@@ -1,0 +1,686 @@
+{
+  "width": 30,
+  "height": 20,
+  "image": "/maps/dragon_island.png",
+  "defaultRegion": "walkable_grass",
+  "regions": [
+    {
+      "x": 13,
+      "y": 0,
+      "width": 8,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "width": 2,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 15,
+      "y": 2,
+      "width": 9,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 20,
+      "y": 3,
+      "width": 6,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 23,
+      "y": 4,
+      "width": 4,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 25,
+      "y": 5,
+      "width": 3,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 26,
+      "y": 6,
+      "width": 4,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 27,
+      "y": 8,
+      "width": 3,
+      "height": 4,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 29,
+      "y": 12,
+      "width": 1,
+      "height": 8,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 28,
+      "y": 15,
+      "width": 1,
+      "height": 5,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 24,
+      "y": 16,
+      "width": 5,
+      "height": 4,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 23,
+      "y": 17,
+      "width": 7,
+      "height": 3,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 22,
+      "y": 18,
+      "width": 1,
+      "height": 2,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 21,
+      "y": 10,
+      "width": 3,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 22,
+      "y": 12,
+      "width": 5,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 24,
+      "y": 11,
+      "width": 3,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 0,
+      "y": 18,
+      "width": 12,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "width": 3,
+      "height": 7,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "width": 4,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "width": 4,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "width": 5,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "width": 4,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 3,
+      "y": 13,
+      "width": 1,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "width": 4,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 8,
+      "y": 14,
+      "width": 3,
+      "height": 4,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 7,
+      "y": 16,
+      "width": 1,
+      "height": 2,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 5,
+      "y": 17,
+      "width": 2,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 11,
+      "y": 13,
+      "width": 2,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 11,
+      "y": 14,
+      "width": 1,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 24,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "regionType": "high_seas"
+    },
+    {
+      "x": 16,
+      "y": 15,
+      "width": 3,
+      "height": 5,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 19,
+      "y": 16,
+      "width": 2,
+      "height": 4,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 21,
+      "y": 18,
+      "width": 1,
+      "height": 2,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 15,
+      "y": 16,
+      "width": 1,
+      "height": 4,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 13,
+      "y": 17,
+      "width": 2,
+      "height": 3,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 12,
+      "y": 18,
+      "width": 1,
+      "height": 2,
+      "regionType": "stormy_seas"
+    },
+    {
+      "x": 16,
+      "y": 9,
+      "width": 3,
+      "height": 1,
+      "regionType": "mountains"
+    },
+    {
+      "x": 14,
+      "y": 10,
+      "width": 4,
+      "height": 2,
+      "regionType": "mountains"
+    },
+    {
+      "x": 15,
+      "y": 12,
+      "width": 1,
+      "height": 1,
+      "regionType": "mountains"
+    },
+    {
+      "x": 18,
+      "y": 11,
+      "width": 1,
+      "height": 1,
+      "regionType": "mountains"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "width": 1,
+      "height": 2,
+      "regionType": "forest"
+    },
+    {
+      "x": 19,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 22,
+      "y": 0,
+      "width": 2,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 25,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 28,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 29,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 27,
+      "y": 2,
+      "width": 2,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 29,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 19,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 20,
+      "y": 14,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 18,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 17,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "regionType": "mountains"
+    },
+    {
+      "x": 17,
+      "y": 12,
+      "width": 2,
+      "height": 1,
+      "regionType": "mountains"
+    },
+    {
+      "x": 16,
+      "y": 12,
+      "width": 1,
+      "height": 1,
+      "regionType": "forest"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "width": 13,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "width": 2,
+      "height": 4,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "width": 1,
+      "height": 5,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 1,
+      "y": 8,
+      "width": 8,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "width": 2,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "width": 4,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "width": 7,
+      "height": 2,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "width": 4,
+      "height": 2,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 16,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "width": 2,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "width": 1,
+      "height": 5,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "width": 1,
+      "height": 2,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 12,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "width": 1,
+      "height": 2,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 19,
+      "y": 10,
+      "width": 2,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 20,
+      "y": 11,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 20,
+      "y": 9,
+      "width": 2,
+      "height": 1,
+      "regionType": "shallow_water"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "regionType": "shallow_water"
+    }
+  ],
+  "unwalkable": [
+    {
+      "x": 6,
+      "y": 18,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "x": 7,
+      "y": 17,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "x": 7,
+      "y": 19,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "x": 9,
+      "y": 18,
+      "width": 2,
+      "height": 1
+    }
+  ],
+  "objects": [
+    {
+      "x": 14,
+      "y": 3,
+      "type": "resource",
+      "resourceId": "oak_tree"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "type": "resource",
+      "resourceId": "oak_tree"
+    },
+    {
+      "x": 16,
+      "y": 4,
+      "type": "resource",
+      "resourceId": "tree_log"
+    },
+    {
+      "x": 20,
+      "y": 5,
+      "type": "resource",
+      "resourceId": "tree_log"
+    },
+    {
+      "x": 21,
+      "y": 7,
+      "type": "resource",
+      "resourceId": "oak_tree"
+    },
+    {
+      "x": 23,
+      "y": 7,
+      "type": "resource",
+      "resourceId": "oak_tree"
+    },
+    {
+      "x": 29,
+      "y": 0,
+      "type": "resource",
+      "resourceId": "big_mushroom"
+    },
+    {
+      "x": 20,
+      "y": 13,
+      "type": "resource",
+      "resourceId": "rock_mine"
+    },
+    {
+      "x": 22,
+      "y": 15,
+      "type": "resource",
+      "resourceId": "rock_mine"
+    },
+    {
+      "x": 26,
+      "y": 14,
+      "type": "resource",
+      "resourceId": "rock_mine"
+    },
+    {
+      "x": 29,
+      "y": 3,
+      "type": "resource",
+      "resourceId": "big_mushroom"
+    },
+    {
+      "x": 26,
+      "y": 0,
+      "type": "resource",
+      "resourceId": "big_mushroom"
+    },
+    {
+      "x": 20,
+      "y": 7,
+      "type": "resource",
+      "resourceId": "big_mushroom"
+    },
+    {
+      "type": "npc",
+      "x": 8,
+      "y": 1,
+      "npcId": "hela"
+    },{
+      "type": "npc",
+      "x": 13,
+      "y": 2,
+      "npcId": "sylvie"
+    },
+    {
+      "type": "event",
+      "x": 3,
+      "y": 5,
+      "eventId": "campfire"
+    },
+    {
+      "type": "event",
+      "x": 10,
+      "y": 9,
+      "eventId": "aura_shrine"
+    },
+    {
+      "type": "event",
+      "x": 10,
+      "y": 10,
+      "eventId": "treasure_chest"
+    },
+    {
+      "type": "event",
+      "x": 10,
+      "y": 11,
+      "eventId": "offering_altar"
+    },
+    {
+      "type": "event",
+      "x": 10,
+      "y": 12,
+      "eventId": "gem_trap"
+    }
+  ],
+  "playerStart": {
+    "x": 4,
+    "y": 2
+  },
+  "enemyEncounterChance": 0.3,
+  "itemFindingChance": 0.3
+}

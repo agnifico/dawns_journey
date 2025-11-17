@@ -1,0 +1,278 @@
+{
+    "open_field": [
+        {
+            "id": 1,
+            "plotNumber": 1,
+            "x": 176,
+            "y": 80,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 4,
+            "plotNumber": 2,
+            "x": 208,
+            "y": 80,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 5,
+            "plotNumber": 3,
+            "x": 240,
+            "y": 80,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 6,
+            "plotNumber": 4,
+            "x": 272,
+            "y": 80,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 7,
+            "plotNumber": 5,
+            "x": 176,
+            "y": 112,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 8,
+            "plotNumber": 6,
+            "x": 208,
+            "y": 112,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 9,
+            "plotNumber": 7,
+            "x": 240,
+            "y": 112,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 10,
+            "plotNumber": 8,
+            "x": 272,
+            "y": 112,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 11,
+            "plotNumber": 9,
+            "x": 208,
+            "y": 144,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 12,
+            "plotNumber": 10,
+            "x": 240,
+            "y": 144,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        }
+    ],
+    "greenhouse": [
+        {
+            "id": 14,
+            "plotNumber": 1,
+            "x": 32,
+            "y": 288,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 15,
+            "plotNumber": 2,
+            "x": 32,
+            "y": 320,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 16,
+            "plotNumber": 3,
+            "x": 48,
+            "y": 304,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 17,
+            "plotNumber": 4,
+            "x": 64,
+            "y": 288,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 18,
+            "plotNumber": 5,
+            "x": 64,
+            "y": 320,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 19,
+            "plotNumber": 6,
+            "x": 96,
+            "y": 288,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 20,
+            "plotNumber": 7,
+            "x": 112,
+            "y": 304,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 21,
+            "plotNumber": 8,
+            "x": 96,
+            "y": 320,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 22,
+            "plotNumber": 9,
+            "x": 128,
+            "y": 288,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 23,
+            "plotNumber": 10,
+            "x": 128,
+            "y": 320,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        }
+    ],
+    "forest_floor": [
+        {
+            "id": 25,
+            "plotNumber": 1,
+            "x": 192,
+            "y": 400,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 26,
+            "plotNumber": 2,
+            "x": 208,
+            "y": 368,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 27,
+            "plotNumber": 3,
+            "x": 256,
+            "y": 384,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 28,
+            "plotNumber": 4,
+            "x": 224,
+            "y": 400,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 29,
+            "plotNumber": 5,
+            "x": 288,
+            "y": 400,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 30,
+            "plotNumber": 6,
+            "x": 304,
+            "y": 416,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 31,
+            "plotNumber": 7,
+            "x": 304,
+            "y": 384,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 32,
+            "plotNumber": 8,
+            "x": 320,
+            "y": 384,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 33,
+            "plotNumber": 9,
+            "x": 336,
+            "y": 352,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        },
+        {
+            "id": 34,
+            "plotNumber": 10,
+            "x": 368,
+            "y": 400,
+            "width": 16,
+            "height": 16,
+            "requiredLevel": 1
+        }
+    ]
+}

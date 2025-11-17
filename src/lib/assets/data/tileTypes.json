@@ -1,0 +1,29 @@
+{
+    "water": {
+        "tileImage": "/images/tiles/water0.png",
+        "description": "Deep blue sea.",
+        "isWalkable": false,
+        "gates": [
+            { "ability": "Water Exploration", "level": 1 },
+            { "ability": "Wind Exploration", "level": 1 }
+        ]
+    },
+    "grass": {
+        "tileImage": "/images/tiles/grass1.png",
+        "description": "Grassy plains.",
+        "isWalkable": true,
+        "gates": []
+    },
+    "water_plant": {
+        "tileImage": "/images/tiles/waterPlant.png",
+        "description": "Deep blue sea.",
+        "isWalkable": false,
+        "gates": []
+    },
+    "water_rock": {
+        "tileImage": "/images/tiles/waterRock.png",
+        "description": "Deep blue sea.",
+        "isWalkable": false,
+        "gates": []
+    }
+}

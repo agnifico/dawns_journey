@@ -1,0 +1,110 @@
+{
+    "alchemy": {
+        "name": "Alchemy",
+        "description": "The art of brewing potions and transmuting materials.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "farming": {
+        "name": "Farming",
+        "description": "The art of growing your own food.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "cooking": {
+        "name": "Cooking",
+        "description": "The art of preparing delicious and restorative meals.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "mining": {
+        "name": "Mining",
+        "description": "The art of extracting valuable ores and minerals from the earth.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "fishing": {
+        "name": "Fishing",
+        "description": "The art of catching fish and other aquatic creatures.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "woodcutting": {
+        "name": "Woodcutting",
+        "description": "The art of felling trees and gathering wood.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "smithing": {
+        "name": "Smithing",
+        "description": "The art of forging weapons and armor from metal.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "crafting": {
+        "name": "Crafting",
+        "description": "The art of creating useful items from various materials.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    },
+    "construction": {
+        "name": "Construction",
+        "description": "The art of building structures and furniture.",
+        "levels": [
+            { "xp": 0, "rewards": [] },
+            { "xp": 100, "rewards": [] },
+            { "xp": 200, "rewards": [] },
+            { "xp": 300, "rewards": [] },
+            { "xp": 400, "rewards": [] },
+            { "xp": 500, "rewards": [] }
+        ]
+    }
+}

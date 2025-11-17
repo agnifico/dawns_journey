@@ -1,0 +1,62 @@
+{
+    "id": "sylvie",
+    "name": "Sylvie",
+    "profileImage": "/images/npc_avatars/sylvie.png",
+    "image": "/images/npcs/sylvie.png",
+    "description": "A skilled artisan and warrior from a secluded village, seeking inspiration in the wider world.",
+    "isCombatant": true,
+    "types": ["Wind", "Light"],
+    "hp": 400,
+    "physicalAttack": 25,
+    "physicalDefence": 25,
+    "elementalAttack": 25,
+    "elementalDefence": 25,
+    "speed": 70,
+    "evasion": 50,
+    "critChance": 0.10,
+    "critDamage": 1.5,
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
+    "statGrowth": [
+        {
+            "level": 0,
+            "stats": {
+                "hp": 400,
+                "physicalAttack": 60,
+                "elementalAttack": 50,
+                "physicalDefence": 30,
+                "elementalDefence": 35
+            }
+        }
+    ],
+    "itemPreferencesByHeartRank": [],
+    "battleAftermathsBySwordRank": [],
+    "swordRanks": [
+        {
+            "requirement": { "type": "win_against_npc", "npcId": "sylvie", "quantity": 1 },
+            "intro_dialogue": ["Hela is a powerful foe. Prove your strength by defeating her once."],
+            "reminder_dialogue": ["Hela still stands. My request remains."],
+            "success_dialogue": ["You defeated Hela! Impressive. You have my respect."],
+            "success_rewards": []
+        },
+        {
+            "requirement": { "type": "counterpart_rank", "rankType": "heart", "value": 1 },
+            "intro_dialogue": ["To truly understand my sword, you must first understand my heart. Reach Heart Rank 1 with me."],
+            "reminder_dialogue": ["We need to connect more before we can continue our training."],
+            "success_dialogue": ["Good. Now you understand my motivations. Let us continue."],
+            "success_rewards": []
+        }
+    ],
+    "heartRanks": [
+        {
+            "requirement": { "type": "lose_to_npc", "npcId": "hela", "quantity": 1 },
+            "intro_dialogue": ["You seem strong, but strength must be tempered with humility. Challenge me, and learn from defeat."],
+            "reminder_dialogue": ["Are you afraid to face me? Defeat is a lesson, not a failure."],
+            "success_dialogue": ["You fought well, but you have much to learn. In defeat, you have shown your willingness to grow."],
+            "success_rewards": []
+        }
+    ]
+}

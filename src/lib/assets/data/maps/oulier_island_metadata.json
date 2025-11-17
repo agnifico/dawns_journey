@@ -1,0 +1,172 @@
+{
+    "id": "oulier_island",
+    "name": "Oulier Island",
+    "mapWidth": 20,
+    "mapHeight": 20,
+    "playerStart": {
+      "x": 2,
+      "y": 2
+    },
+    "itemFindingChance": 0.3,
+    "enemyEncounterChance": 0.3,
+    "tileTypes": {
+      "grass1": {
+        "tileImage": "/images/tiles/grass1.png"
+      },
+      "grass2": {
+        "tileImage": "/images/tiles/grass2.png"
+      },
+      "grass3": {
+        "tileImage": "/images/tiles/grass3.png"
+      },
+      "grass4": {
+        "tileImage": "/images/tiles/grass4.png"
+      },
+      "grass5": {
+        "tileImage": "/images/tiles/grass5.png"
+      },
+      "grass6": {
+        "tileImage": "/images/tiles/grass6.png"
+      },
+      "grass7": {
+        "tileImage": "/images/tiles/grass7.png"
+      },
+      "grass8": {
+        "tileImage": "/images/tiles/grass8.png"
+      },
+      "grass9": {
+        "tileImage": "/images/tiles/grass9.png"
+      },
+      "water0": {
+        "tileImage": "/images/tiles/water0.png"
+      },
+      "waterPlant": {
+        "tileImage": "/images/tiles/waterPlant.png"
+      },
+      "waterRock": {
+        "tileImage": "/images/tiles/waterRock.png"
+      },
+      "waterBoat1": {
+        "tileImage": "/images/tiles/waterBoat1.png"
+      },
+      "waterBoat2": {
+        "tileImage": "/images/tiles/waterBoat2.png"
+      }
+    },
+    "behaviorTypes": {
+      "walkable_grass": {
+        "isWalkable": true,
+        "description": "Grassy plains.",
+        "itemDrops": [
+            { "itemId": "corn", "quantity": 1, "chance": 0.25 },
+            { "itemId": "tomato", "quantity": 1, "chance": 0.25 },
+            { "itemId": "onion", "quantity": 1, "chance": 0.25 },
+            { "itemId": "meat", "quantity": 1, "chance": 0.25 }
+        ],
+        "randomEnemies": [
+            { "enemyId": "greenhorn", "chance": 1 }
+        ]
+      },
+      "mountains": {
+        "isWalkable": false,
+        "description": "Tall mountains you have to climb over.",
+        "gates": [
+          {
+            "element": "Earth",
+            "level": 1
+          }
+        ],
+        "itemDrops": [
+            { "itemId": "meat", "quantity": 1, "chance": 0.33 },
+            { "itemId": "feather", "quantity": 1, "chance": 0.33 },
+            { "itemId": "dragon_fang", "quantity": 1, "chance": 0.33 }
+        ],
+        "randomEnemies": [
+            { "enemyId": "woodmech_bear", "chance": 0.2 }
+        ]
+      },
+      "mountain_peak": {
+        "isWalkable": false,
+        "description": "The very peak of the mountain.",
+        "gates": [
+          {
+            "element": "Earth",
+            "level": 2
+          }
+        ],
+        "itemDrops": [
+            { "itemId": "dragon_fang", "quantity": 1, "chance": 0.3 },
+            { "itemId": "four_leaf_clover", "quantity": 1, "chance": 0.7 }
+        ]
+      },
+      "high_seas": {
+        "isWalkable": false,
+        "description": "The high sea.",
+        "gates": [
+          {
+            "element": "Wind",
+            "level": 1
+          },
+          {
+            "element": "Water",
+            "level": 1
+          }
+        ],
+        "itemDrops": [
+            { "itemId": "fish", "quantity": 1, "chance": 0.8 },
+            { "itemId": "coral_reef", "quantity": 1, "chance": 0.2 }
+        ],
+        "randomEnemies": [
+            { "enemyId": "aquamech_shark", "chance": 0.1 }
+        ]
+      },
+      "stormy_sea": {
+        "isWalkable": false,
+        "description": "A storm over the sea. You cannot fly into it.",
+        "gates": [
+          {
+            "element": "Water",
+            "level": 2
+          }
+        ],
+        "itemDrops": [
+            { "itemId": "fish", "quantity": 1, "chance": 0.9 },
+            { "itemId": "aquamarine", "quantity": 1, "chance": 0.1 }
+        ]
+      },
+      "shallow_water": {
+        "isWalkable": true,
+        "description": "Shallow waters.",
+        "itemDrops": [
+            { "itemId": "island_herb", "quantity": 1, "chance": 0.6 },
+            { "itemId": "fish", "quantity": 1, "chance": 0.4 }
+        ]
+      }
+    },
+    "objects": [
+        {
+            "type": "resource",
+            "typeId": "rock_mine",
+            "position": { "x": 5, "y": 5 }
+        },
+        {
+            "type": "resource",
+            "typeId": "oak_tree",
+            "position": { "x": 7, "y": 7 }
+        }
+    ],
+    "npcs": [
+        {
+            "id": "hela",
+            "position": { "x": 3, "y": 3 }
+        }
+    ],
+    "events": [
+        {
+            "id": "campfire",
+            "position": { "x": 12, "y": 12 }
+        }
+    ],
+    "items": [],
+    "enemies": []
+  }

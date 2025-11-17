@@ -1,0 +1,2407 @@
+[
+    {
+        "x": 0,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 7,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 8,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 9,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 10,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 12,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 13,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 14,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 15,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 17,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 0,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas",
+        "resourceNodeId": "wood"
+    },
+    {
+        "x": 2,
+        "y": 1,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 1,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 1,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 7,
+        "y": 1,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 8,
+        "y": 1,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 9,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 10,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 1,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 1,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 14,
+        "y": 1,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 15,
+        "y": 1,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 1,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 1,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 1,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 2,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass",
+        "resourceNodeId": "copper-ore"
+    },
+    {
+        "x": 3,
+        "y": 2,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 2,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 2,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 7,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 8,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 9,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 10,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 2,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 2,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 2,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 14,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 15,
+        "y": 2,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 2,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 2,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 2,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 3,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 3,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 3,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass",
+        "resourceNodeId": "fishing-spot"
+    },
+    {
+        "x": 4,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 5,
+        "y": 3,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 7,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 8,
+        "y": 3,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 3,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 12,
+        "y": 3,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 3,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 15,
+        "y": 3,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 16,
+        "y": 3,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 3,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 3,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 4,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 4,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 4,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water",
+        "resourceNodeId": "herb-patch"
+    },
+    {
+        "x": 5,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 7,
+        "y": 4,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 4,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 4,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 4,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 12,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 13,
+        "y": 4,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 4,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 4,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 4,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 4,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 4,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 2,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 3,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 4,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 5,
+        "y": 5,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass",
+        "resourceNodeId": "berry-bush"
+    },
+    {
+        "x": 6,
+        "y": 5,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 5,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 5,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 5,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 5,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 5,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 13,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 14,
+        "y": 5,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 5,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 5,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 5,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 5,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 5,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 2,
+        "y": 6,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 3,
+        "y": 6,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 6,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 6,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 6,
+        "y": 6,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 6,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 6,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 6,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 6,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 6,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 13,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 14,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 15,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 17,
+        "y": 6,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 6,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 6,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 2,
+        "y": 7,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 7,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 7,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 7,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 8,
+        "y": 7,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 7,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 7,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 12,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 13,
+        "y": 7,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountain_peak"
+    },
+    {
+        "x": 14,
+        "y": 7,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "mountain_peak"
+    },
+    {
+        "x": 15,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 17,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 7,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 8,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 8,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 8,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 5,
+        "y": 8,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 6,
+        "y": 8,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 8,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 8,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 8,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 12,
+        "y": 8,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountain_peak"
+    },
+    {
+        "x": 13,
+        "y": 8,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 14,
+        "y": 8,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 8,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 8,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 8,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 8,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 9,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 9,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 9,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "shallow_water"
+    },
+    {
+        "x": 5,
+        "y": 9,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 6,
+        "y": 9,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 9,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 9,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 10,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 11,
+        "y": 9,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountain_peak"
+    },
+    {
+        "x": 12,
+        "y": 9,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 13,
+        "y": 9,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 9,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 9,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 9,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 9,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 10,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 10,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 10,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 10,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 10,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 6,
+        "y": 10,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 10,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 10,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 10,
+        "y": 10,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 11,
+        "y": 10,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 12,
+        "y": 10,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 10,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 10,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 17,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 10,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 11,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 11,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 11,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 11,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 7,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 8,
+        "y": 11,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 11,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 11,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 11,
+        "y": 11,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 11,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 11,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 15,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 11,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 17,
+        "y": 11,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 11,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 11,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 0,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 12,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 12,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 12,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 12,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 7,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 8,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 9,
+        "y": 12,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 10,
+        "y": 12,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 11,
+        "y": 12,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 12,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 14,
+        "y": 12,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 15,
+        "y": 12,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 12,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 12,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 12,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 12,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 0,
+        "y": 13,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 13,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 13,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 7,
+        "y": 13,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 8,
+        "y": 13,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 9,
+        "y": 13,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 13,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 13,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 13,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 13,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 15,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 13,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 13,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 13,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 0,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 14,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "mountains"
+    },
+    {
+        "x": 7,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 14,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 14,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 14,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 14,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 17,
+        "y": 14,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 14,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 14,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 0,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 15,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 15,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 6,
+        "y": 15,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 15,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 8,
+        "y": 15,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 15,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 15,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 11,
+        "y": 15,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 13,
+        "y": 15,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 14,
+        "y": 15,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 16,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 17,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 18,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 19,
+        "y": 15,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 0,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 16,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 2,
+        "y": 16,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 3,
+        "y": 16,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 16,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 16,
+        "tileTypeId": "grass2",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 6,
+        "y": 16,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 7,
+        "y": 16,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 8,
+        "y": 16,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 9,
+        "y": 16,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 10,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 11,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 12,
+        "y": 16,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 13,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 14,
+        "y": 16,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 16,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 17,
+        "y": 16,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 16,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 16,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 0,
+        "y": 17,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 17,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 17,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 17,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 4,
+        "y": 17,
+        "tileTypeId": "grass8",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 5,
+        "y": 17,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 6,
+        "y": 17,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 7,
+        "y": 17,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 8,
+        "y": 17,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 9,
+        "y": 17,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 10,
+        "y": 17,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 11,
+        "y": 17,
+        "tileTypeId": "grass1",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 17,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 17,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 14,
+        "y": 17,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 15,
+        "y": 17,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 16,
+        "y": 17,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 17,
+        "y": 17,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 17,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 17,
+        "tileTypeId": "waterBoat2",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 0,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 6,
+        "y": 18,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 7,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 8,
+        "y": 18,
+        "tileTypeId": "waterRock",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 9,
+        "y": 18,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 10,
+        "y": 18,
+        "tileTypeId": "waterBoat1",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 11,
+        "y": 18,
+        "tileTypeId": "grass7",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 12,
+        "y": 18,
+        "tileTypeId": "grass9",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 13,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 14,
+        "y": 18,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 15,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 16,
+        "y": 18,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 17,
+        "y": 18,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 18,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 18,
+        "tileTypeId": "grass3",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 0,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 1,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 2,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 3,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 4,
+        "y": 19,
+        "tileTypeId": "waterPlant",
+        "behaviorTypeId": "high_seas"
+    },
+    {
+        "x": 5,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 6,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 7,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 8,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 9,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 10,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 11,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 12,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 13,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 14,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 15,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 16,
+        "y": 19,
+        "tileTypeId": "water0",
+        "behaviorTypeId": "stormy_sea"
+    },
+    {
+        "x": 17,
+        "y": 19,
+        "tileTypeId": "grass4",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 18,
+        "y": 19,
+        "tileTypeId": "grass5",
+        "behaviorTypeId": "walkable_grass"
+    },
+    {
+        "x": 19,
+        "y": 19,
+        "tileTypeId": "grass6",
+        "behaviorTypeId": "walkable_grass"
+    }
+]
