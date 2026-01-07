@@ -1,71 +1,18 @@
-import type { NPC, Player, Requirement, RequirementCondition } from '$lib/types';
+import type { NPC, Player, Requirement, Reward, GiftingOption } from '$lib/types';
+import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
-
-// ---  PRIVATE: Requirement Checking ---
-function checkRequirement(
-    requirement: Requirement,
-    player: Player,
-    npc: NPC,
-    globalNpcs: Record<string, NPC>
-): boolean {
-    const checkCondition = (condition: RequirementCondition): boolean => {
-        switch (condition.type) {
-            case 'have_item': {
-                const item = player.inventory.find(i => i.itemId === condition.itemId);
-                return item ? item.amount >= condition.quantity : false;
-            }
-            case 'kill': {
-                const killsAtQuestStart = npc.requirementSnapshot?.kill?.[condition.enemyId] || 0;
-                const currentKills = player.killCounts[condition.enemyId] || 0;
-                return (currentKills - killsAtQuestStart) >= condition.quantity;
-            }
-            case 'win_against_npc': {
-                const winsAtQuestStart = npc.requirementSnapshot?.win_against_npc?.[condition.npcId] || 0;
-                const currentWins = player.combatHistory.filter(h => h.npcId === condition.npcId && h.outcome === 'win').length;
-                return (currentWins - winsAtQuestStart) >= condition.quantity;
-            }
-            case 'lose_to_npc': {
-                const lossesAtQuestStart = npc.requirementSnapshot?.lose_to_npc?.[condition.npcId] || 0;
-                const currentLosses = player.combatHistory.filter(h => h.npcId === condition.npcId && h.outcome === 'lose').length;
-                return (currentLosses - lossesAtQuestStart) >= condition.quantity;
-            }
-            case 'counterpart_rank': {
-                if (condition.rankType === 'heart') {
-                    return npc.heartRank >= condition.value;
-                } else {
-                    return npc.swordRank >= condition.value;
-                }
-            }
-            case 'npc_rank': {
-                const targetNpc = globalNpcs[condition.npcId];
-                if (!targetNpc) return false;
-                if (condition.rankType === 'heart') {
-                    return targetNpc.heartRank >= condition.value;
-                } else {
-                    return targetNpc.swordRank >= condition.value;
-                }
-            }
-            default:
-                return false;
-        }
-    };
-
-    if ('operator' in requirement) {
-        if (requirement.operator === 'AND') {
-            return requirement.conditions.every(checkCondition);
-        }
-        if (requirement.operator === 'OR') {
-            return requirement.conditions.some(checkCondition);
-        }
-    }
-    return checkCondition(requirement as RequirementCondition);
-}
+import { addItem, removeItem } from './ItemService';
+import { get } from 'svelte/store';
+import { playerStore } from '$lib/stores/playerStore';
+import { questStore } from '$lib/stores/questStore';
+import { checkRequirement, checkQuestTriggers } from './QuestService';
 
 function createRequirementSnapshot(player: Player, requirement: Requirement): any {
     const snapshot = {
         kill: {},
         win_against_npc: {},
         lose_to_npc: {},
+        fight_npc: {},
     };
 
     const conditions = 'conditions' in requirement ? requirement.conditions : [requirement];
@@ -77,124 +24,200 @@ function createRequirementSnapshot(player: Player, requirement: Requirement): an
             snapshot.win_against_npc[condition.npcId] = player.combatHistory.filter(h => h.npcId === condition.npcId && h.outcome === 'win').length;
         } else if (condition.type === 'lose_to_npc') {
             snapshot.lose_to_npc[condition.npcId] = player.combatHistory.filter(h => h.npcId === condition.npcId && h.outcome === 'lose').length;
+        } else if (condition.type === 'fight_npc') {
+            snapshot.fight_npc[condition.npcId] = player.combatHistory.filter(h => h.npcId === condition.npcId).length;
         }
     }
     return snapshot;
 }
 
-
-// --- PUBLIC API for NPC interactions ---
+function handleRewards(player: Player, rewards: Reward[]): Player {
+    let newPlayer = { ...player };
+    for (const reward of rewards) {
+        if (reward.type === 'item') {
+            newPlayer = addItem(newPlayer, reward.itemId, reward.quantity);
+        } else if (reward.type === 'tag') {
+            if (!newPlayer.worldTags.includes(reward.tagId)) {
+                newPlayer.worldTags.push(reward.tagId);
+            }
+        }
+    }
+    checkQuestTriggers();
+    return newPlayer;
+}
 
 export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, NPC>): { updatedNpc: NPC, updatedPlayer: Player } {
-    const rankData = npc.swordRanks[npc.swordRank];
-    if (!rankData) {
-        messageStore.addMessage(`[${npc.name}]: I have nothing more to say to you.`, ['NPC']);
-        return { updatedNpc: npc, updatedPlayer: player };
-    }
-
-    if (npc.swordState === 'NOT_STARTED') {
-        npc.swordState = 'IN_PROGRESS';
-        if (rankData.requirement) {
-            npc.requirementSnapshot = createRequirementSnapshot(player, rankData.requirement);
-        }
-        messageStore.addMessage(`[${npc.name}]: ${rankData.intro_dialogue[0]}`, ['NPC']);
-    } else if (npc.swordState === 'IN_PROGRESS') {
-        const requirementMet = rankData.requirement ? checkRequirement(rankData.requirement, player, npc, globalNpcs) : false;
-        if (requirementMet) {
-            npc.swordState = 'NOT_STARTED';
-            npc.swordRank++;
-            npc.requirementSnapshot = {}; // Clear snapshot
-            messageStore.addMessage(`[${npc.name}]: ${rankData.success_dialogue[0]}`, ['NPC']);
-            messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
-            // TODO: Handle rewards
-        } else {
-            messageStore.addMessage(`[${npc.name}]: ${rankData.reminder_dialogue[0]}`, ['NPC']);
-        }
-    }
-    return { updatedNpc: npc, updatedPlayer: player };
-}
-
-export function handleConnect(npc: NPC, player: Player, globalNpcs: Record<string, NPC>): { updatedNpc: NPC, updatedPlayer: Player } {
-    const rankData = npc.heartRanks[npc.heartRank];
-    if (!rankData) {
-        messageStore.addMessage(`[${npc.name}]: I have nothing more to share with you.`, ['NPC']);
-        return { updatedNpc: npc, updatedPlayer: player };
-    }
-
-    const requirementMet = rankData.requirement ? checkRequirement(rankData.requirement, player, npc, globalNpcs) : false;
-    const affinityMet = npc.affinity >= 10;
-
-    if (npc.heartState === 'READY_FOR_RANK_UP' || requirementMet || affinityMet) {
-        npc.heartState = 'NOT_STARTED';
-        npc.heartRank++;
-        npc.requirementSnapshot = {}; // Clear snapshot
-        if (affinityMet && !requirementMet) npc.affinity -= 10;
-        messageStore.addMessage(`[${npc.name}]: ${rankData.success_dialogue[0]}`, ['NPC']);
-        messageStore.addMessage(`Your Heart Rank with ${npc.name} is now ${npc.heartRank}.`, ['World', 'Update']);
-        // TODO: Handle rewards
-    } else if (npc.heartState === 'NOT_STARTED') {
-        npc.heartState = 'IN_PROGRESS';
-        if (rankData.requirement) {
-            npc.requirementSnapshot = createRequirementSnapshot(player, rankData.requirement);
-        }
-        messageStore.addMessage(`[${npc.name}]: ${rankData.intro_dialogue[0]}`, ['NPC']);
-    } else {
-        messageStore.addMessage(`[${npc.name}]: ${rankData.reminder_dialogue[0]}`, ['NPC']);
-    }
-    return { updatedNpc: npc, updatedPlayer: player };
-}
-
-export function handleGiveItem(npc: NPC, player: Player, itemId: string, quantity: number): { updatedNpc: NPC, updatedPlayer: Player } {
-    console.log(`[NpcService.handleGiveItem] 1. Received call to give ${quantity}x ${itemId} to ${npc.name}`);
+    const allQuests = get(questStore).quests;
+    let updatedNpc = { ...npc };
+    let updatedPlayer = { ...player };
     
-    const updatedNpc = JSON.parse(JSON.stringify(npc));
-    const heartRank = updatedNpc.heartRank;
-    console.log(`[NpcService.handleGiveItem] 2. Current Heart Rank: ${heartRank}`);
+    // --- Maxed out checks ---
+    const isSwordMaxed = updatedNpc.swordRank >= updatedNpc.swordRanks.length;
+    const isHeartMaxed = updatedNpc.heartRank >= updatedNpc.heartRanks.length;
 
-    const preferencesForRank = updatedNpc.itemPreferencesByHeartRank.find(p => p.rank === heartRank);
-    console.log(`[NpcService.handleGiveItem] 3. Found preferences object for rank ${heartRank}:`, preferencesForRank);
-
-    const preferences = preferencesForRank?.preferences || [];
-    const itemPref = preferences.find(p => p.itemId === itemId);
-    console.log(`[NpcService.handleGiveItem] 4. Found specific preference for item ${itemId}:`, itemPref);
-
-    let dialogue = "I have no use for this.";
-
-    if (itemPref) {
-        const affinityChange = itemPref.value * quantity;
-        dialogue = itemPref.dialogue[0];
-        console.log(`[NpcService.handleGiveItem] 5. Match found! Affinity change: ${affinityChange}. Dialogue: ${dialogue}`);
-        updatedNpc.affinity += affinityChange;
-    } else {
-        console.log('[NpcService.handleGiveItem] 5. No preference match found. Using neutral dialogue.');
+    if (isSwordMaxed && isHeartMaxed && updatedNpc.allRanksMaxedDialogue?.length) {
+        const dialogue = updatedNpc.allRanksMaxedDialogue[Math.floor(Math.random() * updatedNpc.allRanksMaxedDialogue.length)];
+        dialogueStore.startDialogue([dialogue], updatedNpc.name);
+        return { updatedNpc, updatedPlayer };
     }
-    messageStore.addMessage(`[${npc.name}]: ${dialogue}`, ['NPC']);
-
-    if (updatedNpc.affinity >= 10 && updatedNpc.heartState !== 'READY_FOR_RANK_UP') {
-        updatedNpc.heartState = 'READY_FOR_RANK_UP';
-        messageStore.addMessage(`You feel your connection with ${npc.name} has deepened. You should Connect with them.`, ['World', 'Update']);
-        console.log('[NpcService.handleGiveItem] 6. Affinity threshold reached! State changed to READY_FOR_RANK_UP.');
+    if (isSwordMaxed && updatedNpc.swordRankMaxedDialogue?.length) {
+        const dialogue = updatedNpc.swordRankMaxedDialogue[Math.floor(Math.random() * updatedNpc.swordRankMaxedDialogue.length)];
+        dialogueStore.startDialogue([dialogue], updatedNpc.name);
+        return { updatedNpc, updatedPlayer };
     }
 
-    // Create a new player object with updated inventory
-    const newInventory = [...player.inventory];
-    const itemIndex = newInventory.findIndex(i => i.itemId === itemId);
-    if (itemIndex !== -1) {
-        newInventory[itemIndex].amount -= quantity;
-        if (newInventory[itemIndex].amount <= 0) {
-            newInventory.splice(itemIndex, 1);
+    // --- Heart Rank upgrade ---
+    if (updatedNpc.heartState === 'READY_FOR_RANK_UP') {
+        const heartRankData = updatedNpc.heartRanks[updatedNpc.heartRank];
+        if (heartRankData) {
+            const { met } = checkRequirement(heartRankData.rankUpRequirement, player, updatedNpc, globalNpcs);
+            if (met) {
+                updatedNpc.heartRank++;
+                updatedNpc.heartState = 'NOT_STARTED';
+                updatedNpc.affinity -= 10;
+                
+                if (heartRankData.rank_up_dialogue) {
+                    dialogueStore.startDialogue(heartRankData.rank_up_dialogue, updatedNpc.name);
+                }
+                if (heartRankData.rank_up_rewards) {
+                    updatedPlayer = handleRewards(updatedPlayer, heartRankData.rank_up_rewards);
+                }
+                
+                messageStore.addMessage(`Your Heart Rank with ${updatedNpc.name} is now ${updatedNpc.heartRank}.`, ['World', 'Update']);
+                return { updatedNpc, updatedPlayer };
+            }
         }
     }
-    const updatedPlayer = { ...player, inventory: newInventory };
+
+    // --- Sword Rank quest ---
+    const rankData = updatedNpc.swordRanks[updatedNpc.swordRank];
+
+    if (!rankData?.questId) {
+        messageStore.addMessage(`${updatedNpc.name} has nothing new to say.`, ['System']);
+        return { updatedNpc, updatedPlayer };
+    }
+
+    const quest = allQuests[rankData.questId];
+
+    if (!quest) {
+        messageStore.addMessage("Error: Quest not found.", ['System']);
+        return { updatedNpc, updatedPlayer };
+    }
+
+    switch (quest.state) {
+        case 'LOCKED': {
+            const unavailableDialogue = rankData.stages[0]?.unavailable_dialogue || [`I have nothing for you right now.`];
+            dialogueStore.startDialogue(unavailableDialogue, updatedNpc.name);
+            break;
+        }
+        case 'AVAILABLE': {
+            const firstStage = rankData.stages[0];
+            if (firstStage) {
+                dialogueStore.startDialogue(firstStage.reminder_dialogue || ["A new opportunity awaits."], updatedNpc.name);
+                questStore.setQuestState(quest.id, 'ACTIVE');
+                
+                const allRequirements = rankData.stages.map(s => s.requirement);
+                const combinedRequirement = { operator: 'OR' as const, conditions: allRequirements.flatMap(r => 'conditions' in r ? r.conditions : [r]) };
+                const snapshot = createRequirementSnapshot(updatedPlayer, combinedRequirement);
+                updatedNpc.requirementSnapshot = {
+                    ...updatedNpc.requirementSnapshot,
+                    [updatedNpc.swordRank]: snapshot
+                };
+
+                if (firstStage.requirement.type === 'dialogue') {
+                    if (firstStage.success_rewards) {
+                        updatedPlayer = handleRewards(updatedPlayer, firstStage.success_rewards);
+                    }
+                    questStore.advanceQuestStage(quest.id);
+                }
+            }
+            break;
+        }
+        case 'ACTIVE': {
+            const currentStageIndex = quest.currentStage;
+            const stage = rankData.stages[currentStageIndex];
+
+            if (!stage) {
+                messageStore.addMessage(`${updatedNpc.name} seems to be at a loss for words.`, ['System']);
+                break;
+            }
+
+            if (stage.requirement.type === 'dialogue') {
+                if (stage.success_dialogue) {
+                    dialogueStore.startDialogue(stage.success_dialogue, updatedNpc.name);
+                }
+                if (stage.success_rewards) {
+                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+                }
+                questStore.advanceQuestStage(quest.id);
+                return { updatedNpc, updatedPlayer };
+            }
+
+            const { met, postCheckActions } = checkRequirement(stage.requirement, updatedPlayer, updatedNpc, globalNpcs);
+
+            if (met) {
+                updatedPlayer = postCheckActions.reduce((p, action) => action(p), updatedPlayer);
+                
+                if (stage.success_rewards) {
+                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+                }
+                
+                if (stage.success_dialogue) {
+                    dialogueStore.startDialogue(stage.success_dialogue, updatedNpc.name);
+                }
+
+                if (currentStageIndex >= rankData.stages.length - 1) {
+                    questStore.setQuestState(quest.id, 'COMPLETED');
+                    updatedNpc.swordRank++;
+                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
+                    checkQuestTriggers();
+                } else {
+                    questStore.advanceQuestStage(quest.id);
+                }
+            } else {
+                dialogueStore.startDialogue(stage.reminder_dialogue || ["You still have things to do."], updatedNpc.name);
+            }
+            break;
+        }
+        case 'COMPLETED': {
+            messageStore.addMessage(`${updatedNpc.name} has nothing new to say.`, ['System']);
+            break;
+        }
+    }
 
     return { updatedNpc, updatedPlayer };
 }
 
+
+export function fulfillGiftingOption(npc: NPC, player: Player, option: GiftingOption): { updatedNpc: NPC, updatedPlayer: Player } {
+    let updatedNpc = JSON.parse(JSON.stringify(npc));
+    
+    const itemInInventory = player.inventory.find(i => i.itemId === option.itemId);
+    if (!itemInInventory || itemInInventory.amount < option.quantity) {
+        messageStore.addMessage(`You don't have enough ${option.itemId}.`, ['World', 'Error']);
+        return { updatedNpc, updatedPlayer: player };
+    }
+
+    const affinityChange = option.value;
+    updatedNpc.affinity += affinityChange;
+    messageStore.addMessage(`[${updatedNpc.name}]: ${option.dialogue[0]}`, ['NPC']);
+
+    if (updatedNpc.affinity >= 10 && updatedNpc.heartState !== 'READY_FOR_RANK_UP') {
+        updatedNpc.heartState = 'READY_FOR_RANK_UP';
+        messageStore.addMessage(`You feel your connection with ${updatedNpc.name} has deepened. You should Talk to them.`, ['World', 'Update']);
+    }
+
+    const updatedPlayer = removeItem(player, option.itemId, option.quantity);
+    
+    return { updatedNpc, updatedPlayer };
+}
+
 export function getNpcCombatStats(npc: NPC): Partial<Player['baseStats']> {
-    const stats: Partial<Player['baseStats']> = {};
+    const stats: Partial<Player['baseStats']> = { ...npc.baseStats };
+    const effectiveRank = Math.max(npc.heartRank, npc.swordRank);
 
     npc.statGrowth.forEach(growth => {
-        if (npc.swordRank >= growth.level) {
+        if (effectiveRank >= growth.level) {
             Object.assign(stats, growth.stats);
         }
     });

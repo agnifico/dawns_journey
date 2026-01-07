@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { goto } from '$app/navigation';
+import { browser } from '$app/environment';
 import { playerStore } from '$lib/stores/playerStore';
 import { npcStore } from '$lib/stores/npcStore';
 import { mapStore } from '$lib/stores/mapStore';
@@ -10,6 +11,8 @@ import { loadMap } from './MapService';
 const SAVE_KEY = 'dawn_journey_save_v2';
 
 export function saveGame() {
+    if (!browser) return; // Guard against server-side execution
+
     try {
         const playerData = { ...get(playerStore), lastPlayedTimestamp: Date.now() };
         const npcData = get(npcStore).globalNpcs;
@@ -30,6 +33,8 @@ export function saveGame() {
 }
 
 export async function loadGame() {
+    if (!browser) return; // Guard against server-side execution
+
     const savedDataString = localStorage.getItem(SAVE_KEY);
     if (!savedDataString) {
         messageStore.addMessage('No save data found to load.', ['System']);
@@ -42,7 +47,7 @@ export async function loadGame() {
         if (savedData.player) {
             const loadedPlayer = savedData.player;
             // Call the correct function for offline growth calculation
-            const updatedPlayer = FarmingService.calculateGrowthOnLoad(loadedPlayer); 
+            const updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer); 
             playerStore.set({ ...updatedPlayer, isInitialized: true });
         }
         // NEW: Load map data if available in save
@@ -68,6 +73,8 @@ export async function loadGame() {
 }
 
 export function clearSave() {
+    if (!browser) return; // Guard against server-side execution
+    
     localStorage.removeItem(SAVE_KEY);
     window.location.reload();
 }

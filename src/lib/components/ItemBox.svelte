@@ -50,14 +50,11 @@
         align-items: center;
         background-size: cover;
         image-rendering: pixelated;
-        /* background-color: antiquewhite; */
-        /* border: 3px solid grey; */
-        /* border-radius: 20px; */
     }
 
     .item-box img {
-        max-width: 100%;
-        max-height: 100%;
+        max-width: 32px;
+        max-height: 32px;
         image-rendering: pixelated;
     }
 

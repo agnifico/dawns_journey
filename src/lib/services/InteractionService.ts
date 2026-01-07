@@ -1,7 +1,8 @@
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
 import { mapStore } from '$lib/stores/mapStore';
-import { eventScreenStore } from '$lib/stores/eventScreenStore';
+import { showEvent } from '$lib/stores/uiStore';
+import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { resourceStore } from '$lib/stores/resourceStore';
 import { time } from '$lib/stores/timeStore';
@@ -28,22 +29,21 @@ export async function checkForTileInteraction(): Promise<boolean> {
             case 'npc':
                 const npcData = await getNpcData(mapObject.npcId);
                 if (npcData) {
-                    eventScreenStore.show('npc', npcData.profileImage, { npcId: npcData.id, fullImage: npcData.image });
+                    showEvent('npc', npcData.profileImage, { npcId: npcData.id, fullImage: npcData.image });
                     return true;
                 }
                 break;
             case 'resource':
                 const node = resourceNodeDefinitions[mapObject.resourceId];
                 if (node) {
-                    eventScreenStore.show('resource', node.image, mapObject);
+                    showEvent('resource', node.image, mapObject);
                     return true;
                 }
                 break;
             case 'event':
                 const eventData = locationEventDefinitions[mapObject.eventId];
                 if (eventData) {
-                    messageStore.addMessage(eventData.stepOnMessage, ['World']);
-                    eventScreenStore.show('location_event', eventData.image, eventData);
+                    showEvent('location_event', eventData.image, eventData);
                     if (!eventData.actions) {
                         triggerEventEffect(eventData.effects, eventData.message);
                     }
@@ -52,6 +52,13 @@ export async function checkForTileInteraction(): Promise<boolean> {
             // Add other cases for different object types here
         }
     }
+    
+    // If no object is found, or the object is not interactive in a way that opens a UI,
+    // ensure the dialogue is closed.
+    if (get(dialogueStore).isOpen) {
+        dialogueStore.closeDialogue();
+    }
+    
     return false;
 }
 
@@ -59,6 +66,7 @@ export async function checkForTileInteraction(): Promise<boolean> {
  * Handles the logic for a player attempting to gather a resource.
  */
 export function gatherResource() {
+    console.log("gatherResource called at", new Date().getTime());
     const player = get(playerStore);
     const mapData = get(mapStore).mapData;
     if (!mapData) {

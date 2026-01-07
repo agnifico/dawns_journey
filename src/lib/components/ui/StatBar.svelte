@@ -1,7 +1,7 @@
 <script lang="ts">
     export let current: number;
     export let max: number;
-    export let color: string = '#22c55e';
+    export let color: string = 'var(--color-primary)';
 
     let percentage = 0;
     $: {
@@ -14,22 +14,22 @@
     }
 </script>
 
-<div class="stat-bar-container" title={`${Math.max(0, current)} / ${max}`}>
+<div class="stat-bar-container" title={`${Math.max(0, current)} / ${max}`} style="background-color: color-mix(in srgb, {color} 20%, black)">
     <div class="stat-bar-filled" style="width: {percentage}%; background-color: {color};"></div>
 </div>
 
 <style>
     .stat-bar-container {
         width: 100px;
-        height: 12px;
-        background-color: #333; /* Dark background for the empty part of the bar */
-        border: 1px solid #555;
-        border-radius: 3px;
-        overflow: hidden; /* Ensures the filled bar stays within the rounded corners */
+        height: 10px;
+        border: 2px solid rgba(205, 205, 205, 1);
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: black 2px 2px;
     }
 
     .stat-bar-filled {
         height: 100%;
-        transition: width 0.3s ease-in-out; /* Smooth transition for width changes */
+        transition: width 0.3s ease-in-out;
     }
 </style>

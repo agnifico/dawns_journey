@@ -2,26 +2,9 @@ import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
 import type { GameEffect, Player } from '$lib/types';
 import { get } from 'svelte/store';
-import { addItem } from './ItemService';
-import { getItemById } from '$lib/stores/itemStore';
-
-function removeItem(player: Player, itemId: string, amount: number): { success: boolean, player: Player } {
-    const newInventory = [...player.inventory];
-    const itemIndex = newInventory.findIndex(i => i.itemId === itemId);
-
-    if (itemIndex === -1 || newInventory[itemIndex].amount < amount) {
-        return { success: false, player };
-    }
-
-    newInventory[itemIndex].amount -= amount;
-
-    if (newInventory[itemIndex].amount <= 0) {
-        newInventory.splice(itemIndex, 1);
-    }
-
-    return { success: true, player: { ...player, inventory: newInventory } };
-}
-
+import { addItem, removeItem } from './ItemService';
+import { getItemById } from '$lib/services/ItemDataService';
+import { checkForTileInteraction } from './InteractionService';
 
 export function triggerEventEffect(effects: GameEffect[], message: string) {
     if (!effects) return;
@@ -58,9 +41,9 @@ export function triggerEventEffect(effects: GameEffect[], message: string) {
                     effectApplied = true;
                     break;
                 case 'TAKE_ITEM':
-                    const removal = removeItem(newPlayer, effect.itemId, effect.quantity);
-                    if (removal.success) {
-                        newPlayer = removal.player;
+                    const inventoryItem = newPlayer.inventory.find(i => i.itemId === effect.itemId);
+                    if (inventoryItem && inventoryItem.amount >= effect.quantity) {
+                        newPlayer = removeItem(newPlayer, effect.itemId, effect.quantity);
                         effectApplied = true;
                     } else {
                         allEffectsApplied = false;
@@ -69,9 +52,10 @@ export function triggerEventEffect(effects: GameEffect[], message: string) {
                     }
                     break;
                 case 'SWAP_ITEM':
-                    const take = removeItem(newPlayer, effect.takeItemId, effect.takeQuantity);
-                    if (take.success) {
-                        newPlayer = addItem(take.player, effect.giveItemId, effect.giveQuantity);
+                    const itemToTake = newPlayer.inventory.find(i => i.itemId === effect.takeItemId);
+                    if (itemToTake && itemToTake.amount >= effect.takeQuantity) {
+                        newPlayer = removeItem(newPlayer, effect.takeItemId, effect.takeQuantity);
+                        newPlayer = addItem(newPlayer, effect.giveItemId, effect.giveQuantity);
                         effectApplied = true;
                     } else {
                         allEffectsApplied = false;

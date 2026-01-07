@@ -8,7 +8,7 @@
     export let player: Player;
 
     const TILE_SIZE = 16;
-    const RENDER_SCALE = 4; // Using your preferred scale
+    const RENDER_SCALE = 3; // Using your preferred scale
     const FINAL_TILE_SIZE = TILE_SIZE * RENDER_SCALE;
 
     let windowWidth: number;

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     import CropAlmanac from './CropAlmanac.svelte';
-    import SkillTree from './SkillTree.svelte';
+    import UpgradeTree from './UpgradeTree.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -26,7 +26,7 @@
             {#if activeTab === 'almanac'}
                 <CropAlmanac />
             {:else if activeTab === 'skill_tree'}
-                <SkillTree />
+                <UpgradeTree />
             {/if}
         </div>
     </div>

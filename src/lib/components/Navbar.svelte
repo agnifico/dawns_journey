@@ -10,8 +10,8 @@
     <div class="navbar-left">
         <a href="/" class="brand">Dawn's Journey</a>
         <div class="nav-stat-bars">
-            <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#61b753" />
-            <StatBar current={$playerStats.auraShield} max={$playerStats.maxAuraShield} color="#3b82f6" />
+            <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
+            <StatBar current={$playerStats.auraShield} max={$playerStats.maxAuraShield} color="#a98467" />
         </div>
     </div>
     <div class="navbar-right">
@@ -28,6 +28,9 @@
         <button class="icon-button" on:click={() => goto('/homestead')} title="Homestead">
             <img src="/game_icons/homestead.png" alt="Homestead" />
         </button>
+        <button class="icon-button" on:click={() => goto('/settings')} title="Settings">
+            <img src="/game_icons/settings.png" alt="Settings" />
+        </button>
 
         <TimeDisplay />
 
@@ -41,20 +44,25 @@
             <img src="/game_icons/load.png" alt="Load" />
         </button>
         <button class="icon-button danger" on:click={SaveLoadService.clearSave} title="Delete Save">
-            <img src="/game_icons/take.png" alt="Delete" />
+            <img src="/game_icons/cancel.png" alt="Delete" />
         </button>
     </div>
 </nav>
 
 <style>
     .navbar {
+        position: absolute;
+        inset: 0;
+        height: 50px;
+        box-sizing: border-box;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #222;
-        padding: 0.5em 1em;
+        background-color: var(--color-secondary);
+        padding: 1rem 1rem;
         color: white;
-        border-bottom: 2px solid #444;
+        border-bottom: 4px solid #00000056;
+        z-index: 1; 
     }
 
     .navbar-left {
@@ -86,7 +94,7 @@
     .icon-button {
         background: none;
         border: 2px solid #555;
-        padding: 0.5em;
+        padding: 0.25em;
         cursor: pointer;
         background-color: #333;
         display: flex;
@@ -106,10 +114,6 @@
         width: 24px;
         height: 24px;
         display: block;
-    }
-
-    .time-of-day {
-        cursor: help;
     }
 
     .divider {

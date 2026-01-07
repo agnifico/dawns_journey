@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { homesteadMapStore, type HomesteadPlots, type PlotData } from '$lib/stores/homesteadStore';
+    import { getHomesteadPlots, type HomesteadPlots, type PlotData } from '$lib/services/HomesteadDataService';
     import { currentEnvironment, type HomesteadEnvironment } from '$lib/stores/environmentStore';
     import { derived } from 'svelte/store';
-    import { selectedPlotId } from '$lib/stores/selectionStore';
+    import { selectedPlotId } from '$lib/stores/uiStore';
+
+    const homesteadPlots = getHomesteadPlots();
 
     const environmentKeyMap: Record<HomesteadEnvironment, keyof HomesteadPlots> = {
         env_open_field: 'open_field',
@@ -11,10 +13,10 @@
     };
 
     const currentPlots = derived(
-        [homesteadMapStore, currentEnvironment],
-        ([$homesteadMapStore, $currentEnvironment]) => {
+        currentEnvironment,
+        ($currentEnvironment) => {
             const key = environmentKeyMap[$currentEnvironment];
-            return $homesteadMapStore[key] || [];
+            return homesteadPlots[key] || [];
         }
     );
 

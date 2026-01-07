@@ -1,19 +1,4 @@
 :root {
-    /* Light Mode Colors */
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #f5cac3;
-    --color-background-primary: #22223b;
-    --color-background-secondary: #6d6875;
-    --color-border: #0fa3b1;
-    --color-accent-primary: #a53860;
-    --color-accent-secondary: #b3b3b3;
-    --color-orange: #f7a072;
-
-    /* Game specific colors (can be refined later) */
-    --color-player: #2d6a4f;
-    --color-npc: #00b4d8;
-    --color-enemy: #ff4d6d;
-
     --navbar-height: 3rem;
 }
 
@@ -24,11 +9,13 @@ p {
 html,
 body {
     height: 100dvh;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: var(--color-background-primary);
-    color: var(--color-text-primary);
+    background-color: var(--color-background);
+    color: var(--color-text);
     transition: background-color 0.3s ease, color 0.3s ease;
     image-rendering: pixelated;
     cursor:

@@ -647,6 +647,36 @@
       "npcId": "sylvie"
     },
     {
+      "type": "npc",
+      "x": 27,
+      "y": 1,
+      "npcId": "guinevere"
+    },
+    {
+      "type": "npc",
+      "x": 26,
+      "y": 13,
+      "npcId": "claudia"
+    },
+    {
+      "type": "npc",
+      "x": 17,
+      "y": 18,
+      "npcId": "marjane"
+    },
+    {
+      "type": "npc",
+      "x": 8,
+      "y": 18,
+      "npcId": "hanabi"
+    },
+    {
+      "type": "npc",
+      "x": 17,
+      "y": 9,
+      "npcId": "veres"
+    },
+    {
       "type": "event",
       "x": 3,
       "y": 5,
@@ -660,21 +690,21 @@
     },
     {
       "type": "event",
-      "x": 10,
-      "y": 10,
+      "x": 18,
+      "y": 3,
       "eventId": "treasure_chest"
     },
     {
       "type": "event",
-      "x": 10,
-      "y": 11,
-      "eventId": "offering_altar"
+      "x": 9,
+      "y": 10,
+      "eventId": "ancient_dragons_fang_shrine"
     },
     {
       "type": "event",
-      "x": 10,
-      "y": 12,
-      "eventId": "gem_trap"
+      "x": 16,
+      "y": 11,
+      "eventId": "small_cave_1"
     }
   ],
   "playerStart": {

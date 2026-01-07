@@ -1,5 +1,44 @@
 import type { CropDefinition } from '../types';
 
+// --- HELPER FUNCTIONS (from imageUtils.ts) ---
+
+/**
+ * Generates a two-letter abbreviation for a crop name.
+ * e.g., "Snow Pea" -> "SP", "Ginseng" -> "Gi"
+ * @param name The full name of the crop.
+ * @returns A two-letter string.
+ */
+function getAbbreviation(name: string): string {
+    const words = name.split(' ');
+    if (words.length > 1) {
+        return (words[0][0] + (words[1][0] || '')).toUpperCase();
+    }
+    return name.substring(0, 2);
+}
+
+/**
+ * Generates a data URI for a square SVG placeholder image with two letters.
+ * @param abbreviation The two-letter string to display.
+ * @returns A data URI string.
+ */
+function generatePlaceholder(abbreviation: string): string {
+    const bgColor = '#5a5a5a'; // A neutral dark grey
+    const textColor = '#ffffff';
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+            <rect width="80" height="80" fill="${bgColor}" />
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${textColor}" font-size="32" font-family="monospace" font-weight="bold">
+                ${abbreviation}
+            </text>
+        </svg>
+    `.trim().replace(/\s\s+/g, ' ');
+
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+
+// --- CROP DATA ---
+
 const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'growthMultiplierInIdealSeason' | 'yieldMultiplierInIdealSeason' | 'totalGrowthTime'> & { xpValue: number } } = {
     "potato": {
         "id": "potato",
@@ -141,30 +180,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 1,
         "xpValue": 25,
         "growthStages": [
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_00.png"
-            },
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_01.png"
-            },
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_02.png"
-            },
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_03.png"
-            },
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_04.png"
-            },
-            {
-                "duration": 1 * 60 * 1000, // 1 minute
-                "imagePath": "/crops/fava_bean_05.png"
-            }
+            { "duration": 1 * 60 * 1000, "imagePath": "" },
+            { "duration": 1 * 60 * 1000, "imagePath": "" },
+            { "duration": 1 * 60 * 1000, "imagePath": "" },
+            { "duration": 1 * 60 * 1000, "imagePath": "" },
+            { "duration": 1 * 60 * 1000, "imagePath": "" },
+            { "duration": 1 * 60 * 1000, "imagePath": "" }
         ]
     },
     "kale": {
@@ -207,9 +228,9 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             }
         ]
     },
-    "tomato": {
-        "id": "tomato",
-        "name": "Tomato",
+    "tomatoo": {
+        "id": "tomatoo",
+        "name": "Tomato X",
         "description": "Solanum lycopersicum. A heat-loving fruit, commonly treated as a vegetable. It is sensitive to cold and requires a long, warm growing season, making a greenhouse ideal.",
         "unlockLevel": 8,
         "requiredEnvironment": [
@@ -223,27 +244,27 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "growthStages": [
             {
                 "duration": 2 * 60 * 1000, // 2 minutes (rounded from 1.5)
-                "imagePath": "/crops/tomato_00.png"
+                "imagePath": ""
             },
             {
                 "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/tomato_01.png"
+                "imagePath": ""
             },
             {
                 "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/tomato_02.png"
+                "imagePath": ""
             },
             {
                 "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/tomato_03.png"
+                "imagePath": ""
             },
             {
                 "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/tomato_04.png"
+                "imagePath": ""
             },
             {
                 "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/tomato_05.png"
+                "imagePath": ""
             }
         ]
     },
@@ -305,30 +326,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 1,
         "xpValue": 55,
         "growthStages": [
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes (rounded from 1.5)
-                "imagePath": "/crops/snow_pea_00.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/snow_pea_01.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/snow_pea_02.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/snow_pea_03.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/snow_pea_04.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/snow_pea_05.png"
-            }
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" }
         ]
     },
     "cucumber": {
@@ -347,30 +350,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 2,
         "xpValue": 65,
         "growthStages": [
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes (rounded from 1.75)
-                "imagePath": "/crops/cucumber_00.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/cucumber_01.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/cucumber_02.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/cucumber_03.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/cucumber_04.png"
-            },
-            {
-                "duration": 2 * 60 * 1000, // 2 minutes
-                "imagePath": "/crops/cucumber_05.png"
-            }
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" },
+            { "duration": 2 * 60 * 1000, "imagePath": "" }
         ]
     },
     "pumpkin": {
@@ -464,30 +449,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 2,
         "xpValue": 180,
         "growthStages": [
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_00.png"
-            },
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_01.png"
-            },
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_02.png"
-            },
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_03.png"
-            },
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_04.png"
-            },
-            {
-                "duration": 9 * 60 * 1000, // 9 minutes
-                "imagePath": "/crops/cardamom_05.png"
-            }
+            { "duration": 9 * 60 * 1000, "imagePath": "" },
+            { "duration": 9 * 60 * 1000, "imagePath": "" },
+            { "duration": 9 * 60 * 1000, "imagePath": "" },
+            { "duration": 9 * 60 * 1000, "imagePath": "" },
+            { "duration": 9 * 60 * 1000, "imagePath": "" },
+            { "duration": 9 * 60 * 1000, "imagePath": "" }
         ]
     },
     "ginseng": {
@@ -506,30 +473,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 20,
         "xpValue": 300,
         "growthStages": [
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_00.png"
-            },
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_01.png"
-            },
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_02.png"
-            },
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_03.png"
-            },
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_04.png"
-            },
-            {
-                "duration": 24 * 60 * 1000, // 24 minutes
-                "imagePath": "/crops/ginseng_05.png"
-            }
+            { "duration": 24 * 60 * 1000, "imagePath": "" },
+            { "duration": 24 * 60 * 1000, "imagePath": "" },
+            { "duration": 24 * 60 * 1000, "imagePath": "" },
+            { "duration": 24 * 60 * 1000, "imagePath": "" },
+            { "duration": 24 * 60 * 1000, "imagePath": "" },
+            { "duration": 24 * 60 * 1000, "imagePath": "" }
         ]
     },
     "wasabi": {
@@ -594,30 +543,12 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "wateringRequirementValue": 3,
         "xpValue": 1000,
         "growthStages": [
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_00.png"
-            },
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_01.png"
-            },
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_02.png"
-            },
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_03.png"
-            },
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_04.png"
-            },
-            {
-                "duration": 18 * 60 * 1000, // 18 minutes
-                "imagePath": "/crops/dragon_fruit_05.png"
-            }
+            { "duration": 18 * 60 * 1000, "imagePath": "" },
+            { "duration": 18 * 60 * 1000, "imagePath": "" },
+            { "duration": 18 * 60 * 1000, "imagePath": "" },
+            { "duration": 18 * 60 * 1000, "imagePath": "" },
+            { "duration": 18 * 60 * 1000, "imagePath": "" },
+            { "duration": 18 * 60 * 1000, "imagePath": "" }
         ]
     },
     "saffron": {
@@ -641,27 +572,27 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
         "growthStages": [
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_00.png"
+                "imagePath": ""
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_01.png"
+                "imagePath": ""
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_02.png"
+                "imagePath": ""
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_03.png"
+                "imagePath": ""
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_04.png"
+                "imagePath": ""
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": "/crops/saffron_05.png"
+                "imagePath": ""
             }
         ]
     }
@@ -695,4 +626,33 @@ for (const key in crops) {
         totalGrowthTime: totalGrowthTime,
         leavesYield: leavesYield,
     };
+}
+
+// --- DATA CLEANUP ---
+const placeholderCrops = new Set(['fava_bean', 'ginseng', 'cardamom', 'dragon_fruit', 'cucumber', 'snow_pea']);
+
+for (const key in cropDefinitions) {
+    const crop = cropDefinitions[key];
+    
+    // Handle crops that need a placeholder
+    if (placeholderCrops.has(crop.id)) {
+        const placeholder = generatePlaceholder(getAbbreviation(crop.name));
+        crop.growthStages.forEach(stage => stage.imagePath = placeholder);
+    } 
+    // Handle other crops that might be missing some images
+    else {
+        const finalStageImage = crop.growthStages[crop.growthStages.length - 1]?.imagePath;
+        if (finalStageImage) {
+            crop.growthStages.forEach(stage => {
+                if (!stage.imagePath) {
+                    stage.imagePath = finalStageImage;
+                }
+            });
+        }
+        // If even the final image is missing for a non-placeholder crop, generate a placeholder as a last resort
+        else {
+            const placeholder = generatePlaceholder(getAbbreviation(crop.name));
+            crop.growthStages.forEach(stage => stage.imagePath = placeholder);
+        }
+    }
 }

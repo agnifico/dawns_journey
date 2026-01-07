@@ -3,7 +3,7 @@
     import { playerStore } from '$lib/stores/playerStore';
     import { cropDefinitions } from '$lib/data/cropDefinitions';
     import { derived, writable } from 'svelte/store'; // Import writable
-    import { getItemById } from '$lib/stores/itemStore';
+    import { getItemById } from '$lib/services/ItemDataService';
 
     
 

@@ -1,10 +1,10 @@
 import { get } from 'svelte/store';
 import { playerStore, playerStats, playerExplorationAbilities, playerMastery, playerActiveElements } from '$lib/stores/playerStore';
 import { mapStore } from '$lib/stores/mapStore';
-import { eventScreenStore } from '$lib/stores/eventScreenStore';
+import { showEvent } from '$lib/stores/uiStore';
 import { messageStore } from '$lib/stores/messageStore';
-import { getEnemyById } from '$lib/stores/enemyStore';
-import { getItemById } from '$lib/stores/itemStore';
+import { getEnemyById } from '$lib/services/EnemyDataService';
+import { getItemById } from '$lib/services/ItemDataService';
 import { getRegionForPosition } from './MapService';
 import { addItem } from './ItemService';
 import type { MapData } from '$lib/types';
@@ -44,7 +44,7 @@ export function checkForRandomEncounter() {
                 const enemyData = getEnemyById(spawn.id);
                 if (!enemyData) break;
 
-                eventScreenStore.show('enemy', enemyData.image, enemyData);
+                showEvent('enemy', enemyData.image, enemyData);
                 messageStore.addMessage(`A wild ${enemyData.name} appears!`, ['World']);
 
                 const currentMastery = get(playerMastery);
@@ -64,9 +64,8 @@ export function checkForRandomEncounter() {
                         newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
                         
                         (enemyData.drops || []).forEach(drop => {
-                            const droppedItem = getItemById(drop.itemId);
-                            if (droppedItem) {
-                                messageStore.addMessage(`You found ${drop.quantity} ${droppedItem.name}!`, ['World']);
+                            const roll = Math.random();
+                            if (!drop.chance || roll < drop.chance) {
                                 newPlayer = addItem(newPlayer, drop.itemId, drop.quantity);
                             }
                         });
@@ -94,10 +93,9 @@ export function checkForRandomEncounter() {
                 const item = getItemById(drop.id);
                 if (item) {
                     playerStore.update(p => {
-                        return addItem(p, item.id, 1);
+                        const newPlayer = addItem(p, item.id, 1);
+                        return newPlayer;
                     });
-                    messageStore.addMessage(`You found a ${item.name}!`, ['World']);
-                    eventScreenStore.show('item_found', `/general/${item.id}.png`, { item, quantity: 1 });
                 }
                 break;
             }

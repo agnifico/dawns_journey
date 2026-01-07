@@ -5,22 +5,9 @@ import { farmingTechTree } from './skilltree/farming'; // Import the farming tec
 import homesteadPlots from './homesteadPlots.json';
 import { v4 as uuidv4 } from 'uuid';
 
-const unityWeapon = items.find(i => i.id === 'unity') as Weapon;
-
 const initialInventory: InventoryItem[] = [
     // { itemId: 'compost', amount: 20 }
 ];
-
-// Pre-populate inventory with some items for testing
-for (const item of items) {
-    if (item.id === 'unity') continue; // Don't add the equipped weapon to inventory
-
-    if (item.type === 'general') {
-        initialInventory.push({ itemId: item.id, amount: 5 });
-    } else if (item.type === 'weapon' || item.type === 'relic') {
-        initialInventory.push({ itemId: item.id, amount: 1 });
-    }
-}
 
 const initialSkills = Object.keys(skills).map(skillId => ({
     id: skillId,
@@ -34,19 +21,19 @@ const allFarmingTechIds = Array.from(new Set(farmingTechTree.map(node => node.id
 
 // Generate initial farm plots from the processed map data
 const initialFarmPlots: FarmPlot[] = [];
-(Object.keys(homesteadPlots) as Array<keyof typeof homesteadPlots>).forEach(envKey => {
-    const plotData = homesteadPlots[envKey];
-    plotData.forEach(plot => {
-        initialFarmPlots.push({
-            id: uuidv4(), // Generate a unique ID for the player's instance of the plot
-            mapObjectId: plot.id, // Link to the Tiled map object ID
-            requiredLevel: plot.requiredLevel,
-            x: plot.x,
-            y: plot.y,
-            environment: `env_${envKey}`, // Correctly format the environment string
-            crop: null,
-            appliedTech: [],
-        });
+// The player starts with the first 6 plots in the open field.
+// Other plots and environments are unlocked via the skill tree.
+const startingPlots = homesteadPlots.open_field.slice(0, 6);
+startingPlots.forEach(plot => {
+    initialFarmPlots.push({
+        id: uuidv4(), // Generate a unique ID for the player's instance of the plot
+        mapObjectId: plot.id, // Link to the Tiled map object ID
+        requiredLevel: plot.requiredLevel,
+        x: plot.x,
+        y: plot.y,
+        environment: 'env_open_field',
+        crop: null,
+        appliedTech: [],
     });
 });
 
@@ -71,7 +58,7 @@ export const player: Player = {
         critDamage: 1.5, // 1.5x default
     },
     equipment: {
-        weapon_slots: [unityWeapon, null],
+        weapon_slots: [null, null],
         relic_slots: [null, null, null, null],
     },
     inventory: initialInventory,
@@ -81,10 +68,10 @@ export const player: Player = {
     skills: initialSkills,
     killCounts: {},
     combatHistory: [],
-    farmingLevel: 99, // For testing
+    farmingLevel: 1,
     farmingXp: 0,
-    techPoints: 999, // For testing
-    unlockedTech: ['env_open_field', 'env_greenhouse', 'env_forest_floor', ...allFarmingTechIds], // Unlock all for testing
+    techPoints: 0,
+    unlockedTech: ['env_open_field'], // Start with only the open field unlocked
     homestead: {
         farmPlots: initialFarmPlots,
         compostQueue: [],

@@ -3,10 +3,11 @@ import { playerStore, playerExplorationAbilities } from '$lib/stores/playerStore
 import { mapStore } from '$lib/stores/mapStore';
 import { time } from '$lib/stores/timeStore';
 import { messageStore } from '$lib/stores/messageStore';
-import { eventScreenStore } from '$lib/stores/eventScreenStore';
+import { clearEvent } from '$lib/stores/uiStore';
 import { checkForTileInteraction } from './InteractionService';
 import { checkForRandomEncounter } from './EncounterService';
 import { getRegionForPosition } from './MapService';
+import { processBuffs } from './BuffService';
 import type { MapData } from '$lib/types';
 
 /**
@@ -16,7 +17,7 @@ export async function movePlayer(dx: number, dy: number) {
     const mapData = get(mapStore).mapData;
     if (!mapData) return;
 
-    const player = get(playerStore);
+    let player = get(playerStore);
     const newPosition = { x: player.position.x + dx, y: player.position.y + dy };
 
     // Check boundaries
@@ -48,11 +49,15 @@ export async function movePlayer(dx: number, dy: number) {
         }
     }
 
+    // Process buffs before updating time and position
+    const nextTime = get(time) + 1;
+    player = processBuffs(player, nextTime);
+
     // Update player position and time
     const direction = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
-    playerStore.update(p => ({ ...p, position: newPosition, direction, isMoving: true }));
+    playerStore.update(p => ({ ...player, position: newPosition, direction, isMoving: true }));
     time.update(t => t + 1);
-    eventScreenStore.clear();
+    clearEvent();
 
     // Check for interactions and encounters
     const interactionOccurred = await checkForTileInteraction();

@@ -4,28 +4,30 @@
 </script>
 
 <Tooltip text={$formattedTime} direction="down">
-    <div class="time-display">
-        {#if $phase === 'Dawnrise'}
+    {#if $phase === 'Dawnrise'}
+        <div class="time-display" style:background-color="#4eacea">
             <img src="/game_icons/day.png" alt="Dawnrise" />
-        {:else}
+        </div>
+    {:else}
+        <div class="time-display" style:background-color="#4f2475" style:border="2px solid black">
             <img src="/game_icons/night.png" alt="Duskfall" />
-        {/if}
-    </div>
+        </div>
+    {/if}
 </Tooltip>
 
 <style>
     .time-display {
-        background-color: #333;
-        border: 2px solid #555;
-        padding: 0.5em;
+        background-color: #4f2475;
+        border: 2px solid #0f6495;
+        padding: 0.25em;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: help;
     }
     .time-display:hover {
-        background-color: #444;
-        border-color: #777;
+        background-color: #ffffff;
+        /* border-color: #777; */
     }
     img {
         width: 24px;

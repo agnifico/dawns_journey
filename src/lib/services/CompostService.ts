@@ -40,8 +40,6 @@ export function startComposting(leavesToUse: number) {
 
         newPlayer.homestead.compostQueue.push(newCompostTask);
 
-        messageStore.addMessage(`Started composting ${leavesToUse} leaves. It will produce ${compostToProduce} compost in ${compostToProduce} hour(s).`, ['World']);
-
         return newPlayer;
     });
 }
@@ -70,7 +68,6 @@ export function claimCompost(taskId: string) {
 
         // Add compost to inventory
         newPlayer = addItem(newPlayer, 'compost', task.compostToProduce);
-        messageStore.addMessage(`Claimed ${task.compostToProduce} Compost.`, ['World']);
 
         // Remove task from queue
         newPlayer.homestead.compostQueue.splice(taskIndex, 1);

@@ -13,7 +13,7 @@ export const allEnemies: Enemy[] = [
         },
         "drops": [
             { "itemId": "shark_fin", "quantity": 1 },
-            { "itemId": "argentum", "quantity": 100 }
+            { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
         ]
     },
     {
@@ -29,7 +29,7 @@ export const allEnemies: Enemy[] = [
         },
         "drops": [
             { "itemId": "raw_hide", "quantity": 1 },
-            { "itemId": "argentum", "quantity": 100 }
+            { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
         ]
     },
     {
@@ -44,7 +44,7 @@ export const allEnemies: Enemy[] = [
         },
         "drops": [
             { "itemId": "dragon_fang", "quantity": 1 },
-            { "itemId": "azurite", "quantity": 1 },
+            { "itemId": "azurite", "quantity": 1, "chance": 0.5 },
             { "itemId": "argentum", "quantity": 300 }
         ]
     },
@@ -61,7 +61,7 @@ export const allEnemies: Enemy[] = [
         },
         "drops": [
             { "itemId": "raw_hide", "quantity": 3 },
-            { "itemId": "blueberries", "quantity": 1 },
+            { "itemId": "blueberries", "quantity": 1, "chance": 0.5 },
             { "itemId": "argentum", "quantity": 100 }
         ]
     }

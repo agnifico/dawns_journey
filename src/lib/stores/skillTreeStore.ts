@@ -2,6 +2,8 @@ import { writable, get } from 'svelte/store';
 import type { TechNode, Prerequisite, Player, FarmPlot } from '$lib/types';
 import { playerStore } from './playerStore';
 import { messageStore } from './messageStore';
+import homesteadPlots from '$lib/data/homesteadPlots.json';
+import { v4 as uuidv4 } from 'uuid';
 
 interface SkillTreeState {
     techNodes: Map<string, TechNode>;
@@ -87,72 +89,82 @@ function createSkillTreeStore() {
             // Handle special unlocks for environments and plot expansions
             switch (nodeId) {
                 case 'env_greenhouse':
-                    // Add initial 6 plots for Greenhouse
-                    for (let i = 0; i < 6; i++) {
+                    const initialGreenhousePlots = homesteadPlots.greenhouse.slice(0, 6);
+                    initialGreenhousePlots.forEach(plot => {
                         newPlayer.homestead.farmPlots.push({
-                            id: `greenhouse_plot_${i + 1}`,
-                            x: i % 3, // Example coordinates
-                            y: Math.floor(i / 3),
+                            id: uuidv4(),
+                            mapObjectId: plot.id,
+                            requiredLevel: plot.requiredLevel,
+                            x: plot.x,
+                            y: plot.y,
                             environment: 'env_greenhouse',
                             crop: null,
                             appliedTech: []
                         });
-                    }
+                    });
                     break;
                 case 'env_forest_floor':
-                    // Add initial 6 plots for Forest Floor
-                    for (let i = 0; i < 6; i++) {
+                    const initialForestPlots = homesteadPlots.forest_floor.slice(0, 6);
+                    initialForestPlots.forEach(plot => {
                         newPlayer.homestead.farmPlots.push({
-                            id: `forest_plot_${i + 1}`,
-                            x: i % 3, // Example coordinates
-                            y: Math.floor(i / 3),
+                            id: uuidv4(),
+                            mapObjectId: plot.id,
+                            requiredLevel: plot.requiredLevel,
+                            x: plot.x,
+                            y: plot.y,
                             environment: 'env_forest_floor',
                             crop: null,
                             appliedTech: []
                         });
-                    }
+                    });
                     break;
                 case 'upgrade_open_field_plots':
-                    // Add 4 more plots to Open Field
                     const currentOpenFieldPlots = newPlayer.homestead.farmPlots.filter(plot => plot.environment === 'env_open_field').length;
-                    for (let i = 0; i < 4; i++) {
+                    const openFieldPlotsToAdd = homesteadPlots.open_field.slice(currentOpenFieldPlots, currentOpenFieldPlots + 4);
+                    openFieldPlotsToAdd.forEach(plot => {
                         newPlayer.homestead.farmPlots.push({
-                            id: `plot_${currentOpenFieldPlots + i + 1}`,
-                            x: (currentOpenFieldPlots + i) % 4, // Example coordinates
-                            y: Math.floor((currentOpenFieldPlots + i) / 4),
+                            id: uuidv4(),
+                            mapObjectId: plot.id,
+                            requiredLevel: plot.requiredLevel,
+                            x: plot.x,
+                            y: plot.y,
                             environment: 'env_open_field',
                             crop: null,
                             appliedTech: []
                         });
-                    }
+                    });
                     break;
                 case 'upgrade_greenhouse_plots':
-                    // Add 4 more plots to Greenhouse
                     const currentGreenhousePlots = newPlayer.homestead.farmPlots.filter(plot => plot.environment === 'env_greenhouse').length;
-                    for (let i = 0; i < 4; i++) {
+                    const greenhousePlotsToAdd = homesteadPlots.greenhouse.slice(currentGreenhousePlots, currentGreenhousePlots + 4);
+                    greenhousePlotsToAdd.forEach(plot => {
                         newPlayer.homestead.farmPlots.push({
-                            id: `greenhouse_plot_${currentGreenhousePlots + i + 1}`,
-                            x: (currentGreenhousePlots + i) % 4,
-                            y: Math.floor((currentGreenhousePlots + i) / 4),
+                            id: uuidv4(),
+                            mapObjectId: plot.id,
+                            requiredLevel: plot.requiredLevel,
+                            x: plot.x,
+                            y: plot.y,
                             environment: 'env_greenhouse',
                             crop: null,
                             appliedTech: []
                         });
-                    }
+                    });
                     break;
                 case 'upgrade_forest_floor_plots':
-                    // Add 4 more plots to Forest Floor
                     const currentForestFloorPlots = newPlayer.homestead.farmPlots.filter(plot => plot.environment === 'env_forest_floor').length;
-                    for (let i = 0; i < 4; i++) {
+                    const forestPlotsToAdd = homesteadPlots.forest_floor.slice(currentForestFloorPlots, currentForestFloorPlots + 4);
+                    forestPlotsToAdd.forEach(plot => {
                         newPlayer.homestead.farmPlots.push({
-                            id: `forest_plot_${currentForestFloorPlots + i + 1}`,
-                            x: (currentForestFloorPlots + i) % 4,
-                            y: Math.floor((currentForestFloorPlots + i) / 4),
+                            id: uuidv4(),
+                            mapObjectId: plot.id,
+                            requiredLevel: plot.requiredLevel,
+                            x: plot.x,
+                            y: plot.y,
                             environment: 'env_forest_floor',
                             crop: null,
                             appliedTech: []
                         });
-                    }
+                    });
                     break;
             }
 

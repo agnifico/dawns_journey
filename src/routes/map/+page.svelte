@@ -6,6 +6,7 @@
 	import { npcStore } from '$lib/stores/npcStore';
 	import { mapStore } from '$lib/stores/mapStore';
 	import { combatStore } from '$lib/stores/combatStore';
+    import { dialogueStore } from '$lib/stores/dialogueStore';
 	import { mobileInfoPanelView, switchToEventView, switchToLogView } from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
@@ -13,28 +14,40 @@
 	import MobileInfoPanel from '$lib/components/MobileInfoPanel.svelte';
 	import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
     import CombatModal from '$lib/components/CombatModal.svelte';
+    import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
+    import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
+    import DialogueBox from '$lib/components/DialogueBox.svelte';
 
     let mainElement: HTMLElement;
+    let isMobile = false;
 
 	onMount(async () => {
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        isMobile = mediaQuery.matches;
+        const handler = (e: { matches: boolean; }) => isMobile = e.matches;
+        mediaQuery.addEventListener('change', handler);
+
 		if (!get(playerStore).isInitialized) {
 			await npcStore.initializeGlobalNpcs();
 			await game.initializeGame();
 			playerStore.update((p) => ({ ...p, isInitialized: true }));
 		}
         mainElement.focus();
+
+        return () => mediaQuery.removeEventListener('change', handler);
 	});
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
 
+        if (get(dialogueStore).isOpen) {
+            handleMovement(event.key);
+            return;
+        }
+
 		handleMovement(event.key);
 
 		switch (event.key) {
-			case 'g':
-			case 'G':
-				game.gatherResource();
-				break;
 			case ' ': // A button
 				handleActionButton();
 				break;
@@ -84,6 +97,9 @@
 
 <main on:keydown={handleKeyDown} tabindex="0" bind:this={mainElement}>
     <CombatModal />
+    <QuestTracker />
+    <HomesteadStatus />
+    <DialogueBox />
 
 	<div class="game-view-container">
 		<CoordinateDisplay />
@@ -94,57 +110,59 @@
 		{/if}
 	</div>
 
-	<!-- Desktop Right Panel -->
-	<div class="right-panel">
-		<div class="event-screen-wrapper">
-			<EventScreen />
-		</div>
-		<div class="message-log-wrapper">
-			<MessageLog />
-		</div>
-	</div>
-
-	<!-- Mobile Bottom Bar -->
-	<div class="mobile-bottom-bar">
-		<div class="mobile-info-wrapper">
-			<MobileInfoPanel />
-		</div>
-		<div class="mobile-controls">
-			<div class="d-pad">
-				<button class="d-pad-up" on:click={() => handleMovement('ArrowUp')}>▲</button>
-				<button class="d-pad-left" on:click={() => handleMovement('ArrowLeft')}>◀</button>
-				<button class="d-pad-right" on:click={() => handleMovement('ArrowRight')}>▶</button>
-				<button class_="d-pad-down" on:click={() => handleMovement('ArrowDown')}>▼</button>
-			</div>
-			<div class="mobile-center-actions">
-				<button class="switch-view-button" on:click={toggleMobileView}>
-					{$mobileInfoPanelView === 'log' ? 'Event' : 'Log'}
-				</button>
-			</div>
-			<div class="action-buttons">
-				<button class="b-button">B</button>
-				<button class="a-button" on:click={handleActionButton}>A</button>
-			</div>
-		</div>
-	</div>
+    {#if isMobile}
+        <!-- Mobile Bottom Bar -->
+        <div class="mobile-bottom-bar">
+            <div class="mobile-info-wrapper">
+                <MobileInfoPanel />
+            </div>
+            <div class="mobile-controls">
+                <div class="d-pad">
+                    <button class="d-pad-up" on:click={() => handleMovement('ArrowUp')}>▲</button>
+                    <button class="d-pad-left" on:click={() => handleMovement('ArrowLeft')}>◀</button>
+                    <button class="d-pad-right" on:click={() => handleMovement('ArrowRight')}>▶</button>
+                    <button class_="d-pad-down" on:click={() => handleMovement('ArrowDown')}>▼</button>
+                </div>
+                <div class="mobile-center-actions">
+                    <button class="switch-view-button" on:click={toggleMobileView}>
+                        {$mobileInfoPanelView === 'log' ? 'Event' : 'Log'}
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="b-button">B</button>
+                    <button class="a-button" on:click={handleActionButton}>A</button>
+                </div>
+            </div>
+        </div>
+    {:else}
+        <!-- Desktop Right Panel -->
+        <div class="right-panel">
+            <div class="event-screen-wrapper">
+                <EventScreen />
+            </div>
+            <div class="message-log-wrapper">
+                <MessageLog />
+            </div>
+        </div>
+    {/if}
 </main>
 
 <style>
 	main {
-		width: 100vw;
-		height: 100%;
+		width: 100%;
+		height: 100vh;
 		display: flex;
 		background-color: #111;
 		outline: none;
-		overflow: hidden; /* Apply overflow hidden directly to the main element */
 	}
 	.game-view-container {
-		flex-grow: 1;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 100%;
 		position: relative;
+		width: 100%;
+		margin: auto;
 	}
 	.right-panel {
 		display: flex;
@@ -157,20 +175,33 @@
 	}
 
 	.event-screen-wrapper {
-		flex-shrink: 0; /* Prevent this from shrinking */
+		flex-shrink: 0;
 		border-bottom: 1px solid #444;
+		height: 40vh;
 	}
 
 	.message-log-wrapper {
-		flex-grow: 1; /* Allow this to take up all remaining space */
-		min-height: 0; /* Flexbox fix to allow shrinking and scrolling */
-		display: flex; /* Make the wrapper a flex container */
-		margin-bottom: 4rem;
+		flex-grow: 1;
+		height: 50vh;
+		display: flex;
 	}
 
 	.mobile-bottom-bar {
-		display: none;
+		display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 280px;
+        background-color: #1a1a1a;
+        flex-shrink: 0;
+        position: absolute;
+        bottom: 0;
 	}
+    
+    @media (min-width: 769px) {
+        .mobile-bottom-bar {
+            display: none;
+        }
+    }
 
 	@media (max-width: 768px) {
 		main {
@@ -181,14 +212,6 @@
 		}
 		.game-view-container {
 			height: calc(100% - 280px);
-		}
-		.mobile-bottom-bar {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			height: 280px;
-			background-color: #1a1a1a;
-			flex-shrink: 0;
 		}
 		.mobile-info-wrapper {
 			height: 160px;

@@ -1,8 +1,10 @@
 import { get } from 'svelte/store';
-import type { Player, Item, Weapon, Relic } from '$lib/types';
+import type { Player, Item, Weapon, Relic, ActiveEffect } from '$lib/types';
 import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
-import { getItemById } from '$lib/stores/itemStore';
+import { notificationStore } from '$lib/stores/notificationStore';
+import { getItemById } from '$lib/services/ItemDataService';
+import { time } from '$lib/stores/timeStore';
 
 /**
  * Consumes an item, applying its effects and removing it from inventory.
@@ -10,7 +12,10 @@ import { getItemById } from '$lib/stores/itemStore';
 export function useItem(itemId: string) {
     playerStore.update(player => {
         const itemToUse = getItemById(itemId);
-        if (!itemToUse || !itemToUse.effects || !Array.isArray(itemToUse.effects) || itemToUse.effects.length === 0) {
+        const hasInstantEffects = itemToUse?.effects && itemToUse.effects.length > 0;
+        const hasActiveEffects = itemToUse?.activeEffects && itemToUse.activeEffects.length > 0;
+
+        if (!itemToUse || (!hasInstantEffects && !hasActiveEffects)) {
             messageStore.addMessage(`${itemToUse?.name || 'Item'} has no effect.`, ['System']);
             return player;
         }
@@ -18,15 +23,36 @@ export function useItem(itemId: string) {
         const currentStats = get(playerStats);
         let newPlayer = { ...player };
 
-        itemToUse.effects.forEach(effect => {
-            if (effect.hp) {
-                newPlayer.baseStats.hp = Math.min(currentStats.maxHp, newPlayer.baseStats.hp + effect.hp);
-            }
-            if (effect.auraShield) {
-                newPlayer.baseStats.auraShield = Math.min(currentStats.maxAuraShield, newPlayer.baseStats.auraShield + effect.auraShield);
-            }
-        });
+        // Handle instant effects (e.g., healing)
+        if (hasInstantEffects) {
+            itemToUse.effects.forEach(effect => {
+                if (effect.hp) {
+                    newPlayer.baseStats.hp = Math.min(currentStats.maxHp, newPlayer.baseStats.hp + effect.hp);
+                }
+                if (effect.auraShield) {
+                    newPlayer.baseStats.auraShield = Math.min(currentStats.maxAuraShield, newPlayer.baseStats.auraShield + effect.auraShield);
+                }
+            });
+        }
 
+        // Handle active effects (buffs/debuffs)
+        if (hasActiveEffects) {
+            const currentTime = get(time);
+            itemToUse.activeEffects.forEach(effect => {
+                // Remove any existing buff with the same ID to refresh duration
+                newPlayer.activeEffects = newPlayer.activeEffects.filter(e => e.id !== effect.id);
+
+                // Add the new effect with its expiry time
+                const newEffect: ActiveEffect = {
+                    ...effect,
+                    expiryTime: currentTime + effect.duration,
+                };
+                newPlayer.activeEffects.push(newEffect);
+                messageStore.addMessage(`${effect.name} applied.`, ['System']);
+            });
+        }
+
+        // Remove item from inventory
         const newInventory = [...newPlayer.inventory];
         const inventoryItemIndex = newInventory.findIndex(i => i.itemId === itemId);
         if (inventoryItemIndex !== -1) {
@@ -37,6 +63,7 @@ export function useItem(itemId: string) {
             }
             newPlayer.inventory = newInventory;
             messageStore.addMessage(`Used ${itemToUse.name}.`, ['System']);
+            notificationStore.add('item_used', itemToUse, 1);
         }
 
         return newPlayer;
@@ -92,9 +119,11 @@ export function equipItem(itemId: string) {
             } else {
                 newPlayer.inventory.push({ itemId: unequippedItem.id, amount: 1 });
             }
+            notificationStore.add('item_unequipped', unequippedItem, 1);
         }
 
         messageStore.addMessage(`Equipped ${itemToEquip.name}.`, ['System']);
+        notificationStore.add('item_equipped', itemToEquip, 1);
         return newPlayer;
     });
 }
@@ -118,56 +147,20 @@ export function unequipItem(slotType: 'weapon_slots' | 'relic_slots', slotIndex:
             newPlayer.equipment[slotType][slotIndex] = null;
 
             messageStore.addMessage(`Unequipped ${equippedItem.name}.`, ['System']);
+            notificationStore.add('item_unequipped', equippedItem, 1);
         }
         return newPlayer;
     });
 }
 
-export const getEquippedStats = (player: Player): Player['baseStats'] => {
-    const baseStats = player.baseStats;
-    const equippedBonuses = {
-        maxHp: 0,
-        maxAuraShield: 0,
-        physicalAttack: 0,
-        physicalDefence: 0,
-        elementalAttack: 0,
-        elementalDefence: 0,
-        speed: 0,
-        evasion: 0,
-        critChance: 0,
-        critDamage: 0,
-    };
 
-    const allEquipment: (Item | null)[] = [...player.equipment.weapon_slots, ...player.equipment.relic_slots];
-
-    for (const item of allEquipment) {
-        if (item && item.stats) {
-            for (const stat of item.stats) {
-                const statName = stat.name as keyof typeof equippedBonuses;
-                if (equippedBonuses[statName] !== undefined) {
-                    (equippedBonuses[statName] as number) += stat.value;
-                }
-            }
-        }
-    }
-
-    return {
-        hp: baseStats.hp, // Keep current HP
-        auraShield: baseStats.auraShield, // Keep current Aura Shield
-        maxHp: baseStats.maxHp + equippedBonuses.maxHp,
-        maxAuraShield: baseStats.maxAuraShield + equippedBonuses.maxAuraShield,
-        physicalAttack: baseStats.physicalAttack + equippedBonuses.physicalAttack,
-        physicalDefence: baseStats.physicalDefence + equippedBonuses.physicalDefence,
-        elementalAttack: baseStats.elementalAttack + equippedBonuses.elementalAttack,
-        elementalDefence: baseStats.elementalDefence + equippedBonuses.elementalDefence,
-        speed: baseStats.speed + equippedBonuses.speed,
-        evasion: baseStats.evasion + equippedBonuses.evasion,
-        critChance: baseStats.critChance + equippedBonuses.critChance,
-        critDamage: baseStats.critDamage + equippedBonuses.critDamage,
-    };
-};
 
 export function addItem(player: Player, itemId: string, amount: number): Player {
+    const item = getItemById(itemId);
+    if (item) {
+        notificationStore.add('item_received', item, amount);
+    }
+
     const newInventory = [...player.inventory];
     const existingItemIndex = newInventory.findIndex(i => i.itemId === itemId);
 
@@ -181,6 +174,11 @@ export function addItem(player: Player, itemId: string, amount: number): Player 
 }
 
 export function removeItem(player: Player, itemId: string, amount: number): Player {
+    const item = getItemById(itemId);
+    if (item) {
+        notificationStore.add('item_used', item, amount);
+    }
+
     const newInventory = [...player.inventory];
     const existingItemIndex = newInventory.findIndex(i => i.itemId === itemId);
 

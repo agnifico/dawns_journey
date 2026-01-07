@@ -1,20 +1,16 @@
 <script lang="ts">
-	import MessageLog from './MessageLog.svelte';
-	import EventScreen from './EventScreen.svelte';
-	import { eventScreenStore } from '$lib/stores/eventScreenStore';
-	import { mobileInfoPanelView } from '$lib/stores/uiStore';
+    import { eventScreen } from '$lib/stores/uiStore';
+    import EventScreen from '$lib/components/EventScreen.svelte';
+    import MessageLog from '$lib/components/MessageLog.svelte';
+    import { mobileInfoPanelView } from '$lib/stores/uiStore';
 </script>
 
 <div class="mobile-info-panel">
-	{#if $mobileInfoPanelView === 'log'}
-		<div class="log-view">
-			<MessageLog />
-		</div>
-	{:else}
-		<div class="event-view">
-			<EventScreen image={$eventScreenStore.image} />
-		</div>
-	{/if}
+    {#if $mobileInfoPanelView === 'log'}
+        <MessageLog />
+    {:else}
+        <EventScreen image={$eventScreen.image} />
+    {/if}
 </div>
 
 <style>

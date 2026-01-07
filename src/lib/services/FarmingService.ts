@@ -2,11 +2,12 @@ import { get } from 'svelte/store';
 import { playerStore } from '../stores/playerStore';
 import { messageStore } from '../stores/messageStore';
 import { cropDefinitions } from '../data/cropDefinitions';
-import { getItemById } from '../stores/itemStore';
-import { addItem } from './ItemService';
+import { getItemById } from '../services/ItemDataService';
+import { addItem, removeItem } from './ItemService';
 import { gainExperience } from './SkillService';
 import type { Player, Crop, FarmPlot, CropDefinition } from '../types';
 import { seasonStore } from '../stores/seasonStore';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 const FARMING_SKILL_ID = 'farming';
 
@@ -15,7 +16,7 @@ const FARMING_SKILL_ID = 'farming';
  */
 export function plantCrop(plotId: string, cropDefinitionId: string, useCompost: boolean) {
     playerStore.update(player => {
-        const newPlayer = { ...player };
+        let newPlayer = { ...player };
         const plot = newPlayer.homestead.farmPlots.find(p => p.id === plotId);
 
         if (!plot) {
@@ -45,11 +46,14 @@ export function plantCrop(plotId: string, cropDefinitionId: string, useCompost: 
                 return player;
             }
             // Consume compost
-            compostInInventory.amount--;
-            if (compostInInventory.amount <= 0) {
-                newPlayer.inventory = newPlayer.inventory.filter(i => i.itemId !== 'compost');
-            }
+            newPlayer = removeItem(newPlayer, 'compost', 1);
             messageStore.addMessage('Used 1 Compost.', ['World']);
+        }
+
+        const seedItem = getItemById(cropDef.seedItemId);
+        if (!seedItem) {
+            messageStore.addMessage('Seed item not found.', ['System']);
+            return player;
         }
 
         const seedInInventory = newPlayer.inventory.find(i => i.itemId === cropDef.seedItemId);
@@ -59,10 +63,7 @@ export function plantCrop(plotId: string, cropDefinitionId: string, useCompost: 
         }
 
         // Consume seed
-        seedInInventory.amount--;
-        if (seedInInventory.amount <= 0) {
-            newPlayer.inventory = newPlayer.inventory.filter(i => i.itemId !== seedInInventory.itemId);
-        }
+        newPlayer = removeItem(newPlayer, cropDef.seedItemId, 1);
 
         const now = Date.now();
         const newCrop: Crop = {
@@ -139,14 +140,11 @@ export function harvestCrop(plotId: string) {
         cropDef.yield.forEach(yieldItem => {
             const amount = Math.floor(yieldItem.amount * totalYieldMultiplier);
             newPlayer = addItem(newPlayer, yieldItem.itemId, amount);
-            const itemDetails = getItemById(yieldItem.itemId);
-            messageStore.addMessage(`You harvested ${amount} ${itemDetails?.name || 'items'}.`, ['World']);
         });
 
         // Add leaves to inventory
         if (cropDef.leavesYield > 0) {
             newPlayer = addItem(newPlayer, 'leaves', cropDef.leavesYield);
-            messageStore.addMessage(`You collected ${cropDef.leavesYield} Leaves.`, ['World']);
         }
 
         newPlayer.skills = gainExperience(newPlayer, FARMING_SKILL_ID, cropDef.xpYield).skills;
@@ -160,7 +158,7 @@ export function harvestCrop(plotId: string) {
  * Main function to process growth on game load or manual refresh.
  * This is the core logic that handles stage advancement.
  */
-function processGrowth(player: Player): Player {
+export function calculateOfflineGrowth(player: Player): Player {
     const now = Date.now();
     const newPlayer = { ...player };
 
@@ -237,7 +235,7 @@ function processGrowth(player: Player): Player {
  */
 export function refreshHomestead() {
     playerStore.update(player => {
-        const playerAfterGrowth = processGrowth(player);
+        const playerAfterGrowth = calculateOfflineGrowth(player);
         messageStore.addMessage('Homestead crops refreshed.', ['System']);
         return playerAfterGrowth;
     });

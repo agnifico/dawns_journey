@@ -3,7 +3,7 @@
     import * as CombatService from '$lib/services/CombatService';
     import StatBar from './ui/StatBar.svelte';
     import { afterUpdate } from 'svelte';
-    import { getItemById } from '$lib/stores/itemStore';
+    import { getItemById } from '$lib/services/ItemDataService';
 
     let logContainer: HTMLDivElement;
 

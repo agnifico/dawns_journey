@@ -1,0 +1,133 @@
+[
+    {
+        "id": "relic_health_1",
+        "name": "Vitality Charm (T1)",
+        "description": "A small charm that slightly boosts the wearer's vitality.",
+        "image": "/game_icons/relic_health_1.png",
+        "type": "relic",
+        "stats": [ { "name": "maxHp", "value": 20 } ]
+    },
+    {
+        "id": "relic_health_2",
+        "name": "Vitality Charm (T2)",
+        "description": "A charm that noticeably boosts the wearer's vitality.",
+        "image": "/game_icons/relic_health_1.png",
+        "type": "relic",
+        "stats": [ { "name": "maxHp", "value": 50 } ]
+    },
+    {
+        "id": "relic_attack_1",
+        "name": "Power Shard (T1)",
+        "description": "A sharp crystal that hums with latent power.",
+        "image": "/game_icons/relic_attack_1.png",
+        "type": "relic",
+        "stats": [
+            { "name": "physicalAttack", "value": 5 },
+            { "name": "elementalAttack", "value": 5 }
+        ]
+    },
+    {
+        "id": "relic_attack_2",
+        "name": "Power Shard (T2)",
+        "description": "A larger crystal that crackles with raw power.",
+        "image": "/game_icons/relic_attack_1.png",
+        "type": "relic",
+        "stats": [
+            { "name": "physicalAttack", "value": 12 },
+            { "name": "elementalAttack", "value": 12 }
+        ]
+    },
+    {
+        "id": "relic_defense_1",
+        "name": "Aegis Fragment (T1)",
+        "description": "A piece of an ancient shield that enhances defensive capabilities.",
+        "image": "/game_icons/relic_defense_1.png",
+        "type": "relic",
+        "stats": [
+            { "name": "physicalDefence", "value": 5 },
+            { "name": "elementalDefence", "value": 5 }
+        ]
+    },
+    {
+        "id": "relic_defense_2",
+        "name": "Aegis Fragment (T2)",
+        "description": "A larger piece of an ancient shield that greatly enhances defensive capabilities.",
+        "image": "/game_icons/relic_defense_1.png",
+        "type": "relic",
+        "stats": [
+            { "name": "physicalDefence", "value": 12 },
+            { "name": "elementalDefence", "value": 12 }
+        ]
+    },
+    {
+        "id": "relic_speed_1",
+        "name": "Swiftness Talisman (T1)",
+        "description": "An enchanted feather that quickens the wearer's movements.",
+        "image": "/game_icons/relic_speed_1.png",
+        "type": "relic",
+        "stats": [ { "name": "speed", "value": 10 } ]
+    },
+    {
+        "id": "relic_speed_2",
+        "name": "Swiftness Talisman (T2)",
+        "description": "A plume of enchanted feathers that greatly quickens the wearer's movements.",
+        "image": "/game_icons/relic_speed_1.png",
+        "type": "relic",
+        "stats": [ { "name": "speed", "value": 25 } ]
+    },
+    {
+        "id": "relic_crit_1",
+        "name": "Precision Lens (T1)",
+        "description": "A finely crafted lens that helps in finding weak spots.",
+        "image": "/game_icons/relic_crit_1.png",
+        "type": "relic",
+        "stats": [ { "name": "critChance", "value": 0.05 } ]
+    },
+    {
+        "id": "relic_berserker_crest",
+        "name": "Berserker's Crest",
+        "description": "A relic that rewards aggression, boosting attack at the cost of defense.",
+        "image": "/game_icons/relic_berserker.png",
+        "type": "relic",
+        "stats": [
+            { "name": "physicalAttack", "value": 20 },
+            { "name": "elementalAttack", "value": 20 },
+            { "name": "physicalDefence", "value": -10 },
+            { "name": "elementalDefence", "value": -10 }
+        ]
+    },
+    {
+        "id": "relic_guardian_seal",
+        "name": "Guardian's Seal",
+        "description": "A seal that embodies fortitude, boosting HP and defenses.",
+        "image": "/game_icons/relic_guardian.png",
+        "type": "relic",
+        "stats": [
+            { "name": "maxHp", "value": 80 },
+            { "name": "physicalDefence", "value": 15 },
+            { "name": "elementalDefence", "value": 15 }
+        ]
+    },
+    {
+        "id": "relic_infiltrator_cloak",
+        "name": "Infiltrator's Cloak",
+        "description": "A cloak woven with shadows, enhancing speed and evasion.",
+        "image": "/game_icons/relic_infiltrator.png",
+        "type": "relic",
+        "stats": [
+            { "name": "speed", "value": 20 },
+            { "name": "evasion", "value": 20 }
+        ]
+    },
+    {
+        "id": "relic_archmage_codex",
+        "name": "Archmage's Codex",
+        "description": "A book containing forbidden knowledge, boosting elemental power and critical damage.",
+        "image": "/game_icons/relic_archmage.png",
+        "type": "relic",
+        "stats": [
+            { "name": "elementalAttack", "value": 25 },
+            { "name": "critDamage", "value": 0.25 }
+        ]
+    }
+]

@@ -1,32 +1,23 @@
 <script lang="ts">
-	import { eventScreenStore } from '$lib/stores/eventScreenStore';
+	import { eventScreen } from '$lib/stores/uiStore';
 	import { npcStore } from '$lib/stores/npcStore';
-	import { playerStore } from '$lib/stores/playerStore';
     import { resourceStore } from '$lib/stores/resourceStore';
     import { mapStore } from '$lib/stores/mapStore';
     import { time } from '$lib/stores/timeStore';
-	import { items as allItems } from '$lib/data/items';
     import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
-	import * as CombatService from '$lib/services/CombatService';
-    import * as LocationEventService from '$lib/services/LocationEventService';
 	import StatBar from './ui/StatBar.svelte';
 	import MasteryTag from './ui/MasteryTag.svelte';
     import Tooltip from './ui/Tooltip.svelte';
     import { derived } from 'svelte/store';
-    import type { EventAction } from '$lib/types';
 
 	let npc;
-	$: if ($eventScreenStore.type === 'npc' && $eventScreenStore.data?.npcId) {
-		npc = $npcStore.globalNpcs[$eventScreenStore.data.npcId];
+	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
+		npc = $npcStore.globalNpcs[$eventScreen.data.npcId];
 	} else {
 		npc = null;
 	}
 
 	// --- Component State ---
-	let isGivingItem = false;
-	let selectedItemId: string | null = null;
-	let selectedQuantity: number = 1;
-	let maxQuantity = 1;
     let lightboxVisible = false;
     let lightboxImage = '';
 
@@ -40,37 +31,11 @@
         lightboxImage = '';
     }
 
-	// --- Item Selection Logic ---
-	const itemMap = new Map(allItems.map((item) => [item.id, item]));
-	let generalInventoryItems = [];
-	$: {
-		generalInventoryItems = $playerStore.inventory
-			.map((invItem) => ({
-				...invItem,
-				details: itemMap.get(invItem.itemId)
-			}))
-			.filter((item) => item.details && item.details.type === 'general');
-
-		if (!selectedItemId && generalInventoryItems.length > 0) {
-			selectedItemId = generalInventoryItems[0].itemId;
-		}
-	}
-
-	$: {
-		if (selectedItemId) {
-			const selectedInvItem = generalInventoryItems.find((i) => i.itemId === selectedItemId);
-			maxQuantity = selectedInvItem ? selectedInvItem.amount : 1;
-			if (selectedQuantity > maxQuantity) {
-				selectedQuantity = maxQuantity;
-			}
-		}
-	}
-
     const resourceNodeKey = derived(
-        [eventScreenStore, mapStore],
-        ([$eventScreenStore, $mapStore]) => {
-            if ($eventScreenStore.type === 'resource' && $eventScreenStore.data) {
-                const mapObject = $eventScreenStore.data;
+        [eventScreen, mapStore],
+        ([$eventScreen, $mapStore]) => {
+            if ($eventScreen.type === 'resource' && $eventScreen.data) {
+                const mapObject = $eventScreen.data;
                 return `${$mapStore.currentMapId}-${mapObject.x}-${mapObject.y}`;
             }
             return null;
@@ -78,10 +43,10 @@
     );
 
     const resourceNodeData = derived(
-        [eventScreenStore],
-        ([$eventScreenStore]) => {
-            if ($eventScreenStore.type === 'resource' && $eventScreenStore.data) {
-                return resourceNodeDefinitions[$eventScreenStore.data.resourceId];
+        [eventScreen],
+        ([$eventScreen]) => {
+            if ($eventScreen.type === 'resource' && $eventScreen.data) {
+                return resourceNodeDefinitions[$eventScreen.data.resourceId];
             }
             return null;
         }
@@ -125,33 +90,6 @@
             return 'Ready to gather';
         }
     );
-
-	// --- Button Handlers ---
-	function handleTalk() {
-		if (npc) npcStore.interactTalk(npc.id);
-	}
-
-	function handleConnect() {
-		if (npc) npcStore.interactConnect(npc.id);
-	}
-
-	function handleChallenge() {
-		if (npc && npc.isCombatant) {
-			CombatService.startCombat(npc);
-		}
-	}
-
-	function handleGiveConfirm() {
-		if (!npc || !selectedItemId || selectedQuantity <= 0) return;
-		npcStore.giveItem(npc.id, selectedItemId, selectedQuantity);
-		isGivingItem = false; // Close the give UI
-	}
-
-    function handleEventAction(action: EventAction) {
-        if (action.effects) {
-            LocationEventService.triggerEventEffect(action.effects, $eventScreenStore.data.message);
-        }
-    }
 </script>
 
 <svelte:window on:keydown={(e) => e.key === 'Escape' && closeLightbox()} />
@@ -164,21 +102,21 @@
 {/if}
 
 <div class="event-screen">
-	{#if $eventScreenStore.type === 'none'}
+	{#if $eventScreen.type === 'none'}
 		<div class="placeholder"></div>
 	{:else}
 		<!-- Image Container -->
 		<div class="image-container">
-			{#if $eventScreenStore.image}
-                {#if $eventScreenStore.type === 'npc'}
-                    <button class="avatar-button" on:click={() => openLightbox($eventScreenStore.data.fullImage)}>
-                        <img src={$eventScreenStore.image} alt="NPC Avatar" class="npc-image" />
+			{#if $eventScreen.image}
+                {#if $eventScreen.type === 'npc'}
+                    <button class="avatar-button" on:click={() => openLightbox($eventScreen.data.fullImage)}>
+                        <img src={$eventScreen.image} alt="NPC Avatar" class="npc-image" />
                     </button>
                 {:else}
                     <img
-                        src={$eventScreenStore.image}
+                        src={$eventScreen.image}
                         alt="Event"
-                        class:npc-image={$eventScreenStore.type === 'npc' || $eventScreenStore.type === 'enemy'}
+                        class:npc-image={$eventScreen.type === 'npc' || $eventScreen.type === 'enemy'}
                     />
                 {/if}
 			{/if}
@@ -191,24 +129,24 @@
 				<div class="rank-meters">
 					<div class="rank-meter">
 						<img src="/game_icons/sword_rank.png" alt="Sword Rank" class="rank-icon" />
-						<StatBar current={npc.swordRank} max={npc.swordRanks.length} color="#9ca3af" />
+						<StatBar current={npc.swordRank} max={npc.swordRanks.length} color="pink" />
 					</div>
 					<div class="rank-meter">
 						<img src="/game_icons/heart_rank.png" alt="Heart Rank" class="rank-icon" />
-						<StatBar current={npc.heartRank} max={npc.heartRanks.length} color="#f472b6" />
+						<StatBar current={npc.heartRank} max={npc.heartRanks.length} color="white" />
 					</div>
 				</div>
-			{:else if $eventScreenStore.type === 'enemy' && $eventScreenStore.data}
-				<h3>{$eventScreenStore.data.name}</h3>
+			{:else if $eventScreen.type === 'enemy' && $eventScreen.data}
+				<h3>{$eventScreen.data.name}</h3>
 				<div class="mastery-requirements">
-					{#each Object.entries($eventScreenStore.data.masteryRequirements || {}) as [element, level]}
+					{#each Object.entries($eventScreen.data.masteryRequirements || {}) as [element, level]}
 						<MasteryTag {element} {level} />
 					{/each}
 				</div>
-			{:else if $eventScreenStore.type === 'item_found' && $eventScreenStore.data}
-			<h3>{$eventScreenStore.data.item.name}</h3>
-			<p>You found x{$eventScreenStore.data.quantity}</p>
-            {:else if $eventScreenStore.type === 'resource' && $resourceNodeData}
+			{:else if $eventScreen.type === 'item_found' && $eventScreen.data}
+			<h3>{$eventScreen.data.item.name}</h3>
+			<p>You found x{$eventScreen.data.quantity}</p>
+            {:else if $eventScreen.type === 'resource' && $resourceNodeData}
                 <h3>{$resourceNodeData.name}</h3>
                 <div class="resource-info">
                     <div class="pip-bar-container">
@@ -223,69 +161,12 @@
                         </div>
                     </Tooltip>
                 </div>
-			{:else if $eventScreenStore.type === 'location_event' && $eventScreenStore.data}
-				<h3>{$eventScreenStore.data.name}</h3>
-                <p>{$eventScreenStore.data.shortDesc}</p>
+			{:else if $eventScreen.type === 'location_event' && $eventScreen.data}
+				<h3>{$eventScreen.data.name}</h3>
+                <p>{$eventScreen.data.shortDesc}</p>
 			{/if}
 		</div>
 
-		<!-- Interaction Area -->
-		<div class="interaction-area">
-			{#if npc}
-				{#if isGivingItem}
-					<!-- Give Item UI -->
-					<div class="give-item-ui">
-						{#if generalInventoryItems.length > 0}
-							<div class="form-group">
-								<select id="item-select" bind:value={selectedItemId}>
-									{#each generalInventoryItems as invItem}
-										<option value={invItem.itemId}
-											>{invItem.details.name} (x{invItem.amount})</option
-										>
-									{/each}
-								</select>
-								<input
-									id="quantity-input"
-									type="number"
-									min="1"
-									max={maxQuantity}
-									bind:value={selectedQuantity}
-								/>
-							</div>
-							<div class="give-confirm-buttons">
-								<button on:click={handleGiveConfirm}>Give</button>
-								<button on:click={() => (isGivingItem = false)}>Cancel</button>
-							</div>
-						{:else}
-							<p>You have no general items to give.</p>
-							<button on:click={() => (isGivingItem = false)}>Back</button>
-						{/if}
-					</div>
-				{:else}
-					<!-- Default Action Buttons -->
-					<div class="interaction-buttons">
-						<button on:click={handleTalk}>Talk</button>
-						<button
-							on:click={handleConnect}
-							class:highlight={npc.heartState === 'READY_FOR_RANK_UP'}
-						>
-							<img src="/game_icons/expression_alerted.png" alt="!!" />
-							Connect
-						</button>
-						<button on:click={handleChallenge} disabled={!npc.isCombatant}>Challenge</button>
-						<button on:click={() => (isGivingItem = true)}>Give Item</button>
-					</div>
-				{/if}
-            {:else if $eventScreenStore.type === 'location_event' && $eventScreenStore.data.actions}
-                <div class="interaction-buttons">
-                    {#each $eventScreenStore.data.actions as action}
-                        <button on:click={() => handleEventAction(action)}>
-                            {action.text}
-                        </button>
-                    {/each}
-                </div>
-			{/if}
-		</div>
 	{/if}
 </div>
 
@@ -324,16 +205,18 @@
     }
 
 	.event-screen {
-		background-color: #111;
+		background-color: #75594b;
 		padding: 1rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		color: white;
-		height: 360px;
+		height: 260px;
+		height: 100%;
 		box-sizing: border-box;
 		gap: 1rem;
+        background-color: var(--surface-3);
 	}
 	.placeholder {
 		min-height: 150px;
@@ -355,6 +238,9 @@
 	.enemy-image {
 		width: 150px;
 		height: 150px;
+		border: 3px solid white;
+		border-radius: 8px;
+		box-shadow: #222 4px 4px;
 	}
 	.info-box {
 		display: flex;
@@ -366,10 +252,13 @@
 	}
 	.info-box h3 {
 		margin: 0;
-		font-family: 'Silkscreen';
+		font-family: var(--font-family-main);
+        font-family: "Silkscreen";
+        font-weight: normal;
 	}
 	.rank-meters {
 		display: flex;
+		flex-direction: column;
 		gap: 1rem;
 	}
 	.rank-meter {
@@ -379,8 +268,8 @@
 		font-size: 0.8em;
 	}
 	.rank-icon {
-		width: 16px;
-		height: 16px;
+		width: 20px;
+		height: 20px;
 	}
 	.mastery-requirements {
 		display: flex;
@@ -417,63 +306,4 @@
         width: 16px;
         height: 16px;
     }
-	.interaction-area {
-		width: 100%;
-		max-width: 250px;
-		min-height: 80px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.interaction-buttons {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 0.5rem;
-		width: 100%;
-	}
-	.interaction-buttons button {
-		padding: 0.25rem;
-		font-size: 0.9rem;
-		background-color: #333;
-		border: 1px solid #555;
-		color: white;
-		font-family: 'Silkscreen', sans-serif;
-		img {
-			visibility: hidden;
-		}
-	}
-	.interaction-buttons button:disabled {
-		background-color: #222;
-		color: #666;
-		cursor: not-allowed;
-	}
-	.interaction-buttons button.highlight {
-		color: #facc15;
-		font-weight: bold;
-		border-color: #facc15;
-		img {
-			visibility: visible;
-		}
-	}
-	.give-item-ui {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-	.give-item-ui .form-group {
-		display: flex;
-		gap: 0.5rem;
-	}
-	.give-item-ui select {
-		flex-grow: 1;
-	}
-	.give-item-ui input {
-		width: 60px;
-	}
-	.give-confirm-buttons {
-		display: flex;
-		gap: 0.5rem;
-		justify-content: flex-end;
-	}
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { FarmPlot, CropDefinition, Item } from '../types';
     import { cropDefinitions } from '../data/cropDefinitions';
-    import { getItemById } from '../stores/itemStore';
+    import { getItemById } from '../services/ItemDataService';
     import { playerStore } from '../stores/playerStore';
     import * as FarmingService from '../services/FarmingService';
     import { onMount } from 'svelte';

@@ -1,6 +1,9 @@
 <script lang="ts">
     import Navbar from '$lib/components/Navbar.svelte';
+    import Notification from '$lib/components/Notification.svelte';
+    import GiftModal from '$lib/components/ui/GiftModal.svelte';
     import './app.css';
+    import '$lib/styles/theme.css';
     import favicon from '$lib/assets/favicon.svg';
     import { phase } from '$lib/stores/timeStore';
     import { messageStore } from '$lib/stores/messageStore';
@@ -34,8 +37,13 @@
     {@render children?.()}
 </div>
 
+<Notification />
+<GiftModal />
+
 <style>
     .page-content {
-        height: 100vh;
+        height: 100dvh;
+        padding-top: 50px;
+        box-sizing: border-box;
     }
 </style>

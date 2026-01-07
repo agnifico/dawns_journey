@@ -1,5 +1,6 @@
 import type { Item } from '../types';
 import { cropDefinitions } from './cropDefinitions';
+import { generalItems } from './generalItems';
 
 const existingSeedImages = [
     "potato", "wheat", "carrot", "kale", "parsnip", 
@@ -19,18 +20,22 @@ homesteadItems.push({
     flags: ['homestead_resource']
 });
 
+const generalItemIds = new Set(generalItems.map(item => item.id));
+
 for (const cropId in cropDefinitions) {
     const cropDef = cropDefinitions[cropId];
 
-    // Add the harvested crop item
-    homesteadItems.push({
-        id: cropDef.id,
-        name: cropDef.name,
-        description: `A harvested ${cropDef.name}.`,
-        image: cropDef.growthStages[cropDef.growthStages.length - 1]?.imagePath || '/crops/crate_base.png',
-        type: 'general',
-        flags: ['crop']
-    });
+    // Add the harvested crop item, only if it doesn't exist in general items
+    if (!generalItemIds.has(cropDef.id)) {
+        homesteadItems.push({
+            id: cropDef.id,
+            name: cropDef.name,
+            description: `A harvested ${cropDef.name}.`,
+            image: cropDef.growthStages[cropDef.growthStages.length - 1]?.imagePath || '/crops/crate_base.png',
+            type: 'general',
+            flags: ['crop']
+        });
+    }
 
     // Add the corresponding seed item
     const seedImage = existingSeedImages.includes(cropDef.id) 

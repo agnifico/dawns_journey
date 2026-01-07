@@ -1,41 +1,74 @@
 <script lang="ts">
     import PlayerStats from "$lib/components/PlayerStats.svelte";
     import Inventory from "$lib/components/Inventory.svelte";
+    import Equipment from "$lib/components/Equipment.svelte";
+    import MobileTabs from "$lib/components/MobileTabs.svelte";
 </script>
 
 <main>
-    <!-- <h1>Player Data</h1> -->
-    <div class="player-data-container">
-        <PlayerStats />
-        <Inventory />
+    <div class="desktop-layout">
+        <div class="player-stats-column">
+            <PlayerStats />
+        </div>
+        <div class="equipment-column">
+            <Equipment />
+        </div>
+        <div class="inventory-column">
+            <Inventory />
+        </div>
+    </div>
+    <div class="mobile-layout">
+        <MobileTabs>
+            <div slot="stats">
+                <PlayerStats />
+            </div>
+            <div slot="equipment">
+                <Equipment />
+            </div>
+        </MobileTabs>
+        <div class="inventory-column">
+            <Inventory />
+        </div>
     </div>
 </main>
 
 <style>
     main {
+        height: 100%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        font-family: sans-serif;
-        text-align: center;
-        background-color: #282c34;
-        color: white;
-        padding: 20px;
-    }
-    
-    h1 {
-        color: #61dafb;
-        margin-bottom: 1rem;
-    }
-    
-    .player-data-container {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 5rem;
     }
 
+    .desktop-layout {
+        flex-grow: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2rem;
+        padding: 1rem 2rem;
+        overflow: hidden; /* Prevent the grid from causing page scroll */
+    }
+
+    .player-stats-column, .equipment-column, .inventory-column {
+        overflow-y: auto;
+        background-color: transparent;
+        /* border: 6px solid var(--color-border); */
+        border-radius: 12px;
+        min-height: 0;
+        /* box-shadow: var(--color-border) 4px 4px; */
+        height: fit-content;
+        height: 100%;
+    }
+
+    .mobile-layout {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-layout {
+            display: none;
+        }
+        .mobile-layout {
+            display: block;
+        }
+    }
 </style>

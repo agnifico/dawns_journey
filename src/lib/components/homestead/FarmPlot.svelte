@@ -8,7 +8,7 @@
     import ProgressBar from '../ui/ProgressBar.svelte';
     import PipBar from '../ui/PipBar.svelte';
     import PlotActions from './PlotActions.svelte';
-    import { selectedPlotId } from '$lib/stores/selectionStore';
+    import { selectedPlotId } from '$lib/stores/uiStore';
 
     export let plot: FarmPlotType;
 
@@ -51,7 +51,7 @@
 <div class="farm-plot" class:selected={$selectedPlotId === plot.mapObjectId}>
     {#if plot.crop && $cropDef}
         <div class="crop-display">
-            <img src={$cropDef.growthStages[plot.crop.currentGrowthStage].imagePath} alt={$cropDef.name} class="crop-image" />
+            <img src={$cropDef.growthStages[plot.crop.currentGrowthStage]?.imagePath || ''} alt={$cropDef.name} class="crop-image" />
             <p class="crop-name">{$cropDef.name}</p>
             
             <div class="info-section">

@@ -3,17 +3,15 @@ import type { NPC, Player, Combatant } from '$lib/types';
 import { combatStore } from '$lib/stores/combatStore';
 import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
+import { dialogueStore } from '$lib/stores/dialogueStore';
+import { npcStore } from '$lib/stores/npcStore';
 import { openCombatModal, closeCombatModal } from '$lib/stores/uiStore';
 import * as CombatEngine from './CombatEngine';
 import { getNpcCombatStats } from './NpcService';
+import { checkQuestTriggers } from './QuestService';
 
 function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combatant) {
-    console.log('--- END COMBAT DEBUG ---');
-    console.log('Final Player HP:', player.hp);
-    console.log('Outcome:', outcome);
-    console.log('------------------------');
-
-    const drops = outcome === 'win' ? (opponent.drops || []) : [];
+    const drops = outcome === 'win' ? (opponent as any).drops || [] : [];
 
     // Persist the player's final HP, Aura Shield, and combat history back to the main store
     playerStore.update(p => {
@@ -29,6 +27,35 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
         };
     });
 
+    // Check for quest triggers after combat ends
+    checkQuestTriggers();
+
+    // Handle combat aftermath (dialogue and affinity changes)
+    const npc = get(npcStore).globalNpcs[opponent.id];
+    if (npc) {
+        const aftermaths = npc.battleAftermathsBySwordRank.find(a => a.rank === npc.swordRank)?.aftermaths;
+        if (aftermaths) {
+            const aftermath = aftermaths.find(a => a.outcome === outcome);
+            if (aftermath) {
+                if (aftermath.dialogue) {
+                    dialogueStore.startDialogue(aftermath.dialogue, npc.name);
+                }
+                if (aftermath.value) {
+                    npcStore.update(s => {
+                        const npcToUpdate = s.globalNpcs[npc.id];
+                        const newAffinity = npcToUpdate.affinity + aftermath.value;
+                        let newHeartState = npcToUpdate.heartState;
+                        if (newAffinity >= 10 && npcToUpdate.heartState !== 'READY_FOR_RANK_UP') {
+                            newHeartState = 'READY_FOR_RANK_UP';
+                        }
+                        const newNpc = { ...npcToUpdate, affinity: newAffinity, heartState: newHeartState };
+                        return { ...s, globalNpcs: { ...s.globalNpcs, [npc.id]: newNpc }};
+                    });
+                }
+            }
+        }
+    }
+
     combatStore.update(state => ({
         ...state,
         combatEnded: true,
@@ -40,12 +67,8 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
 export function forceEndCombat() {
     combatStore.resetCombat();
     closeCombatModal();
-    console.log("Combat ended.");
 }
 
-/**
- * Processes the next turn in the combat sequence.
- */
 export function processTurn() {
     const combatState = get(combatStore);
     if (!combatState.isInCombat || combatState.combatEnded || !combatState.player || !combatState.opponent) return;
@@ -64,7 +87,6 @@ export function processTurn() {
         logs = turnResult.logs;
     }
 
-    // Update the store with the new HP values and logs before checking for end conditions
     combatStore.update(state => ({
         ...state,
         player,
@@ -72,7 +94,6 @@ export function processTurn() {
         combatLog: [...state.combatLog, ...logs],
     }));
 
-    // Check for end conditions
     if (player.hp <= 0) {
         logs.push({ center: `${player.name} has been defeated!` });
         endCombat('lose', player, opponent);
@@ -84,7 +105,6 @@ export function processTurn() {
         return;
     }
 
-    // Switch turns and update state
     const nextTurn = combatState.currentTurn === 'player' ? 'opponent' : 'player';
     const nextTurnNumber = combatState.currentTurn === 'opponent' ? combatState.turnNumber + 1 : combatState.turnNumber;
 
@@ -96,10 +116,6 @@ export function processTurn() {
     }));
 }
 
-/**
- * Initiates combat against an NPC.
- * @param opponentNpc The NPC to fight.
- */
 export function startCombat(opponentNpc: NPC) {
     const currentPlayer = get(playerStore);
     const currentPlayerStats = get(playerStats);
@@ -110,29 +126,16 @@ export function startCombat(opponentNpc: NPC) {
     }
 
     const playerCombatant: Combatant = {
-        id: 'player',
-        name: 'Player',
-        isPlayer: true,
-        image: '' /* Player image if you have one */,
-        activeEffects: currentPlayer.activeEffects,
-        statusEffects: currentPlayer.statusEffects,
-        ...currentPlayerStats,
-        equipment: currentPlayer.equipment,
-        elements: [],
+        id: 'player', name: 'Player', isPlayer: true, image: '',
+        activeEffects: currentPlayer.activeEffects, statusEffects: currentPlayer.statusEffects,
+        ...currentPlayerStats, equipment: currentPlayer.equipment, elements: [],
     };
 
     const opponentStats = getNpcCombatStats(opponentNpc);
-
     const opponentCombatant: Combatant = {
-        ...opponentNpc,
-        ...opponentStats,
-        id: opponentNpc.id,
-        isPlayer: false,
-        hp: opponentStats.hp || 50,
-        maxHp: opponentStats.maxHp || 50,
-        auraShield: 0,
-        maxAuraShield: 0,
-        elements: opponentNpc.types || [],
+        ...opponentNpc, ...opponentStats, id: opponentNpc.id, isPlayer: false,
+        hp: opponentStats.hp || 50, maxHp: opponentStats.maxHp || 50,
+        auraShield: 0, maxAuraShield: 0, elements: opponentNpc.types || [],
     };
 
     const playerSpeed = playerCombatant.speed || 0;
@@ -146,18 +149,11 @@ export function startCombat(opponentNpc: NPC) {
     ];
 
     combatStore.set({
-        isInCombat: true,
-        combatEnded: false,
-        outcome: null,
-        player: playerCombatant,
-        opponent: opponentCombatant,
-        combatLog: initialLog,
-        currentTurn: firstTurn,
-        turnNumber: 1,
-        playerWeaponIndex: 0,
-        drops: [],
+        isInCombat: true, combatEnded: false, outcome: null,
+        player: playerCombatant, opponent: opponentCombatant,
+        combatLog: initialLog, currentTurn: firstTurn,
+        turnNumber: 1, playerWeaponIndex: 0, drops: [],
     });
 
     openCombatModal();
-    console.log(`Combat started. ${firstTurn} goes first.`);
 }

@@ -4,6 +4,7 @@ import { mapStore } from '../stores/mapStore';
 import { loadMap } from '../services/MapService';
 import { movePlayer as movePlayerService } from '../services/PlayerMovementService';
 import { gatherResource as gatherResourceService } from '../services/InteractionService';
+import * as ItemService from '../services/ItemService';
 
 export const game = {
     /**
@@ -34,4 +35,25 @@ export const game = {
     gatherResource: () => {
         gatherResourceService();
     },
+
+    /**
+     * Unequips an item from an equipment slot.
+     */
+    unequipItem: (slotType: 'weapon_slots' | 'relic_slots', slotIndex: number) => {
+        ItemService.unequipItem(slotType, slotIndex);
+    },
+
+    /**
+     * Equips an item from the inventory.
+     */
+    equipItem: (itemId: string) => {
+        ItemService.equipItem(itemId);
+    },
+
+    /**
+     * Consumes an item, applying its effects and removing it from inventory.
+     */
+    useItem: (itemId: string) => {
+        ItemService.useItem(itemId);
+    }
 };

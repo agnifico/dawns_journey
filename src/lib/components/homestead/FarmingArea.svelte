@@ -3,10 +3,11 @@
     import { seasonStore, type Season } from '$lib/stores/seasonStore';
     import FarmPlot from './FarmPlot.svelte';
     import * as FarmingService from '$lib/services/FarmingService';
+    import * as SkillService from '$lib/services/SkillService';
     import { derived, writable } from 'svelte/store';
     import { currentEnvironment, type HomesteadEnvironment } from '$lib/stores/environmentStore';
     import MapGrid from './MapGrid.svelte';
-    import { selectedPlotId } from '$lib/stores/selectionStore';
+    import { selectedPlotId } from '$lib/stores/uiStore';
     import { tick } from 'svelte';
 
     let selectedSeason: Season;
@@ -32,12 +33,21 @@
         seasonStore.setSeason(selectedSeason);
     }
 
+    function handleLevelTest(event: Event) {
+        const isChecked = (event.target as HTMLInputElement).checked;
+        SkillService.setSkillLevel('farming', isChecked ? 99 : 1);
+    }
+
     function selectEnvironment(envId: HomesteadEnvironment) {
         currentEnvironment.set(envId); // Update the store
         selectedPlotId.set(null); // Deselect any plot when changing environment
     }
 
     $: showBottomHalf = $currentEnvironment === 'env_greenhouse' || $currentEnvironment === 'env_forest_floor';
+
+    // Bind the checkbox state to the player's level
+    let isLevel99: boolean;
+    $: isLevel99 = $playerStore.farmingLevel > 1;
 
     // Scrolling logic
     $: if ($selectedPlotId !== null) {
@@ -66,6 +76,12 @@
                 <option value="Winter">Winter</option>
             </select>
             <button on:click={handleSaveSeason}>Set (Test)</button>
+        </div>
+        <div class="test-controls">
+            <label>
+                <input type="checkbox" on:change={handleLevelTest} bind:checked={isLevel99} />
+                Set Farming Lvl 99
+            </label>
         </div>
         <button on:click={() => FarmingService.refreshHomestead()}>Refresh Crops</button>
     </div>

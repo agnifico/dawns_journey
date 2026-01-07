@@ -45,6 +45,7 @@
                 <button on:click={SaveLoadService.saveGame}>Save Game</button>
                 <button on:click={() => goto('/journal')}>Journal</button>
                 <button on:click={() => goto('/map-editor')}>Map Editor</button>
+                <button on:click={() => goto('/settings')}>Settings</button>
                 <button on:click={SaveLoadService.clearSave} class="danger">Delete Save</button>
             </div>
         </div>
