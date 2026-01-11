@@ -1,9 +1,11 @@
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
+import { npcStore } from '$lib/stores/npcStore';
+import { questStore } from '$lib/stores/questStore';
 import { time } from '$lib/stores/timeStore';
-import { items as baseItems } from '$lib/data/items';
-import { generalItems } from '$lib/data/generalItems';
-import { playerDev } from '$lib/data/player.dev';
+import { items as allItems } from '$lib/data/items';
+import { playerDev, devNpcState, devQuestState } from '$lib/data/player.dev';
+import { checkQuestTriggers } from '../services/QuestService';
 import type { InventoryItem, ActiveEffect } from '$lib/types';
 
 /**
@@ -11,7 +13,6 @@ import type { InventoryItem, ActiveEffect } from '$lib/types';
  */
 export function addAllItems() {
     const newInventory: InventoryItem[] = [];
-    const allItems = [...baseItems, ...generalItems];
 
     for (const item of allItems) {
         if (item.type === 'general') {
@@ -28,10 +29,16 @@ export function addAllItems() {
 }
 
 /**
- * Loads a specific developer state for testing Hela's quests.
+ * Loads a specific developer state for testing quests.
  */
-export function loadTestState() {
+export async function loadTestState() {
+    // 1. Force-set the stores with the complete dev state
     playerStore.set(playerDev);
+    npcStore.set(devNpcState);
+    questStore.set(devQuestState);
+
+    // 2. After loading the new state, re-evaluate all quest triggers
+    checkQuestTriggers();
 }
 
 /**

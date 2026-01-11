@@ -1,10 +1,12 @@
 import type { NPC, Player, Requirement, Reward, GiftingOption } from '$lib/types';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
+import { mapStore } from '$lib/stores/mapStore';
 import { addItem, removeItem } from './ItemService';
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
 import { questStore } from '$lib/stores/questStore';
+import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { checkRequirement, checkQuestTriggers } from './QuestService';
 
 function createRequirementSnapshot(player: Player, requirement: Requirement): any {
@@ -13,6 +15,7 @@ function createRequirementSnapshot(player: Player, requirement: Requirement): an
         win_against_npc: {},
         lose_to_npc: {},
         fight_npc: {},
+        finish_location_event: {},
     };
 
     const conditions = 'conditions' in requirement ? requirement.conditions : [requirement];
@@ -26,6 +29,8 @@ function createRequirementSnapshot(player: Player, requirement: Requirement): an
             snapshot.lose_to_npc[condition.npcId] = player.combatHistory.filter(h => h.npcId === condition.npcId && h.outcome === 'lose').length;
         } else if (condition.type === 'fight_npc') {
             snapshot.fight_npc[condition.npcId] = player.combatHistory.filter(h => h.npcId === condition.npcId).length;
+        } else if (condition.type === 'finish_location_event' && condition.timing === 'future') {
+            snapshot.finish_location_event[condition.eventId] = player.locationEventHistory[condition.eventId] || 0;
         }
     }
     return snapshot;
@@ -39,6 +44,17 @@ function handleRewards(player: Player, rewards: Reward[]): Player {
         } else if (reward.type === 'tag') {
             if (!newPlayer.worldTags.includes(reward.tagId)) {
                 newPlayer.worldTags.push(reward.tagId);
+            }
+        } else if (reward.type === 'unlock_location_event') {
+            const eventDef = locationEventDefinitions[reward.eventId];
+            if (eventDef && eventDef.coords) {
+                const newObject = {
+                    type: 'event',
+                    eventId: reward.eventId,
+                    x: eventDef.coords.x,
+                    y: eventDef.coords.y
+                };
+                mapStore.addObject(newObject);
             }
         }
     }
@@ -113,7 +129,7 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
         case 'AVAILABLE': {
             const firstStage = rankData.stages[0];
             if (firstStage) {
-                dialogueStore.startDialogue(firstStage.reminder_dialogue || ["A new opportunity awaits."], updatedNpc.name);
+                dialogueStore.startDialogue(firstStage.intro_dialogue || ["A new opportunity awaits."], updatedNpc.name);
                 questStore.setQuestState(quest.id, 'ACTIVE');
                 
                 const allRequirements = rankData.stages.map(s => s.requirement);
@@ -125,10 +141,21 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
                 };
 
                 if (firstStage.requirement.type === 'dialogue') {
+                    if (firstStage.success_dialogue) {
+                        dialogueStore.startDialogue(firstStage.success_dialogue, updatedNpc.name);
+                    }
                     if (firstStage.success_rewards) {
                         updatedPlayer = handleRewards(updatedPlayer, firstStage.success_rewards);
                     }
-                    questStore.advanceQuestStage(quest.id);
+                    
+                    if (rankData.stages.length === 1) { // It's a single-stage quest
+                        questStore.setQuestState(quest.id, 'COMPLETED');
+                        updatedNpc.swordRank++;
+                        messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
+                        checkQuestTriggers();
+                    } else {
+                        questStore.advanceQuestStage(quest.id);
+                    }
                 }
             }
             break;
@@ -149,7 +176,15 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
                 if (stage.success_rewards) {
                     updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
                 }
-                questStore.advanceQuestStage(quest.id);
+                
+                if (currentStageIndex >= rankData.stages.length - 1) {
+                    questStore.setQuestState(quest.id, 'COMPLETED');
+                    updatedNpc.swordRank++;
+                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
+                    checkQuestTriggers();
+                } else {
+                    questStore.advanceQuestStage(quest.id);
+                }
                 return { updatedNpc, updatedPlayer };
             }
 

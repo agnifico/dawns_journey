@@ -185,7 +185,7 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             { "duration": 1 * 60 * 1000, "imagePath": "" },
             { "duration": 1 * 60 * 1000, "imagePath": "" },
             { "duration": 1 * 60 * 1000, "imagePath": "" },
-            { "duration": 1 * 60 * 1000, "imagePath": "" }
+            { "duration": 1 * 60 * 1000, "imagePath": "/crops/fava_beans.png" }
         ]
     },
     "kale": {
@@ -331,7 +331,7 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             { "duration": 2 * 60 * 1000, "imagePath": "" },
             { "duration": 2 * 60 * 1000, "imagePath": "" },
             { "duration": 2 * 60 * 1000, "imagePath": "" },
-            { "duration": 2 * 60 * 1000, "imagePath": "" }
+            { "duration": 2 * 60 * 1000, "imagePath": "/crops/snow_pea.png" }
         ]
     },
     "cucumber": {
@@ -478,7 +478,7 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             { "duration": 24 * 60 * 1000, "imagePath": "" },
             { "duration": 24 * 60 * 1000, "imagePath": "" },
             { "duration": 24 * 60 * 1000, "imagePath": "" },
-            { "duration": 24 * 60 * 1000, "imagePath": "" }
+            { "duration": 24 * 60 * 1000, "imagePath": "/crops/ginseng.png" }
         ]
     },
     "wasabi": {
@@ -548,7 +548,7 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             { "duration": 18 * 60 * 1000, "imagePath": "" },
             { "duration": 18 * 60 * 1000, "imagePath": "" },
             { "duration": 18 * 60 * 1000, "imagePath": "" },
-            { "duration": 18 * 60 * 1000, "imagePath": "" }
+            { "duration": 18 * 60 * 1000, "imagePath": "/crops/dragon_fruit.png" }
         ]
     },
     "saffron": {
@@ -592,7 +592,7 @@ const crops: { [id: string]: Omit<CropDefinition, 'seedItemId' | 'yield' | 'grow
             },
             {
                 "duration": 36 * 60 * 1000, // 36 minutes
-                "imagePath": ""
+                "imagePath": "/crops/saffron.png"
             }
         ]
     }
@@ -629,7 +629,8 @@ for (const key in crops) {
 }
 
 // --- DATA CLEANUP ---
-const placeholderCrops = new Set(['fava_bean', 'ginseng', 'cardamom', 'dragon_fruit', 'cucumber', 'snow_pea']);
+// const placeholderCrops = new Set(['fava_bean', 'ginseng', 'cardamom', 'dragon_fruit', 'cucumber', 'snow_pea']);
+const placeholderCrops = new Set(['cardamom', 'cucumber']);
 
 for (const key in cropDefinitions) {
     const crop = cropDefinitions[key];

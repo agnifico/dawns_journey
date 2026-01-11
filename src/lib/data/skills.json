@@ -1,6 +1,6 @@
 {
-    "alchemy": {
-        "name": "Alchemy",
+    "herblore": {
+        "name": "Herblore",
         "description": "The art of brewing potions and transmuting materials.",
         "levels": [
             { "xp": 0, "rewards": [] },

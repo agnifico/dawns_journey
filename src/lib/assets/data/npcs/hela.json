@@ -1,25 +1,88 @@
 {
     "id": "hela",
     "name": "Hela",
-    "profileImage": "/images/npc_avatars/hela2.png",
-    "image": "/images/npcs/hela.png",
+    "profileImage": "/images/characters/hela/hela_avatar.png",
+    "image": "/images/characters/hela/hela1.png",
+    "galleryImages": [
+        "/images/characters/hela/hela0.png",
+        "/images/characters/hela/hela1.png",
+        "/images/characters/hela/hela2.png",
+        "/images/characters/hela/hela3.png",
+        "/images/characters/hela/hela4.png",
+        "/images/characters/hela/hela5.png",
+        "/images/characters/hela/hela6.png",
+        "/images/characters/hela/hela8.png",
+        "/images/characters/hela/hela9.png",
+        "/images/characters/hela/hela10.png"
+    ],
     "isCombatant": true,
-    "types": [ "Dark", "Fire" ],
+    "types": [
+        "Dark",
+        "Fire"
+    ],
     "baseStats": {
-        "hp": 1000, "physicalAttack": 300, "physicalDefence": 450, "elementalAttack": 450,
-        "elementalDefence": 300, "speed": 90, "evasion": 70, "critChance": 0.6, "critDamage": 2
+        "hp": 1000,
+        "maxHp": 1000,
+        "auraShield": 100,
+        "maxAuraShield": 100,
+        "physicalAttack": 300,
+        "physicalDefence": 450,
+        "elementalAttack": 450,
+        "elementalDefence": 300,
+        "speed": 90,
+        "evasion": 70,
+        "critChance": 0.6,
+        "critDamage": 2
     },
-    "swordRank": 0, "heartRank": 0, "affinity": 0,
-    "swordState": "NOT_STARTED", "heartState": "NOT_STARTED",
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
     "statGrowth": [
-        { "level": 1, "stats": { "maxHp": 550, "physicalAttack": 55, "elementalAttack": 77, "physicalDefence": 44, "elementalDefence": 44 } }
+        {
+            "level": 1,
+            "stats": {
+                "maxHp": 550,
+                "physicalAttack": 55,
+                "elementalAttack": 77,
+                "physicalDefence": 44,
+                "elementalDefence": 44
+            }
+        }
     ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
             "aftermaths": [
-                { "outcome": "lose", "value": 10, "dialogue": ["Don't worry. I am supposed to be the 'Final Boss' of the game."] },
-                { "outcome": "win", "value": -5, "dialogue": ["Who are you, the game developer!?"] }
+                {
+                    "outcome": "lose",
+                    "value": 10,
+                    "dialogue": [
+                        "You have courage, I'll give you that. Now, speak to me."
+                    ],
+                    "requirement": {
+                        "type": "quest_state",
+                        "questId": "sylvie_sword_4",
+                        "state": "ACTIVE"
+                    }
+                },
+                {
+                    "outcome": "lose",
+                    "value": 0,
+                    "dialogue": [
+                        "You know, I'm designed to be the 'Final Boss' of the game.",
+                        "I was the first character to be designed for this game."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": -5,
+                    "dialogue": [
+                        "Agni, is that you teaching your friends cheat codes to defeat me?",
+                        "I thought you had a thing for me :("
+                    ]
+                }
             ]
         }
     ],
@@ -27,22 +90,28 @@
         {
             "questId": "hela_sword_1",
             "title": "A Worthy Challenger",
-            "description": "Hela has acknowledged your existence.",
+            "description": "Hela has acknowledged your existence and is ready to give you a task.",
             "startRequirement": {
-                "operator": "AND",
-                "conditions": [
-                    { "type": "lose_to_npc", "npcId": "hela", "quantity": 1 },
-                    { "type": "have_tag", "tag": "can_fight_hela" }
-                ]
+                "type": "have_tag",
+                "tag": "hela_heart_rank_1_unlocked"
             },
             "stages": [
                 {
                     "objective": "Speak with Hela",
-                    "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": ["I have no time for weaklings. Come back when you are worthy."],
-                    "success_dialogue": ["You have a spark. I am... intrigued. Let's see if you can keep my interest."],
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "unavailable_dialogue": [
+                        "I am waiting."
+                    ],
+                    "success_dialogue": [
+                        "You have a spark. I am... intrigued. Let's see if you can keep my interest."
+                    ],
                     "success_rewards": [
-                        { "type": "tag", "tagId": "hela_sword_1_complete" }
+                        {
+                            "type": "tag",
+                            "tagId": "hela_sword_1_complete"
+                        }
                     ]
                 }
             ]
@@ -51,46 +120,99 @@
             "questId": "hela_sword_2",
             "title": "Trials of the Damned",
             "description": "Hela has a few tasks for her new toy.",
-            "startRequirement": { "type": "have_tag", "tag": "hela_sword_1_complete" },
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "hela_sword_1_complete"
+            },
             "stages": [
                 {
                     "objective": "Rest by the campfire",
-                    "requirement": { "type": "finish_location_event", "eventId": "campfire" },
-                    "reminder_dialogue": ["Go. Do the things I ask of you."],
-                    "success_dialogue": ["You're back. Good."]
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "campfire"
+                    },
+                    "reminder_dialogue": [
+                        "Go. Do the things I ask of you."
+                    ],
+                    "success_dialogue": [
+                        "You're back. Good."
+                    ]
                 },
                 {
                     "objective": "Unlock the treasure chest at (18, 3)",
-                    "requirement": { "type": "unlock_location_event", "eventId": "treasure_chest" },
-                    "reminder_dialogue": ["There is a hidden stash nearby. Find it."],
-                    "success_dialogue": ["So you found the mead. Don't get any ideas. It's for me."]
+                    "requirement": {
+                        "type": "unlock_location_event",
+                        "eventId": "treasure_chest"
+                    },
+                    "reminder_dialogue": [
+                        "There is a hidden stash nearby. Find it."
+                    ],
+                    "success_dialogue": [
+                        "So you found the mead. Don't get any ideas. It's for me."
+                    ]
                 },
                 {
                     "objective": "Give Hela the Forza Mead",
-                    "requirement": { "type": "give_item", "itemId": "forza_mead", "quantity": 1 },
-                    "reminder_dialogue": ["Are you going to give me that mead or just stare at it?"],
-                    "success_dialogue": ["Finally. A decent drink."],
+                    "requirement": {
+                        "type": "give_item",
+                        "itemId": "forza_mead",
+                        "quantity": 1
+                    },
+                    "reminder_dialogue": [
+                        "Are you going to give me that mead or just stare at it?"
+                    ],
+                    "success_dialogue": [
+                        "Finally. A decent drink."
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "argentum", "quantity": 5000 },
-                        { "type": "tag", "tagId": "hela_sword_2_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "argentum",
+                            "quantity": 5000
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "hela_sword_2_complete"
+                        }
                     ]
                 }
             ]
         },
         {
             "questId": "hela_sword_3",
-            "title": "Shrine of Power",
-            "description": "Hela senses a source of power.",
-            "startRequirement": { "type": "have_tag", "tag": "hela_sword_2_complete" },
+            "title": "An Uneasy Alliance",
+            "description": "Hela wants you to investigate the Solis Saints.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "hela_sword_2_complete"
+            },
             "stages": [
                 {
-                    "objective": "Complete the Aura Shrine event at (10, 9)",
-                    "requirement": { "type": "finish_location_event", "eventId": "aura_shrine" },
-                    "reminder_dialogue": ["There is a shrine nearby. I can feel its energy. Go there."],
-                    "success_dialogue": ["You have done well. This power suits you."],
+                    "objective": "Earn the trust of Veres (Heart Rank 1).",
+                    "requirement": {
+                        "type": "npc_rank",
+                        "npcId": "veres",
+                        "rankType": "heart",
+                        "value": 1
+                    },
+                    "intro_dialogue": [
+                        "So, you're ready for more? Good.",
+                        "I have my suspicions about the so-called 'Solis Saints'. They're too clean, too pious. It stinks.",
+                        "I need someone to get close to them, to see what they're really planning. But first, you need to understand the other side of this coin.",
+                        "Go to Veres. Earn her trust. She sees things others miss. Come back to me when her Heart Rank is at least 1."
+                    ],
+                    "reminder_dialogue": [
+                        "Veres is not one for idle chatter. You'll need to prove your worth to her before she speaks freely. Her Heart Rank must be at least 1."
+                    ],
+                    "success_dialogue": [
+                        "You've spoken with Veres, then. You feel it now, don't you? The imbalance.",
+                        "The Saints are planning something, and it involves the ancient towers on this island. Keep your eyes open."
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "dawnbringer", "quantity": 1 },
-                        { "type": "tag", "tagId": "hela_sword_3_complete" }
+                        {
+                            "type": "tag",
+                            "tagId": "hela_sword_3_complete"
+                        }
                     ]
                 }
             ]
@@ -98,14 +220,42 @@
     ],
     "heartRanks": [
         {
-            "rank_up_dialogue": ["You've caught my eye. Don't disappoint me."],
-            "rankUpRequirement": { "type": "have_tag", "tag": "can_fight_hela" }
+            "rank_up_dialogue": [
+                "Why are you here to annoy me? I'm kinda lost here anyway...",
+                "Oh, someone sent you to 'investigate' me?",
+                "Well, I am Hela. Empress of Hell, and the Dominator of the Night.",
+                "Sometimes, 'at' night huehue.",
+                "But I like your courage. Just fighting me like that, because someone - this Sylvie - needed help? Amusing.",
+                "We could be friends."
+            ],
+            "rank_up_rewards": [
+                {
+                    "type": "tag",
+                    "tagId": "hela_heart_rank_1_unlocked"
+                }
+            ]
         },
         {
-            "rank_up_dialogue": ["There is... something about you."],
+            "rank_up_dialogue": [
+                "There is... something about you."
+            ],
             "giftingOptions": [
-                { "itemId": "magma_fossil", "quantity": 1, "value": 3, "dialogue": ["Another one? You're quite resourceful."] },
-                { "itemId": "hellward_lance", "quantity": 1, "value": 10, "dialogue": ["You would give me a weapon of such power? I'm impressed."] }
+                {
+                    "itemId": "magma_fossil",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "Another one? You're quite resourceful."
+                    ]
+                },
+                {
+                    "itemId": "hellward_lance",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "You would give me a weapon of such power? I'm impressed."
+                    ]
+                }
             ]
         }
     ]

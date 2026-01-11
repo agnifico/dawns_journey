@@ -5,10 +5,11 @@ import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { npcStore } from '$lib/stores/npcStore';
+import { questStore } from '$lib/stores/questStore';
 import { openCombatModal, closeCombatModal } from '$lib/stores/uiStore';
 import * as CombatEngine from './CombatEngine';
 import { getNpcCombatStats } from './NpcService';
-import { checkQuestTriggers } from './QuestService';
+import { checkRequirement, checkQuestTriggers } from './QuestService';
 
 function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combatant) {
     const drops = outcome === 'win' ? (opponent as any).drops || [] : [];
@@ -33,24 +34,29 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
     // Handle combat aftermath (dialogue and affinity changes)
     const npc = get(npcStore).globalNpcs[opponent.id];
     if (npc) {
-        const aftermaths = npc.battleAftermathsBySwordRank.find(a => a.rank === npc.swordRank)?.aftermaths;
-        if (aftermaths) {
-            const aftermath = aftermaths.find(a => a.outcome === outcome);
-            if (aftermath) {
-                if (aftermath.dialogue) {
-                    dialogueStore.startDialogue(aftermath.dialogue, npc.name);
+        const aftermathsByRank = npc.battleAftermathsBySwordRank.find(a => a.rank === npc.swordRank);
+        if (aftermathsByRank) {
+            const potentialAftermaths = aftermathsByRank.aftermaths.filter(a => a.outcome === outcome);
+            let aftermathToApply = null;
+
+            const playerForCheck = get(playerStore);
+            const allNpcs = get(npcStore).globalNpcs;
+
+            for (const potential of potentialAftermaths) {
+                // If no requirement, it's a default. The checkRequirement function returns true for null requirement.
+                const { met } = checkRequirement(potential.requirement, playerForCheck, npc, allNpcs, true);
+                if (met) {
+                    aftermathToApply = potential;
+                    break; // Use the first one that matches
                 }
-                if (aftermath.value) {
-                    npcStore.update(s => {
-                        const npcToUpdate = s.globalNpcs[npc.id];
-                        const newAffinity = npcToUpdate.affinity + aftermath.value;
-                        let newHeartState = npcToUpdate.heartState;
-                        if (newAffinity >= 10 && npcToUpdate.heartState !== 'READY_FOR_RANK_UP') {
-                            newHeartState = 'READY_FOR_RANK_UP';
-                        }
-                        const newNpc = { ...npcToUpdate, affinity: newAffinity, heartState: newHeartState };
-                        return { ...s, globalNpcs: { ...s.globalNpcs, [npc.id]: newNpc }};
-                    });
+            }
+
+            if (aftermathToApply) {
+                if (aftermathToApply.dialogue) {
+                    dialogueStore.startDialogue(aftermathToApply.dialogue, npc.name);
+                }
+                if (aftermathToApply.value !== undefined) {
+                    npcStore.applyCombatAftermath(npc.id, aftermathToApply);
                 }
             }
         }

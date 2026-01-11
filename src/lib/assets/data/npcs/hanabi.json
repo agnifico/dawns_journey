@@ -1,20 +1,32 @@
 {
     "id": "hanabi",
     "name": "Hanabi",
-    "profileImage": "/images/npc_avatars/hanabi2.png",
-    "image": "/images/npcs/hanabi.png",
+    "profileImage": "/images/characters/hanabi/hanabi_avatar.png",
+    "image": "/images/characters/hanabi/hanabi1.png",
+    "galleryImages": [
+        "/images/characters/hanabi/hanabi1.png",
+        "/images/characters/hanabi/hanabi2.png",
+        "/images/characters/hanabi/hanabi3.png",
+        "/images/characters/hanabi/hanabi4.png",
+        "/images/characters/hanabi/hanabi0.png"
+    ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
     "isCombatant": true,
-    "types": ["Dark", "Wind"],
-    "hp": 500,
-    "physicalAttack": 50,
-    "physicalDefence": 40,
-    "elementalAttack": 70,
-    "elementalDefence": 40,
-    "speed": 60,
-    "evasion": 40,
-    "critChance": 0.15,
-    "critDamage": 1.6,
+    "types": ["Fire", "Water"],
+    "baseStats": {
+        "hp": 500,
+        "maxHp": 500,
+        "auraShield": 100,
+        "maxAuraShield": 100,
+        "physicalAttack": 50,
+        "physicalDefence": 40,
+        "elementalAttack": 70,
+        "elementalDefence": 40,
+        "speed": 60,
+        "evasion": 40,
+        "critChance": 0.15,
+        "critDamage": 1.6
+    },
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
@@ -42,22 +54,6 @@
             }
         }
     ],
-    "itemPreferencesByHeartRank": [
-        {
-            "rank": 0,
-            "preferences": [
-                { "itemId": "shrooms", "value": 2, "dialogue": ["These shrooms become a bit 'magical' if you are in the right mind space. Thanks, now all I need is some company."] },
-                { "itemId": "fish", "value": -1, "dialogue": ["Ugh, turf over surf. But fine, I'll try frying it."] }
-            ]
-        },
-        {
-            "rank": 1,
-            "preferences": [
-                { "itemId": "forza_mead", "value": 2, "dialogue": ["A rare and delightful spirit; where'd you find it? Lovely!"] },
-                { "itemId": "fish", "value": -1, "dialogue": ["I think I still hate fish."] }
-            ]
-        }
-    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -76,72 +72,37 @@
     ],
     "swordRanks": [
         {
+            "questId": "hanabi_sword_1",
+            "title": "First Trial of the Firework Queen",
+            "description": "Hanabi demands a show of force.",
             "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
-            "intro_dialogue": [
-                "This place is crawling with these young dragon hatchlings. Figure out how to beat them, and defeat 5 of them.",
-                "Another mortal seeking favor. If you wish to prove your worth, there is a Woodmech Bear causing a nuisance. Remove it."
-            ],
-            "reminder_dialogue": [
-                "The bear still draws breath. My interest wanes.",
-                "Report back to me when the mechanical beast is scrap metal."
-            ],
-            "success_dialogue": [
-                "You have a spark. I am... intrigued. This is a small token for your service."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "dawnbringer_evolution", "quantity": 1 },
-                { "type": "tag", "tagId": "hela_quest_1_complete" }
-            ]
-        },
-        {
-            "requirement": { "type": "have_item", "itemId": "magma_fossil", "quantity": 1 },
-            "intro_dialogue": [
-                "Your strength is adequate, but strength alone is meaningless. I require a Magma Fossil. It is said they can be found in the mountains."
-            ],
-            "reminder_dialogue": [
-                "The mountains are that way. Are you lost?",
-                "My patience is not infinite. Bring me the fossil."
-            ],
-            "success_dialogue": [
-                "Good. You are not entirely useless. Perhaps you will be a useful tool after all."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "hellward_lance", "quantity": 1 }
+            "stages": [
+                {
+                    "objective": "Defeat 5 Greenhorns",
+                    "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
+                    "intro_dialogue": [
+                        "This place is crawling with these young dragon hatchlings. Figure out how to beat them, and defeat 5 of them.",
+                        "Another mortal seeking favor. If you wish to prove your worth, there is a Woodmech Bear causing a nuisance. Remove it."
+                    ],
+                    "reminder_dialogue": [
+                        "The bear still draws breath. My interest wanes.",
+                        "Report back to me when the mechanical beast is scrap metal."
+                    ],
+                    "success_dialogue": [
+                        "You have a spark. I am... intrigued. This is a small token for your service."
+                    ],
+                    "success_rewards": [
+                        { "type": "item", "itemId": "dawnbringer_evolution", "quantity": 1 },
+                        { "type": "tag", "tagId": "hela_quest_1_complete" }
+                    ]
+                }
             ]
         }
     ],
     "heartRanks": [
         {
-            "requirement": { "type": "have_item", "itemId": "fish", "quantity": 3 },
-            "intro_dialogue": [
-                "This realm is... tedious. Your presence provides a minor diversion. Amuse me.",
-                "You again. What do you want? Conversation? How droll."
-            ],
-            "reminder_dialogue": [
-                "I am still waiting to be amused.",
-                "Your attempts to curry favor are noted. And found wanting."
-            ],
-            "success_dialogue": [
-                "Hm. You are more interesting than the usual rabble. I suppose I can tolerate your presence."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "water_whip", "quantity": 1 },
-                { "type": "tag", "tagId": "helas_favor" }
-            ]
-        },
-        {
-            "intro_dialogue": [
-                "They say the 'Queen of Hell' has no heart. An amusing, if inaccurate, sentiment. What do you think, mortal?"
-            ],
-            "reminder_dialogue": [
-                "Have you pondered my question? Or is your mind as empty as your hands?"
-            ],
-            "success_dialogue": [
-                "A surprisingly nuanced answer. You may last longer than the others."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "pleasure", "quantity": 1 }
-            ]
+            "rank_up_dialogue": [],
+            "giftingOptions": []
         }
     ]
 }

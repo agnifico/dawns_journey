@@ -43,9 +43,30 @@ export async function checkForTileInteraction(): Promise<boolean> {
             case 'event':
                 const eventData = locationEventDefinitions[mapObject.eventId];
                 if (eventData) {
+                    const hasBeenCompleted = (player.locationEventHistory && player.locationEventHistory[eventData.id] || 0) > 0;
+
+                    if (hasBeenCompleted && (eventData.afterImage || eventData.afterDescription)) {
+                        const afterData = {
+                            ...eventData,
+                            image: eventData.afterImage || eventData.image,
+                            shortDesc: eventData.afterDescription || eventData.shortDesc,
+                            actions: [],
+                            effects: []
+                        };
+                        showEvent('location_event', afterData.image, afterData);
+                        return true;
+                    }
+                    
+                    // Fallback for one-time events without a special "after" state
+                    if (hasBeenCompleted && eventData.id === 'treasure_chest') {
+                        messageStore.addMessage('The chest is empty.', ['System']);
+                        return true;
+                    }
+
+                    // Default behavior for events that are not completed or are repeatable
                     showEvent('location_event', eventData.image, eventData);
                     if (!eventData.actions) {
-                        triggerEventEffect(eventData.effects, eventData.message);
+                        triggerEventEffect(eventData.id, eventData.effects, eventData.message);
                     }
                     return true;
                 }

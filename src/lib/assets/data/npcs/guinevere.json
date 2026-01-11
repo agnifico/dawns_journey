@@ -1,20 +1,33 @@
 {
     "id": "guinevere",
     "name": "Guinevere",
-    "profileImage": "/images/npc_avatars/guinevere2.png",
-    "image": "/images/npcs/guinevere.png",
-    "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
+    "profileImage": "/images/characters/guinevere/guinevere_profile.png",
+    "image": "/images/characters/guinevere/guinevere1.png",
+    "galleryImages": [
+        "/images/characters/guinevere/guinevere0.png",
+        "/images/characters/guinevere/guinevere1.png",
+        "/images/characters/guinevere/guinevere2.png",
+        "/images/characters/guinevere/guinevere3.png",
+        "/images/characters/guinevere/guinevere4.png"
+    ],
+    "description": "The local branch head of the Solis Saints, dedicated to bringing stability to the island through 'purification'.",
+    "faction": "Solis Saints",
     "isCombatant": true,
-    "types": ["Light"],
-    "hp": 500,
-    "physicalAttack": 50,
-    "physicalDefence": 40,
-    "elementalAttack": 70,
-    "elementalDefence": 40,
-    "speed": 60,
-    "evasion": 40,
-    "critChance": 0.15,
-    "critDamage": 1.6,
+    "types": ["Light", "Dark"],
+    "baseStats": {
+        "hp": 500,
+        "maxHp": 500,
+        "auraShield": 100,
+        "maxAuraShield": 100,
+        "physicalAttack": 50,
+        "physicalDefence": 40,
+        "elementalAttack": 70,
+        "elementalDefence": 40,
+        "speed": 60,
+        "evasion": 40,
+        "critChance": 0.15,
+        "critDamage": 1.6
+    },
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
@@ -42,106 +55,190 @@
             }
         }
     ],
-    "itemPreferencesByHeartRank": [
-        {
-            "rank": 0,
-            "preferences": [
-                { "itemId": "shrooms", "value": 2, "dialogue": ["These shrooms become a bit 'magical' if you are in the right mind space. Thanks, now all I need is some company."] },
-                { "itemId": "fish", "value": -1, "dialogue": ["Ugh, turf over surf. But fine, I'll try frying it."] }
-            ]
-        },
-        {
-            "rank": 1,
-            "preferences": [
-                { "itemId": "forza_mead", "value": 2, "dialogue": ["A rare and delightful spirit; where'd you find it? Lovely!"] },
-                { "itemId": "fish", "value": -1, "dialogue": ["I think I still hate fish."] }
-            ]
-        }
-    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
             "aftermaths": [
-                { "outcome": "lose", "value": 2, "dialogue": ["Don't worry. I am supposed to be the 'Final Boss' of the game."] },
-                { "outcome": "win", "value": -5, "dialogue": ["Who are you, the game developer!?"] }
-            ]
-        },
-        {
-            "rank": 1,
-            "aftermaths": [
-                { "outcome": "lose", "value": 1, "dialogue": ["As expected. Still the final boss here babe."] },
-                { "outcome": "win", "value": 2, "dialogue": ["You finally cracked the secret, right? ;)"] }
+                { "outcome": "lose", "value": 2, "dialogue": ["You are strong, but the light is stronger."] },
+                { "outcome": "win", "value": -5, "dialogue": ["This... this is not possible!"] }
             ]
         }
     ],
     "swordRanks": [
         {
-            "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
-            "intro_dialogue": [
-                "This place is crawling with these young dragon hatchlings. Figure out how to beat them, and defeat 5 of them.",
-                "Another mortal seeking favor. If you wish to prove your worth, there is a Woodmech Bear causing a nuisance. Remove it."
-            ],
-            "reminder_dialogue": [
-                "The bear still draws breath. My interest wanes.",
-                "Report back to me when the mechanical beast is scrap metal."
-            ],
-            "success_dialogue": [
-                "You have a spark. I am... intrigued. This is a small token for your service."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "dawnbringer_evolution", "quantity": 1 },
-                { "type": "tag", "tagId": "hela_quest_1_complete" }
+            "questId": "guinevere_sword_1",
+            "title": "A Simple Offering",
+            "description": "Guinevere requires a small tribute to prove your devotion.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "veres_sword_2_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Give Guinevere 2 Potatoes",
+                    "requirement": {
+                        "type": "give_item",
+                        "itemId": "potato",
+                        "quantity": 2
+                    },
+                    "intro_dialogue": [
+                        "So, Veres sent you to spy on me. I can see her shadow in your eyes.",
+                        "If you wish to walk in the light, you must prove your worth. Even a small offering can show great faith. Bring me two potatoes from your farm."
+                    ],
+                    "reminder_dialogue": [
+                        "I am waiting for the offering. Do not dally."
+                    ],
+                    "success_dialogue": [
+                        "A humble gift, but it shows you are willing. Good."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "guinevere_sword_1_complete" }
+                    ]
+                }
             ]
         },
         {
-            "requirement": { "type": "have_item", "itemId": "magma_fossil", "quantity": 1 },
-            "intro_dialogue": [
-                "Your strength is adequate, but strength alone is meaningless. I require a Magma Fossil. It is said they can be found in the mountains."
-            ],
-            "reminder_dialogue": [
-                "The mountains are that way. Are you lost?",
-                "My patience is not infinite. Bring me the fossil."
-            ],
-            "success_dialogue": [
-                "Good. You are not entirely useless. Perhaps you will be a useful tool after all."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "hellward_lance", "quantity": 1 }
+            "questId": "guinevere_sword_2",
+            "title": "Cleansing the Woods",
+            "description": "Guinevere wants you to clear a nuisance from the forest.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "guinevere_sword_1_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Defeat 1 Woodmech Bear",
+                    "requirement": {
+                        "type": "kill",
+                        "enemyId": "woodmech_bear",
+                        "quantity": 1
+                    },
+                    "intro_dialogue": [
+                        "There is a discordant presence in the woods. A 'Woodmech Bear', a creation of chaotic energies. It must be cleansed. Remove it."
+                    ],
+                    "reminder_dialogue": [
+                        "The abomination still roams the forest. My patience wears thin."
+                    ],
+                    "success_dialogue": [
+                        "You have done well. The forest breathes easier now. You are proving to be a useful instrument of the light."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "guinevere_sword_2_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "guinevere_sword_3",
+            "title": "The Commanders' Tasks",
+            "description": "Guinevere has tasked you with assisting her commanders, Claudia and Cygwin.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "guinevere_sword_2_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Talk to Guinevere",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "success_dialogue": [
+                        "Assist my two commanders: Cygwin and Claudia"
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "tag",
+                            "itemId": "can_assist_claudia"
+                        },
+                        {
+                            "type": "tag",
+                            "itemId": "can_assist_cygwin"
+                        }
+                    ]
+                },
+                {
+                    "objective": "Assist Commander Claudia",
+                    "requirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "npc_rank", "npcId": "claudia", "rankType": "sword", "value": 1 },
+                            { "type": "npc_rank", "npcId": "claudia", "rankType": "heart", "value": 1 }
+                        ]
+                    },
+                    "intro_dialogue": [
+                        "My commanders, Claudia and Cygwin, are undertaking vital work to stabilize this island. They require an able hand. Find them, assist them in their tasks, and earn their trust."
+                    ],
+                    "reminder_dialogue": [
+                        "Commander Claudia still requires your assistance."
+                    ],
+                    "success_dialogue": [
+                        "Excellent. One pillar of stability is secured."
+                    ]
+                },
+                {
+                    "objective": "Assist Commander Cygwin",
+                    "requirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "npc_rank", "npcId": "cygwin", "rankType": "sword", "value": 1 },
+                            { "type": "npc_rank", "npcId": "cygwin", "rankType": "heart", "value": 1 }
+                        ]
+                    },
+                    "reminder_dialogue": [
+                        "Commander Cygwin is still waiting for you."
+                    ],
+                    "success_dialogue": [
+                        "The second pillar is in place. Well done."
+                    ]
+                },
+                {
+                    "objective": "Report back to Guinevere",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "reminder_dialogue": [
+                        "You have done what I asked. Return to me and report your success."
+                    ],
+                    "success_dialogue": [
+                        "You have served the Saints well. The commanders speak highly of you. There is but one final task to secure this island's future."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "guinevere_sword_3_complete" },
+                        { "type": "tag", "tagId": "reported_to_guinevere_f1_f2" },
+                        { "type": "tag", "tagId": "can_start_akari_quest" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "guinevere_sword_4",
+            "title": "The Final Purification",
+            "description": "Guinevere has revealed the final tower that needs to be 'purified'.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "guinevere_sword_3_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Activate the Altar of Fates at (25, 9)",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "F3"
+                    },
+                    "intro_dialogue": [
+                        "The final tower, the Altar of Fates, is now revealed to you. Go there and activate it. Its purification will bring lasting peace to this land."
+                    ],
+                    "success_rewards": [
+                        { "type": "unlock_location_event", "eventId": "F3" }
+                    ]
+                }
             ]
         }
     ],
     "heartRanks": [
         {
-            "requirement": { "type": "have_item", "itemId": "fish", "quantity": 3 },
-            "intro_dialogue": [
-                "This realm is... tedious. Your presence provides a minor diversion. Amuse me.",
-                "You again. What do you want? Conversation? How droll."
-            ],
-            "reminder_dialogue": [
-                "I am still waiting to be amused.",
-                "Your attempts to curry favor are noted. And found wanting."
-            ],
-            "success_dialogue": [
-                "Hm. You are more interesting than the usual rabble. I suppose I can tolerate your presence."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "water_whip", "quantity": 1 },
-                { "type": "tag", "tagId": "helas_favor" }
-            ]
-        },
-        {
-            "intro_dialogue": [
-                "They say the 'Queen of Hell' has no heart. An amusing, if inaccurate, sentiment. What do you think, mortal?"
-            ],
-            "reminder_dialogue": [
-                "Have you pondered my question? Or is your mind as empty as your hands?"
-            ],
-            "success_dialogue": [
-                "A surprisingly nuanced answer. You may last longer than the others."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "pleasure", "quantity": 1 }
-            ]
+            "rank_up_dialogue": [],
+            "giftingOptions": []
         }
     ]
 }

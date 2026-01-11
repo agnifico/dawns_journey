@@ -16,6 +16,11 @@ export function checkRequirement(
 
     const checkCondition = (condition: RequirementCondition): boolean => {
         switch (condition.type) {
+            case 'quest_state': {
+                const allQuests = get(questStore).quests;
+                const quest = allQuests[condition.questId];
+                return quest ? quest.state === condition.state : false;
+            }
             case 'dialogue': return true;
             case 'have_item': {
                 const item = player.inventory.find(i => i.itemId === condition.itemId);
@@ -71,8 +76,22 @@ export function checkRequirement(
                 if (!targetNpc) return false;
                 return condition.rankType === 'heart' ? targetNpc.heartRank >= condition.value : targetNpc.swordRank >= condition.value;
             }
-            case 'finish_location_event': return player.completedLocationEvents.includes(condition.eventId);
-            case 'unlock_location_event': return player.unlockedLocationEvents.includes(condition.eventId);
+            case 'finish_location_event': {
+                const timing = condition.timing || 'history';
+                const quantity = condition.quantity || 1;
+                const currentCount = (player.locationEventHistory && player.locationEventHistory[condition.eventId]) || 0;
+
+                if (timing === 'history') {
+                    return currentCount >= quantity;
+                } else { // timing === 'future'
+                    if (isStartRequirement || !npc) {
+                        // A 'future' check can't be a start requirement, so it's always false if checked that way.
+                        return false;
+                    }
+                    const countAtQuestStart = npc.requirementSnapshot?.[npc.swordRank]?.finish_location_event?.[condition.eventId] || 0;
+                    return (currentCount - countAtQuestStart) >= quantity;
+                }
+            }
             case 'have_tag': return player.worldTags.includes(condition.tag);
             case 'stat_check': return player.baseStats[condition.stat] >= condition.value;
             case 'element_exploration_level_check': return player.equipment.weapon_slots.some(w => w?.exploration?.some(e => e.name === condition.element && e.level >= condition.level));
@@ -98,21 +117,35 @@ export function checkRequirement(
 
 
 export function checkQuestTriggers() {
-    const player = get(playerStore);
-    const allQuests = get(questStore).quests;
-    const globalNpcs = get(npcStore).globalNpcs;
+    playerStore.update(player => {
+        let newPlayer = { ...player };
+        const allQuests = get(questStore).quests;
+        const globalNpcs = get(npcStore).globalNpcs;
 
-    for (const questId in allQuests) {
-        const quest = allQuests[questId];
-        if (quest.state === 'LOCKED' && quest.startRequirement) {
-            const giverNpc = globalNpcs[quest.giver] || null;
-            
-            // Pass true for the isStartRequirement flag
-            const { met } = checkRequirement(quest.startRequirement, player, giverNpc, globalNpcs, true);
+        for (const questId in allQuests) {
+            const quest = allQuests[questId];
+            if (quest.state === 'LOCKED' && quest.startRequirement) {
+                const giverNpc = globalNpcs[quest.giver] || null;
+                
+                const { met } = checkRequirement(quest.startRequirement, newPlayer, giverNpc, globalNpcs, true);
 
-            if (met) {
-                questStore.setQuestState(quest.id, 'AVAILABLE');
+                if (met) {
+                    const rankData = giverNpc?.swordRanks.find(r => r.questId === questId);
+                    if (rankData?.autoStart) {
+                        questStore.setQuestState(quest.id, 'ACTIVE');
+                        
+                        // Consume the "can_start" tag
+                        const conditions = 'conditions' in rankData.startRequirement ? rankData.startRequirement.conditions : [rankData.startRequirement];
+                        const startTagCondition = conditions.find(c => c.type === 'have_tag' && c.tag.startsWith('can_start_'));
+                        if (startTagCondition && 'tag' in startTagCondition) {
+                            newPlayer.worldTags = newPlayer.worldTags.filter(t => t !== startTagCondition.tag);
+                        }
+                    } else {
+                        questStore.setQuestState(quest.id, 'AVAILABLE');
+                    }
+                }
             }
         }
-    }
+        return newPlayer;
+    });
 }

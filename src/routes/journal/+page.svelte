@@ -32,6 +32,7 @@
                         {chapter.title}
                     </button>
                 {/each}
+                <a href="/journal/character" class="tab-button">Characters</a>
             </div>
         </header>
 

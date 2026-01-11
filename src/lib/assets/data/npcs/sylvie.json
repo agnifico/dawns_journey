@@ -1,34 +1,74 @@
 {
     "id": "sylvie",
     "name": "Sylvie",
-    "profileImage": "/images/npc_avatars/sylvie2.png",
-    "image": "/images/npcs/sylvie.png",
+    "profileImage": "/images/characters/sylvie/sylvie_avatar.png",
+    "image": "/images/characters/sylvie/sylvie1.png",
+    "galleryImages": [
+        "/images/characters/sylvie/sylvie0.png",
+        "/images/characters/sylvie/sylvie1.png",
+        "/images/characters/sylvie/sylvie2.png",
+        "/images/characters/sylvie/sylvie3.png",
+        "/images/characters/sylvie/sylvie4.png"
+    ],
     "isCombatant": true,
-    "types": [ "Nature", "Water" ],
+    "types": [
+        "Earth"
+    ],
     "baseStats": {
-        "hp": 100, "maxHp": 100, "auraShield": 20, "maxAuraShield": 20, "physicalAttack": 15,
-        "physicalDefence": 10, "elementalAttack": 20, "elementalDefence": 15, "speed": 30,
-        "evasion": 20, "critChance": 0.05, "critDamage": 1.5
+        "hp": 100,
+        "maxHp": 100,
+        "auraShield": 20,
+        "maxAuraShield": 20,
+        "physicalAttack": 15,
+        "physicalDefence": 10,
+        "elementalAttack": 20,
+        "elementalDefence": 15,
+        "speed": 30,
+        "evasion": 20,
+        "critChance": 0.05,
+        "critDamage": 1.5
     },
-    "swordRank": 0, "heartRank": 0, "affinity": 0,
-    "swordState": "NOT_STARTED", "heartState": "NOT_STARTED",
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
     "statGrowth": [],
     "swordRankMaxedDialogue": [
-        "Sword Rank Maxed - Dialogue 1",
-        "Sword Rank Maxed - Dialogue 2",
-        "Sword Rank Maxed - Dialogue 3"
+        "Congratulations, you have finished the basic tutorial!",
+        "Before you go, let me explain to you how time works.",
+        "Time exists in Revoluts, with each comprising of Dawnrise, followed by Duskfall.",
+        "Each step you take is one unit of time. 50 steps/units change the half of Revolut - Dawnrise/Duskfall.",
+        "Resources on the map respawn (replenish to full) after certain amount of time."
     ],
     "allRanksMaxedDialogue": [
-        "All Ranks Maxed - Dialogue 1",
-        "All Ranks Maxed - Dialogue 2",
-        "All Ranks Maxed - Dialogue 3"
+        "Long ago, an ancient dragon, the size of a small village used to roam over these waters - The Southern Sea.",
+        "The dragon - Ymir - was benevolent, guarding these waters from foul creatures of the Abyss and intrusions from land alike.",
+        "In a war two centuries back, one of the belligerent factions tried to imprison Ymir, trying to tame him.",
+        "In a clash that saw the end of the war, the imprudent faction, and Ymir himself, he fell from the skies.",
+        "The Ocean Goddess wept, for she was rather fond of Ymir. Goddess Earth took it upon herself to ensure he got a proper burial.",
+        "Over 3 days, with her own hands, no magic, she raised mountains, planted forest, and covered Ymir with a landform,",
+        "one that is blessed of life. That is the story of Dragon Island. "
     ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
             "aftermaths": [
-                { "outcome": "win", "value": 5, "dialogue": ["A good fight! You are stronger than you look."] },
-                { "outcome": "lose", "value": 1, "dialogue": ["You fought well, but the forest is stronger."] }
+                {
+                    "outcome": "win",
+                    "value": 5,
+                    "dialogue": [
+                        "Well done, don't worry too much about combat right now, it will be explained, later."
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "You fought well, but the forest is stronger.",
+                        "(Hint: You should equip the weapon - Vine Whip. Check out your Inventory, 'treasure chest' icon on top.)"
+                    ]
+                }
             ]
         }
     ],
@@ -40,22 +80,36 @@
             "startState": "ACTIVE",
             "stages": [
                 {
-                    "objective": "Talk to Sylvie",
-                    "requirement": { "type": "dialogue" },
+                    "objective": "Talk to Sylvie (X:13, Y:2)",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "success_dialogue": [
                         "Welcome Traveler, this is Dawn's Journey",
                         "Move around, you'll find random loot you can pick up.",
                         "There are some places you can't go to right now, but you will, later.",
                         "For now, can you go into the water and get me a Fish?"
                     ],
-                    "success_rewards": [{ "type": "item", "itemId": "potato_seed", "quantity": 10 }]
+                    "success_rewards": [
+                        {
+                            "type": "item",
+                            "itemId": "potato_seed",
+                            "quantity": 10
+                        }
+                    ]
                 },
                 {
-                    "objective": "Bring a fish to Sylvie",
-                    "requirement": { "type": "give_item", "itemId": "fish", "quantity": 1 },
-                    "reminder_dialogue": ["The fish are still waiting."],
+                    "objective": "Catch a Fish",
+                    "requirement": {
+                        "type": "give_item",
+                        "itemId": "fish",
+                        "quantity": 1
+                    },
+                    "reminder_dialogue": [
+                        "Still waiting for the Fish. 'Walk' over the waters, you'll find one."
+                    ],
                     "success_dialogue": [
-                        "Thank you. You've done a great service. Please, take this bread for your troubles.",
+                        "Yum, can't wait to cook it! We can have it with some Bread. You don't have any? Here, take some :3",
                         "I've also added some potato seeds to your backpack, to help start your Farming journey.",
                         "Go to the Homestead area (you can find it as the 'House' icon on top).",
                         "There, you can find your Homestead, and your Farming area.",
@@ -63,8 +117,15 @@
                         "Watch the magic! (Just code, you know)"
                     ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "bread", "quantity": 5 },
-                        { "type": "tag", "tagId": "sylvie_sword_1_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "bread",
+                            "quantity": 5
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "sylvie_sword_1_complete"
+                        }
                     ]
                 }
             ]
@@ -73,23 +134,52 @@
             "questId": "sylvie_sword_2",
             "title": "Heart of the Forest",
             "description": "Sylvie wants to teach you more about the forest.",
-            "startRequirement": { "type": "have_tag", "tag": "sylvie_sword_1_complete" },
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_1_complete"
+            },
             "stages": [
                 {
                     "objective": "Gather 30 Wood",
-                    "requirement": { "type": "have_item", "itemId": "wood", "quantity": 30 },
-                    "unavailable_dialogue": ["The forest is quiet today."],
-                    "reminder_dialogue": ["The trees of the island are a precious resource..."],
-                    "success_dialogue": ["You have gathered enough wood."]
+                    "requirement": {
+                        "type": "have_item",
+                        "itemId": "wood",
+                        "quantity": 10
+                    },
+                    "unavailable_dialogue": [
+                        "The forest is quiet today."
+                    ],
+                    "reminder_dialogue": [
+                        "The trees of the island are bountiful. You can gather some wood from them."
+                    ],
+                    "success_dialogue": [
+                        "Perfect, you now have enough Wood for a rainy day."
+                    ]
                 },
                 {
                     "objective": "Reach Heart Rank 1 with Sylvie",
-                    "requirement": { "type": "npc_rank", "npcId": "sylvie", "rankType": "heart", "value": 1 },
-                    "reminder_dialogue": ["I need some Wood. Would you care to gift me some?"],
-                    "success_dialogue": ["You have shown your kindness. The forest thanks you."],
+                    "requirement": {
+                        "type": "npc_rank",
+                        "npcId": "sylvie",
+                        "rankType": "heart",
+                        "value": 1
+                    },
+                    "reminder_dialogue": [
+                        "I need some Wood. Would you care to gift me some?"
+                    ],
+                    "success_dialogue": [
+                        "You have shown your kindness. The forest thanks you."
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "vine_whip", "quantity": 1 },
-                        { "type": "tag", "tagId": "sylvie_sword_2_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "vine_whip",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "sylvie_sword_2_complete"
+                        }
                     ]
                 }
             ]
@@ -98,18 +188,42 @@
             "questId": "sylvie_sword_3",
             "title": "Dragon Taming",
             "description": "Sylvie is concerned about the growing number of dragons.",
-            "startRequirement": { "type": "have_tag", "tag": "sylvie_sword_2_complete" },
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_2_complete"
+            },
             "stages": [
                 {
                     "objective": "Defeat 5 Greenhorns",
-                    "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
-                    "unavailable_dialogue": ["The forest is quiet today."],
-                    "reminder_dialogue": ["The Greenhorn dragons are getting a bit too numerous..."],
-                    "success_dialogue": ["Thank you. The forest is a little safer now."],
+                    "requirement": {
+                        "type": "kill",
+                        "enemyId": "greenhorn",
+                        "quantity": 5
+                    },
+                    "unavailable_dialogue": [
+                        "The forest is quiet today."
+                    ],
+                    "reminder_dialogue": [
+                        "The Greenhorn dragons are getting a bit too numerous...",
+                        "(Hint: You should equip the weapon - Vine Whip. Check out your Inventory, 'treasure chest' icon on top.)"
+                    ],
+                    "success_dialogue": [
+                        "Thank you. The forest is a little safer now."
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "hymn", "quantity": 1 },
-                        { "type": "tag", "tagId": "sylvie_sword_3_complete" },
-                        { "type": "tag", "tagId": "can_fight_hela" }
+                        {
+                            "type": "item",
+                            "itemId": "hymn",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "sylvie_sword_3_complete"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "can_fight_hela"
+                        }
                     ]
                 }
             ]
@@ -118,23 +232,51 @@
             "questId": "sylvie_sword_4",
             "title": "A Test of Mettle",
             "description": "Sylvie wants to test your strength.",
-            "startRequirement": { "type": "have_tag", "tag": "sylvie_sword_3_complete" },
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_3_complete"
+            },
             "stages": [
                 {
                     "objective": "Defeat Sylvie in combat.",
-                    "requirement": { "type": "win_against_npc", "npcId": "sylvie", "quantity": 1 },
-                    "unavailable_dialogue": ["I am not ready to face you yet."],
-                    "reminder_dialogue": ["I need to see your strength in battle first."],
-                    "success_dialogue": ["Well fought. Now, I need you to face another challenger."]
+                    "requirement": {
+                        "type": "win_against_npc",
+                        "npcId": "sylvie",
+                        "quantity": 1
+                    },
+                    "unavailable_dialogue": [
+                        "I am not ready to face you yet."
+                    ],
+                    "reminder_dialogue": [
+                        "I need to see your strength in battle first."
+                    ],
+                    "success_dialogue": [
+                        "Well fought. Now, I need you to face another challenger."
+                    ]
                 },
                 {
                     "objective": "Face Hela in combat.",
-                    "requirement": { "type": "fight_npc", "npcId": "hela", "quantity": 1 },
-                    "reminder_dialogue": ["Hela awaits. Go and test your might."],
-                    "success_dialogue": ["You have faced her. That is all I ask. Here is your reward."],
+                    "requirement": {
+                        "type": "fight_npc",
+                        "npcId": "hela",
+                        "quantity": 1
+                    },
+                    "reminder_dialogue": [
+                        "Hela awaits. Go and test your might."
+                    ],
+                    "success_dialogue": [
+                        "You have faced her. That is all I ask. Here is your reward."
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "requiem", "quantity": 1 },
-                        { "type": "tag", "tagId": "sylvie_sword_4_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "requiem",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "sylvie_sword_4_complete"
+                        }
                     ]
                 }
             ]
@@ -142,18 +284,41 @@
         {
             "questId": "sylvie_sword_5",
             "title": "A Simple Meal",
-            "description": "Sylvie wants to share a meal with you.",
-            "startRequirement": { "type": "have_tag", "tag": "sylvie_sword_4_complete" },
+            "description": "A New Gameplay Mode - Farming",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_4_complete"
+            },
             "stages": [
                 {
-                    "objective": "Bring 5 Potatoes to Sylvie",
-                    "requirement": { "type": "have_item", "itemId": "potato", "quantity": 5 },
-                    "unavailable_dialogue": ["The time is not right."],
-                    "reminder_dialogue": ["I'm feeling a bit hungry. Could you spare some potatoes?"],
-                    "success_dialogue": ["Thank you. This will make a fine stew. You have been a great friend to me and this forest."],
+                    "objective": "Farming begins!",
+                    "requirement": {
+                        "type": "have_item",
+                        "itemId": "potato",
+                        "quantity": 5
+                    },
+                    "unavailable_dialogue": [
+                        "The time is not right."
+                    ],
+                    "reminder_dialogue": [
+                        "It's time you tried out Farming! Grow 5 potatoes and show me.",
+                        "Go to the Homestead area (you can find it as the 'House' icon on top).",
+                        "There, you can find your Homestead, and your Farming area.",
+                        "Plant one potato seed per plot, water them, and wait."
+                    ],
+                    "success_dialogue": [
+                        "Yayy potaayytoooozz!!!"
+                    ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "freedom_cry", "quantity": 1 },
-                        { "type": "tag", "tagId": "sylvie_sword_5_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "freedom_cry",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "sylvie_sword_5_complete"
+                        }
                     ]
                 }
             ]
@@ -161,10 +326,26 @@
     ],
     "heartRanks": [
         {
-            "rank_up_dialogue": ["Thank you for your kindness. I feel we have grown closer."],
+            "rank_up_dialogue": [
+                "Thank you for your kindness. I feel we have grown closer."
+            ],
             "giftingOptions": [
-                { "itemId": "wood", "quantity": 5, "value": 2, "dialogue": ["Thank you. A gift for the forest is a gift for me."] },
-                { "itemId": "potato", "quantity": 3, "value": 2, "dialogue": ["Oh, how lovely! These will make a wonderful stew."] }
+                {
+                    "itemId": "wood",
+                    "quantity": 2,
+                    "value": 2,
+                    "dialogue": [
+                        "Thank you. A gift for the forest is a gift for me."
+                    ]
+                },
+                {
+                    "itemId": "potato",
+                    "quantity": 1,
+                    "value": 2,
+                    "dialogue": [
+                        "Oh, how lovely! These will make a wonderful stew."
+                    ]
+                }
             ]
         }
     ]

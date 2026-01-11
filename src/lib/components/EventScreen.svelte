@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { eventScreen } from '$lib/stores/uiStore';
+	import { eventScreen, clearEvent } from '$lib/stores/uiStore';
 	import { npcStore } from '$lib/stores/npcStore';
     import { resourceStore } from '$lib/stores/resourceStore';
     import { mapStore } from '$lib/stores/mapStore';
     import { time } from '$lib/stores/timeStore';
     import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
+    import { triggerEventEffect } from '$lib/services/LocationEventService';
 	import StatBar from './ui/StatBar.svelte';
 	import MasteryTag from './ui/MasteryTag.svelte';
     import Tooltip from './ui/Tooltip.svelte';
     import { derived } from 'svelte/store';
+    import { goto } from '$app/navigation';
 
 	let npc;
 	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
@@ -29,6 +31,12 @@
     function closeLightbox() {
         lightboxVisible = false;
         lightboxImage = '';
+    }
+
+    function handleAction(action) {
+        const eventData = $eventScreen.data;
+        triggerEventEffect(eventData.id, action.effects, eventData.message);
+        clearEvent();
     }
 
     const resourceNodeKey = derived(
@@ -109,7 +117,7 @@
 		<div class="image-container">
 			{#if $eventScreen.image}
                 {#if $eventScreen.type === 'npc'}
-                    <button class="avatar-button" on:click={() => openLightbox($eventScreen.data.fullImage)}>
+                    <button class="avatar-button" on:click={() => openLightbox(npc.image)}>
                         <img src={$eventScreen.image} alt="NPC Avatar" class="npc-image" />
                     </button>
                 {:else}
@@ -125,7 +133,12 @@
 		<!-- Info Box (for all types) -->
 		<div class="info-box">
 			{#if npc}
-				<h3>{npc.name}</h3>
+                <div class="npc-header">
+                    <h3>{npc.name}</h3>
+                    <button class="info-button" on:click={() => goto(`/journal/character/${npc.id}`)} title="View Character Info">
+                        <img src="/game_icons/info.png" alt="Info" />
+                    </button>
+                </div>
 				<div class="rank-meters">
 					<div class="rank-meter">
 						<img src="/game_icons/sword_rank.png" alt="Sword Rank" class="rank-icon" />
@@ -171,6 +184,41 @@
 </div>
 
 <style>
+    .npc-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .info-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .info-button img {
+        width: 16px;
+        height: 16px;
+        image-rendering: pixelated;
+    }
+    .info-button:hover {
+        filter: brightness(1.2);
+    }
+
+    .action-button {
+        font-family: var(--font-family-pixel);
+        background-color: var(--color-accent);
+        color: var(--text-white);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 3px;
+        font-size: 0.9em;
+        cursor: pointer;
+        margin-top: 0.5rem;
+    }
+
     .lightbox {
         position: fixed;
         top: 0;

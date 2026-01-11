@@ -2,6 +2,7 @@ import { writable, get } from 'svelte/store';
 import type { Player, NPC, GiftingOption } from '../types';
 import { playerStore } from './playerStore';
 import { questStore } from './questStore';
+import { messageStore } from './messageStore';
 import * as NpcService from '../services/NpcService';
 
 const npcModules = {
@@ -12,6 +13,9 @@ const npcModules = {
     'marjane': () => import('../assets/data/npcs/marjane.json'),
     'hanabi': () => import('../assets/data/npcs/hanabi.json'),
     'veres': () => import('../assets/data/npcs/veres.json'),
+    'akari': () => import('../assets/data/npcs/akari.json'),
+    'cygwin': () => import('../assets/data/npcs/cygwin.json'),
+    'nyx': () => import('../assets/data/npcs/nyx.json'),
 };
 
 export async function getNpcData(npcId: string): Promise<NPC | null> {
@@ -81,6 +85,27 @@ function createNpcStore() {
         update(state => ({ ...state, globalNpcs: { ...state.globalNpcs, [npcId]: updatedNpc } }));
     }
 
+    function applyCombatAftermath(npcId: string, aftermath: { value?: number }) {
+        if (aftermath.value === undefined) return;
+    
+        update(s => {
+            const npcToUpdate = s.globalNpcs[npcId];
+            if (!npcToUpdate) return s;
+    
+            // Ensure affinity doesn't go below 0
+            const newAffinity = Math.max(0, npcToUpdate.affinity + aftermath.value);
+            let newHeartState = npcToUpdate.heartState;
+    
+            if (newAffinity >= 10 && npcToUpdate.heartState !== 'READY_FOR_RANK_UP') {
+                newHeartState = 'READY_FOR_RANK_UP';
+                messageStore.addMessage(`You feel your connection with ${npcToUpdate.name} has deepened. You should Talk to them.`, ['World', 'Update']);
+            }
+    
+            const newNpc = { ...npcToUpdate, affinity: newAffinity, heartState: newHeartState };
+            return { ...s, globalNpcs: { ...s.globalNpcs, [npcId]: newNpc }};
+        });
+    }
+
     function loadNpcs(loadedNpcs: Record<string, NPC>) {
         // When loading NPCs from a save, we need to re-register their quests
         // to ensure the quest definitions are up-to-date, but the state will be preserved.
@@ -104,6 +129,7 @@ function createNpcStore() {
         initializeGlobalNpcs,
         interactTalk,
         fulfillGiftingOption,
+        applyCombatAftermath,
         loadNpcs,
         set
     };

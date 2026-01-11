@@ -2,19 +2,18 @@
     import type { MapData, Player } from '$lib/types';
     import { phase } from '$lib/stores/timeStore';
     import PlayerIcon from './ui/PlayerIcon.svelte';
-    import { onMount } from 'svelte';
+    import MapObject from './MapObject.svelte';
 
     export let mapData: MapData;
     export let player: Player;
 
     const TILE_SIZE = 16;
-    const RENDER_SCALE = 3; // Using your preferred scale
+    const RENDER_SCALE = 3;
     const FINAL_TILE_SIZE = TILE_SIZE * RENDER_SCALE;
 
     let windowWidth: number;
     let windowHeight: number;
 
-    // These values will move the map around inside the window
     $: mapTranslateX = -(player.position.x * FINAL_TILE_SIZE) + (windowWidth / 2) - (FINAL_TILE_SIZE / 2);
     $: mapTranslateY = -(player.position.y * FINAL_TILE_SIZE) + (windowHeight / 2) - (FINAL_TILE_SIZE / 2);
 
@@ -38,6 +37,10 @@
             style="background-image: url({mapData.image});"
         ></div>
         
+        {#each mapData.objects as mapObject (mapObject.type + (mapObject.npcId || mapObject.resourceId || mapObject.eventId) + mapObject.x + mapObject.y)}
+            <MapObject {mapObject} {FINAL_TILE_SIZE} />
+        {/each}
+
         <PlayerIcon {player} {FINAL_TILE_SIZE} />
 
         <div class="day-night-overlay" class:night={$phase === 'Duskfall'}></div>
@@ -55,7 +58,7 @@
 
     .map-world {
         position: absolute;
-        transition: transform 0.1s linear; /* Smooth movement */
+        transition: transform 0.1s linear;
     }
 
     .map-background {
@@ -63,7 +66,7 @@
         height: 100%;
         background-size: cover;
         background-repeat: no-repeat;
-        image-rendering: pixelated; /* Crucial for pixel art */
+        image-rendering: pixelated;
     }
 
     .day-night-overlay {

@@ -27,16 +27,13 @@
             {#if activeQuests.length > 0}
                 {#each activeQuests as quest}
                     {@const currentStage = quest.stages[quest.currentStage]}
-                    {@const progress = $questProgressStore[quest.id]}
+                    {@const status = $questProgressStore[quest.id]}
                     <div class="quest">
                         <p class="quest-title">{quest.title}</p>
                         {#if currentStage}
                         <ul>
-                            <li>
+                            <li class:ready={status === 'ready'} class:ongoing={status === 'ongoing'}>
                                 {currentStage.objective}
-                                {#if progress}
-                                    <span>({progress.progress}/{progress.target})</span>
-                                {/if}
                             </li>
                         </ul>
                         {/if}
@@ -50,6 +47,12 @@
 </div>
 
 <style>
+    .ready {
+        color: #4ade80; /* Tailwind Green 400 */
+    }
+    .ongoing {
+        color: #facc15; /* Tailwind Yellow 400 */
+    }
     .widget-container {
         position: absolute;
         width: 250px;

@@ -74,11 +74,12 @@ export interface Player {
     farmingXp: number;
     techPoints: number;
     unlockedTech: string[];
-    completedLocationEvents: string[];
-    unlockedLocationEvents: string[];
+    locationEventHistory: { [eventId: string]: number };
+    factionReputation: Record<string, number>;
 }
 
 export type RequirementCondition =
+    | { type: 'quest_state'; questId: string; state: QuestState }
     | { type: 'npc_rank'; npcId: string; rankType: 'sword' | 'heart'; value: number }
     | { type: 'counterpart_rank'; rankType: 'sword' | 'heart'; value: number }
     | { type: 'talk'; npcId: string }
@@ -88,7 +89,7 @@ export type RequirementCondition =
     | { type: 'kill'; enemyId: string; quantity: number }
     | { type: 'have_item'; itemId: string; quantity: number }
     | { type: 'give_item'; itemId: string; quantity: number }
-    | { type: 'finish_location_event'; eventId: string }
+    | { type: 'finish_location_event'; eventId: string; quantity?: number; timing?: 'history' | 'future' }
     | { type: 'unlock_location_event'; eventId: string }
     | { type: 'have_tag'; tag: string }
     | { type: 'stat_check'; stat: keyof Player['baseStats']; value: number }
@@ -100,7 +101,23 @@ export type Requirement = { operator: 'AND' | 'OR'; conditions: RequirementCondi
 
 export type Reward = 
     | { type: 'item'; itemId: string; quantity: number; }
-    | { type: 'tag'; tagId: string; };
+    | { type: 'tag'; tagId: string; }
+    | { type: 'unlock_location_event'; eventId: string; }
+    | { type: 'change_reputation'; faction: 'Solis Saints' | 'Shadowhand'; amount: number; }
+    | { type: 'complete_quest_stage'; questId: string; }
+    | { type: 'fail_quest'; questId: string; };
+
+export type GameEffect = 
+    | { type: 'RESTORE_HP'; value: number }
+    | { type: 'RESTORE_HP_FULL' }
+    | { type: 'RESTORE_AURA'; value: number }
+    | { type: 'GIVE_ITEM'; itemId: string; quantity: number }
+    | { type: 'TAKE_ITEM'; itemId: string; quantity: number }
+    | { type: 'SWAP_ITEM'; takeItemId: string; takeQuantity: number; giveItemId: string; giveQuantity: number }
+    | { type: 'trigger_faction_choice' }
+    | { type: 'add_tag', tag: string }
+    | { type: 'give_item', itemId: string, quantity: number }
+    | { type: 'complete_quest_stage' };
 
 export interface GiftingOption {
     itemId: string;
@@ -118,7 +135,7 @@ export interface QuestStage {
     unavailable_dialogue?: string[];
 }
 
-export type QuestState = 'LOCKED' | 'AVAILABLE' | 'ACTIVE' | 'COMPLETED';
+export type QuestState = 'LOCKED' | 'AVAILABLE' | 'ACTIVE' | 'COMPLETED' | 'FAILED';
 
 export interface RankData {
     questId: string;
@@ -126,6 +143,7 @@ export interface RankData {
     description: string;
     startRequirement?: Requirement;
     startState?: QuestState;
+    autoStart?: boolean;
     stages: QuestStage[];
 }
 
@@ -139,6 +157,18 @@ export interface HeartRankData {
 export interface SwordRankData extends RankData {}
 
 export type NpcInteractionState = 'NOT_STARTED' | 'IN_PROGRESS' | 'READY_FOR_TURN_IN' | 'READY_FOR_RANK_UP';
+
+export interface BattleAftermath {
+    outcome: 'win' | 'lose';
+    value?: number;
+    dialogue?: string[];
+    requirement?: Requirement;
+}
+
+export interface BattleAftermathsByRank {
+    rank: number;
+    aftermaths: BattleAftermath[];
+}
 
 export interface NPC {
     id: string;
@@ -155,11 +185,13 @@ export interface NPC {
     swordRanks: SwordRankData[];
     heartRanks: HeartRankData[];
     statGrowth: any[];
-    battleAftermathsBySwordRank: any[];
+    battleAftermathsBySwordRank: BattleAftermathsByRank[];
     types?: string[];
     requirementSnapshot?: any;
     swordRankMaxedDialogue?: string[];
     allRanksMaxedDialogue?: string[];
+    galleryImages?: string[];
+    faction?: 'Solis Saints' | 'Shadowhand';
 }
 
 export interface Quest {
@@ -190,11 +222,14 @@ export interface LocationEvent {
     id: string;
     name: string;
     image: string;
+    coords?: Position;
     shortDesc: string;
     stepOnMessage: string;
     message: string;
     effects?: any[];
     actions?: any[];
+    afterImage?: string;
+    afterDescription?: string;
 }
 
 export interface ResourceNode {

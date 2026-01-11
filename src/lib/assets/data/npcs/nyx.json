@@ -1,0 +1,39 @@
+{
+    "id": "nyx",
+    "name": "Nyx",
+    "profileImage": "/images/characters/nyx/nyx_avatar.png",
+    "image": "/images/characters/nyx/nyx1.png",
+    "galleryImages": [
+        "/images/characters/nyx/nyx0.png",
+        "/images/characters/nyx/nyx1.png"
+    ],
+    "isCombatant": true,
+    "types": [
+        "Dark"
+    ],
+    "baseStats": {
+        "hp": 100,
+        "maxHp": 100,
+        "auraShield": 20,
+        "maxAuraShield": 20,
+        "physicalAttack": 15,
+        "physicalDefence": 10,
+        "elementalAttack": 20,
+        "elementalDefence": 15,
+        "speed": 30,
+        "evasion": 20,
+        "critChance": 0.05,
+        "critDamage": 1.5
+    },
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
+    "statGrowth": [],
+    "swordRankMaxedDialogue": [],
+    "allRanksMaxedDialogue": [],
+    "battleAftermathsBySwordRank": [],
+    "swordRanks": [],
+    "heartRanks": []
+}

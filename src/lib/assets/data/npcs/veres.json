@@ -1,20 +1,31 @@
 {
     "id": "veres",
     "name": "Veres",
-    "profileImage": "/images/npc_avatars/veres2.png",
-    "image": "/images/npcs/veres.png",
+    "profileImage": "/images/characters/veres/veres_avatar.png",
+    "image": "/images/characters/veres/veres1.png",
+    "galleryImages": [
+        "/images/characters/veres/veres1.png",
+        "/images/characters/veres/veres2.png",
+        "/images/characters/veres/veres0.png",
+        "/images/characters/veres/veres4.png"
+    ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
     "isCombatant": true,
-    "types": ["Dark", "Wind"],
-    "hp": 500,
-    "physicalAttack": 50,
-    "physicalDefence": 40,
-    "elementalAttack": 70,
-    "elementalDefence": 40,
-    "speed": 60,
-    "evasion": 40,
-    "critChance": 0.15,
-    "critDamage": 1.6,
+    "types": ["Light", "Wind"],
+    "baseStats": {
+        "hp": 500,
+        "maxHp": 500,
+        "auraShield": 100,
+        "maxAuraShield": 100,
+        "physicalAttack": 50,
+        "physicalDefence": 40,
+        "elementalAttack": 70,
+        "elementalDefence": 40,
+        "speed": 60,
+        "evasion": 40,
+        "critChance": 0.15,
+        "critDamage": 1.6
+    },
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
@@ -42,22 +53,6 @@
             }
         }
     ],
-    "itemPreferencesByHeartRank": [
-        {
-            "rank": 0,
-            "preferences": [
-                { "itemId": "shrooms", "value": 2, "dialogue": ["These shrooms become a bit 'magical' if you are in the right mind space. Thanks, now all I need is some company."] },
-                { "itemId": "fish", "value": -1, "dialogue": ["Ugh, turf over surf. But fine, I'll try frying it."] }
-            ]
-        },
-        {
-            "rank": 1,
-            "preferences": [
-                { "itemId": "forza_mead", "value": 2, "dialogue": ["A rare and delightful spirit; where'd you find it? Lovely!"] },
-                { "itemId": "fish", "value": -1, "dialogue": ["I think I still hate fish."] }
-            ]
-        }
-    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -76,71 +71,91 @@
     ],
     "swordRanks": [
         {
-            "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
-            "intro_dialogue": [
-                "This place is crawling with these young dragon hatchlings. Figure out how to beat them, and defeat 5 of them.",
-                "Another mortal seeking favor. If you wish to prove your worth, there is a Woodmech Bear causing a nuisance. Remove it."
-            ],
-            "reminder_dialogue": [
-                "The bear still draws breath. My interest wanes.",
-                "Report back to me when the mechanical beast is scrap metal."
-            ],
-            "success_dialogue": [
-                "You have a spark. I am... intrigued. This is a small token for your service."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "dawnbringer_evolution", "quantity": 1 },
-                { "type": "tag", "tagId": "hela_quest_1_complete" }
+            "questId": "veres_sword_1",
+            "title": "Whispers of the Grove",
+            "description": "Veres has asked you to gather some mushrooms.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "hela_sword_2_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Gather 10 Mushrooms",
+                    "requirement": {
+                        "type": "have_item",
+                        "itemId": "shrooms",
+                        "quantity": 10
+                    },
+                    "intro_dialogue": [
+                        "You want to know more? Fine. But words are not cheap.",
+                        "The groves nearby are rich with... ingredients. Bring me 10 mushrooms, and I will tell you what you wish to know."
+                    ],
+                    "reminder_dialogue": [
+                        "I am waiting for those mushrooms. The forest doesn't gather them for you."
+                    ],
+                    "success_dialogue": [
+                        "Good. A fair trade.",
+                        "The 'Solis Saints' are not what they seem. They seek to 'purify' this island by destroying three ancient towers.",
+                        "They believe it will bring stability. I believe it will bring ruin.",
+                        "Their local leader, Guinevere, is the one you should be wary of. Go speak with her. See for yourself what 'piety' looks like."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "veres_sword_1_complete" }
+                    ]
+                }
             ]
         },
         {
-            "requirement": { "type": "have_item", "itemId": "magma_fossil", "quantity": 1 },
-            "intro_dialogue": [
-                "Your strength is adequate, but strength alone is meaningless. I require a Magma Fossil. It is said they can be found in the mountains."
-            ],
-            "reminder_dialogue": [
-                "The mountains are that way. Are you lost?",
-                "My patience is not infinite. Bring me the fossil."
-            ],
-            "success_dialogue": [
-                "Good. You are not entirely useless. Perhaps you will be a useful tool after all."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "hellward_lance", "quantity": 1 }
+            "questId": "veres_sword_2",
+            "title": "Eyes on the Cathedral",
+            "description": "Veres wants you to observe Guinevere.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "veres_sword_1_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Talk to Guinevere",
+                    "requirement": {
+                        "type": "dialogue",
+                        "npcId": "guinevere"
+                    },
+                    "intro_dialogue": [
+                        "Go on, then. Guinevere is waiting. Let's see if you can peel back the layers of her 'divine mission'."
+                    ],
+                    "reminder_dialogue": [
+                        "Are you having second thoughts? Guinevere is in the cathedral. Go."
+                    ],
+                    "success_dialogue": [
+                        "You see now? The righteousness is just a mask for ambition.",
+                        "Keep a close eye on her and her commanders."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "veres_sword_2_complete" }
+                    ]
+                }
             ]
         }
     ],
     "heartRanks": [
         {
-            "requirement": { "type": "have_item", "itemId": "fish", "quantity": 3 },
-            "intro_dialogue": [
-                "This realm is... tedious. Your presence provides a minor diversion. Amuse me.",
-                "You again. What do you want? Conversation? How droll."
+            "rank_up_dialogue": [
+                "You approach me again. You are either brave or a fool. Perhaps both.",
+                "Hela sent you, didn't she? That meddler. She senses a shift in this island's balance, and she is not wrong.",
+                "If you truly wish to understand, you must first prove your worth beyond mere combat. Show me you can provide, not just take."
             ],
-            "reminder_dialogue": [
-                "I am still waiting to be amused.",
-                "Your attempts to curry favor are noted. And found wanting."
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "veres_heart_1_unlocked" }
             ],
-            "success_dialogue": [
-                "Hm. You are more interesting than the usual rabble. I suppose I can tolerate your presence."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "water_whip", "quantity": 1 },
-                { "type": "tag", "tagId": "helas_favor" }
-            ]
-        },
-        {
-            "intro_dialogue": [
-                "They say the 'Queen of Hell' has no heart. An amusing, if inaccurate, sentiment. What do you think, mortal?"
-            ],
-            "reminder_dialogue": [
-                "Have you pondered my question? Or is your mind as empty as your hands?"
-            ],
-            "success_dialogue": [
-                "A surprisingly nuanced answer. You may last longer than the others."
-            ],
-            "success_rewards": [
-                { "type": "item", "itemId": "pleasure", "quantity": 1 }
+            "giftingOptions": [
+                {
+                    "itemId": "shrooms",
+                    "quantity": 5,
+                    "value": 5,
+                    "dialogue": [
+                        "A simple offering, but useful. Thank you."
+                    ]
+                }
             ]
         }
     ]

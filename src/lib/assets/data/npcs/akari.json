@@ -1,0 +1,100 @@
+{
+    "id": "akari",
+    "name": "Akari",
+    "profileImage": "/images/characters/akari/akari_avatar.png",
+    "image": "/images/characters/akari/akari1.png",
+    "galleryImages": [
+        "/images/characters/akari/akari0.png",
+        "/images/characters/akari/akari1.png",
+        "/images/characters/akari/akari2.png"
+    ],
+    "description": "A mysterious agent of the Shadowhand, working to thwart the plans of the Solis Saints.",
+    "faction": "Shadowhand",
+    "isCombatant": true,
+    "types": [
+        "Fire"
+    ],
+    "baseStats": {
+        "hp": 100,
+        "maxHp": 100,
+        "auraShield": 20,
+        "maxAuraShield": 20,
+        "physicalAttack": 15,
+        "physicalDefence": 10,
+        "elementalAttack": 20,
+        "elementalDefence": 15,
+        "speed": 30,
+        "evasion": 20,
+        "critChance": 0.05,
+        "critDamage": 1.5
+    },
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
+    "statGrowth": [],
+    "swordRankMaxedDialogue": [],
+    "allRanksMaxedDialogue": [],
+    "battleAftermathsBySwordRank": [],
+    "swordRanks": [
+        {
+            "questId": "akari_sword_1",
+            "title": "A Shadow's Warning",
+            "description": "A mysterious woman has appeared with an urgent warning.",
+            "startRequirement": {
+                "operator": "AND",
+                "conditions": [
+                    { "type": "have_tag", "tag": "reported_to_guinevere_f1_f2" },
+                    { "type": "have_tag", "tag": "can_start_akari_quest" }
+                ]
+            },
+            "autoStart": true,
+            "stages": [
+                {
+                    "objective": "Speak with the mysterious woman",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "intro_dialogue": [
+                        "You! The one who's been helping the Saints. You have no idea what you're doing.",
+                        "Guinevere's 'purification' will destabilize the entire island. The towers are not meant to be activated in this way.",
+                        "I am Akari, of the Shadowhand. We work to maintain the true balance. You've been a pawn in their game, but you can still make things right."
+                    ],
+                    "success_dialogue": [
+                        "Think about what I've said. The final tower is the key."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "akari_sword_1_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "akari_sword_2",
+            "title": "The True Balance",
+            "description": "Akari has urged you to confront the Saints at the final tower.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "akari_sword_1_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Confront the Saints at the Altar of Fates (25, 9)",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "F3"
+                    },
+                    "intro_dialogue": [
+                        "Guinevere will have sent you to the final tower by now. The Altar of Fates.",
+                        "You have a choice to make. Destroy it as she commands, or fight back and preserve the true balance. The choice is yours, but know that the Shadowhand will remember it."
+                    ],
+                    "success_rewards": [
+                        { "type": "unlock_location_event", "eventId": "F3" }
+                    ]
+                }
+            ]
+        }
+    ],
+    "heartRanks": []
+}

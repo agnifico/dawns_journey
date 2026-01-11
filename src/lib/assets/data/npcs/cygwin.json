@@ -1,0 +1,90 @@
+{
+    "id": "cygwin",
+    "name": "Cygwin",
+    "profileImage": "/images/characters/cygwin/cygwin_avatar.png",
+    "image": "/images/characters/cygwin/cygwin1.png",
+    "galleryImages": [
+        "/images/characters/cygwin/cygwin0.png",
+        "/images/characters/cygwin/cygwin1.png",
+        "/images/characters/cygwin/cygwin2.png",
+        "/images/characters/cygwin/cygwin3.png"
+    ],
+    "description": "A commander of the Solis Saints, known for her unwavering and sometimes brutal efficiency.",
+    "isCombatant": true,
+    "types": [
+        "Light",
+        "Earth"
+    ],
+    "baseStats": {
+        "hp": 100,
+        "maxHp": 100,
+        "auraShield": 20,
+        "maxAuraShield": 20,
+        "physicalAttack": 15,
+        "physicalDefence": 10,
+        "elementalAttack": 20,
+        "elementalDefence": 15,
+        "speed": 30,
+        "evasion": 20,
+        "critChance": 0.05,
+        "critDamage": 1.5
+    },
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
+    "statGrowth": [],
+    "swordRankMaxedDialogue": [],
+    "allRanksMaxedDialogue": [],
+    "battleAftermathsBySwordRank": [],
+    "swordRanks": [
+        {
+            "questId": "cygwin_sword_1",
+            "title": "The Decrepit Spire",
+            "description": "Assist Commander Cygwin in her task.",
+            "startRequirement": {
+                "type": "tag",
+                "questId": "can_assist_cygwin"
+            },
+            "stages": [
+                {
+                    "objective": "Activate the Decrepit Spire at (26, 13)",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "F2"
+                    },
+                    "intro_dialogue": [
+                        "You're the help Lady Guinevere sent? Don't look like much. There's a spire to the east that needs activating. Get it done. Don't waste my time."
+                    ],
+                    "reminder_dialogue": [
+                        "The spire at (26, 13) isn't going to activate itself. Move."
+                    ],
+                    "success_dialogue": [
+                        "Hmph. You're slightly more useful than you look. Report back to Lady Guinevere."
+                    ],
+                    "success_rewards": [
+                        { "type": "unlock_location_event", "eventId": "F2" }
+                    ]
+                }
+            ]
+        }
+    ],
+    "heartRanks": [
+        {
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        }
+    ]
+}

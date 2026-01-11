@@ -57,8 +57,9 @@
 				id: `event_action_${index}`,
 				label: act.text,
 				hotkey: keymap[index] || null,
-				action: () =>
-					LocationEventService.triggerEventEffect(act.effects, $eventScreen.data.message)
+				action: () => {
+					LocationEventService.triggerEventEffect($eventScreen.data.id, act.effects, $eventScreen.data.message);
+                }
 			}));
 		} else if ($eventScreen.type === 'resource') {
 			actions = [

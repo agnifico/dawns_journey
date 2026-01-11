@@ -119,3 +119,14 @@ export const homesteadStatusState = persistentStore<WidgetState>('homesteadStatu
 export function toggleHomesteadStatus() {
     homesteadStatusState.update(s => ({ ...s, isCollapsed: !s.isCollapsed }));
 }
+
+// --- Faction Choice Modal ---
+export const isFactionChoiceModalOpen = writable<boolean>(false);
+
+export function openFactionChoiceModal() {
+    isFactionChoiceModalOpen.set(true);
+}
+
+export function closeFactionChoiceModal() {
+    isFactionChoiceModalOpen.set(false);
+}
