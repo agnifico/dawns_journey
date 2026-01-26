@@ -17,7 +17,7 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
     // Persist the player's final HP, Aura Shield, and combat history back to the main store
     playerStore.update(p => {
         const newCombatHistory = [...p.combatHistory, { npcId: opponent.id, outcome: outcome }];
-        return {
+        let updatedPlayer = {
             ...p,
             baseStats: {
                 ...p.baseStats,
@@ -26,10 +26,12 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
             },
             combatHistory: newCombatHistory,
         };
-    });
 
-    // Check for quest triggers after combat ends
-    checkQuestTriggers();
+        // Check for quest triggers after combat ends
+        updatedPlayer = checkQuestTriggers(updatedPlayer);
+        
+        return updatedPlayer;
+    });
 
     // Handle combat aftermath (dialogue and affinity changes)
     const npc = get(npcStore).globalNpcs[opponent.id];

@@ -1,4 +1,4 @@
-import type { NPC, Player, Requirement, Reward, GiftingOption } from '$lib/types';
+import type { NPC, Player, Requirement, Reward, GiftingOption, RankData, Quest } from '$lib/types';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { mapStore } from '$lib/stores/mapStore';
@@ -6,8 +6,8 @@ import { addItem, removeItem } from './ItemService';
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
 import { questStore } from '$lib/stores/questStore';
-import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { checkRequirement, checkQuestTriggers } from './QuestService';
+
 
 function createRequirementSnapshot(player: Player, requirement: Requirement): any {
     const snapshot = {
@@ -45,41 +45,205 @@ function handleRewards(player: Player, rewards: Reward[]): Player {
             if (!newPlayer.worldTags.includes(reward.tagId)) {
                 newPlayer.worldTags.push(reward.tagId);
             }
-        } else if (reward.type === 'unlock_location_event') {
-            const eventDef = locationEventDefinitions[reward.eventId];
-            if (eventDef && eventDef.coords) {
-                const newObject = {
-                    type: 'event',
-                    eventId: reward.eventId,
-                    x: eventDef.coords.x,
-                    y: eventDef.coords.y
-                };
-                mapStore.addObject(newObject);
-            }
         }
     }
-    checkQuestTriggers();
+    newPlayer = checkQuestTriggers(newPlayer);
     return newPlayer;
 }
+
+function handleMaxedOutDialogue(npc: NPC, dialogueType: 'allRanksMaxed' | 'swordRankMaxed'): { updatedNpc: NPC, shouldReturn: boolean } {
+    const dialogueKey = `${dialogueType}Dialogue`;
+    const dialogueIndexKey = `${dialogueType}DialogueIndex`;
+
+    const dialogue = npc[dialogueKey];
+    if (!dialogue?.length) {
+        return { updatedNpc: npc, shouldReturn: false };
+    }
+
+    const dialogueIndex = npc[dialogueIndexKey] || 0;
+    dialogueStore.startDialogue(dialogue, npc.name);
+
+    const newIndex = Math.min(dialogueIndex + 1, dialogue.length - 1);
+    const updatedNpc = { ...npc, [dialogueIndexKey]: newIndex };
+
+    return { updatedNpc, shouldReturn: true };
+}
+
+type QuestStateHandler = (
+    npc: NPC,
+    player: Player,
+    globalNpcs: Record<string, NPC>,
+    rankData: RankData,
+    quest: Quest
+) => { updatedNpc: NPC, updatedPlayer: Player };
+
+const questStateHandlers: Record<string, QuestStateHandler> = {
+    LOCKED: (npc, player, globalNpcs, rankData, quest) => {
+        const unavailableDialogue = rankData.stages[0]?.unavailable_dialogue || [`I have nothing for you right now.`];
+        dialogueStore.startDialogue(unavailableDialogue, npc.name);
+        return { updatedNpc: npc, updatedPlayer: player };
+    },
+    AVAILABLE: (npc, player, globalNpcs, rankData, quest) => {
+        let updatedNpc = { ...npc };
+        let updatedPlayer = { ...player };
+        const firstStage = rankData.stages[0];
+        if (firstStage) {
+            questStore.setQuestState(quest.id, 'ACTIVE');
+            
+            const allRequirements = rankData.stages.map(s => s.requirement);
+            const combinedRequirement = { operator: 'OR' as const, conditions: allRequirements.flatMap(r => 'conditions' in r ? r.conditions : [r]) };
+            const snapshot = createRequirementSnapshot(updatedPlayer, combinedRequirement);
+            updatedNpc.requirementSnapshot = {
+                ...updatedNpc.requirementSnapshot,
+                [updatedNpc.swordRank]: snapshot
+            };
+
+            if (firstStage.requirement.type === 'dialogue') {
+                const intro = firstStage.intro_dialogue || ["A new opportunity awaits."];
+                const success = firstStage.success_dialogue || [];
+                dialogueStore.startDialogue([...intro, ...success], npc.name);
+
+                if (firstStage.success_rewards) {
+                    updatedPlayer = handleRewards(updatedPlayer, firstStage.success_rewards);
+                }
+                
+                if (rankData.stages.length === 1) {
+                    questStore.setQuestState(quest.id, 'COMPLETED');
+                    updatedNpc.swordRank++;
+                    messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                    updatedPlayer = checkQuestTriggers(updatedPlayer);
+                } else {
+                    questStore.advanceQuestStage(quest.id);
+                }
+            } else {
+                dialogueStore.startDialogue(firstStage.intro_dialogue || ["A new opportunity awaits."], npc.name);
+            }
+        }
+        return { updatedNpc, updatedPlayer };
+    },
+    ACTIVE: (npc, player, globalNpcs, rankData, quest) => {
+        let updatedNpc = { ...npc };
+        let updatedPlayer = { ...player };
+        const currentStageIndex = quest.currentStage;
+        const stage = rankData.stages[currentStageIndex];
+
+        if (!stage) {
+            messageStore.addMessage(`${npc.name} seems to be at a loss for words.`, ['System']);
+            return { updatedNpc, updatedPlayer };
+        }
+
+        if (stage.requirement.type === 'dialogue') {
+            if (stage.success_dialogue) {
+                dialogueStore.startDialogue(stage.success_dialogue, npc.name);
+            }
+            if (stage.success_rewards) {
+                updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+            }
+            
+            if (currentStageIndex >= rankData.stages.length - 1) {
+                questStore.setQuestState(quest.id, 'COMPLETED');
+                updatedNpc.swordRank++;
+                messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                updatedPlayer = checkQuestTriggers(updatedPlayer);
+            } else {
+                questStore.advanceQuestStage(quest.id);
+            }
+            return { updatedNpc, updatedPlayer };
+        }
+
+        const { met, postCheckActions } = checkRequirement(stage.requirement, updatedPlayer, updatedNpc, globalNpcs);
+
+        if (met) {
+            updatedPlayer = postCheckActions.reduce((p, action) => action(p), updatedPlayer);
+            
+            if (stage.success_rewards) {
+                updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+            }
+            
+            if (stage.success_dialogue) {
+                dialogueStore.startDialogue(stage.success_dialogue, npc.name);
+            }
+
+            if (currentStageIndex >= rankData.stages.length - 1) {
+                questStore.setQuestState(quest.id, 'COMPLETED');
+                updatedNpc.swordRank++;
+                messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                updatedPlayer = checkQuestTriggers(updatedPlayer);
+            } else {
+                questStore.advanceQuestStage(quest.id);
+            }
+        } else {
+            dialogueStore.startDialogue(stage.reminder_dialogue || ["You still have things to do."], npc.name);
+        }
+        return { updatedNpc, updatedPlayer };
+    },
+    REPORT_PENDING: (npc, player, globalNpcs, rankData, quest) => {
+        let updatedPlayer = { ...player };
+        const finalState = quest.finalState;
+        if (finalState === 'COMPLETED') {
+            questStore.setQuestState(quest.id, 'COMPLETED');
+            messageStore.addMessage(`You reported to ${npc.name}. Quest "${quest.title}" completed!`, ['World', 'Update']);
+            const finalStage = rankData.stages[rankData.stages.length - 1];
+            if (finalStage?.success_rewards) {
+                updatedPlayer = handleRewards(updatedPlayer, finalStage.success_rewards);
+            }
+            if (finalStage?.success_dialogue) {
+                dialogueStore.startDialogue(finalStage.success_dialogue, npc.name);
+            } else {
+                dialogueStore.startDialogue([`Thank you for your report on "${quest.title}". Well done.`], npc.name);
+            }
+        } else if (finalState === 'FAILED') {
+            questStore.setQuestState(quest.id, 'FAILED');
+            messageStore.addMessage(`You reported to ${npc.name}. Quest "${quest.title}" failed.`, ['World', 'Update']);
+            const finalStage = rankData.stages[rankData.stages.length - 1];
+            if (finalStage?.unavailable_dialogue) {
+                dialogueStore.startDialogue(finalStage.unavailable_dialogue, npc.name);
+            } else {
+                dialogueStore.startDialogue([`You failed to complete "${quest.title}". Better luck next time.`], npc.name);
+            }
+        }
+        return { updatedNpc: npc, updatedPlayer: player };
+    },
+    COMPLETED: (npc, player, globalNpcs, rankData, quest) => {
+        let updatedNpc = { ...npc };
+        let updatedPlayer = { ...player };
+        if (updatedNpc.swordRank === updatedNpc.swordRanks.findIndex(r => r.questId === quest.id)) {
+            const finalStage = rankData.stages[rankData.stages.length - 1];
+            if (finalStage?.success_dialogue) {
+                dialogueStore.startDialogue(finalStage.success_dialogue, npc.name);
+            }
+            updatedNpc.swordRank++;
+            messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+            updatedPlayer = checkQuestTriggers(updatedPlayer);
+        } else {
+            const dialogue = rankData.post_completion_dialogue || [`${npc.name} has nothing new to say.`];
+            dialogueStore.startDialogue(dialogue, npc.name);
+        }
+        return { updatedNpc, updatedPlayer };
+    },
+    FAILED: (npc, player, globalNpcs, rankData, quest) => {
+        const dialogue = rankData.post_failure_dialogue || [`${npc.name} has nothing to say to you.`];
+        dialogueStore.startDialogue(dialogue, npc.name);
+        return { updatedNpc: npc, updatedPlayer: player };
+    }
+};
 
 export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, NPC>): { updatedNpc: NPC, updatedPlayer: Player } {
     const allQuests = get(questStore).quests;
     let updatedNpc = { ...npc };
     let updatedPlayer = { ...player };
     
-    // --- Maxed out checks ---
     const isSwordMaxed = updatedNpc.swordRank >= updatedNpc.swordRanks.length;
     const isHeartMaxed = updatedNpc.heartRank >= updatedNpc.heartRanks.length;
 
-    if (isSwordMaxed && isHeartMaxed && updatedNpc.allRanksMaxedDialogue?.length) {
-        const dialogue = updatedNpc.allRanksMaxedDialogue[Math.floor(Math.random() * updatedNpc.allRanksMaxedDialogue.length)];
-        dialogueStore.startDialogue([dialogue], updatedNpc.name);
-        return { updatedNpc, updatedPlayer };
+    if (isSwordMaxed && isHeartMaxed) {
+        const { updatedNpc: newNpc, shouldReturn } = handleMaxedOutDialogue(updatedNpc, 'allRanksMaxed');
+        if (shouldReturn) return { updatedNpc: newNpc, updatedPlayer };
     }
-    if (isSwordMaxed && updatedNpc.swordRankMaxedDialogue?.length) {
-        const dialogue = updatedNpc.swordRankMaxedDialogue[Math.floor(Math.random() * updatedNpc.swordRankMaxedDialogue.length)];
-        dialogueStore.startDialogue([dialogue], updatedNpc.name);
-        return { updatedNpc, updatedPlayer };
+
+    if (isSwordMaxed) {
+        const { updatedNpc: newNpc, shouldReturn } = handleMaxedOutDialogue(updatedNpc, 'swordRankMaxed');
+        if (shouldReturn) return { updatedNpc: newNpc, updatedPlayer };
     }
 
     // --- Heart Rank upgrade ---
@@ -116,108 +280,13 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
     const quest = allQuests[rankData.questId];
 
     if (!quest) {
-        messageStore.addMessage("Error: Quest not found.", ['System']);
+        messageStore.addMessage(`Error: Quest data for ${rankData.questId} not found. Please check the data files.`, ['System', 'Error']);
         return { updatedNpc, updatedPlayer };
     }
 
-    switch (quest.state) {
-        case 'LOCKED': {
-            const unavailableDialogue = rankData.stages[0]?.unavailable_dialogue || [`I have nothing for you right now.`];
-            dialogueStore.startDialogue(unavailableDialogue, updatedNpc.name);
-            break;
-        }
-        case 'AVAILABLE': {
-            const firstStage = rankData.stages[0];
-            if (firstStage) {
-                dialogueStore.startDialogue(firstStage.intro_dialogue || ["A new opportunity awaits."], updatedNpc.name);
-                questStore.setQuestState(quest.id, 'ACTIVE');
-                
-                const allRequirements = rankData.stages.map(s => s.requirement);
-                const combinedRequirement = { operator: 'OR' as const, conditions: allRequirements.flatMap(r => 'conditions' in r ? r.conditions : [r]) };
-                const snapshot = createRequirementSnapshot(updatedPlayer, combinedRequirement);
-                updatedNpc.requirementSnapshot = {
-                    ...updatedNpc.requirementSnapshot,
-                    [updatedNpc.swordRank]: snapshot
-                };
-
-                if (firstStage.requirement.type === 'dialogue') {
-                    if (firstStage.success_dialogue) {
-                        dialogueStore.startDialogue(firstStage.success_dialogue, updatedNpc.name);
-                    }
-                    if (firstStage.success_rewards) {
-                        updatedPlayer = handleRewards(updatedPlayer, firstStage.success_rewards);
-                    }
-                    
-                    if (rankData.stages.length === 1) { // It's a single-stage quest
-                        questStore.setQuestState(quest.id, 'COMPLETED');
-                        updatedNpc.swordRank++;
-                        messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
-                        checkQuestTriggers();
-                    } else {
-                        questStore.advanceQuestStage(quest.id);
-                    }
-                }
-            }
-            break;
-        }
-        case 'ACTIVE': {
-            const currentStageIndex = quest.currentStage;
-            const stage = rankData.stages[currentStageIndex];
-
-            if (!stage) {
-                messageStore.addMessage(`${updatedNpc.name} seems to be at a loss for words.`, ['System']);
-                break;
-            }
-
-            if (stage.requirement.type === 'dialogue') {
-                if (stage.success_dialogue) {
-                    dialogueStore.startDialogue(stage.success_dialogue, updatedNpc.name);
-                }
-                if (stage.success_rewards) {
-                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
-                }
-                
-                if (currentStageIndex >= rankData.stages.length - 1) {
-                    questStore.setQuestState(quest.id, 'COMPLETED');
-                    updatedNpc.swordRank++;
-                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
-                    checkQuestTriggers();
-                } else {
-                    questStore.advanceQuestStage(quest.id);
-                }
-                return { updatedNpc, updatedPlayer };
-            }
-
-            const { met, postCheckActions } = checkRequirement(stage.requirement, updatedPlayer, updatedNpc, globalNpcs);
-
-            if (met) {
-                updatedPlayer = postCheckActions.reduce((p, action) => action(p), updatedPlayer);
-                
-                if (stage.success_rewards) {
-                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
-                }
-                
-                if (stage.success_dialogue) {
-                    dialogueStore.startDialogue(stage.success_dialogue, updatedNpc.name);
-                }
-
-                if (currentStageIndex >= rankData.stages.length - 1) {
-                    questStore.setQuestState(quest.id, 'COMPLETED');
-                    updatedNpc.swordRank++;
-                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
-                    checkQuestTriggers();
-                } else {
-                    questStore.advanceQuestStage(quest.id);
-                }
-            } else {
-                dialogueStore.startDialogue(stage.reminder_dialogue || ["You still have things to do."], updatedNpc.name);
-            }
-            break;
-        }
-        case 'COMPLETED': {
-            messageStore.addMessage(`${updatedNpc.name} has nothing new to say.`, ['System']);
-            break;
-        }
+    const handler = questStateHandlers[quest.state];
+    if (handler) {
+        return handler(updatedNpc, updatedPlayer, globalNpcs, rankData, quest);
     }
 
     return { updatedNpc, updatedPlayer };
@@ -258,4 +327,79 @@ export function getNpcCombatStats(npc: NPC): Partial<Player['baseStats']> {
     });
 
     return stats;
+}
+
+export function handleNpcDefeat(npcId: string, player: Player): Player {
+    let updatedPlayer = { ...player };
+    
+    const combatHistoryEntry = {
+        npcId: npcId,
+        outcome: 'win',
+        timestamp: Date.now()
+    };
+    updatedPlayer.combatHistory.push(combatHistoryEntry);
+
+    const npc = get(mapStore).npcs[npcId];
+    if (npc) {
+        const updatedNpc = { ...npc };
+        updatedNpc.swordRank = Math.max(0, updatedNpc.swordRank - 1);
+        updatedNpc.heartRank = Math.max(0, updatedNpc.heartRank - 1);
+        updatedNpc.affinity = 0;
+        mapStore.updateNpc(npcId, updatedNpc);
+        messageStore.addMessage(`You have defeated ${npc.name}. Their Sword and Heart Ranks have decreased.`, ['World', 'Update']);
+    }
+    
+    updatedPlayer = checkQuestTriggers(updatedPlayer);
+    return updatedPlayer;
+}
+
+export function getNpcInteractionIcon(npc: NPC, player: Player, globalNpcs: Record<string, NPC>): string | null {
+    if (npc.heartState === 'READY_FOR_RANK_UP') {
+        return '/game_icons/expression_love.png';
+    }
+
+    const rankData = npc.swordRanks[npc.swordRank];
+    if (!rankData?.questId) {
+        return null;
+    }
+
+    const quest = get(questStore).quests[rankData.questId];
+    if (!quest) {
+        return null;
+    }
+
+    if (quest.state === 'AVAILABLE') {
+        return '/game_icons/expression_alerted.png';
+    }
+
+    if (quest.state === 'ACTIVE') {
+        const stage = rankData.stages[quest.currentStage];
+        if (stage) {
+            const { met } = checkRequirement(stage.requirement, player, npc, globalNpcs);
+            if (met) {
+                return '/game_icons/expression_confused.png';
+            }
+        }
+    }
+
+    return null;
+}
+
+export function handleNpcVictory(npcId: string, player: Player): Player {
+    let updatedPlayer = { ...player };
+
+    const combatHistoryEntry = {
+        npcId: npcId,
+        outcome: 'lose',
+        timestamp: Date.now()
+    };
+    updatedPlayer.combatHistory.push(combatHistoryEntry);
+
+    const npc = get(mapStore).npcs[npcId];
+    if (npc) {
+        messageStore.addMessage(`You have been defeated by ${npc.name}.`, ['World', 'Update']);
+    }
+
+    updatedPlayer = checkQuestTriggers(updatedPlayer);
+    return updatedPlayer;
 }

@@ -12,6 +12,7 @@ import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { gainExperience } from '$lib/services/SkillService';
 import { addItem } from '$lib/services/ItemService';
 import { triggerEventEffect } from '$lib/services/LocationEventService';
+import { checkRequirement } from '$lib/services/QuestService';
 
 /**
  * Checks for and handles interactions with fixed objects on the current tile.
@@ -45,27 +46,40 @@ export async function checkForTileInteraction(): Promise<boolean> {
                 if (eventData) {
                     const hasBeenCompleted = (player.locationEventHistory && player.locationEventHistory[eventData.id] || 0) > 0;
 
-                    if (hasBeenCompleted && (eventData.afterImage || eventData.afterDescription)) {
+                    // Handle one-time events that have already been completed
+                    if (hasBeenCompleted && !eventData.reusable) {
                         const afterData = {
                             ...eventData,
                             image: eventData.afterImage || eventData.image,
-                            shortDesc: eventData.afterDescription || eventData.shortDesc,
+                            shortDesc: eventData.afterDescription || 'You have already completed this event.',
+                            message: '',
                             actions: [],
                             effects: []
                         };
                         showEvent('location_event', afterData.image, afterData);
                         return true;
                     }
-                    
-                    // Fallback for one-time events without a special "after" state
-                    if (hasBeenCompleted && eventData.id === 'treasure_chest') {
-                        messageStore.addMessage('The chest is empty.', ['System']);
-                        return true;
-                    }
 
+                    // Check requirements for the event
+                    if (eventData.requirement) {
+                        const { met } = checkRequirement(eventData.requirement, player, null, get(npcStore).npcs);
+                        if (!met) {
+                            const requirementNotMetData = {
+                                ...eventData,
+                                shortDesc: eventData.requirementNotMetMessage || "You can't do this right now.",
+                                message: '',
+                                actions: [],
+                                effects: []
+                            };
+                            showEvent('location_event', requirementNotMetData.image, requirementNotMetData);
+                            return true;
+                        }
+                    }
+                    
                     // Default behavior for events that are not completed or are repeatable
                     showEvent('location_event', eventData.image, eventData);
-                    if (!eventData.actions) {
+                    // Only trigger effects immediately if there are no actions to display
+                    if (!eventData.actions || eventData.actions.length === 0) {
                         triggerEventEffect(eventData.id, eventData.effects, eventData.message);
                     }
                     return true;

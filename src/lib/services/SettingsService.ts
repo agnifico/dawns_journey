@@ -31,14 +31,16 @@ export function addAllItems() {
 /**
  * Loads a specific developer state for testing quests.
  */
-export async function loadTestState() {
+export function loadTestState() {
     // 1. Force-set the stores with the complete dev state
     playerStore.set(playerDev);
     npcStore.set(devNpcState);
     questStore.set(devQuestState);
 
     // 2. After loading the new state, re-evaluate all quest triggers
-    checkQuestTriggers();
+    let player = get(playerStore);
+    player = checkQuestTriggers(player);
+    playerStore.set(player);
 }
 
 /**

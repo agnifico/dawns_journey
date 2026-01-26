@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import { onMount, afterUpdate } from 'svelte';
 	import ExploBubble from './ExploBubble.svelte';
-	import ChoiceMenu from './ui/ChoiceMenu.svelte';
+	// import ChoiceMenu from './ui/ChoiceMenu.svelte';
 
 	let messagesContainer: HTMLDivElement;
 	let currentFilter: MessageType | 'All' = 'All';
@@ -43,11 +43,11 @@
 		{/each}
 	</div>
 
-	<div class="interaction-menu-container">
+	<!-- <div class="interaction-menu-container">
 		{#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource'}
 			<ChoiceMenu />
 		{/if}
-	</div>
+	</div> -->
 
 	<div class="messages" bind:this={messagesContainer}>
 		{#each filterMessages($messageStore.messages, currentFilter) as message (message.id)}
@@ -84,8 +84,9 @@
 		font-family: monospace;
 		font-size: 14px;
 		box-sizing: border-box;
-		flex-grow: 1; /* Fill available space */
-		min-height: 0; /* Flexbox fix */
+		flex-grow: 1;
+		min-height: 0;
+
 	}
 
 	.filters {
@@ -126,6 +127,7 @@
 		padding: 10px;
 		display: flex;
 		flex-direction: column;
+		text-wrap: wrap;
 	}
 
 	.message {
@@ -159,7 +161,6 @@
 
 	.explo-bubbles {
 		display: flex;
-		flex-wrap: wrap;
 		margin-top: 5px;
 	}
 </style>

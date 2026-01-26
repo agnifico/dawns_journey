@@ -56,6 +56,7 @@ export async function movePlayer(dx: number, dy: number) {
     // Update player position and time
     const direction = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
     playerStore.update(p => ({ ...player, position: newPosition, direction, isMoving: true }));
+    mapStore.setPlayerPosition(newPosition.x, newPosition.y); // NEW LINE: Update mapStore with player position
     time.update(t => t + 1);
     clearEvent();
 

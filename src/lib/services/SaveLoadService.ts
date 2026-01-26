@@ -7,6 +7,9 @@ import { mapStore } from '$lib/stores/mapStore';
 import { messageStore } from '$lib/stores/messageStore';
 import * as FarmingService from './FarmingService';
 import { loadMap } from './MapService';
+import { checkQuestTriggers } from './QuestService';
+import { validateAllData } from './ValidationService';
+import { questStore } from '$lib/stores/questStore';
 
 const SAVE_KEY = 'dawn_journey_save_v2';
 
@@ -62,6 +65,12 @@ export async function loadGame() {
             await npcStore.initializeGlobalNpcs(); 
             npcStore.loadNpcs(savedData.npcs);
         }
+
+        let player = get(playerStore);
+        player = checkQuestTriggers(player);
+        playerStore.set(player);
+
+        validateAllData(get(questStore), get(npcStore));
 
         messageStore.addMessage('Game Loaded!', ['System']);
         goto('/map');

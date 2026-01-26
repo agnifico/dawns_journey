@@ -1,0 +1,274 @@
+[
+    {
+        "id": "aquamech_shark",
+        "name": "Aquamech Shark",
+        "description": "A mechanical shark patrolling the waters.",
+        "image": "/images/enemies/aquamech_shark.png",
+        "thumbnailImage": "/images/enemies/aquamech_shark.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 40 },
+        "drops": [
+            { "itemId": "shark_fin", "quantity": 1 },
+            { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
+        ]
+    },
+    {
+        "id": "greenhorn",
+        "name": "Greenhorn",
+        "description": "A novice adventurer, easily defeated.",
+        "image": "/images/enemies/greenhorn.png",
+        "thumbnailImage": "/images/enemies/greenhorn.png",
+        "types": ["Earth"],
+        "masteryRequirements": { "Earth": 15, "Fire": 25 },
+        "drops": [
+            { "itemId": "meat", "quantity": 1 },
+            { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
+        ]
+    },
+    {
+        "id": "white_wyvern",
+        "name": "White Wyvern",
+        "description": "A majestic but dangerous white wyvern.",
+        "image": "/images/enemies/white_wyvern.png",
+        "thumbnailImage": "/images/enemies/white_wyvern.png",
+        "types": ["Wind"],
+        "masteryRequirements": { "Wind": 75 },
+        "drops": [
+            { "itemId": "dragon_fang", "quantity": 1 },
+            { "itemId": "azurite", "quantity": 1, "chance": 0.5 },
+            { "itemId": "argentum", "quantity": 300 }
+        ]
+    },
+    {
+        "id": "woodmech_bear",
+        "name": "Woodmech Bear",
+        "description": "A bear-like automaton made of wood and gears.",
+        "image": "/images/enemies/woodmech_bear.png",
+        "thumbnailImage": "/images/enemies/woodmech_bear.png",
+        "types": ["Earth"],
+        "masteryRequirements": { "Fire": 50, "Earth": 25 },
+        "drops": [
+            { "itemId": "bear_skin", "quantity": 3 },
+            { "itemId": "blueberries", "quantity": 1, "chance": 0.5 },
+            { "itemId": "argentum", "quantity": 100 }
+        ]
+    },
+    {
+        "id": "vanguard_siren",
+        "name": "Vanguard Siren",
+        "description": "An elite soldier of Marjane, they fiercely protect the Southern Seas.",
+        "image": "/images/enemies/vanguard_siren.png",
+        "thumbnailImage": "/images/enemies/vanguard_siren.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 70 },
+        "drops": [
+            { "itemId": "shark_fin", "quantity": 2 },
+            { "itemId": "tranquility_pearl", "quantity": 1, "chance": 0.1 },
+            { "itemId": "argentum", "quantity": 500 }
+        ]
+    },
+    {
+        "id": "biceon",
+        "name": "Biceon",
+        "description": "A massive bison with fur made of permafrost and horns of solid ice.",
+        "image": "/images/enemies/biceon.png",
+        "thumbnailImage": "/images/enemies/biceon.png",
+        "types": ["Water", "Earth"],
+        "masteryRequirements": { "Water": 35, "Earth": 20 },
+        "drops": [
+            { "itemId": "bear_skin", "quantity": 2 },
+            { "itemId": "argentum", "quantity": 150 }
+        ]
+    },
+    {
+        "id": "coral_eyes",
+        "name": "Coral-Eyes",
+        "description": "A sturdy crab whose eyes have been replaced by living, growing coral.",
+        "image": "/images/enemies/coral-eyes.png",
+        "thumbnailImage": "/images/enemies/coral-eyes.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 30 },
+        "drops": [
+            { "itemId": "coral_reef", "quantity": 3 },
+            { "itemId": "argentum", "quantity": 120, "chance": 0.8 }
+        ]
+    },
+    {
+        "id": "forest_prowler",
+        "name": "Forest Prowler",
+        "description": "A feline predator built for extreme speed.",
+        "image": "/images/enemies/forest_prowler.png",
+        "thumbnailImage": "/images/enemies/forest_prowler.png",
+        "types": ["Earth", "Wind"],
+        "masteryRequirements": { "Earth": 45, "Wind": 15 },
+        "drops": [
+            { "itemId": "meat", "quantity": 2 },
+            { "itemId": "argentum", "quantity": 200 }
+        ]
+    },
+    {
+        "id": "inkjet_ray",
+        "name": "Inkjet Ray",
+        "description": "The manta ray now evolved into a draconic, semi-flying, ink-spitting beast.",
+        "image": "/images/enemies/inkjet_ray.png",
+        "thumbnailImage": "/images/enemies/inkjet_ray.png",
+        "types": ["Earth", "Wind"],
+        "masteryRequirements": { "Water": 45, "Wind": 15 },
+        "drops": [
+            { "itemId": "meat", "quantity": 2 },
+            { "itemId": "argentum", "quantity": 200 }
+        ]
+    },
+    {
+        "id": "mountain_basilisk",
+        "name": "Mountain Basilisk",
+        "description": "A heavy-scaled lizard that can turn prey to stone.",
+        "image": "/images/enemies/mountain_basilisk.png",
+        "thumbnailImage": "/images/enemies/mountain_basilisk.png",
+        "types": ["Earth"],
+        "masteryRequirements": { "Earth": 60 },
+        "drops": [
+            { "itemId": "stone", "quantity": 5 },
+            { "itemId": "argentum", "quantity": 400 }
+        ]
+    },
+    {
+        "id": "punching_tortoise",
+        "name": "Punching Tortoise",
+        "description": "A beach-dwelling tortoise with unexpectedly fast reflexes.",
+        "image": "/images/enemies/punching_tortoise.png",
+        "thumbnailImage": "/images/enemies/punching_tortoise.png",
+        "types": ["Water", "Earth"],
+        "masteryRequirements": { "Water": 20, "Earth": 20 },
+        "drops": [
+            { "itemId": "stone", "quantity": 2 },
+            { "itemId": "meat", "quantity": 1 }
+        ]
+    },
+    {
+        "id": "rock_lion",
+        "name": "Rock Lion",
+        "description": "A prideful beast with a mane made of jagged stone.",
+        "image": "/images/enemies/rock_lion.png",
+        "thumbnailImage": "/images/enemies/rock_lion.png",
+        "types": ["Earth"],
+        "masteryRequirements": { "Earth": 50 },
+        "drops": [
+            { "itemId": "meat", "quantity": 2 },
+            { "itemId": "argentum", "quantity": 250 }
+        ]
+    },
+    {
+        "id": "shark_soldier",
+        "name": "Shark Soldier",
+        "description": "Humanoid shark warriors serving the undersea kingdom.",
+        "image": "/images/enemies/shark_soldier.png",
+        "thumbnailImage": "/images/enemies/shark_soldier.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 55 },
+        "drops": [
+            { "itemId": "shark_fin", "quantity": 1 },
+            { "itemId": "metal", "quantity": 1 }
+        ]
+    },
+    {
+        "id": "solis_sentinel",
+        "name": "Solis Sentinel",
+        "description": "A knight clad in armor that radiates pure sunlight.",
+        "image": "/images/enemies/solis_sentinel.png",
+        "thumbnailImage": "/images/enemies/solis_sentinel.png",
+        "types": ["Light"],
+        "masteryRequirements": { "Light": 50, "Fire": 30 },
+        "drops": [
+            { "itemId": "citrine", "quantity": 1, "chance": 0.3 },
+            { "itemId": "argentum", "quantity": 600 }
+        ]
+    },
+    {
+        "id": "toxolotl",
+        "name": "Toxolotl",
+        "description": "A neon-colored axolotl that secretes paralyzing toxins.",
+        "image": "/images/enemies/toxolotl.png",
+        "thumbnailImage": "/images/enemies/toxolotl.png",
+        "types": ["Water", "Dark"],
+        "masteryRequirements": { "Water": 25, "Dark": 10 },
+        "drops": [
+            { "itemId": "fish", "quantity": 1 },
+            { "itemId": "shrooms", "quantity": 1, "chance": 0.5 }
+        ]
+    },
+    {
+        "id": "water_spirit_beast",
+        "name": "Water Spirit Beast",
+        "description": "A shimmering entity made of pure, high-pressure water.",
+        "image": "/images/enemies/water_spirit_beast.png",
+        "thumbnailImage": "/images/enemies/water_spirit_beast.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 80 },
+        "drops": [
+            { "itemId": "aquamarine", "quantity": 1, "chance": 0.4 },
+            { "itemId": "azurite", "quantity": 1, "chance": 0.2 }
+        ]
+    },
+    {
+        "id": "archangel_one",
+        "name": "Archangel One",
+        "description": "A high-ranking divine valkyrie serving the celestial realms.",
+        "image": "/images/enemies/archangel_one.png",
+        "thumbnailImage": "/images/enemies/archangel_one.png",
+        "types": ["Light", "Wind"],
+        "masteryRequirements": { "Light": 90, "Wind": 60 },
+        "isLegendary": true,
+        "baseStats": {
+            "hp": 800, "maxHp": 800, "auraShield": 0, "maxAuraShield": 0,
+            "physicalAttack": 120, "physicalDefence": 60,
+            "elementalAttack": 180, "elementalDefence": 90,
+            "speed": 150, "evasion": 0.2, "critChance": 0.25, "critDamage": 1.75
+        },
+        "drops": [
+            { "itemId": "gold", "quantity": 1, "chance": 0.5 },
+            { "itemId": "azurite", "quantity": 5, "chance": 0.3 },
+            { "itemId": "argentum", "quantity": 2000 }
+        ]
+    },
+    {
+        "id": "bob",
+        "name": "Bob",
+        "description": "A titanic dragon shark the size of an island.",
+        "image": "/images/enemies/bob.png",
+        "thumbnailImage": "/images/enemies/bob.png",
+        "types": ["Water", "Wind"],
+        "masteryRequirements": { "Water": 100, "Wind": 100 },
+        "isLegendary": true,
+        "baseStats": {
+            "hp": 2500, "maxHp": 2500, "auraShield": 0, "maxAuraShield": 0,
+            "physicalAttack": 200, "physicalDefence": 150,
+            "elementalAttack": 50, "elementalDefence": 120,
+            "speed": 40, "evasion": 0, "critChance": 0.05, "critDamage": 1.5
+        },
+        "drops": [
+            { "itemId": "tranquility_pearl", "quantity": 1 },
+            { "itemId": "argentum", "quantity": 5000 }
+        ]
+    },
+    {
+        "id": "wilhemina",
+        "name": "Wilhemina",
+        "description": "The elite siren commander and bodyguard to the Queen.",
+        "image": "/images/enemies/wilhemina.png",
+        "thumbnailImage": "/images/enemies/wilhemina.png",
+        "types": ["Water"],
+        "masteryRequirements": { "Water": 85 },
+        "isLegendary": true,
+        "baseStats": {
+            "hp": 1200, "maxHp": 1200, "auraShield": 500, "maxAuraShield": 500,
+            "physicalAttack": 100, "physicalDefence": 100,
+            "elementalAttack": 150, "elementalDefence": 110,
+            "speed": 110, "evasion": 0.1, "critChance": 0.15, "critDamage": 1.6
+        },
+        "drops": [
+            { "itemId": "aquamarine", "quantity": 3 },
+            { "itemId": "argentum", "quantity": 1500 }
+        ]
+    }
+]

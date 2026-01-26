@@ -38,27 +38,37 @@
             "title": "The Forgotten Shrine",
             "description": "Assist Commander Claudia in her task.",
             "startRequirement": {
-                "type": "tag",
-                "questId": "can_assist_claudia"
+                "type": "have_tag",
+                "tag": "can_assist_claudia"
             },
             "stages": [
                 {
-                    "objective": "Activate the Forgotten Shrine at (22, 13)",
-                    "requirement": {
-                        "type": "finish_location_event",
-                        "eventId": "F1"
-                    },
+                    "objective": "Speak with Claudia",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": ["I have no time for you now."],
                     "intro_dialogue": [
                         "Lady Guinevere sent you? Good. I need to activate a shrine to the south. It's a delicate matter. Go and handle it."
                     ],
+                    "reminder_dialogue": ["The shrine is waiting."],
+                    "success_dialogue": ["See that it is done."],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "claudia_ready_for_f1" }
+                    ]
+                },
+                {
+                    "objective": "Activate the Forgotten Shrine at (26, 13)",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "F1",
+                        "timing": "future"
+                    },
+                    "unavailable_dialogue": ["The shrine is not yet active."],
+                    "intro_dialogue": ["You are at the Forgotten Shrine."],
                     "reminder_dialogue": [
-                        "The shrine at (22, 13) is still waiting. Do not keep the Saints waiting."
+                        "The shrine at (26, 13) is still waiting. Do not keep the Saints waiting."
                     ],
                     "success_dialogue": [
                         "It is done. You have served the light well."
-                    ],
-                    "success_rewards": [
-                        { "type": "unlock_location_event", "eventId": "F1" }
                     ]
                 }
             ]

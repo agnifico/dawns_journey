@@ -7,6 +7,7 @@
 	import * as LocationEventService from '$lib/services/LocationEventService';
 	import { gatherResource } from '$lib/services/InteractionService';
 	import { onMount, onDestroy } from 'svelte';
+	import type { NPC } from '$lib/types';
 
 	let actions = [];
 	let npc = null;
@@ -20,12 +21,11 @@
 			npc = $npcStore.globalNpcs[$eventScreen.data.npcId];
 			if (npc) {
 				const canChallenge = npc.isCombatant;
-                const canGift = npc.heartRanks[npc.heartRank]?.giftingOptions?.length > 0;
-				
+				const canGift = npc.heartRanks[npc.heartRank]?.giftingOptions?.length > 0;
+
 				const quest = $questStore.quests[npc.swordRanks[npc.swordRank]?.questId];
 				const showQuestIndicator =
-					npc.heartState === 'READY_FOR_RANK_UP' ||
-					(quest && quest.state === 'AVAILABLE');
+					npc.heartState === 'READY_FOR_RANK_UP' || (quest && quest.state === 'AVAILABLE');
 
 				actions = [
 					{
@@ -58,8 +58,13 @@
 				label: act.text,
 				hotkey: keymap[index] || null,
 				action: () => {
-					LocationEventService.triggerEventEffect($eventScreen.data.id, act.effects, $eventScreen.data.message);
-                }
+					LocationEventService.triggerEventEffect(
+						$eventScreen.data.id,
+						act.effects,
+						$eventScreen.data.message
+					);
+					clearEvent();
+				}
 			}));
 		} else if ($eventScreen.type === 'resource') {
 			actions = [
@@ -68,6 +73,41 @@
 					label: 'Gather',
 					hotkey: 'z',
 					action: () => gatherResource()
+				}
+			];
+		} else if ($eventScreen.type === 'enemy' && $eventScreen.data?.isLegendary) {
+			let enemy = $eventScreen.data;
+			const fakeNpcForCombat: NPC = {
+				id: enemy.id,
+				name: enemy.name,
+				image: enemy.image,
+				profileImage: enemy.thumbnailImage, // Assuming thumbnailImage can be used as profileImage
+				isCombatant: true,
+				baseStats: enemy.baseStats!, // We've added baseStats to legendary enemies
+				swordRank: 0, // Default for non-NPCs
+				heartRank: 0, // Default for non-NPCs
+				affinity: 0, // Default
+				swordState: 'NOT_STARTED', // Default
+				heartState: 'NOT_STARTED', // Default
+				swordRanks: [], // Empty for non-NPCs
+				heartRanks: [], // Empty for non-NPCs
+				statGrowth: [], // Empty
+				battleAftermathsBySwordRank: [], // Empty
+				types: enemy.types,
+				requirementSnapshot: {},
+				swordRankMaxedDialogue: [],
+				allRanksMaxedDialogue: [],
+				galleryImages: [],
+				faction: undefined,
+				swordRankMaxedDialogueIndex: 0,
+				allRanksMaxedDialogueIndex: 0
+			};
+			actions = [
+				{
+					id: 'challenge',
+					label: 'Challenge',
+					hotkey: 'x',
+					action: () => CombatService.startCombat(fakeNpcForCombat)
 				}
 			];
 		} else {
@@ -83,11 +123,11 @@
 			const action = actions.find((a) => a.hotkey === key && !a.disabled);
 			if (action) {
 				e.preventDefault();
-                e.stopPropagation();
+				e.stopPropagation();
 				action.action();
 			} else if (key === 'escape') {
 				e.preventDefault();
-                e.stopPropagation();
+				e.stopPropagation();
 				clearEvent();
 			}
 		}
@@ -124,14 +164,19 @@
 
 <style>
 	.interaction-menu {
+		position: relative;
+		/* bottom: 2%;
+		left: 62%;
+		right: 2%; */
+
 		padding: 16px 16px 22px;
 		background-color: #cb997e;
 		border-top: 3px solid #00000056;
 		/* width: 80%; */
-		margin-inline: auto;
+		/* margin-inline: auto; */
 		border-radius: 0 0 12px 12px;
-        box-shadow: #00000056 0 -6px 0 3px inset;
-        background-color: var(--color-surface-1);
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		background-color: var(--color-surface-2);
 	}
 	ul {
 		list-style: none;
@@ -146,14 +191,13 @@
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
-		padding: 0.25rem 0.5rem .5rem;
+		padding: 0.25rem 0.5rem 0.5rem;
 		background-color: #9c6f58;
 		border: 3px solid #5e4335;
-        border: none;
-        background-color: var(--color-surface-2);
-        color: var(--text-header);
-		box-shadow: #1a1a1a 3px 3px;
-        box-shadow: #00000056 0 -3px 0 3px inset;
+		border: none;
+		background-color: var(--surface-3);
+		color: var(--text-header);
+		box-shadow: #00000056 0 -3px 0 3px inset;
 		/* border: none; */
 		border-radius: 6px;
 		font-family: 'Silkscreen', sans-serif;
@@ -163,32 +207,32 @@
 	}
 	button:hover,
 	button:focus {
-        background-color: #51bfc1;
+		background-color: #51bfc1;
 		border-color: #09625b;
 		color: #343a40;
-        
+
 		.hotkey {
-            color: #343a40;
+			color: #343a40;
 		}
 	}
 	button:disabled {
-        color: #666;
+		color: #666;
 		background-color: #1a1a1a;
 		cursor: not-allowed;
 	}
 	.action-label {
-        display: flex;
+		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 	}
 	.icon {
-        width: 16px;
+		width: 16px;
 		height: 16px;
 		image-rendering: pixelated;
 		background-color: transparent;
 	}
 	.hotkey {
-        color: #ffe8d6;
-        color: var(--text-muted);
+		color: #ffe8d6;
+		color: var(--text-muted);
 	}
 </style>

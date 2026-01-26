@@ -9,7 +9,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A warm, inviting campfire.',
         stepOnMessage: 'You find a warm campfire.',
         message: 'You rest by the fire and restore some HP.',
-        effects: [{ type: 'RESTORE_HP', value: 25 }],
+        effects: [{ type: 'RESTORE_HP', value: 9999 }],
+        reusable: true
     },
     aura_shrine: {
         id: 'aura_shrine',
@@ -28,11 +29,11 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     treasure_chest: {
         id: 'treasure_chest',
         name: 'Treasure Chest',
-        image: '/locations/chest.png',
+        image: '/locations/shack.jpg',
         shortDesc: 'A weathered treasure chest.',
         stepOnMessage: 'You\'ve found a treasure chest!',
         message: 'You opened the chest and found a stash of mead!',
-        effects: [{ type: 'GIVE_ITEM', itemId: 'forza_mead', quantity: 1 }],
+        effects: [{ type: 'GIVE_ITEM', itemId: 'forza_mead', quantity: 10 }],
         afterDescription: 'An empty treasure chest. You remember finding some mead here.',
     },
     ancient_dragons_fang_shrine: {
@@ -70,57 +71,84 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     },
 
     // New Events (integrated into the correct structure)
-    "F1": {
-        "id": "F1",
-        "name": "Forgotten Shrine",
-        "image": "/locations/tower.png",
-        "coords": { "x": 22, "y": 13 },
-        "stepOnMessage": "You've discovered a Forgotten Shrine, humming with a faint energy.",
-        "message": "The air is thick with old magic. A single button on a pedestal seems to be the only point of interaction.",
-        "actions": [
+    F1: {
+        id: "F1",
+        name: "Forgotten Shrine",
+        shortDesc: "A forgotten shrine humming with a faint energy.",
+        image: "/locations/tower1-landscape.png",
+        reusable: false,
+        coords: { x: 26, y: 13 },
+        stepOnMessage: "You've discovered a Forgotten Shrine.",
+        message: "The air is thick with old magic. A single button on a pedestal seems to be the only point of interaction.",
+        requirementNotMetMessage: "The shrine is dormant. Perhaps someone needs to tell you about it first.",
+        requirement: {
+            "type": "have_tag",
+            "tag": "claudia_ready_for_f1"
+        },
+        actions: [
             {
                 "text": "Press the Button",
                 "effects": [
                     { "type": "add_tag", "tag": "f1_complete" },
-                    { "type": "give_item", "itemId": "aquamarine", "quantity": 1 },
-                    { "type": "complete_quest_stage" }
+                    { "type": "give_item", "itemId": "aquamarine", "quantity": 1 }
                 ]
             }
         ]
     },
-    "F2": {
-        "id": "F2",
-        "name": "Decrepit Spire",
-        "image": "/locations/tower.png",
-        "coords": { "x": 26, "y": 13 },
-        "stepOnMessage": "You've found a Decrepit Spire, pulsing with a strange light.",
-        "message": "The structure is ancient, yet a single button on a console seems to be active.",
-        "actions": [
+    F2: {
+        id: "F2",
+        name: "Decrepit Spire",
+        shortDesc: "A decrepit spire pulsing with a strange light.",
+        image: "/locations/tower2-landscape.png",
+        reusable: false,
+        coords: { x: 22, y: 13 },
+        stepOnMessage: "You've found a Decrepit Spire.",
+        message: "The structure is ancient, yet a single button on a console seems to be active.",
+        requirementNotMetMessage: "The spire is dormant. Perhaps someone needs to tell you about it first.",
+        requirement: {
+            "type": "have_tag",
+            "tag": "cygwin_ready_for_f2"
+        },
+        actions: [
             {
                 "text": "Press the Button",
                 "effects": [
                     { "type": "add_tag", "tag": "f2_complete" },
-                    { "type": "give_item", "itemId": "citrine", "quantity": 1 },
-                    { "type": "complete_quest_stage" }
+                    { "type": "give_item", "itemId": "citrine", "quantity": 1 }
                 ]
             }
         ]
     },
-    "F3": {
-        "id": "F3",
-        "name": "Altar of Fates",
-        "image": "/locations/tower.png",
-        "coords": { "x": 25, "y": 9 },
-        "stepOnMessage": "You've reached the Altar of Fates. The air crackles with power and impending decision.",
-        "message": "This is the final tower. Its energy is unstable. You feel two powerful forces pulling you in different directions. Your choice here will have consequences.",
-        "actions": [
-            {
-                "text": "Channel the Altar's Energy",
-                "effects": [
-                    { "type": "give_item", "itemId": "amethyst", "quantity": 1 },
-                    { "type": "trigger_faction_choice" }
-                ]
-            }
+    F3: {
+        id: "F3",
+        name: "The Shattered Crossroads",
+        image: "/locations/tower3-landscape.png",
+        shortDesc: "The path ahead diverges. A choice must be made.",
+        stepOnMessage: "You stand at a shattered crossroads, the path ahead diverging.",
+        message: "Both the Solis Saints and the Shadowhand have presented you with an ultimatum. Your decision will shape your future alliances. Who will you side with?",
+        actions: [
+          {
+            text: "Side with the Solis Saints",
+            effects: [
+              { type: "set_quest_state", questId: "guinevere_sword_4", state: "COMPLETED" },
+              { type: "set_quest_state", questId: "akari_sword_2", state: "FAILED" },
+              { type: "add_reputation", faction: "Solis Saints", amount: 25 },
+              { type: "add_reputation", faction: "Shadowhand", amount: -15 },
+              { type: "add_tag", tag: "chose_solis_saints" }
+            ],
+            responseMessage: "You have chosen to align with the Solis Saints. The path of light is now clearer, but shadows of resentment may follow."
+          },
+          {
+            text: "Side with the Shadowhand",
+            effects: [
+              { type: "set_quest_state", questId: "akari_sword_2", state: "COMPLETED" },
+              { type: "set_quest_state", questId: "guinevere_sword_4", state: "FAILED" },
+              { type: "add_reputation", faction: "Shadowhand", amount: 25 },
+              { type: "add_reputation", faction: "Solis Saints", amount: -15 },
+              { type: "add_tag", tag: "chose_shadowhand" }
+            ],
+            responseMessage: "You have cast your lot with the Shadowhand. You gain favor in the underworld, but have made a powerful enemy in the light."
+          }
         ]
     }
 };

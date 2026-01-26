@@ -1,13 +1,14 @@
 import { get } from 'svelte/store';
 import { playerStore, playerStats, playerExplorationAbilities, playerMastery, playerActiveElements } from '$lib/stores/playerStore';
 import { mapStore } from '$lib/stores/mapStore';
-import { showEvent } from '$lib/stores/uiStore';
+import { showEvent, clearEvent } from '$lib/stores/uiStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { getEnemyById } from '$lib/services/EnemyDataService';
 import { getItemById } from '$lib/services/ItemDataService';
 import { getRegionForPosition } from './MapService';
 import { addItem } from './ItemService';
-import type { MapData } from '$lib/types';
+import { startCombat } from './CombatService'; // Import startCombat
+import type { MapData, NPC } from '$lib/types'; // Import NPC type
 
 /**
  * Checks for and handles random encounters in the player's current region.
@@ -21,10 +22,10 @@ export function checkForRandomEncounter() {
     if (!regionInfo) return;
 
     const roll = Math.random();
-    const baseEnemyChance = mapData.enemyEncounterChance || 0;
-    const baseItemChance = mapData.itemFindingChance || 0;
+    const enemyChance = regionInfo.enemyChance ?? mapData.enemyEncounterChance ?? 0;
+    const itemChance = regionInfo.itemChance ?? mapData.itemFindingChance ?? 0;
 
-    if (roll < baseEnemyChance) {
+    if (roll < enemyChance) {
         // Enemy Encounter
         if (get(playerStats).hp <= 0) {
             messageStore.addMessage('You are too weak to engage in combat.', ['Combat']);
@@ -34,8 +35,7 @@ export function checkForRandomEncounter() {
         const enemySpawns = regionInfo.enemies || [];
         if (enemySpawns.length === 0) return;
         
-        const totalWeight = enemySpawns.reduce((sum, e) => sum + e.chance, 0);
-        const pickRoll = Math.random() * totalWeight;
+        const pickRoll = Math.random();
         let cumulativeChance = 0;
 
         for (const spawn of enemySpawns) {
@@ -44,41 +44,43 @@ export function checkForRandomEncounter() {
                 const enemyData = getEnemyById(spawn.id);
                 if (!enemyData) break;
 
-                showEvent('enemy', enemyData.image, enemyData);
                 messageStore.addMessage(`A wild ${enemyData.name} appears!`, ['World']);
 
-                const currentMastery = get(playerMastery);
-                const activeElements = get(playerActiveElements);
-                let canDefeat = false;
-                for (const [element, requiredLevel] of Object.entries(enemyData.masteryRequirements || {})) {
-                    if (activeElements.includes(element) && currentMastery >= requiredLevel) {
-                        canDefeat = true;
-                        break;
+                    // Regular Enemy Encounter - Mastery Check
+                    showEvent('enemy', enemyData.image, enemyData);
+                    const currentMastery = get(playerMastery);
+                    const activeElements = get(playerActiveElements);
+                    let canDefeat = false;
+                    for (const [element, requiredLevel] of Object.entries(enemyData.masteryRequirements || {})) {
+                        if (activeElements.includes(element) && currentMastery >= requiredLevel) {
+                            canDefeat = true;
+                            break;
+                        }
                     }
-                }
 
-                if (canDefeat) {
-                    messageStore.addMessage(`You overpowered the ${enemyData.name}!`, ['World']);
-                    playerStore.update(p => {
-                        let newPlayer = { ...p };
-                        newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
-                        
-                        (enemyData.drops || []).forEach(drop => {
-                            const roll = Math.random();
-                            if (!drop.chance || roll < drop.chance) {
-                                newPlayer = addItem(newPlayer, drop.itemId, drop.quantity);
-                            }
+                    if (canDefeat) {
+                        messageStore.addMessage(`You overpowered the ${enemyData.name}!`, ['World']);
+                        playerStore.update(p => {
+                            let newPlayer = { ...p };
+                            newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
+                            
+                            (enemyData.drops || []).forEach(drop => {
+                                const roll = Math.random();
+                                if (!drop.chance || roll < drop.chance) {
+                                    newPlayer = addItem(newPlayer, drop.itemId, drop.quantity);
+                                }
+                            });
+                            return newPlayer;
                         });
-                        return newPlayer;
-                    });
-                } else {
-                    const reqs = Object.entries(enemyData.masteryRequirements || {}).map(([e, l]) => `${l} ${e} Mastery`).join(' or ');
-                    messageStore.addMessage(`The ${enemyData.name} is too strong. Requires: ${reqs}`, ['World', 'Help']);
-                }
+                    } else {
+                        const reqs = Object.entries(enemyData.masteryRequirements || {}).map(([e, l]) => `${l} ${e} Mastery`).join(' or ');
+                        messageStore.addMessage(`The ${enemyData.name} is too strong. Requires: ${reqs}`, ['World', 'Help']);
+                    }
+                
                 break; 
             }
         }
-    } else if (roll < baseEnemyChance + baseItemChance) {
+    } else if (roll < enemyChance + itemChance) {
         // Item Finding
         const itemDrops = regionInfo.items || [];
         if (itemDrops.length === 0) return;

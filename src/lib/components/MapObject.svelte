@@ -52,12 +52,26 @@
 <style>
     .map-object {
         position: absolute;
-        z-index: 1;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     img {
         width: 100%;
         height: 100%;
+        margin: auto;
         object-fit: contain;
-        image-rendering: pixelated;
+        image-rendering:auto;
+        border-radius: 6px;
+        box-sizing: border-box;
+        border: 3px solid white;
+        opacity: 0;
+    }
+
+    .map-object:hover {
+        img {
+            opacity: 1;
+        }
     }
 </style>

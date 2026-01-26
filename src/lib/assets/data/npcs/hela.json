@@ -141,7 +141,7 @@
                 {
                     "objective": "Unlock the treasure chest at (18, 3)",
                     "requirement": {
-                        "type": "unlock_location_event",
+                        "type": "finish_location_event",
                         "eventId": "treasure_chest"
                     },
                     "reminder_dialogue": [
@@ -212,6 +212,11 @@
                         {
                             "type": "tag",
                             "tagId": "hela_sword_3_complete"
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "water_whip",
+                            "quantity": 1
                         }
                     ]
                 }

@@ -1,5 +1,6 @@
-import type { Player, NPC, Quest } from '../types';
+import type { Player, NPC, Quest, Weapon } from '../types';
 import { player as basePlayer } from './player';
+import { generalItems } from './generalItems';
 
 // Import all base NPC data to construct the full NPC state
 import akari from '../assets/data/npcs/akari.json';
@@ -13,16 +14,21 @@ import nyx from '../assets/data/npcs/nyx.json';
 import sylvie from '../assets/data/npcs/sylvie.json';
 import veres from '../assets/data/npcs/veres.json';
 
+// --- Find Items ---
+const vineWhip = generalItems.find(item => item.id === 'vine_whip') as Weapon;
+const waterWhip = generalItems.find(item => item.id === 'water_whip') as Weapon;
+
 // --- 1. Player State ---
 const devPlayerOverrides: Partial<Player> = {
     equipment: {
-        weapon_slots: [null, null],
+        weapon_slots: [vineWhip, waterWhip],
         relic_slots: [null, null, null, null],
     },
     inventory: [
         { itemId: 'potato_seed', amount: 10 },
         { itemId: 'bread', amount: 5 },
         { itemId: 'vine_whip', amount: 1 },
+        { itemId: 'water_whip', amount: 1 },
         { itemId: 'hymn', amount: 1 },
         { itemId: 'requiem', amount: 1 },
         { itemId: 'argentum', amount: 5000 }
@@ -32,10 +38,15 @@ const devPlayerOverrides: Partial<Player> = {
         "sylvie_sword_2_complete",
         "sylvie_sword_3_complete",
         "sylvie_sword_4_complete",
+        "sylvie_sword_5_complete",
         "can_fight_hela",
         "hela_heart_rank_1_unlocked",
         "hela_sword_1_complete",
-        "hela_sword_2_complete"
+        "hela_sword_2_complete",
+        "hela_sword_3_complete",
+        "veres_heart_1_unlocked",
+        "veres_sword_1_complete",
+        "veres_sword_2_complete",
     ],
     locationEventHistory: {
         "campfire": 1,
@@ -56,9 +67,12 @@ const baseNpcs: Record<string, NPC> = {
 
 // Create a deep copy to avoid modifying the original JSON imports
 const devNpcsData = JSON.parse(JSON.stringify(baseNpcs));
-devNpcsData.sylvie.swordRank = 4;
-devNpcsData.hela.swordRank = 2;
+devNpcsData.sylvie.swordRank = 5;
+devNpcsData.hela.swordRank = 3;
 devNpcsData.hela.heartRank = 1;
+devNpcsData.veres.swordRank = 2;
+devNpcsData.veres.heartRank = 1;
+
 
 export const devNpcState: { npcsInitialized: boolean, globalNpcs: Record<string, NPC> } = {
     npcsInitialized: true,
@@ -91,8 +105,13 @@ devQuestsData.sylvie_sword_1.state = 'COMPLETED';
 devQuestsData.sylvie_sword_2.state = 'COMPLETED';
 devQuestsData.sylvie_sword_3.state = 'COMPLETED';
 devQuestsData.sylvie_sword_4.state = 'COMPLETED';
+devQuestsData.sylvie_sword_5.state = 'COMPLETED';
 devQuestsData.hela_sword_1.state = 'COMPLETED';
 devQuestsData.hela_sword_2.state = 'COMPLETED';
+devQuestsData.hela_sword_3.state = 'COMPLETED';
+devQuestsData.veres_sword_1.state = 'COMPLETED';
+devQuestsData.veres_sword_2.state = 'COMPLETED';
+
 
 export const devQuestState: { quests: Record<string, Quest> } = {
     quests: devQuestsData

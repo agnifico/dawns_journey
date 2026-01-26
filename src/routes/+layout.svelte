@@ -2,13 +2,14 @@
     import Navbar from '$lib/components/Navbar.svelte';
     import Notification from '$lib/components/Notification.svelte';
     import GiftModal from '$lib/components/ui/GiftModal.svelte';
+    // import RainOverlay from '$lib/components/ui/RainOverlay.svelte';
     import './app.css';
     import '$lib/styles/theme.css';
     import favicon from '$lib/assets/favicon.svg';
     import { phase } from '$lib/stores/timeStore';
     import { messageStore } from '$lib/stores/messageStore';
     import { skillTreeStore } from '$lib/stores/skillTreeStore'; // Import skillTreeStore
-    import { onMount } from 'svelte'; // Import onMount
+    import { onMount } from 'svelte';
 
     let { children } = $props();
 
@@ -39,10 +40,12 @@
 
 <Notification />
 <GiftModal />
+<!-- <RainOverlay /> -->
 
 <style>
     .page-content {
         height: 100dvh;
+        height: 100%;
         padding-top: 50px;
         box-sizing: border-box;
     }

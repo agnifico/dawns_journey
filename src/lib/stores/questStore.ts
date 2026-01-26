@@ -40,16 +40,16 @@ function createQuestStore() {
         });
     }
 
-    function setQuestState(questId: string, state: QuestState) {
+    function setQuestState(questId: string, state: QuestState, finalState?: QuestState) {
         update(s => {
             const quest = s.quests[questId];
-            if (quest && quest.state !== state) {
+            if (quest && (quest.state !== state || quest.finalState !== finalState)) {
                 console.log(`Quest ${questId} state changed from ${quest.state} to ${state}`);
                 return {
                     ...s,
                     quests: {
                         ...s.quests,
-                        [questId]: { ...quest, state },
+                        [questId]: { ...quest, state, finalState },
                     },
                 };
             }

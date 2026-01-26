@@ -6,44 +6,53 @@
 	import { npcStore } from '$lib/stores/npcStore';
 	import { mapStore } from '$lib/stores/mapStore';
 	import { combatStore } from '$lib/stores/combatStore';
-    import { dialogueStore } from '$lib/stores/dialogueStore';
-	import { mobileInfoPanelView, switchToEventView, switchToLogView } from '$lib/stores/uiStore';
+	import { dialogueStore } from '$lib/stores/dialogueStore';
+	import {
+		mobileInfoPanelView,
+		switchToEventView,
+		switchToLogView,
+		showQuestTracker,
+		showHomesteadTracker,
+		showMessageBox,
+		eventScreen
+	} from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
 	import EventScreen from '$lib/components/EventScreen.svelte';
 	import MobileInfoPanel from '$lib/components/MobileInfoPanel.svelte';
 	import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
-    import CombatModal from '$lib/components/CombatModal.svelte';
-    import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
-    import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
-    import DialogueBox from '$lib/components/DialogueBox.svelte';
+	import CombatModal from '$lib/components/CombatModal.svelte';
+	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
+	import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
+	// import DialogueBox from '$lib/components/DialogueBox.svelte';
+	import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
+	import { validateAllData } from '$lib/services/ValidationService';
+	import { questStore } from '$lib/stores/questStore';
+	import ChoiceMenu from '$lib/components/ui/ChoiceMenu.svelte';
+	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
 
-    let mainElement: HTMLElement;
-    let isMobile = false;
+	let mainElement: HTMLElement;
+	let isMobile = false;
 
 	onMount(async () => {
-        const mediaQuery = window.matchMedia('(max-width: 768px)');
-        isMobile = mediaQuery.matches;
-        const handler = (e: { matches: boolean; }) => isMobile = e.matches;
-        mediaQuery.addEventListener('change', handler);
+		const mediaQuery = window.matchMedia('(max-width: 768px)');
+		isMobile = mediaQuery.matches;
+		const handler = (e: { matches: boolean }) => (isMobile = e.matches);
+		mediaQuery.addEventListener('change', handler);
 
 		if (!get(playerStore).isInitialized) {
 			await npcStore.initializeGlobalNpcs();
+			validateAllData(get(questStore), get(npcStore));
 			await game.initializeGame();
 			playerStore.update((p) => ({ ...p, isInitialized: true }));
 		}
-        mainElement.focus();
+		mainElement.focus();
 
-        return () => mediaQuery.removeEventListener('change', handler);
+		return () => mediaQuery.removeEventListener('change', handler);
 	});
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
-
-        if (get(dialogueStore).isOpen) {
-            handleMovement(event.key);
-            return;
-        }
 
 		handleMovement(event.key);
 
@@ -96,122 +105,217 @@
 </script>
 
 <main on:keydown={handleKeyDown} tabindex="0" bind:this={mainElement}>
-    <CombatModal />
-    <QuestTracker />
-    <HomesteadStatus />
-    <DialogueBox />
+	<CombatModal />
+	{#if $showQuestTracker}
+		<QuestTracker />
+	{/if}
+	{#if $showHomesteadTracker}
+		<HomesteadStatus />
+	{/if}
 
-	<div class="game-view-container">
-		<CoordinateDisplay />
-		{#if $mapStore.mapData && $playerStore.position}
-			<MapDisplay mapData={$mapStore.mapData} player={$playerStore} />
-		{:else}
-			<p>Loading map...</p>
-		{/if}
+	{#if isMobile}
+		<!-- Mobile layout remains unchanged for now -->
+		<div class="game-view-container">
+			{#if $mapStore.mapData && $playerStore.position}
+				<MapDisplay mapData={$mapStore.mapData} player={$playerStore} />
+			{:else}
+				<p>Loading map...</p>
+			{/if}
+		</div>
+		<div class="mobile-bottom-bar">
+			<div class="mobile-info-wrapper">
+				<MobileInfoPanel />
+			</div>
+			<div class="mobile-controls">
+				<!-- Mobile controls -->
+			</div>
+		</div>
+	{:else}
+	<div class="console-super">
+		<div class="console">
+			<!-- Desktop Layout -->
+			<div class="left-panel">
+				<button class="logo-button"><TimeDisplay /></button>
+				<LeftControlPanel />
+			</div>
+	
+			<div class="center-panel">
+				<div class="game-view-container">
+					<CoordinateDisplay />
+					{#if $mapStore.mapData && $playerStore.position}
+						<MapDisplay mapData={$mapStore.mapData} player={$playerStore} />
+					{:else}
+						<p>Loading map...</p>
+					{/if}
+				</div>
+				{#if $showMessageBox}
+					<div class="message-log-wrapper">
+						<MessageLog />
+					</div>
+				{/if}
+			</div>
+	
+			<div class="right-panel">
+				<EventScreen />
+				<!-- <DialogueBox /> -->
+				{#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource' || ($eventScreen.type === 'enemy' && $eventScreen.data.isLegendary)}
+					<ChoiceMenu />
+				{/if}
+			</div>
+		</div>
+		<!-- <p>Dawn's Journey (c)</p> -->
 	</div>
-
-    {#if isMobile}
-        <!-- Mobile Bottom Bar -->
-        <div class="mobile-bottom-bar">
-            <div class="mobile-info-wrapper">
-                <MobileInfoPanel />
-            </div>
-            <div class="mobile-controls">
-                <div class="d-pad">
-                    <button class="d-pad-up" on:click={() => handleMovement('ArrowUp')}>▲</button>
-                    <button class="d-pad-left" on:click={() => handleMovement('ArrowLeft')}>◀</button>
-                    <button class="d-pad-right" on:click={() => handleMovement('ArrowRight')}>▶</button>
-                    <button class_="d-pad-down" on:click={() => handleMovement('ArrowDown')}>▼</button>
-                </div>
-                <div class="mobile-center-actions">
-                    <button class="switch-view-button" on:click={toggleMobileView}>
-                        {$mobileInfoPanelView === 'log' ? 'Event' : 'Log'}
-                    </button>
-                </div>
-                <div class="action-buttons">
-                    <button class="b-button">B</button>
-                    <button class="a-button" on:click={handleActionButton}>A</button>
-                </div>
-            </div>
-        </div>
-    {:else}
-        <!-- Desktop Right Panel -->
-        <div class="right-panel">
-            <div class="event-screen-wrapper">
-                <EventScreen />
-            </div>
-            <div class="message-log-wrapper">
-                <MessageLog />
-            </div>
-        </div>
-    {/if}
+	{/if}
 </main>
 
 <style>
 	main {
+		position: relative;
+		box-sizing: border-box;
 		width: 100%;
-		height: 100vh;
+		/* height: 100vh; */
 		display: flex;
-		background-color: #111;
+		border: none;
 		outline: none;
 	}
+	.console-super {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		/* gap: 2rem; */
+		padding-block: 1rem 2rem;
+		padding-inline: 1rem;
+		background-color: #e27a7a;
+		border: 6px solid #00000056;
+		box-shadow: #00000056 0 -12px 0 0px inset;
+		box-sizing: border-box;
+		border-radius: 24px;
+		margin: 2rem auto 2rem 2rem;
+
+		p {
+			position: absolute;
+			bottom: 2rem;
+			left: 50%;
+			font-family: var(--font-family-main);
+		}
+	}
+	
+	.console {
+		display: flex;
+		align-items: flex-start;
+		overflow: hidden;
+		gap: 1rem;
+	}
+
+	.left-panel {
+		width: fit-content;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+	}
+
+	.logo-button {
+		border: none;
+		margin: auto;
+		width: 100%;
+		aspect-ratio: 1;
+		border-radius: 18px;
+		box-sizing: border-box;
+		background-color: var(--color-surface-2);
+		box-sizing: border-box;
+		border: 6px solid #00000056;
+		box-sizing: border-box;
+		color: var(--color-primary);
+		font-weight: 600;
+	}
+
+	.center-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1rem;
+		box-sizing: border-box;
+		background-color: var(--color-surface-1);
+		padding-bottom: 2rem;
+		border: 6px solid #00000056;
+		box-shadow: #00000056 0 -12px 0 0px inset;
+		box-sizing: border-box;
+		border-radius: 24px;
+	}
+
 	.game-view-container {
+		border-radius: 12px;
+		overflow: hidden;
+		position: relative;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 100%;
-		position: relative;
-		width: 100%;
-		margin: auto;
-	}
-	.right-panel {
-		display: flex;
-		flex-direction: column;
-		width: 350px;
-		flex-shrink: 0;
+		width: 600px;
+		height: 400px;
 		background-color: #222;
-		border-left: 1px solid #444;
-		height: 100%;
-	}
-
-	.event-screen-wrapper {
-		flex-shrink: 0;
-		border-bottom: 1px solid #444;
-		height: 40vh;
+		border: 3px solid var(--color-surface-2);
+		box-sizing: border-box;
 	}
 
 	.message-log-wrapper {
-		flex-grow: 1;
-		height: 50vh;
+		height: 150px;
+		width: 600px;
 		display: flex;
+		border: 3px solid var(--color-surface-2);
+		border-radius: 12px;
+		overflow: hidden;
 	}
 
-	.mobile-bottom-bar {
+	.right-panel {
 		display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 280px;
-        background-color: #1a1a1a;
-        flex-shrink: 0;
-        position: absolute;
-        bottom: 0;
+		gap: 1rem;
+		flex-direction: column;
+		width: 400px;
+		/* height: 400px; */
+		flex-shrink: 0;
+		padding: 1rem;
+		background-color: var(--color-surface-1);
+		padding-bottom: 2rem;
+		border: 6px solid #00000056;
+		box-shadow: #00000056 0 -12px 0 0px inset;
+		border-radius: 24px;
+		/* box-sizing: border-box; */
 	}
-    
-    @media (min-width: 769px) {
-        .mobile-bottom-bar {
-            display: none;
-        }
-    }
+
+	/* --- MOBILE STYLES --- */
+	.mobile-bottom-bar {
+		display: none; /* Hide old/mobile panels on desktop */
+	}
 
 	@media (max-width: 768px) {
 		main {
 			flex-direction: column;
+			justify-content: flex-start;
+			align-items: stretch;
+			gap: 0;
 		}
-		.right-panel {
-			display: none;
+		.left-panel,
+		.center-panel {
+			display: none; /* Hide new desktop layout on mobile */
 		}
+
 		.game-view-container {
+			width: 100%;
 			height: calc(100% - 280px);
+			border: none;
+		}
+
+		.mobile-bottom-bar {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: 280px;
+			background-color: #1a1a1a;
+			flex-shrink: 0;
+			position: absolute;
+			bottom: 0;
 		}
 		.mobile-info-wrapper {
 			height: 160px;
@@ -226,68 +330,6 @@
 			padding: 0 20px;
 			box-sizing: border-box;
 		}
-		.d-pad {
-			position: relative;
-			width: 100px;
-			height: 100px;
-		}
-		.d-pad button {
-			position: absolute;
-			width: 34px;
-			height: 34px;
-			background-color: rgba(255, 255, 255, 0.2);
-			border: 1px solid rgba(255, 255, 255, 0.5);
-			color: white;
-			font-size: 1.2rem;
-		}
-		.d-pad-up {
-			top: 0;
-			left: 33px;
-		}
-		.d-pad-down {
-			bottom: 0;
-			left: 33px;
-		}
-		.d-pad-left {
-			top: 33px;
-			left: 0;
-		}
-		.d-pad-right {
-			top: 33px;
-			right: 0;
-		}
-		.mobile-center-actions {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		.switch-view-button {
-			background-color: #444;
-			color: white;
-			border: 1px solid #666;
-			padding: 8px 16px;
-			border-radius: 5px;
-			font-size: 1rem;
-		}
-		.action-buttons {
-			display: flex;
-			align-items: center;
-		}
-		.action-buttons button {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			border: 1px solid rgba(255, 255, 255, 0.5);
-			color: white;
-			font-size: 1.2rem;
-			font-weight: bold;
-		}
-		.a-button {
-			background-color: rgba(220, 50, 50, 0.5);
-			margin-left: 15px;
-		}
-		.b-button {
-			background-color: rgba(50, 150, 220, 0.5);
-		}
+		/* ... other mobile styles can be added here ... */
 	}
 </style>

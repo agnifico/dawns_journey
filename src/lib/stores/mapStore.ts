@@ -1,14 +1,18 @@
 import { writable } from 'svelte/store';
-import type { MapData } from '$lib/types';
+import type { MapData, Position, LandscapeData } from '$lib/types'; // Import Position and LandscapeData
 
 export interface MapState {
     currentMapId: string;
     mapData: MapData | null;
+    playerX: number; // Added
+    playerY: number; // Added
 }
 
 const initialState: MapState = {
     currentMapId: 'dragon_island',
     mapData: null,
+    playerX: 0, // Initial default
+    playerY: 0, // Initial default
 };
 
 function createMapStore() {
@@ -29,6 +33,21 @@ function createMapStore() {
                 const newMapData = { ...state.mapData, objects: newObjects };
                 return { ...state, mapData: newMapData };
             });
+        },
+        setMapData: (newMapData: MapData) => { // Added function
+            update(state => ({
+                ...state,
+                mapData: newMapData,
+                playerX: newMapData.playerStart.x, // Set initial player position from map data
+                playerY: newMapData.playerStart.y, // Set initial player position from map data
+            }));
+        },
+        setPlayerPosition: (x: number, y: number) => { // Added function
+            update(state => ({
+                ...state,
+                playerX: x,
+                playerY: y,
+            }));
         }
     };
 }

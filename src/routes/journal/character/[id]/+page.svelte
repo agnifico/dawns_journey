@@ -60,6 +60,7 @@
         padding: 1rem;
         color: white;
         font-family: 'Silkscreen', sans-serif;
+        image-rendering: auto;
     }
     .header {
         display: flex;

@@ -20,7 +20,8 @@
         position: absolute;
         bottom: 100%;
         left: 50%;
-        transform: translateX(-50%);
+        min-width: 150px;
+        transform: translateX(0%);
         background-color: #333;
         color: white;
         padding: 0.5em 1em;

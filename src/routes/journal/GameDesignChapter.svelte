@@ -1,6 +1,6 @@
 <div class="chapter">
 	<div class="entry">
-		<img src="/images/npc_avatars/verdis.png" alt="Design Philosophy" class="chapter-image" />
+		<img src="/images/characters/sylvie/sylvie0.png" alt="Design Philosophy" class="chapter-image" />
 		<div class="text">
 			<h2>On the Design of Dawn's Journey</h2>
 			<p>

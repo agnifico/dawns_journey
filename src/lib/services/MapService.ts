@@ -32,4 +32,4 @@ export function getRegionForPosition(position: { x: number, y: number }, mapData
     );
     const regionType = region ? region.regionType : mapData.defaultRegion;
     return regionDefinitions[regionType];
-}
+};

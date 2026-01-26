@@ -6,7 +6,9 @@
     "galleryImages": [
         "/images/characters/marjane/marjane1.png",
         "/images/characters/marjane/marjane2.png",
-        "/images/characters/marjane/marjane3.png"
+        "/images/characters/marjane/marjane3.png",
+        "/images/characters/marjane/marjane5.png",
+        "/images/characters/marjane/marjane6.png"
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
     "isCombatant": true,

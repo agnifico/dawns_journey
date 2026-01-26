@@ -33,11 +33,11 @@ export type MobileInfoPanelView = 'log' | 'event';
 export const mobileInfoPanelView = writable<MobileInfoPanelView>('log');
 
 export function switchToEventView() {
-	mobileInfoPanelView.set('event');
+    mobileInfoPanelView.set('event');
 }
 
 export function switchToLogView() {
-	mobileInfoPanelView.set('log');
+    mobileInfoPanelView.set('log');
 }
 
 // --- Event Screen ---
@@ -49,7 +49,7 @@ export interface ContextButton {
 
 export type EventScreenType = 'none' | 'npc' | 'location_event' | 'item_found' | 'enemy' | 'resource';
 
-export type EventScreenState = 
+export type EventScreenState =
     | { type: 'none'; image: null; data: null; contextButtons: ContextButton[] }
     | { type: 'npc'; image: string; data: { npcId: string, fullImage: string }; contextButtons: ContextButton[] }
     | { type: 'location_event'; image: string; data: LocationEvent; contextButtons: ContextButton[] }
@@ -130,3 +130,8 @@ export function openFactionChoiceModal() {
 export function closeFactionChoiceModal() {
     isFactionChoiceModalOpen.set(false);
 }
+
+// --- UI Element Visibility ---
+export const showQuestTracker = persistentStore<boolean>('showQuestTracker', true);
+export const showHomesteadTracker = persistentStore<boolean>('showHomesteadTracker', false);
+export const showMessageBox = persistentStore<boolean>('showMessageBox', true);

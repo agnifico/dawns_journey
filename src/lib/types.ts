@@ -90,7 +90,7 @@ export type RequirementCondition =
     | { type: 'have_item'; itemId: string; quantity: number }
     | { type: 'give_item'; itemId: string; quantity: number }
     | { type: 'finish_location_event'; eventId: string; quantity?: number; timing?: 'history' | 'future' }
-    | { type: 'unlock_location_event'; eventId: string }
+
     | { type: 'have_tag'; tag: string }
     | { type: 'stat_check'; stat: keyof Player['baseStats']; value: number }
     | { type: 'element_check'; element: string; value: number }
@@ -99,25 +99,28 @@ export type RequirementCondition =
 
 export type Requirement = { operator: 'AND' | 'OR'; conditions: RequirementCondition[]; } | RequirementCondition;
 
-export type Reward = 
+export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
-    | { type: 'unlock_location_event'; eventId: string; }
+
     | { type: 'change_reputation'; faction: 'Solis Saints' | 'Shadowhand'; amount: number; }
     | { type: 'complete_quest_stage'; questId: string; }
     | { type: 'fail_quest'; questId: string; };
 
-export type GameEffect = 
+export type GameEffect =
     | { type: 'RESTORE_HP'; value: number }
     | { type: 'RESTORE_HP_FULL' }
     | { type: 'RESTORE_AURA'; value: number }
     | { type: 'GIVE_ITEM'; itemId: string; quantity: number }
     | { type: 'TAKE_ITEM'; itemId: string; quantity: number }
     | { type: 'SWAP_ITEM'; takeItemId: string; takeQuantity: number; giveItemId: string; giveQuantity: number }
-    | { type: 'trigger_faction_choice' }
+    | { type: 'trigger_faction_choice' } // This can be deprecated later
+    | { type: 'CHOOSE_FACTION', faction: 'Solis Saints' | 'Shadowhand' } // This can be deprecated later
     | { type: 'add_tag', tag: string }
     | { type: 'give_item', itemId: string, quantity: number }
-    | { type: 'complete_quest_stage' };
+    | { type: 'complete_quest_stage' }
+    | { type: 'set_quest_state', questId: string, state: QuestState }
+    | { type: 'add_reputation', faction: string, amount: number };
 
 export interface GiftingOption {
     itemId: string;
@@ -135,7 +138,7 @@ export interface QuestStage {
     unavailable_dialogue?: string[];
 }
 
-export type QuestState = 'LOCKED' | 'AVAILABLE' | 'ACTIVE' | 'COMPLETED' | 'FAILED';
+export type QuestState = 'LOCKED' | 'AVAILABLE' | 'ACTIVE' | 'COMPLETED' | 'FAILED' | 'REPORT_PENDING';
 
 export interface RankData {
     questId: string;
@@ -145,6 +148,8 @@ export interface RankData {
     startState?: QuestState;
     autoStart?: boolean;
     stages: QuestStage[];
+    post_completion_dialogue?: string[];
+    post_failure_dialogue?: string[];
 }
 
 export interface HeartRankData {
@@ -154,7 +159,7 @@ export interface HeartRankData {
     rankUpRequirement?: Requirement;
 }
 
-export interface SwordRankData extends RankData {}
+export interface SwordRankData extends RankData { }
 
 export type NpcInteractionState = 'NOT_STARTED' | 'IN_PROGRESS' | 'READY_FOR_TURN_IN' | 'READY_FOR_RANK_UP';
 
@@ -192,6 +197,8 @@ export interface NPC {
     allRanksMaxedDialogue?: string[];
     galleryImages?: string[];
     faction?: 'Solis Saints' | 'Shadowhand';
+    swordRankMaxedDialogueIndex?: number;
+    allRanksMaxedDialogueIndex?: number;
 }
 
 export interface Quest {
@@ -203,6 +210,27 @@ export interface Quest {
     currentStage: number;
     stages: QuestStage[];
     startRequirement?: Requirement;
+    finalState?: QuestState; // New property to store the actual final state
+}
+
+export interface Position {
+    x: number;
+    y: number;
+}
+
+export interface LandscapeData { // NEW INTERFACE
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    landscape: string;
+}
+
+export interface LandscapeDefinition {
+    id: string;
+    name: string;
+    image: string;
+    rainLevel?: number;
 }
 
 export interface MapData {
@@ -210,12 +238,20 @@ export interface MapData {
     height: number;
     image: string;
     defaultRegion: string;
+    defaultLandscape: string;
     regions: any[];
+    landscapes: LandscapeData[]; // UPDATED TO USE LandscapeData[]
     unwalkable: any[];
     objects: any[];
     playerStart: Position;
     enemyEncounterChance?: number;
     itemFindingChance?: number;
+}
+
+export interface EventAction {
+    text: string;
+    effects: GameEffect[];
+    responseMessage?: string;
 }
 
 export interface LocationEvent {
@@ -226,10 +262,13 @@ export interface LocationEvent {
     shortDesc: string;
     stepOnMessage: string;
     message: string;
-    effects?: any[];
-    actions?: any[];
+    effects?: GameEffect[];
+    actions?: EventAction[];
     afterImage?: string;
     afterDescription?: string;
+    requirement?: Requirement;
+    requirementNotMetMessage?: string;
+    reusable?: boolean;
 }
 
 export interface ResourceNode {
@@ -262,3 +301,17 @@ export interface Action {
     action: () => void;
     disabled?: boolean;
 }
+
+export interface Enemy {
+    id: string;
+    name: string;
+    description: string;
+    image: string;
+    thumbnailImage: string | null;
+    types?: string[];
+    masteryRequirements: string;
+    isLegendary: boolean;
+    baseStats: PlayerBaseStats;
+    drops: any[];
+}
+

@@ -81,6 +81,7 @@
                         "itemId": "potato",
                         "quantity": 2
                     },
+                    "unavailable_dialogue": ["I have nothing for you at this time."],
                     "intro_dialogue": [
                         "So, Veres sent you to spy on me. I can see her shadow in your eyes.",
                         "If you wish to walk in the light, you must prove your worth. Even a small offering can show great faith. Bring me two potatoes from your farm."
@@ -113,6 +114,7 @@
                         "enemyId": "woodmech_bear",
                         "quantity": 1
                     },
+                    "unavailable_dialogue": ["The forest is not yet clean."],
                     "intro_dialogue": [
                         "There is a discordant presence in the woods. A 'Woodmech Bear', a creation of chaotic energies. It must be cleansed. Remove it."
                     ],
@@ -138,22 +140,17 @@
             },
             "stages": [
                 {
-                    "objective": "Talk to Guinevere",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
-                    "success_dialogue": [
-                        "Assist my two commanders: Cygwin and Claudia"
+                    "objective": "Speak with Guinevere",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": ["My commanders are busy. Do not bother them."],
+                    "intro_dialogue": [
+                        "My commanders, Claudia and Cygwin, are undertaking vital work to stabilize this island. They require an able hand. Find them, assist them in their tasks, and earn their trust."
                     ],
+                    "reminder_dialogue": ["My commanders await your aid."],
+                    "success_dialogue": ["Go now. They are waiting."],
                     "success_rewards": [
-                        {
-                            "type": "tag",
-                            "itemId": "can_assist_claudia"
-                        },
-                        {
-                            "type": "tag",
-                            "itemId": "can_assist_cygwin"
-                        }
+                        { "type": "tag", "tagId": "can_assist_claudia" },
+                        { "type": "tag", "tagId": "can_assist_cygwin" }
                     ]
                 },
                 {
@@ -165,15 +162,10 @@
                             { "type": "npc_rank", "npcId": "claudia", "rankType": "heart", "value": 1 }
                         ]
                     },
-                    "intro_dialogue": [
-                        "My commanders, Claudia and Cygwin, are undertaking vital work to stabilize this island. They require an able hand. Find them, assist them in their tasks, and earn their trust."
-                    ],
-                    "reminder_dialogue": [
-                        "Commander Claudia still requires your assistance."
-                    ],
-                    "success_dialogue": [
-                        "Excellent. One pillar of stability is secured."
-                    ]
+                    "unavailable_dialogue": ["Commander Claudia is otherwise occupied."],
+                    "intro_dialogue": ["Report to Commander Claudia."],
+                    "reminder_dialogue": [ "Commander Claudia still requires your assistance." ],
+                    "success_dialogue": [ "Excellent. One pillar of stability is secured." ]
                 },
                 {
                     "objective": "Assist Commander Cygwin",
@@ -184,21 +176,17 @@
                             { "type": "npc_rank", "npcId": "cygwin", "rankType": "heart", "value": 1 }
                         ]
                     },
-                    "reminder_dialogue": [
-                        "Commander Cygwin is still waiting for you."
-                    ],
-                    "success_dialogue": [
-                        "The second pillar is in place. Well done."
-                    ]
+                    "unavailable_dialogue": ["Commander Cygwin has no time for you."],
+                    "intro_dialogue": ["Report to Commander Cygwin."],
+                    "reminder_dialogue": [ "Commander Cygwin is still waiting for you." ],
+                    "success_dialogue": [ "The second pillar is in place. Well done." ]
                 },
                 {
                     "objective": "Report back to Guinevere",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
-                    "reminder_dialogue": [
-                        "You have done what I asked. Return to me and report your success."
-                    ],
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": ["I am waiting for you to complete your tasks."],
+                    "intro_dialogue": ["You have returned. Report."],
+                    "reminder_dialogue": [ "You have done what I asked. Return to me and report your success." ],
                     "success_dialogue": [
                         "You have served the Saints well. The commanders speak highly of you. There is but one final task to secure this island's future."
                     ],
@@ -218,19 +206,34 @@
                 "type": "have_tag",
                 "tag": "guinevere_sword_3_complete"
             },
+            "post_failure_dialogue": [
+                "You chose to side with the Shadowhand. You have made a grave mistake."
+            ],
             "stages": [
+                {
+                    "objective": "Speak with Guinevere about the Altar of Fates",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": ["The time is not right."],
+                    "intro_dialogue": [
+                        "The final tower, the Altar of Fates, is now revealed to you. Go there and activate it. Its purification will bring lasting peace to this land."
+                    ],
+                    "reminder_dialogue": ["The Altar of Fates awaits. Do not fail."],
+                    "success_dialogue": ["Go now. The Altar awaits."],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "guinevere_ready_for_f3" }
+                    ]
+                },
                 {
                     "objective": "Activate the Altar of Fates at (25, 9)",
                     "requirement": {
                         "type": "finish_location_event",
-                        "eventId": "F3"
+                        "eventId": "F3",
+                        "timing": "future"
                     },
-                    "intro_dialogue": [
-                        "The final tower, the Altar of Fates, is now revealed to you. Go there and activate it. Its purification will bring lasting peace to this land."
-                    ],
-                    "success_rewards": [
-                        { "type": "unlock_location_event", "eventId": "F3" }
-                    ]
+                    "unavailable_dialogue": ["The Altar of Fates is not yet ready."],
+                    "intro_dialogue": ["The Altar of Fates is before you."],
+                    "reminder_dialogue": ["The Altar of Fates awaits. Do not fail."],
+                    "success_dialogue": [ "It is done. The light has prevailed." ]
                 }
             ]
         }

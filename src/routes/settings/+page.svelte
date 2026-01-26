@@ -15,9 +15,9 @@
     }
 
     function handleLoadTestState() {
-        if (confirm('This will overwrite your current game state to test Hela\'s questline. Are you sure?')) {
+        if (confirm('This will overwrite your game state with the post-game test state. Are you sure?')) {
             SettingsService.loadTestState();
-            alert('Hela test state loaded. You have the Vine Whip equipped and are ready to fight Hela.');
+            alert('Post-game test state loaded. All quests for Hela, Sylvie, and Veres are complete. Vine Whip and Water Whip equipped.');
             goto('/map');
         }
     }
@@ -33,8 +33,8 @@
         <h2>Developer Mode</h2>
         <div class="dev-actions">
             <div class="action">
-                <p><strong>Load Hela Test State</strong></p>
-                <p class="description">Instantly sets your game state to the point where Sylvie has sent you to fight Hela. Equips the Vine Whip.</p>
+                <p><strong>Load Post-Game Test State</strong></p>
+                <p class="description">Completes all quests for Hela, Sylvie, and Veres. Equips the Vine Whip and Water Whip.</p>
                 <button on:click={handleLoadTestState}>Run</button>
             </div>
             <div class="action">

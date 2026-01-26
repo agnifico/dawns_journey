@@ -44,27 +44,37 @@
             "title": "The Decrepit Spire",
             "description": "Assist Commander Cygwin in her task.",
             "startRequirement": {
-                "type": "tag",
-                "questId": "can_assist_cygwin"
+                "type": "have_tag",
+                "tag": "can_assist_cygwin"
             },
             "stages": [
                 {
-                    "objective": "Activate the Decrepit Spire at (26, 13)",
-                    "requirement": {
-                        "type": "finish_location_event",
-                        "eventId": "F2"
-                    },
+                    "objective": "Speak with Cygwin",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": ["I have no time for you."],
                     "intro_dialogue": [
                         "You're the help Lady Guinevere sent? Don't look like much. There's a spire to the east that needs activating. Get it done. Don't waste my time."
                     ],
+                    "reminder_dialogue": ["The spire isn't going to activate itself."],
+                    "success_dialogue": ["Well? Get to it."],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "cygwin_ready_for_f2" }
+                    ]
+                },
+                {
+                    "objective": "Activate the Decrepit Spire at (22, 13)",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "F2",
+                        "timing": "future"
+                    },
+                    "unavailable_dialogue": ["The spire is not yet active."],
+                    "intro_dialogue": ["You are at the Decrepit Spire."],
                     "reminder_dialogue": [
-                        "The spire at (26, 13) isn't going to activate itself. Move."
+                        "The spire at (22, 13) isn't going to activate itself. Move."
                     ],
                     "success_dialogue": [
                         "Hmph. You're slightly more useful than you look. Report back to Lady Guinevere."
-                    ],
-                    "success_rewards": [
-                        { "type": "unlock_location_event", "eventId": "F2" }
                     ]
                 }
             ]

@@ -140,7 +140,7 @@
             },
             "stages": [
                 {
-                    "objective": "Gather 30 Wood",
+                    "objective": "Gather 10 Wood",
                     "requirement": {
                         "type": "have_item",
                         "itemId": "wood",

@@ -16,6 +16,7 @@ const npcModules = {
     'akari': () => import('../assets/data/npcs/akari.json'),
     'cygwin': () => import('../assets/data/npcs/cygwin.json'),
     'nyx': () => import('../assets/data/npcs/nyx.json'),
+    'ariana': () => import('../assets/data/npcs/ariana.json'),
 };
 
 export async function getNpcData(npcId: string): Promise<NPC | null> {
