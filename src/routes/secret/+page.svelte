@@ -1,37 +1,46 @@
 <script lang="ts">
 	import ImageSlideshow from '$lib/components/ImageSlideshow.svelte';
 	const images = [
-		{ src: '/images/characters/nsfw/File-01.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-00.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-02.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-03.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-04.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-05.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-06.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-07.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-08.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-09.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-10.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-11.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-12.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-13.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-14.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-15.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-16.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-17.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-18.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-19.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-20.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-21.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-22.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-23.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-24.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/File-25.png', alt: 'Main Characters' }
+		{ src: '/images/characters/nsfw/01.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/02.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/03.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/04.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/05.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/06.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/07.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/08.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/09.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/10.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/11.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/12.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/13.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/14.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/15.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/16.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/17.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/18.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/19.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/20.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/21.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/22.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/23.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/24.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/25.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/26.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/27.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/28.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/29.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/30.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/31.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/32.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/33.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/34.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/35.png', alt: 'Main Characters' },
 	];
 	let currentImageIndex = 0;
-
+    
 	function changeImage(direction: number) {
-		if (!images) return;
+        if (!images) return;
 		const newIndex = currentImageIndex + direction;
 		if (newIndex >= 0 && newIndex < images.length) {
 			currentImageIndex = newIndex;
@@ -53,9 +62,9 @@
 			/>
 
 			<div class="slideshow-controls">
-				<button on:click={() => changeImage(-1)}>Previous</button>
+				<button on:click={() => changeImage(-1)}>⬅️</button>
 				<!-- <span>{currentImageIndex + 1} / {images.length}</span> -->
-				<button on:click={() => changeImage(1)}>Next</button>
+				<button on:click={() => changeImage(1)}>➡️</button>
 			</div>
 		{:else}
 			<p>No images available for this character.</p>
@@ -85,19 +94,23 @@
 	.slideshow-controls {
 		position: absolute;
         top: 50%;
+        left: 2rem;
         right: 2rem;
+        /* width: 100%; */
 		display: flex;
-        flex-direction: column;
-		justify-content: center;
+        flex-direction: row;
+		justify-content: space-between;
 		align-items: center;
 		gap: 1rem;
 	}
 	.slideshow-controls button {
-		background: #333;
+		background: transparent;
 		color: white;
 		border: none;
-		padding: 0.5rem 1rem;
+		padding: 0;
 		cursor: pointer;
+        font-size: 3rem;
+        margin: 0;
 	}
 	.slideshow-controls button:disabled {
 		background: #333;

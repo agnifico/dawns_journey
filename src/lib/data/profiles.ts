@@ -29,7 +29,7 @@ export const profiles: Profile[] = [
     {
         id: 'shieldmaiden',
         name: 'Shieldmaiden',
-        avatar: '/images/characters/player4.png',
+        avatar: '/images/characters/gladiator.png',
         initialInventory: [
             ...allWeapons.map(item => ({ itemId: item.id, amount: 1 })),
             ...allRelics.map(item => ({ itemId: item.id, amount: 1 })),
@@ -41,7 +41,7 @@ export const profiles: Profile[] = [
     {
         id: 'mage',
         name: 'Mage',
-        avatar: '/images/characters/player3.png',
+        avatar: '/images/characters/mage.png',
         initialInventory: [
             ...allWeapons.map(item => ({ itemId: item.id, amount: 1 })),
             ...allRelics.map(item => ({ itemId: item.id, amount: 1 })),
@@ -50,4 +50,5 @@ export const profiles: Profile[] = [
         equippedWeapons: ['queens_trident', 'unity'],
         equippedRelics: ['helas_whip', 'wicked_jewel', 'sylvies_shorts', 'cygwins_love'],
     },
+    
 ];
