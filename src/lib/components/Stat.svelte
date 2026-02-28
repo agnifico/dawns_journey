@@ -11,7 +11,8 @@
         id: statId,
         name: statId,
         abbr: statId.substring(0, 3).toUpperCase(),
-        description: 'No description available.'
+        description: 'No description available.',
+        color: '#fff'
     };
 
     let bonus: number | undefined = undefined;
@@ -80,23 +81,25 @@
     .stat-name {
         flex: 1;
         text-align: left;
-        margin-right: 1em;
+        margin-right: auto;
         color: var(--color-text-muted);
         text-wrap: nowrap;
         color: #7678ed;
     }
 
     .stat-value {
-        color: var(--color-text);
+        color: var(--color-primary);
         /* font-weight: bold; */
         display: flex;
-        align-items: center;
-        gap: 0.5em;
-        font-size: .75rem;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        /* gap: 0.5em; */
+        font-size: 1rem;
     }
 
     .bonus {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
+        font-weight: 400;
     }
 
     .bonus.buff {

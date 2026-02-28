@@ -11,12 +11,15 @@ const npcModules = {
     'guinevere': () => import('../assets/data/npcs/guinevere.json'),
     'claudia': () => import('../assets/data/npcs/claudia.json'),
     'marjane': () => import('../assets/data/npcs/marjane.json'),
-    'hanabi': () => import('../assets/data/npcs/hanabi.json'),
+    'aoife': () => import('../assets/data/npcs/aoife.json'),
     'veres': () => import('../assets/data/npcs/veres.json'),
     'akari': () => import('../assets/data/npcs/akari.json'),
     'cygwin': () => import('../assets/data/npcs/cygwin.json'),
     'nyx': () => import('../assets/data/npcs/nyx.json'),
     'ariana': () => import('../assets/data/npcs/ariana.json'),
+    'bonnie': () => import('../assets/data/npcs/bonnie.json'),
+    'minerva': () => import('../assets/data/npcs/minerva.json'),
+    'nemesis': () => import('../assets/data/npcs/nemesis.json'),
 };
 
 export async function getNpcData(npcId: string): Promise<NPC | null> {

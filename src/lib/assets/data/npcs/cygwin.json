@@ -10,24 +10,26 @@
         "/images/characters/cygwin/cygwin3.png"
     ],
     "description": "A commander of the Solis Saints, known for her unwavering and sometimes brutal efficiency.",
+    "faction": "solis_saints",
     "isCombatant": true,
     "types": [
         "Light",
         "Earth"
     ],
     "baseStats": {
-        "hp": 100,
-        "maxHp": 100,
+        "hp": 500,
+        "maxHp": 500,
         "auraShield": 20,
-        "maxAuraShield": 20,
-        "physicalAttack": 15,
-        "physicalDefence": 10,
-        "elementalAttack": 20,
-        "elementalDefence": 15,
-        "speed": 30,
-        "evasion": 20,
-        "critChance": 0.05,
-        "critDamage": 1.5
+        "maxAuraShield": 200,
+        "physicalAttack": 420,
+        "physicalDefence": 550,
+        "elementalAttack": 420,
+        "elementalDefence": 550,
+        "speed": 60,
+        "evasion": 30,
+        "critChance": 0.3,
+        "critDamage": 1.5,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,
@@ -81,6 +83,80 @@
         }
     ],
     "heartRanks": [
+        {
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        },{
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "You're still here? I suppose your persistence is... admirable. Don't get any ideas."
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Lumber? Are you building a house? Fine. I'll take it."
+                    ]
+                }
+            ]
+        },
         {
             "rank_up_dialogue": [
                 "You're still here? I suppose your persistence is... admirable. Don't get any ideas."

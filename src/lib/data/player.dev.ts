@@ -1,13 +1,13 @@
 import type { Player, NPC, Quest, Weapon } from '../types';
 import { player as basePlayer } from './player';
-import { generalItems } from './generalItems';
+import { createItems } from '../services/ItemFactory';
 
 // Import all base NPC data to construct the full NPC state
 import akari from '../assets/data/npcs/akari.json';
 import claudia from '../assets/data/npcs/claudia.json';
 import cygwin from '../assets/data/npcs/cygwin.json';
 import guinevere from '../assets/data/npcs/guinevere.json';
-import hanabi from '../assets/data/npcs/hanabi.json';
+import aoife from '../assets/data/npcs/aoife.json';
 import hela from '../assets/data/npcs/hela.json';
 import marjane from '../assets/data/npcs/marjane.json';
 import nyx from '../assets/data/npcs/nyx.json';
@@ -15,8 +15,8 @@ import sylvie from '../assets/data/npcs/sylvie.json';
 import veres from '../assets/data/npcs/veres.json';
 
 // --- Find Items ---
-const vineWhip = generalItems.find(item => item.id === 'vine_whip') as Weapon;
-const waterWhip = generalItems.find(item => item.id === 'water_whip') as Weapon;
+const vineWhip = createItems('vine_whip', 1)[0] as Weapon;
+const waterWhip = createItems('water_whip', 1)[0] as Weapon;
 
 // --- 1. Player State ---
 const devPlayerOverrides: Partial<Player> = {
@@ -25,13 +25,13 @@ const devPlayerOverrides: Partial<Player> = {
         relic_slots: [null, null, null, null],
     },
     inventory: [
-        { itemId: 'potato_seed', amount: 10 },
-        { itemId: 'bread', amount: 5 },
-        { itemId: 'vine_whip', amount: 1 },
-        { itemId: 'water_whip', amount: 1 },
-        { itemId: 'hymn', amount: 1 },
-        { itemId: 'requiem', amount: 1 },
-        { itemId: 'argentum', amount: 5000 }
+        ...createItems('potato_seed', 10),
+        ...createItems('bread', 5),
+        ...createItems('vine_whip', 1),
+        ...createItems('water_whip', 1),
+        ...createItems('hymn', 1),
+        ...createItems('requiem', 1),
+        ...createItems('argentum', 5000)
     ],
     worldTags: [
         "sylvie_sword_1_complete",
@@ -62,7 +62,7 @@ export const playerDev: Player = {
 
 // --- 2. NPC State ---
 const baseNpcs: Record<string, NPC> = {
-    akari, claudia, cygwin, guinevere, hanabi, hela, marjane, nyx, sylvie, veres
+    akari, claudia, cygwin, guinevere, aoife, hela, marjane, nyx, sylvie, veres
 };
 
 // Create a deep copy to avoid modifying the original JSON imports

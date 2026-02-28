@@ -8,7 +8,7 @@
   onMount(() => {
     interval = setInterval(() => {
       currentIndex = (currentIndex + 1) % images.length;
-    }, 5000); // Change image every 5 seconds
+    }, 3000); // Change image every 5 seconds
   });
 
   onDestroy(() => {
@@ -29,8 +29,10 @@
     height: 100%;
     position: relative;
     overflow: hidden;
+    image-rendering: auto;
+    border-radius: 12px;
   }
-
+  
   .slide {
     width: 100%;
     height: 100%;
@@ -38,7 +40,7 @@
     top: 0;
     left: 0;
     background-size: cover;
-    background-position: center;
+    background-position: top center;
     opacity: 0;
     transition: opacity 1s ease-in-out;
     animation: kenburns 20s infinite;

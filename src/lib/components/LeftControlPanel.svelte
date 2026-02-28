@@ -19,36 +19,42 @@
 		store.update((value) => !value);
 	}
 
-	let view: 'save' | 'zoom' | 'toggles';
-	view = 'save';
+	let views = ['save', 'zoom', 'toggles'];
+	let currentIndex = 0;
+
+	function nextView() {
+		currentIndex = (currentIndex + 1) % views.length;
+	}
+
+	function prevView() {
+		currentIndex = (currentIndex - 1 + views.length) % views.length;
+	}
 </script>
 
 <div class="control-panel">
 	<div class="button-group">
-		<button class="icon-button" on:click={() => goto('/map')}>
+		<button class="icon-button" on:click={() => goto('/map')}  title="Map">
 			<img src="/game_icons/map.png" alt="Map" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/inventory')}>
-			<img src="/game_icons/backpack.png" alt="Backpack" />
+		<button class="icon-button" on:click={() => goto('/inventory')}  title="Inventory">
+			<img src="/game_icons/inventory.png" alt="Inventory" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/homestead')}>
+		<button class="icon-button" on:click={() => goto('/homestead')}  title="Homestead">
 			<img src="/game_icons/homestead.png" alt="Homestead" />
 		</button>
 		<button class="icon-button" on:click={() => goto('/journal')} title="Journal">
-            <img src="/game_icons/journal.png" alt="Journal" />
-        </button>
+			<img src="/game_icons/journal.png" alt="Journal" />
+		</button>
 	</div>
 
 	<hr />
 
 	<div class="toggle-group">
 		<div class="switchers">
-
-			<button on:click={() => (view = 'zoom')} class:active={view === 'zoom'}>Z</button>
-			<button on:click={() => (view = 'save')} class:active={view === 'save'}>S</button>
-			<button on:click={() => (view = 'toggles')} class:active={view === 'toggles'}>T</button>
+			<button on:click={prevView}><img src="/game_icons/arrow_left.png" alt="Previous" /></button>
+			<button on:click={nextView}><img src="/game_icons/arrow_right.png" alt="Next" /></button>
 		</div>
-		{#if view === 'save'}
+		{#if views[currentIndex] === 'save'}
 			<button class="icon-button" on:click={SaveLoadService.saveGame} title="Save Game">
 				<img src="/game_icons/save.png" alt="Save" />
 			</button>
@@ -58,7 +64,7 @@
 			<button class="icon-button danger" on:click={SaveLoadService.clearSave} title="Delete Save">
 				<img src="/game_icons/cancel.png" alt="Delete" />
 			</button>
-		{:else if view === 'toggles'}
+		{:else if views[currentIndex] === 'toggles'}
 			<div class="toggle-group">
 				<button
 					class="icon-button"
@@ -116,7 +122,7 @@
 		padding: 1rem 0.5rem;
 		padding-bottom: 2rem;
 		box-sizing: border-box;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 		border-radius: 18px;
 		box-sizing: border-box;
 		border: 6px solid #00000056;
@@ -131,17 +137,20 @@
 		gap: 0.5rem;
 	}
 	.switchers {
-
 		display: flex;
 		gap: 0;
+		border-radius: 6px;
+		overflow: hidden;
 		button {
 			border: none;
-			font-size: .5rem;
+			font-size: 0.5rem;
 			width: 100%;
 			height: 30px;
+			padding: 4px;
+			background-color: var(--surface-2);
 		}
-		button.active {
-			background-color: green;
+		button:hover {
+			background-color: var(--surface-1);
 			color: wheat;
 		}
 	}
@@ -150,7 +159,7 @@
 		align-items: center;
 		justify-content: center;
 		width: 40px;
-		height: 46px;
+		height: 48px;
 		cursor: pointer;
 		font-size: 1.5rem;
 		font-weight: 600;
@@ -168,8 +177,8 @@
 		border-color: #777;
 	}
 	.icon-button img {
-		width: 20px;
-		height: 20px;
+		width: 32px;
+		height: 32px;
 		display: block;
 	}
 	hr {

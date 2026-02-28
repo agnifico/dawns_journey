@@ -15,6 +15,7 @@ export interface ActiveSetBonus {
 }
 
 export const playerActiveSetBonuses = derived(playerStore, ($player): ActiveSetBonus[] => {
+    if (!$player || !$player.equipment) return [];
     const activeBonuses: ActiveSetBonus[] = [];
     const equippedRelicIds = $player.equipment.relic_slots
         .filter((relic): relic is Relic => relic !== null)
@@ -50,13 +51,19 @@ export const playerActiveSetBonuses = derived(playerStore, ($player): ActiveSetB
  * @returns The player's final, calculated stats.
  */
 const calculateFinalStats = (player: Player, activeSetBonuses: ActiveSetBonus[]): Player['baseStats'] => {
+    // Guard clause to prevent crashes if a partial player object is passed.
+    if (!player || !player.equipment) {
+        console.warn('[calculateFinalStats] Received a player object without an equipment property. Using base stats only.');
+        return player.baseStats;
+    }
+
     const baseStats = player.baseStats;
 
     // 1. Start with base stats + equipment bonuses
     const statsFromEquipment = {
         maxHp: 0, maxAuraShield: 0, physicalAttack: 0, physicalDefence: 0,
         elementalAttack: 0, elementalDefence: 0, speed: 0, evasion: 0,
-        critChance: 0, critDamage: 0,
+        critChance: 0, critDamage: 0, precision: 0,
     };
 
     const allEquipment: (Item | null)[] = [...player.equipment.weapon_slots, ...player.equipment.relic_slots];
@@ -95,23 +102,26 @@ const calculateFinalStats = (player: Player, activeSetBonuses: ActiveSetBonus[])
         evasion: baseStats.evasion + statsFromEquipment.evasion,
         critChance: baseStats.critChance + statsFromEquipment.critChance,
         critDamage: baseStats.critDamage + statsFromEquipment.critDamage,
+        precision: baseStats.precision + statsFromEquipment.precision,
     };
 
     // 3. Apply active effects (buffs/debuffs)
-    const flatBuffs = player.activeEffects.filter(e => e.type === 'flat');
-    const percentageBuffs = player.activeEffects.filter(e => e.type === 'percentage');
+    if (player.activeEffects) {
+        const flatBuffs = player.activeEffects.filter(e => e.type === 'flat');
+        const percentageBuffs = player.activeEffects.filter(e => e.type === 'percentage');
 
-    for (const buff of flatBuffs) {
-        const statName = buff.stat as keyof Player['baseStats'];
-        if (finalStats[statName] !== undefined) {
-            (finalStats[statName] as number) += buff.value;
+        for (const buff of flatBuffs) {
+            const statName = buff.stat as keyof Player['baseStats'];
+            if (finalStats[statName] !== undefined) {
+                (finalStats[statName] as number) += buff.value;
+            }
         }
-    }
 
-    for (const buff of percentageBuffs) {
-        const statName = buff.stat as keyof Player['baseStats'];
-        if (finalStats[statName] !== undefined) {
-            (finalStats[statName] as number) *= (1 + buff.value);
+        for (const buff of percentageBuffs) {
+            const statName = buff.stat as keyof Player['baseStats'];
+            if (finalStats[statName] !== undefined) {
+                (finalStats[statName] as number) *= (1 + buff.value);
+            }
         }
     }
 
@@ -131,6 +141,7 @@ export const playerStats = derived([playerStore, playerActiveSetBonuses], ([$pla
 
 
 export const playerActiveElements = derived(playerStore, ($player) => {
+    if (!$player || !$player.equipment) return [];
     const elements: string[] = [];
     $player.equipment.weapon_slots.forEach(weapon => {
         if (weapon && weapon.element) {
@@ -141,6 +152,7 @@ export const playerActiveElements = derived(playerStore, ($player) => {
 });
 
 export const playerExplorationAbilities = derived(playerStore, ($player) => {
+    if (!$player || !$player.equipment) return {};
     const abilities: { [key: string]: number } = {};
 
     const processItem = (item: Item | null) => {
@@ -160,6 +172,7 @@ export const playerExplorationAbilities = derived(playerStore, ($player) => {
 });
 
 export const playerMastery = derived(playerStore, ($player) => {
+    if (!$player || !$player.equipment) return 0;
     let totalMastery = 0;
     $player.equipment.weapon_slots.forEach(weapon => {
         if (weapon && weapon.mastery) {
@@ -168,3 +181,10 @@ export const playerMastery = derived(playerStore, ($player) => {
     });
     return totalMastery;
 });
+
+export const setAvatar = (avatar: string) => {
+    playerStore.update(p => {
+        p.profile.avatar = avatar;
+        return p;
+    });
+};

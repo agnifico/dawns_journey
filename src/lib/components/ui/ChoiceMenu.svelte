@@ -34,13 +34,13 @@
 						hotkey: 'z',
 						icon: showQuestIndicator ? '/game_icons/expression_alerted.png' : null,
 						action: () => npcStore.interactTalk(npc.id),
-						disabled: $dialogueStore.isOpen
+						disabled: $dialogueStore.isOpen || $dialogueStore.justClosed
 					},
 					{
 						id: 'challenge',
 						label: 'Challenge',
 						hotkey: 'x',
-						disabled: !canChallenge || $dialogueStore.isOpen,
+						disabled: !canChallenge || $dialogueStore.isOpen || $dialogueStore.justClosed,
 						action: () => CombatService.startCombat(npc)
 					},
 					{
@@ -48,7 +48,7 @@
 						label: 'Gift Item',
 						hotkey: 'c',
 						action: () => openGiftModal(npc.id),
-						disabled: $dialogueStore.isOpen || !canGift
+						disabled: $dialogueStore.isOpen || $dialogueStore.justClosed || !canGift
 					}
 				];
 			}
@@ -176,7 +176,7 @@
 		/* margin-inline: auto; */
 		border-radius: 0 0 12px 12px;
 		box-shadow: #00000056 0 -6px 0 3px inset;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 	}
 	ul {
 		list-style: none;

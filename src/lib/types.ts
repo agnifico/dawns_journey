@@ -10,20 +10,28 @@ export interface Stat {
 
 export type ItemType = 'general' | 'relic' | 'weapon';
 
+export interface GearPassive {
+    id: string;
+    name: string;
+    flags: StatusEffect['flags'];
+    description?: string;
+}
+
 export interface Item {
     id: string;
+    instanceId: string;
     name: string;
     description: string;
     image: string;
     type: ItemType;
     stats?: Stat[];
-    effects?: { hp?: number; auraShield?: number; }[];
-    activeEffects?: any[];
+    consumableEffects?: { hp?: number; auraShield?: number; }[];
     element?: string;
     flags?: string[];
-    amount?: number;
     mastery?: number;
     exploration?: { name: string, level: number }[];
+    plantId?: string;
+    gearPassives?: GearPassive[];
 }
 
 export interface Weapon extends Item {
@@ -34,12 +42,7 @@ export interface Relic extends Item {
     type: 'relic';
 }
 
-export interface InventoryItem {
-    itemId: string;
-    amount: number;
-}
-
-export type PlayerBaseStats = {
+export interface PlayerBaseStats {
     hp: number;
     maxHp: number;
     auraShield: number;
@@ -52,23 +55,186 @@ export type PlayerBaseStats = {
     evasion: number;
     critChance: number;
     critDamage: number;
-};
+    precision: number;
+}
+
+import type { AnyAbilityEffect } from '$lib/services/abilityEffects';
+
+export type AbilityType = 'Physical Damage' | 'Elemental Damage' | 'Special';
+
+export interface Ability {
+    id: string;
+    name: string;
+    description: string;
+    abilityType: AbilityType;
+    accuracy?: number;
+    effects: AnyAbilityEffect[];
+}
+
+export interface StatusEffect {
+    id: string;
+    name: string;
+    duration: number;
+    remainingTurns?: number;
+    /** % of maxHp dealt as damage each turn. */
+    damagePerTurn?: number;
+    /** % of maxHp restored as HP each turn. */
+    healPerTurn?: number;
+    damageType?: 'physical' | 'elemental';
+    statModifiers?: Partial<Omit<PlayerBaseStats, 'hp' | 'maxHp' | 'auraShield' | 'maxAuraShield'>>;
+    inflictedBy?: string;
+    isStunned?: boolean;
+    /**
+     * Immunity / passive flags.
+     *
+     * immune_to_stat_reduction     — blocks incoming stat debuffs
+     * immune_to_stat_increase      — blocks incoming stat buffs (used on player by enemy)
+     * immune_to_transfer_reduction — suppresses loss half of stat_transfer
+     * immune_to_poison             — blocks any apply_status with category: 'poison'
+     * immune_to_stun               — blocks any apply_status with category: 'stun'
+     * guaranteed_hit               — next damage/lifesteal ability skips accuracy + evasion rolls
+     */
+    flags?: Array<
+        | 'immune_to_stat_reduction'
+        | 'immune_to_stat_increase'
+        | 'immune_to_transfer_reduction'
+        | 'immune_to_poison'
+        | 'immune_to_stun'
+        | 'guaranteed_hit'
+    >;
+}
+
+// ---------------------------------------------------------------------------
+// Arena AI
+// ---------------------------------------------------------------------------
+
+export type ArenaTriggerCondition =
+    | { type: 'PLAYER_HP_BELOW';      value: number }
+    | { type: 'SELF_HP_BELOW';        value: number }
+    | { type: 'SELF_HP_ABOVE';        value: number }
+    | { type: 'ENEMY_STATUS_MISSING'; statusId: string }
+    | { type: 'ENEMY_STATUS_PRESENT'; statusId: string }
+    | { type: 'SELF_STATUS_PRESENT';  statusId: string }
+    | { type: 'TURN_MULTIPLE_OF';     value: number }
+    | { type: 'TURN_NUMBER_IS';       value: number }
+    | { type: 'ENEMY_HAS_FLAG';       flag: string };
+
+export interface ArenaTrigger {
+    condition: ArenaTriggerCondition;
+    responseAbility: string;
+    priority: number;
+    oneShot?: boolean;
+}
+
+export type ArenaPhaseAbility = string | { id: string; maxUses: number };
+
+export interface ArenaPhase {
+    hpThreshold: number;
+    abilities: ArenaPhaseAbility[];
+    tactic: 'RANDOM' | 'SEQUENCE';
+}
+
+export interface ArenaBehavior {
+    phases: ArenaPhase[];
+    triggers?: ArenaTrigger[];
+}
+
+// ---------------------------------------------------------------------------
+// Combatant
+// ---------------------------------------------------------------------------
+
+export interface Combatant {
+	gearPassives: GearPassive[];
+    baseStats: PlayerBaseStats;
+    hp: number;
+    maxHp: number;
+    auraShield: number;
+    maxAuraShield: number;
+    physicalAttack: number;
+    physicalDefence: number;
+    elementalAttack: number;
+    elementalDefence: number;
+    speed: number;
+    evasion: number;
+    critChance: number;
+    critDamage: number;
+    precision: number;
+    id: string;
+    name: string;
+    isPlayer: boolean;
+    image: string;
+    profileImage: string;
+    elements: string[];
+    activeElement: string;
+    abilities: Ability[];
+    /**
+     * All active status effects including gear passives
+     * (inflictedBy: 'equipment' | 'innate' — never expire, never cleansed).
+     */
+    statusEffects: StatusEffect[];
+    equipment?: {
+        weapon_slots: (Weapon | null)[];
+        relic_slots: (Relic | null)[];
+    };
+    arenaBehavior?: ArenaBehavior;
+    abilityUseCounts?: Record<string, number>;
+}
+
+// ---------------------------------------------------------------------------
+// Player
+// ---------------------------------------------------------------------------
+
+export interface Profile {
+    id: string;
+    name: string;
+    avatar: string;
+    initialInventory: { itemId: string; amount: number }[];
+    equippedWeapons: string[];
+    equippedRelics: string[];
+}
+
+export interface Crop {
+    id: string;
+    plantId: string;
+    plantedTimestamp: number;
+    stageStartedTimestamp: number;
+    currentGrowthStage: number;
+    lastWateredTimestamp: number;
+    wateredCount: number;
+}
+
+export interface FarmPlot {
+    id: string;
+    mapObjectId: number;
+    requiredLevel: number;
+    x: number;
+    y: number;
+    environment: string;
+    crop: Crop | null;
+    appliedTech: string[];
+}
 
 export interface Player {
     isInitialized: boolean;
+    level: number;
+    xp: number;
     position: Position;
     direction: string;
     isMoving: boolean;
+    profile: Profile;
     baseStats: PlayerBaseStats;
     equipment: { weapon_slots: (Weapon | null)[]; relic_slots: (Relic | null)[]; };
-    inventory: InventoryItem[];
+    inventory: Item[];
     activeEffects: any[];
-    statusEffects: string[];
+    statusEffects: StatusEffect[];
     worldTags: string[];
     skills: any[];
     killCounts: Record<string, number>;
     combatHistory: any[];
-    homestead: any;
+    homestead: {
+        farmPlots: FarmPlot[];
+        compostQueue: any[];
+    };
     lastPlayedTimestamp: number;
     farmingLevel: number;
     farmingXp: number;
@@ -76,7 +242,22 @@ export interface Player {
     unlockedTech: string[];
     locationEventHistory: { [eventId: string]: number };
     factionReputation: Record<string, number>;
+    achievements: {
+        [achievementId: string]: {
+            unlocked: boolean;
+            unlockedTimestamp?: number;
+            currentTier?: number;
+            progress: number;
+        }
+    };
+    stepsTaken: number;
+    cropsHarvested: number;
+    factions: Record<string, { score: number; rank: number; }>;
 }
+
+// ---------------------------------------------------------------------------
+// Quest / world types
+// ---------------------------------------------------------------------------
 
 export type RequirementCondition =
     | { type: 'quest_state'; questId: string; state: QuestState }
@@ -90,7 +271,6 @@ export type RequirementCondition =
     | { type: 'have_item'; itemId: string; quantity: number }
     | { type: 'give_item'; itemId: string; quantity: number }
     | { type: 'finish_location_event'; eventId: string; quantity?: number; timing?: 'history' | 'future' }
-
     | { type: 'have_tag'; tag: string }
     | { type: 'stat_check'; stat: keyof Player['baseStats']; value: number }
     | { type: 'element_check'; element: string; value: number }
@@ -102,7 +282,6 @@ export type Requirement = { operator: 'AND' | 'OR'; conditions: RequirementCondi
 export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
-
     | { type: 'change_reputation'; faction: 'Solis Saints' | 'Shadowhand'; amount: number; }
     | { type: 'complete_quest_stage'; questId: string; }
     | { type: 'fail_quest'; questId: string; };
@@ -114,13 +293,14 @@ export type GameEffect =
     | { type: 'GIVE_ITEM'; itemId: string; quantity: number }
     | { type: 'TAKE_ITEM'; itemId: string; quantity: number }
     | { type: 'SWAP_ITEM'; takeItemId: string; takeQuantity: number; giveItemId: string; giveQuantity: number }
-    | { type: 'trigger_faction_choice' } // This can be deprecated later
-    | { type: 'CHOOSE_FACTION', faction: 'Solis Saints' | 'Shadowhand' } // This can be deprecated later
+    | { type: 'trigger_faction_choice' }
+    | { type: 'CHOOSE_FACTION', faction: 'Solis Saints' | 'Shadowhand' }
     | { type: 'add_tag', tag: string }
     | { type: 'give_item', itemId: string, quantity: number }
     | { type: 'complete_quest_stage' }
     | { type: 'set_quest_state', questId: string, state: QuestState }
-    | { type: 'add_reputation', faction: string, amount: number };
+    | { type: 'add_reputation', faction: string, amount: number }
+    | { type: 'switch_map', mapId: string, x: number, y: number };
 
 export interface GiftingOption {
     itemId: string;
@@ -159,66 +339,7 @@ export interface HeartRankData {
     rankUpRequirement?: Requirement;
 }
 
-export interface SwordRankData extends RankData { }
-
-export type NpcInteractionState = 'NOT_STARTED' | 'IN_PROGRESS' | 'READY_FOR_TURN_IN' | 'READY_FOR_RANK_UP';
-
-export interface BattleAftermath {
-    outcome: 'win' | 'lose';
-    value?: number;
-    dialogue?: string[];
-    requirement?: Requirement;
-}
-
-export interface BattleAftermathsByRank {
-    rank: number;
-    aftermaths: BattleAftermath[];
-}
-
-export interface NPC {
-    id: string;
-    name: string;
-    image: string;
-    profileImage: string;
-    isCombatant?: boolean;
-    baseStats: PlayerBaseStats;
-    swordRank: number;
-    heartRank: number;
-    affinity: number;
-    swordState: NpcInteractionState;
-    heartState: NpcInteractionState;
-    swordRanks: SwordRankData[];
-    heartRanks: HeartRankData[];
-    statGrowth: any[];
-    battleAftermathsBySwordRank: BattleAftermathsByRank[];
-    types?: string[];
-    requirementSnapshot?: any;
-    swordRankMaxedDialogue?: string[];
-    allRanksMaxedDialogue?: string[];
-    galleryImages?: string[];
-    faction?: 'Solis Saints' | 'Shadowhand';
-    swordRankMaxedDialogueIndex?: number;
-    allRanksMaxedDialogueIndex?: number;
-}
-
-export interface Quest {
-    id: string;
-    title: string;
-    description: string;
-    giver: string;
-    state: QuestState;
-    currentStage: number;
-    stages: QuestStage[];
-    startRequirement?: Requirement;
-    finalState?: QuestState; // New property to store the actual final state
-}
-
-export interface Position {
-    x: number;
-    y: number;
-}
-
-export interface LandscapeData { // NEW INTERFACE
+export interface LandscapeData {
     x: number;
     y: number;
     width: number;
@@ -233,14 +354,24 @@ export interface LandscapeDefinition {
     rainLevel?: number;
 }
 
+export interface RegionDefinition {
+    id: string;
+    name: string;
+    gates: { element: string, level: number }[] | null;
+    enemies: { id: string, chance: number }[];
+    items: { id: string, chance: number }[];
+    enemyChance?: number;
+    itemChance?: number;
+}
+
 export interface MapData {
     width: number;
     height: number;
     image: string;
     defaultRegion: string;
     defaultLandscape: string;
-    regions: any[];
-    landscapes: LandscapeData[]; // UPDATED TO USE LandscapeData[]
+    regions: RegionDefinition[];
+    landscapes: LandscapeData[];
     unwalkable: any[];
     objects: any[];
     playerStart: Position;
@@ -313,5 +444,67 @@ export interface Enemy {
     isLegendary: boolean;
     baseStats: PlayerBaseStats;
     drops: any[];
+    xp: number;
+    hpCost: number;
 }
 
+export type CombatLogSide = 'player' | 'opponent' | 'none';
+
+export type CombatLogMessage =
+    | { type: 'turn_banner';        turn: number }
+    | { type: 'ability_use';        side: CombatLogSide; actorName: string; abilityName: string }
+    | { type: 'damage';             side: CombatLogSide; amount: number; isCritical: boolean;
+                                    damageType: 'physical' | 'elemental'; element?: string;
+                                    hitIndex?: number; totalHits?: number }
+    | { type: 'miss';               side: CombatLogSide; defenderName: string; reason: 'dodge' | 'accuracy' }
+    | { type: 'multi_hit_summary';  side: CombatLogSide; hitCount: number; totalHits: number; totalDamage: number }
+    | { type: 'heal';               side: CombatLogSide; targetName: string; amount: number; healType: 'hp' | 'aura_shield' }
+    | { type: 'status_apply';       side: CombatLogSide; targetName: string; statusName: string; isBuff: boolean }
+    | { type: 'status_tick';        side: CombatLogSide; targetName: string; statusName: string; amount: number }
+    | { type: 'status_heal';        side: CombatLogSide; targetName: string; statusName: string; amount: number }
+    | { type: 'status_expire';      side: CombatLogSide; targetName: string; statusName: string }
+    | { type: 'stat_change';        side: CombatLogSide; targetSide: CombatLogSide; targetName: string;
+                                    stats: string[]; direction: 'up' | 'down' }
+    | { type: 'stat_transfer';      side: CombatLogSide; actorName: string; description: string; suppressed: boolean }
+    | { type: 'stun';               side: CombatLogSide; actorName: string }
+    | { type: 'immune';             side: CombatLogSide; targetName: string; what: string }
+    | { type: 'defeated';           side: CombatLogSide; name: string }
+    | { type: 'system';             text: string };
+
+export interface CropDefinition {
+    id: string;
+    name: string;
+    yields: string;
+    description: string;
+    unlockLevel: number;
+    requiredEnvironment: string[];
+    requiredTechs: string[];
+    idealSeason: string | null;
+    wateringRequirementType: 'lifetime_based' | 'stage_based';
+    wateringRequirementValue: number;
+    xpValue: number;
+    growthStages: { duration: number; }[];
+    xpYield: number;
+    seedItemId: string;
+    growthMultiplierInIdealSeason: number;
+    yieldsAmount: number;
+    idealSeasonYieldMultiplier: number;
+    totalGrowthTime: number;
+    leavesYield: number;
+}
+
+export interface Faction {
+    id: string;
+    name: string;
+    icon: string;
+    score: number;
+    rank: number;
+    ranks: {
+        scoreThreshold: number;
+        rewards: Reward[];
+    }[];
+}
+
+export function countItemsById(inventory: Item[], itemId: string): number {
+    return inventory.filter(i => i.id === itemId).length;
+}

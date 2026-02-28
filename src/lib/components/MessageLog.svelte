@@ -104,7 +104,7 @@
         font-family: var(--font-family-pixel);
         font-size: .75rem;
 		cursor: pointer;
-		background-color: color-mix(in srgb, var(--color-surface-2) 70%, black);
+		background-color: color-mix(in srgb, var(--surface-2) 70%, black);
 		color: var(--text-muted);
 	}
 

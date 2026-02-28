@@ -1,7 +1,7 @@
 {
   "width": 30,
   "height": 20,
-  "image": "/maps/dragon_island2.png",
+  "image": "/maps/dragon_island.png",
   "defaultRegion": "walkable_grass",
   "defaultLandscape": "pleasure_island",
   "unwalkable": [
@@ -161,7 +161,7 @@
       "type": "npc",
       "x": 8,
       "y": 18,
-      "npcId": "hanabi"
+      "npcId": "aoife"
     },
     {
       "type": "npc",
@@ -216,6 +216,12 @@
       "x": 25,
       "y": 9,
       "eventId": "F3"
+    },
+    {
+      "type": "event",
+      "x": 27,
+      "y": 0,
+      "eventId": "teleport_to_cathedral"
     }
   ],
   "regions": [

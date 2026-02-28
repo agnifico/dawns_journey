@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Item } from '$lib/types';
 
-export type NotificationType = 'item_received' | 'item_used' | 'item_equipped' | 'item_unequipped';
+export type NotificationType = 'item_received' | 'item_used' | 'item_equipped' | 'item_unequipped' | 'item_removed';
 
 export interface Notification {
     id: number;

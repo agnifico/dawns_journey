@@ -8,7 +8,8 @@ export const generalItems: Item[] = [
         description: "Leftover organic material from harvesting. Can be composted.",
         image: "/general/leaves.png", // Assuming a path, will need asset
         type: "general",
-        flags: ['homestead_resource'],
+        flags: ['stackable', 'homestead_resource'],
+        instanceId: ''
     },
     {
         id: "amethyst",
@@ -16,7 +17,8 @@ export const generalItems: Item[] = [
         description: "A beautiful purple gemstone.",
         image: "/general/amethyst.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "aquamarine",
@@ -24,7 +26,44 @@ export const generalItems: Item[] = [
         description: "A sparkling blue-green gemstone.",
         image: "/general/aquamarine.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
+        id: "citrine",
+        name: "Citrine",
+        description: "A warm yellow gemstone.",
+        image: "/general/citrine.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
+        id: "ruby",
+        name: "Ruby",
+        description: "An intense red gemstone.",
+        image: "/general/ruby.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
+        id: "sapphire",
+        name: "Sapphire",
+        description: "A deep blue gemstone.",
+        image: "/general/sapphire.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
+        id: "emerald",
+        name: "Emerald",
+        description: "A lush green gemstone.",
+        image: "/general/emerald.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "argentum",
@@ -32,7 +71,8 @@ export const generalItems: Item[] = [
         description: "A rare and valuable silver-like metal.",
         image: "/general/argentum.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "azurite",
@@ -40,7 +80,8 @@ export const generalItems: Item[] = [
         description: "A vibrant blue crystal, said to hold the essence of clear skies and calm waters.",
         image: "/general/azurite.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "bear_skin",
@@ -48,7 +89,8 @@ export const generalItems: Item[] = [
         description: "The hide of a bear, useful for crafting.",
         image: "/general/bear_skin.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "blueberries",
@@ -56,6 +98,7 @@ export const generalItems: Item[] = [
         description: "Small, sweet berries.",
         image: "/general/blueberries.png",
         type: "general",
+        flags: ['stackable'],
         effects: [{ auraShield: 500 }],
         activeEffects: [{ id: "blueberry_buff", name: "Blueberry Buff", stat: "physicalDefence", value: 20, duration: 50, type: "flat", source: "blueberries" }],
     },
@@ -66,14 +109,7 @@ export const generalItems: Item[] = [
         image: "/general/bread.png",
         type: "general",
         effects: [{ hp: 100 }, { auraShield: 500 }],
-    },
-    {
-        id: "citrine",
-        name: "Citrine",
-        description: "A warm yellow gemstone.",
-        image: "/general/citrine.png",
-        type: "general",
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "coral_reef",
@@ -81,7 +117,8 @@ export const generalItems: Item[] = [
         description: "A piece of colorful coral from the reef.",
         image: "/general/coral_reef.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "corn",
@@ -90,7 +127,7 @@ export const generalItems: Item[] = [
         image: "/general/corn.png",
         type: "general",
         effects: [{ auraShield: 100 }],
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "cotton",
@@ -98,7 +135,8 @@ export const generalItems: Item[] = [
         description: "Soft cotton fibers, useful for crafting.",
         image: "/general/cotton.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "cuprum",
@@ -106,7 +144,8 @@ export const generalItems: Item[] = [
         description: "A reddish-brown ore, commonly used in crafting and known for its conductivity.",
         image: "/general/cuprum.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "dragon_fang",
@@ -114,7 +153,8 @@ export const generalItems: Item[] = [
         description: "A razor-sharp fang from a fearsome dragon, a rare and powerful crafting component.",
         image: "/general/dragon_fang.png",
         type: "general",
-        flags: ['special'],
+        flags: ['stackable', 'special'],
+        instanceId: ''
     },
     {
         id: "feather",
@@ -122,7 +162,8 @@ export const generalItems: Item[] = [
         description: "A light feather, perhaps from a bird of prey.",
         image: "/general/feather.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "fish",
@@ -131,7 +172,7 @@ export const generalItems: Item[] = [
         image: "/general/fish.png",
         type: "general",
         effects: [{ hp: 100 }, { auraShield: 100 }],
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "forza_mead",
@@ -139,7 +180,7 @@ export const generalItems: Item[] = [
         description: "A potent mead that invigorates the spirit for 150 steps.",
         image: "/general/forza_mead.png",
         type: "general",
-        flags: ['special'],
+        flags: ['stackable','special'],
         activeEffects: [{ id: "forza_buff", name: "Forza Buff", stat: "physicalAttack", value: 10, duration: 150, type: "flat", source: "forza_mead" }],
     },
     {
@@ -148,7 +189,8 @@ export const generalItems: Item[] = [
         description: "A legendary clover, said to bring immense luck to its possessor.",
         image: "/general/four_leaf_clover.png",
         type: "general",
-        flags: ['special'],
+        flags: ['stackable', 'special'],
+        instanceId: ''
     },
     {
         id: "gold",
@@ -156,7 +198,8 @@ export const generalItems: Item[] = [
         description: "A gleaming nugget of pure gold, highly prized by merchants and dragons alike.",
         image: "/general/gold.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "island_herb",
@@ -164,6 +207,7 @@ export const generalItems: Item[] = [
         description: "A common herb found on the island. Slightly boosts magic defence for 150 steps.",
         image: "/general/island_herb.png",
         type: "general",
+        flags: ['stackable',],
         effects: [{ hp: 5 }],
         activeEffects: [{ id: "herb_buff", name: "Herb Buff", stat: "elementalDefence", value: 5, duration: 150, type: "flat", source: "island_herb" }],
     },
@@ -174,7 +218,7 @@ export const generalItems: Item[] = [
         image: "/general/meat.png",
         type: "general",
         effects: [{ hp: 20 }],
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "omelette",
@@ -183,7 +227,7 @@ export const generalItems: Item[] = [
         image: "/general/omelette.png",
         type: "general",
         effects: [{ hp: 25 }],
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "onigiri",
@@ -192,7 +236,7 @@ export const generalItems: Item[] = [
         image: "/general/onigiri.png",
         type: "general",
         effects: [{ hp: 12 }],
-        flags: [],
+        flags: ['stackable',],
     },
     {
         id: "onion",
@@ -200,6 +244,7 @@ export const generalItems: Item[] = [
         description: "A pungent onion.",
         image: "/general/onion.png",
         type: "general",
+        flags: ['stackable',],
         effects: [{ hp: 2 }],
         activeEffects: [
             { id: "onion_pd_buff", name: "Onion PD Buff", stat: "physicalAttack", value: 15, duration: 50, type: "flat", source: "onion" },
@@ -212,24 +257,17 @@ export const generalItems: Item[] = [
         description: "A sharp shark fin, a valuable crafting material.",
         image: "/general/shark_fin.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "tomato",
         name: "Tomato",
         description: "A tomato",
-        image: "/general/tomato.png",
+        image: "/crops/tomato.png",
         type: "general",
-        flags: [],
-    },
-    {
-        id: "shrooms",
-        name: "Shrooms",
-        description: "Wild mushrooms, some edible, some not.",
-        image: "/general/shrooms.png",
-        type: "general",
-        effects: [{ hp: 3 }],
-        flags: [],
+        flags: ['stackable', "crop"],
+        instanceId: ''
     },
     {
         id: "stone",
@@ -237,7 +275,8 @@ export const generalItems: Item[] = [
         description: "A common stone, useful for basic crafting.",
         image: "/general/stone.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "metal",
@@ -245,7 +284,8 @@ export const generalItems: Item[] = [
         description: "A sheet of scrap metal.",
         image: "/general/metal.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "wood",
@@ -253,7 +293,8 @@ export const generalItems: Item[] = [
         description: "A sturdy log of freshly cut wood, a fundamental resource for building and crafting.",
         image: "/general/wood.png",
         type: "general",
-        flags: [],
+        flags: ['stackable',],
+        instanceId: ''
     },
     {
         id: "tranquility_pearl",
@@ -261,410 +302,279 @@ export const generalItems: Item[] = [
         description: "A luminous pearl said to bring peace and balance to the waters.",
         image: "/general/tranquility_pearl.png",
         type: "general",
-        flags: ['special'],
+        flags: ['stackable', 'special'],
+        instanceId: ''
+    },
+    {
+        id: "potato",
+        name: "Potato",
+        description: "A starchy tuber.",
+        image: "/crops/potato.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "wheat",
+        name: "Wheat",
+        description: "A cereal grain.",
+        image: "/crops/wheat.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "carrot",
+        name: "Carrot",
+        description: "A root vegetable.",
+        image: "/crops/carrot.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "fava_bean",
+        name: "Fava Bean",
+        description: "A type of bean.",
+        image: "/crops/fava_beans.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "kale",
+        name: "Kale",
+        description: "A leafy green vegetable.",
+        image: "/crops/kale.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "parsnip",
+        name: "Parsnip",
+        description: "A root vegetable.",
+        image: "/crops/parsnip.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "snow_pea",
+        name: "Snow Pea",
+        description: "An edible-pod pea.",
+        image: "/crops/snow_pea.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "cucumber",
+        name: "Cucumber",
+        description: "A widely-cultivated creeping vine plant in the gourd family.",
+        image: "/crops/cucumber.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "pumpkin",
+        name: "Pumpkin",
+        description: "A cultivar of winter squash.",
+        image: "/crops/pumpkin.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "mushroom",
+        name: "Mushroom",
+        description: "The fleshy, spore-bearing fruiting body of a fungus.",
+        image: "/crops/mushroom.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "cardamom",
+        name: "Cardamom",
+        description: "A spice made from the seeds of several plants in the genera Elettaria and Amomum.",
+        image: "/crops/cardamom.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "ginseng",
+        name: "Ginseng",
+        description: "The root of plants in the genus Panax.",
+        image: "/crops/ginseng.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "wasabi",
+        name: "Wasabi",
+        description: "A plant of the family Brassicaceae, which also includes horseradish and mustard.",
+        image: "/crops/wasabi.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "dragon_fruit",
+        name: "Dragon Fruit",
+        description: "The fruit of several different cactus species indigenous to the Americas.",
+        image: "/crops/dragon_fruit.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "saffron",
+        name: "Saffron",
+        description: "A spice derived from the flower of Crocus sativus.",
+        image: "/crops/saffron_flower.png",
+        type: "general",
+        flags: ['stackable', "crop"],
+        instanceId: ''
+    },
+    {
+        id: "level_up_point",
+        name: "Level-Up Point",
+        description: "A point used to improve your character.",
+        image: "/general/level_up_point.png",
+        type: "general",
+        flags: ['stackable', 'internal'],
+        instanceId: ''
+    },
+    {
+        id: "arena_silver",
+        name: "Silver Arena Coin",
+        description: "A mark of victory - in silver.",
+        image: "/general/arena_silver.png",
+        type: "general",
+        flags: ['stackable', ''],
+        instanceId: ''
+    },
+    {
+        id: "arena_gold",
+        name: "Arena Gold Coin",
+        description: "A mark of victory - in gold.",
+        image: "/general/arena_gold.png",
+        type: "general",
+        flags: ['stackable', ''],
+        instanceId: ''
+    },
+    {
+        id: "red_bar",
+        name: "Red Bar",
+        description: "Red Ele-Metal Bar.",
+        image: "/general/red_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "purple_bar",
+        name: "Purple Metal Bar",
+        description: "purple Ele-Metal Bar.",
+        image: "/general/purple_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "light_bar",
+        name: "Divine Gold Bar",
+        description: "Light Ele-Metal Bar.",
+        image: "/general/gilded_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "earth_bar",
+        name: "Green Bar",
+        description: "green Ele-Metal Bar.",
+        image: "/general/green_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "sky_bar",
+        name: "Sky Bar",
+        description: "Sky Ele-Metal Bar.",
+        image: "/general/sky_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "water_bar",
+        name: "Water Bar",
+        description: "Water Ele-Metal Bar.",
+        image: "/general/water_bar.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "water_sigil",
+        name: "Water Sigil",
+        description: "Water Sigil - Symbol of Victory.",
+        image: "/general/water_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "wind_sigil",
+        name: "Wind Sigil",
+        description: "Wind Sigil - Symbol of Victory.",
+        image: "/general/wind_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "earth_sigil",
+        name: "Earth Sigil",
+        description: "Earth Sigil - Symbol of Victory.",
+        image: "/general/earth_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "light_sigil",
+        name: "Light Sigil",
+        description: "Light Sigil - Symbol of Victory.",
+        image: "/general/light_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "dark_sigil",
+        name: "Dark Sigil",
+        description: "dark Sigil - Symbol of Victory.",
+        image: "/general/dark_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
+    },
+    {
+        id: "fire_sigil",
+        name: "Fire Sigil",
+        description: "fire Sigil - Symbol of Victory.",
+        image: "/general/fire_sigil.png",
+        type: "general",
+        flags: ['stackable', 'material'],
+        instanceId: ''
     },
 
-    // Relics
-    {
-        id: "bite_mark",
-        name: "Bite Mark",
-        description: "Leaves a faint mark on your neck, a reminder of a passionate night with Hilda.",
-        image: "/relics/bite_mark.png",
-        type: "relic",
-        stats: [{ name: "elementalAttack", value: 15 }, { name: "auraShield", value: 10 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "wachiwis_shorts",
-        name: "Wachiwi's Shorts",
-        description: "Wachiwi's second favourite shorts.",
-        image: "/relics/wachiwis_shorts.png",
-        type: "relic",
-        stats: [{ name: "evasion", value: 10 }, { name: "maxHp", value: 100 }, { name: "critChance", value: .2 }],
-        element: "Earth",
-        flags: ['special'],
-    },
-    {
-        id: "command_of_hell",
-        name: "Command of Hell",
-        description: "Whoever carries this insignia, will command all the Legions of Hell. So Hela fused herself with it.",
-        image: "/relics/command_of_hell.png",
-        type: "relic",
-        stats: [{ name: "physicalDefence", value: 50 }, { name: "elementalAttack", value: 50 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "cygwins_love",
-        name: "Cygwin's Love",
-        description: "Cygwin's heavy iron restraints, surprisingly comfortable, and designed to keep you in place until she is done 'examining' you.",
-        image: "/relics/cygwins_love.png",
-        type: "relic",
-        stats: [{ name: "evasion", value: 10 }, { name: "physicalDefence", value: 10 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "freedom_cry",
-        name: "Freedom Cry",
-        description: "A resonant echo of a forgotten battle cry, capable of shattering magical bonds and inspiring allies with unyielding courage.",
-        image: "/relics/freedom_cry.png",
-        type: "relic",
-        stats: [{ name: "auraShield", value: 12 }, { name: "physicalAttack", value: 8 }],
-        element: "Light",
-        flags: ['special'],
-    },
-    {
-        id: "full_counter",
-        name: "Full Counter",
-        description: "A shimmering amulet that absorbs incoming magical and physical attacks, then unleashes their stored energy back upon the aggressor.",
-        image: "/relics/full_counter.png",
-        type: "relic",
-        stats: [{ name: "physicalAttack", value: 15 }, { name: "physicalDefence", value: 10 }],
-        element: "Light",
-        flags: ['special'],
-    },
-    {
-        id: "helas_whip",
-        name: "Hela's Whip",
-        description: "Hela's formidable whip, crafted from darkness. Strikes anywhere there's a shadow, it leaves a lingering sense of delicious submission.",
-        image: "/relics/helas_whip.png",
-        type: "relic",
-        stats: [{ name: "auraShield", value: 18 }, { name: "elementalAttack", value: 12 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "hymn",
-        name: "Hymn",
-        description: "A celestial melody, imbued with divine grace, that heals wounds and purifies the spirit, warding off malevolent influences.",
-        image: "/relics/hymn.png",
-        type: "relic",
-        stats: [{ name: "elementalDefence", value: 6 }, { name: "evasion", value: 6 }],
-        element: "Light",
-        flags: ['special'],
-    },
-    {
-        id: "lament",
-        name: "Lament",
-        description: "A sorrowful wail trapped within a cursed locket, it can evoke profound despair in enemies, leaving them vulnerable to attack.",
-        image: "/relics/lament.png",
-        type: "relic",
-        stats: [{ name: "elementalAttack", value: 5 }, { name: "speed", value: 5 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "magma_fossil",
-        name: "Magma Fossil",
-        description: "A petrified fragment of primordial magma, it pulses with latent heat, granting resistance to fire and a fiery resolve.",
-        image: "/relics/magma_fossil.png",
-        type: "relic",
-        stats: [{ name: "physicalDefence", value: 150 }, { name: "evasion", value: 20 }],
-        element: "Fire",
-        flags: ['special'],
-    },
-    {
-        id: "nualas_hood",
-        name: "Nuala's Hood",
-        description: "Nuala's silken hood, it conceals your identity when you have nothing else on. The dark elven way for 'open' fun.",
-        image: "/relics/nualas_hood.png",
-        type: "relic",
-        stats: [{ name: "elementalDefence", value: 100 }, { name: "evasion", value: 25 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "oceans_deep",
-        name: "Ocean's Deep",
-        description: "A relic from the abyssal depths, it hums with the eternal, submissive longing of Ariel.",
-        image: "/relics/oceans_deep.png",
-        type: "relic",
-        stats: [{ name: "elementalAttack", value: 10 }, { name: "auraShield", value: 10 }],
-        element: "Water",
-        flags: ['special'],
-    },
-    {
-        id: "red_sutra",
-        name: "Red Sutra",
-        description: "A forbidden thread that ignites carnal urges.",
-        image: "/relics/red_sutra.png",
-        type: "relic",
-        stats: [{ name: "physicalAttack", value: 15 }, { name: "auraShield", value: 10 }],
-        element: "Fire",
-        flags: ['special'],
-    },
-    {
-        id: "nualas_scent",
-        name: "Nuala's Scent",
-        description: "A smooth amethyst crystal, an elven tool for self-pleasure. Nuala enchanted it so it always carries her taste, and scent.",
-        image: "/relics/nualas_scent.png",
-        type: "relic",
-        stats: [{ name: "auraShield", value: 20 }, { name: "evasion", value: 15 }],
-        element: "Dark",
-        flags: ['special'],
-    },
-    {
-        id: "requiem",
-        name: "Requiem",
-        description: "A solemn melody that guides lost souls to their final rest, capable of pacifying restless spirits and calming chaotic energies.",
-        image: "/relics/requiem.png",
-        type: "relic",
-        stats: [{ name: "elementalDefence", value: 7 }, { name: "evasion", value: 7 }],
-        element: "Light",
-        flags: ['special'],
-    },
-    {
-        id: "seabed_fossil",
-        name: "Seabed Fossil",
-        description: "A fossilized fragment from the deepest trenches of the ocean, it grants the wearer the evasion of the deep sea and a connection to ancient aquatic magic.",
-        image: "/relics/seabed_fossil.png",
-        type: "relic",
-        stats: [{ name: "elementalDefence", value: 150 }, { name: "speed", value: 30 }],
-        element: "Water",
-        flags: ['special'],
-    },
-
-    // Weapons
-    {
-        id: "beloved_eye",
-        name: "Beloved's Eye",
-        description: "The watchful eye of an immortal sorceress, formed into a sword.",
-        image: "/weapons/beloved_eye.png",
-        type: "weapon",
-        stats: [{ name: "maxHp", value: 50 }, { name: "physicalAttack", value: 10 }, { name: "elementalAttack", value: 40 }],
-        element: "Dark",
-        mastery: 50,
-        flags: ['special'],
-        exploration: [{ name: 'Dark', level: 1 }]
-    },
-    {
-        id: "amaterasu",
-        name: "Amaterasu",
-        description: "A sword wreathed in dark flames, burning with ancient power.",
-        image: "/weapons/amaterasu.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 25 }, { name: "elementalAttack", value: 50 }],
-        element: "Light",
-        mastery: 50,
-        flags: ['special'],
-        exploration: [{ name: 'Light', level: 1 }]
-    },
-    {
-        id: "burning_cutlass",
-        name: "Burning Cutlass",
-        description: "A pirate's cutlass, enchanted with a fiery edge.",
-        image: "/weapons/burning_cutlass.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 75 }, { name: "speed", value: 5 }],
-        element: "Fire",
-        mastery: 50,
-        flags: ['special'],
-        exploration: [{ name: 'Fire', level: 1 }]
-    },
-    {
-        id: "dawnbringer",
-        name: "Dawnbringer",
-        description: "The legendary Dawnbringer, evolved to its ultimate form.",
-        image: "/weapons/dawnbringer.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 75 }, { name: "elementalDefence", value: 10 }],
-        element: "Fire",
-        mastery: 25,
-        flags: ['special'],
-        exploration: [{ name: 'Fire', level: 1 }]
-    },
-    {
-        id: "fatespinner",
-        name: "Fatespinner",
-        description: "A weapon that weaves destiny, altering the flow of battle.",
-        image: "/weapons/fatespinner.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 100 }, { name: "evasion", value: 10 }],
-        element: "Dark",
-        mastery: 30,
-        flags: ['special'],
-        exploration: [{ name: 'Dark', level: 2 }]
-    },
-    {
-        id: "hellward_lance",
-        name: "Hellward Lance",
-        description: "A formidable lance, capable of piercing the defenses of hellish foes.",
-        image: "/weapons/hellward_lance.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 50 }, { name: "physicalDefence", value: 25 }],
-        element: "Dark",
-        mastery: 20,
-        flags: ['special'],
-        exploration: [{ name: 'Dark', level: 1 }]
-    },
-    {
-        id: "kyoka_suigetsu",
-        name: "Kyoka Suigetsu",
-        description: "A graceful weapon, shimmering with the light of the moon on water.",
-        image: "/weapons/kyoka_suigetsu.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 37 }, { name: "elementalAttack", value: 37 }],
-        element: "Water",
-        mastery: 18,
-        flags: ['special'],
-        exploration: [{ name: 'Water', level: 1 }]
-    },
-    {
-        id: "pleasure",
-        name: "Pleasure",
-        description: "A deceptively beautiful weapon, bringing joy to its wielder and despair to foes.",
-        image: "/weapons/pleasure.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 75 }, { name: "speed", value: 5 }],
-        element: "Earth",
-        mastery: 15,
-        flags: ['special'],
-        exploration: [{ name: 'Earth', level: 1 }]
-    },
-    {
-        id: "raikiri",
-        name: "Raikiri",
-        description: "A legendary sword, capable of cutting lightning itself.",
-        image: "/weapons/raikiri.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 37 }, { name: "speed", value: 15 }],
-        element: "Wind",
-        mastery: 22,
-        flags: ['special'],
-        exploration: [{ name: 'Wind', level: 1 }]
-    },
-    {
-        id: "raven_sword",
-        name: "Raven Sword",
-        description: "A dark sword, adorned with raven feathers, hinting at shadowy powers.",
-        image: "/weapons/raven_sword.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 25 }, { name: "elementalAttack", value: 50 }],
-        element: "Dark",
-        mastery: 20,
-        flags: ['special'],
-        exploration: [{ name: 'Dark', level: 1 }]
-    },
-    {
-        id: "royal_greatsword",
-        name: "Royal Greatsword",
-        description: "A magnificent greatsword, fit for a king and devastating in battle.",
-        image: "/weapons/royal_greatsword.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 75 }, { name: "physicalDefence", value: 10 }],
-        element: "Wind",
-        mastery: 15,
-        flags: ['special'],
-        exploration: [{ name: 'Wind', level: 1 }]
-    },
-    {
-        id: "sky_fan",
-        name: "Sky Fan",
-        description: "A delicate fan, capable of conjuring powerful gusts of wind.",
-        image: "/weapons/sky_fan.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 75 }, { name: "speed", value: 5 }],
-        element: "Wind",
-        mastery: 15,
-        flags: ['special'],
-        exploration: [{ name: 'Wind', level: 1 }]
-    },
-    {
-        id: "unity",
-        name: "Unity",
-        description: "A weapon symbolizing harmony, granting strength through cooperation.",
-        image: "/weapons/unity.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 150 }, { name: "elementalDefence", value: 35 }],
-        element: "Light",
-        mastery: 40,
-        flags: ['special'],
-        exploration: [{ name: 'Fire', level: 4 }, { name: 'Wind', level: 4 }, { name: 'Water', level: 4 }, { name: 'Earth', level: 4 }]
-    },
-    {
-        id: "vine_whip",
-        name: "Vine Whip",
-        description: "A flexible whip made of enchanted vines, entangling foes.",
-        image: "/weapons/vine_whip.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 75 }, { name: "speed", value: 5 }],
-        element: "Earth",
-        mastery: 15,
-        flags: ['special'],
-        exploration: [{ name: 'Earth', level: 1 }]
-    },
-    {
-        id: "xochi",
-        name: "Xochi",
-        description: "A sword with a vibrant green hue, imbued with Earth's power.",
-        image: "/weapons/xochi.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 25 }, { name: "elementalAttack", value: 50 }],
-        element: "Earth",
-        mastery: 20,
-        flags: ['special'],
-        exploration: [{ name: 'Earth', level: 1 }]
-    },
-    {
-        id: "water_whip",
-        name: "Water Whip",
-        description: "A whip made of solidified water, striking with fluid force.",
-        image: "/weapons/water_whip.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 75 }, { name: "speed", value: 5 }],
-        element: "Water",
-        mastery: 30,
-        flags: ['special'],
-        exploration: [{ name: 'Water', level: 1 }]
-    },
-    {
-        id: "medusa_scissors",
-        name: "Medusa Scissors",
-        description: "...wait what??",
-        image: "/weapons/medusa_scissors.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 75 }, { name: "speed", value: 10 }],
-        element: "Dark",
-        mastery: 60,
-        flags: ['special'],
-        exploration: [{ name: 'Dark', level: 1 }]
-    },
-    {
-        id: "queens_trident",
-        name: "Queen's Trident",
-        description: "A light and agile weapon, allowing its user to move like the wind.",
-        image: "/weapons/queens_trident.png",
-        type: "weapon",
-        stats: [{ name: "elementalAttack", value: 180 }, { name: "elementalDefence", value: 70 }],
-        element: "Water",
-        mastery: 50,
-        flags: ['special'],
-        exploration: [{ name: 'Water', level: 3 }]
-    },
-    {
-        id: "frostfall",
-        name: "Frostfall",
-        description: "A light and agile weapon, allowing its user to move like the wind.",
-        image: "/weapons/frostfall.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 25 }, { name: "elementalAttack", value: 50 }],
-        element: "Water",
-        mastery: 20,
-        flags: ['special'],
-        exploration: [{ name: 'Water', level: 1 }]
-    },
-    {
-        id: "saints_greatsword",
-        name: "Saint's Greatsword",
-        description: "A blessed greatsword; standard issue for the Saints Ten.",
-        image: "/weapons/saints_greatsword.png",
-        type: "weapon",
-        stats: [{ name: "physicalAttack", value: 100 }, { name: "physicalDefence", value: 20 }],
-        element: "Light",
-        mastery: 25,
-        flags: ['special'],
-        exploration: [{ name: 'Light', level: 1 }]
-    }
+    
 ];

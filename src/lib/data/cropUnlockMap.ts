@@ -20,16 +20,16 @@ function generatePlotKey(environment: string, appliedTech: string[]): string {
 for (const cropId in cropDefinitions) {
     const cropDef = cropDefinitions[cropId];
 
-    // For each required environment, and for each combination of requiredTech,
+    // For each required environment, and for each combination of requiredTechs,
     // add the crop to the map. This can lead to multiple entries for a single crop
     // if it can be grown in different configurations.
 
     // This is a simplified approach. A more robust solution might involve
     // generating all possible valid tech combinations for each environment.
-    // For now, we'll just use the exact requiredEnvironment and requiredTech from the cropDef.
+    // For now, we'll just use the exact requiredEnvironment and requiredTechs from the cropDef.
 
-    // If a crop has no requiredTech, it just needs the environment.
-    if (cropDef.requiredTech.length === 0) {
+    // If a crop has no requiredTechs, it just needs the environment.
+    if (cropDef.requiredTechs.length === 0) {
         cropDef.requiredEnvironment.forEach(env => {
             const key = generatePlotKey(env, []);
             if (!cropUnlockMap[key]) {
@@ -38,9 +38,9 @@ for (const cropId in cropDefinitions) {
             cropUnlockMap[key].push(cropId);
         });
     } else {
-        // If a crop has requiredTech, it needs both the environment and ALL of those techs.
+        // If a crop has requiredTechs, it needs both the environment and ALL of those techs.
         cropDef.requiredEnvironment.forEach(env => {
-            const key = generatePlotKey(env, cropDef.requiredTech);
+            const key = generatePlotKey(env, cropDef.requiredTechs);
             if (!cropUnlockMap[key]) {
                 cropUnlockMap[key] = [];
             }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questTrackerState, toggleQuestTracker } from '$lib/stores/uiStore';
+	import { questTrackerState, toggleQuestTracker, toggleSummarised } from '$lib/stores/uiStore';
 	import { questStore } from '$lib/stores/questStore';
 	import { questProgressStore } from '$lib/stores/questProgressStore';
 	import { npcStore } from '$lib/stores/npcStore';
@@ -30,17 +30,27 @@
 				return '/game_icons/expression_confused.png';
 		}
 	}
+
+	function toggleView() {
+		if ($questTrackerState.isCollapsed) {
+			toggleQuestTracker();
+		}
+		toggleSummarised();
+	}
 </script>
+	<!-- use:draggable={{
+		storageKey: 'quest-tracker-position',
+		initialPosition: { x: this.innerWidth - 300, y: this.innerHeight - 400 }
+	}} -->
 
 <div
 	class="widget-container"
-	use:draggable={{
-		storageKey: 'quest-tracker-position',
-		initialPosition: { x: window.innerWidth - 300, y: window.innerHeight - 400 }
-	}}
 >
 	<div class="widget-header drag-handle">
 		<span>Active Quests</span>
+		<button class="toggle-button" on:click|stopPropagation={toggleView}>
+			{$questTrackerState.isSummarised ? 'Full' : 'Mini'}
+		</button>
 		<button class="toggle-button" on:click|stopPropagation={toggleQuestTracker}>
 			{$questTrackerState.isCollapsed ? '+' : '-'}
 		</button>
@@ -55,13 +65,15 @@
 					{@const giverName = $npcStore.globalNpcs[quest.giver]?.name || 'Unknown'}
 					{@const icon = getQuestIcon(quest, status)}
 					<div class="quest">
-						<div class="quest-title">
-							<img src={icon} alt="icon" class="quest-icon" />
-							<div class="cont">
-								<span>{giverName}</span><br />
-								{quest.title}
+						{#if !$questTrackerState.isSummarised}
+							<div class="quest-title">
+								<img src={icon} alt="icon" class="quest-icon" />
+								<div class="cont">
+									<span>{giverName}</span><br />
+									{quest.title}
+								</div>
 							</div>
-						</div>
+						{/if}
 						<div class="objectives">
 							{#if currentStage}
 								<ul>
@@ -86,41 +98,45 @@
 </div>
 
 <style>
+	p {
+		padding: 0.25rem 0.5rem;
+	}
 	.ready {
-		color: #4ade80; /* Tailwind Green 400 */
-        /* list-style-type: '🟩 '; */
+		color: #4ade80;
+		/* list-style-type: '🟩 '; */
 	}
 	.ongoing {
-        color: #facc15; /* Tailwind Yellow 400 */
-        /* list-style-type: '🟨 '; */
+		color: #facc15;
+		/* list-style-type: '🟨 '; */
 	}
 	.failed {
-        color: #f87171; /* Tailwind Red 400 */
-        /* list-style-type: '🟥 '; */
+		color: #f87171;
+		/* list-style-type: '🟥 '; */
 		text-decoration: line-through;
 	}
 	.widget-container {
-		position: absolute;
-		width: 300px;
-		background-color: #2b2d4280;
+		/* position: absolute; */
+		width: 13rem;
+		/* background-color: #ffffff27; */
 		border: 1px solid var(--color-border);
-		border-radius: 5px;
+		/* border-radius: 5px; */
 		color: white;
 		font-family: var(--font-family-pixel);
-		font-size: 0.9em;
-		backdrop-filter: blur(10px);
+		font-size: 0.75rem;
+		backdrop-filter: blur(2px);
 		z-index: 10;
+		box-sizing: border-box;
 	}
 
 	.widget-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.4em 0.6em;
-		background-color: var(--color-secondary);
+		padding: 0.25rem 0.5rem;
+		/* background-color: var(--surface-2); */
 		cursor: grab;
-		border-bottom: 1px solid var(--color-surface-1);
-        color: var(--color-primary);
+		/* border-bottom: 1px solid var(--surface-1); */
+		color: var(--color-text);
 	}
 
 	.toggle-button {
@@ -135,58 +151,67 @@
 	}
 
 	.widget-body {
-		padding: 0.5rem;
+		/* padding: 0.5rem; */
 	}
 
 	.widget-body ul {
-        padding: .5rem 0.5rem 1rem 0.5rem;
 		/* padding-left: 0rem; */
-		margin: 0rem 0 0 0;
-        list-style: '';
-        list-style-position: inside;
+		list-style: '- ';
+		list-style-position: inside;
+		padding: 0;
+		margin: 0;
+		padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 	}
 
 	.quest {
-        position: relative;
-		margin-bottom: 0.75rem;
-        height: fit-content;
+		position: relative;
+		/* margin-bottom: 0.75rem; */
+		height: fit-content;
 		/* border: 1px solid white; */
-		/* background-color: var(--color-surface-2); */
+		/* background-color: var(--surface-2); */
+		background-color: rgba(0, 0, 0, 0.4);
 	}
 
 	.quest-title {
-        padding: .5rem;
-        position: relative;
+		/* border: 1px solid white; */
+		padding: 0 0.5rem;
+		position: relative;
 		/* font-weight: bold; */
-        background-color: rgba(0, 0, 0, 0.4);
 		color: var(--text-item-name);
 		display: flex;
 		align-items: center;
 		span {
-            color: var(--text-header);
-            margin-left: auto;
-            font-size: .75rem;
+			color: var(--text-header);
+			margin: auto auto auto 0;
+			font-size: 0.75rem;
+			text-transform: uppercase;
 		}
 	}
-    
-    .cont {
-        width: 100%;
-        padding: 0 .5rem;
-        display: flex;
-        /* gap: 1rem; */
-        align-items: flex-start;
-        justify-content: bottom;
-        flex-direction: row-reverse;
-        /* flex-direction: column; */
-    }
+
+	.cont {
+		font-size: 0.75rem;
+		width: 100%;
+		padding: 0.5rem;
+		display: flex;
+		/* gap: 1rem; */
+		/* align-items: flex-end; */
+		/* flex-direction: row-reverse; */
+		flex-direction: column;
+		/* border: 1px solid white; */
+	}
 
 	.quest-icon {
-		height: 20px;
-        margin: 0;
-        margin-inline: 0 .25rem;
+		height: 1rem;
+		margin: 0;
+		margin-inline: 0 0.25rem;
 	}
-    .objectives {
-        background-color: rgba(36, 91, 185, 0.25);
-        border-radius: 0 0 10px 10px;
-    }
+	.objectives {
+		height: fit-content;
+		/* background-color: rgba(0, 0, 0, 0.2); */
+		/* border-radius: 0 0 10px 10px; */
+		/* display: flex; */
+		/* justify-content: center; */
+		/* align-items: center; */
+		/* border: 1px solid black; */
+	}
 </style>

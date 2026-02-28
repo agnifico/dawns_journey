@@ -11,10 +11,7 @@
 
 <style>
     .coordinate-display {
-        position: absolute;
-        top: 5%;
-        left: 0;
-        /* inset: 0; */
+
         height: fit-content;
         background-color: rgba(0, 0, 0, 0.2);
         color: white;
@@ -22,11 +19,11 @@
         /* border-radius: 5px; */
         font-family: monospace;
         font-size: 14px;
-        z-index: 10;
+        z-index: 1;
         /* clip-path: polygon(28% 0%, 0 0, 0% 28%); */
         /* backdrop-filter: blur(20px); */
         /* border: 1px solid salmon; */
-        background-color: var(--color-surface-2);
+        background-color: var(--surface-2);
     }
     p {
         padding: 0;

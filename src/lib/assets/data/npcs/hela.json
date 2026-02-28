@@ -26,13 +26,14 @@
         "auraShield": 100,
         "maxAuraShield": 100,
         "physicalAttack": 300,
-        "physicalDefence": 450,
+        "physicalDefence": 270,
         "elementalAttack": 450,
-        "elementalDefence": 300,
+        "elementalDefence": 270,
         "speed": 90,
         "evasion": 70,
         "critChance": 0.6,
-        "critDamage": 2
+        "critDamage": 2,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,

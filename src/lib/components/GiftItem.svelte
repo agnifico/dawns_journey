@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     import { playerStore } from '$lib/stores/playerStore';
-    import { getAllItems } from '$lib/services/ItemDataService';
+    import { getAllItems } from '$lib/services/InventoryService';
 
     export let npcId: string;
 
@@ -18,7 +18,7 @@
         generalInventoryItems = $playerStore.inventory
             .map((invItem) => ({
                 ...invItem,
-                details: itemMap.get(invItem.itemId)
+                details: itemMap.get(invItem.id)
             }))
             .filter((item) => item.details && item.details.type === 'general');
 

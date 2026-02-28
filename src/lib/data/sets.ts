@@ -8,26 +8,26 @@ export const sets: Set[] = [
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'speed', value: 15 }]
+                stats: [{ name: 'speed', value: 75 }]
             },
             {
                 pieces: 4,
-                stats: [{ name: 'elementalAttack', value: 25 }, { name: 'elementalDefence', value: 25 }]
+                stats: [{ name: 'elementalAttack', value: 125 }, { name: 'elementalDefence', value: 125 }]
             }
         ]
     },
     {
         id: 'toys',
         name: 'Hela\'s Toys',
-        relicIds: ['helas_whip', 'wachiwis_shorts', 'cygwins_love', 'nualas_scent'],
+        relicIds: ['helas_whip', 'sylvies_shorts', 'nualas_hood', 'wicked_jewel'],
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'maxHp', value: 50 }]
+                stats: [{ name: 'maxHp', value: 500 }]
             },
             {
                 pieces: 4,
-                stats: [{ name: 'physicalAttack', value: 20 }, { name: 'critChance', value: 0.10 }]
+                stats: [{ name: 'physicalAttack', value: 150 }, { name: 'critChance', value: 0.10 }]
             }
         ]
     },
@@ -39,6 +39,25 @@ export const sets: Set[] = [
             {
                 pieces: 2,
                 stats: [{ name: 'physicalDefence', value: 50 }, { name: 'elementalDefence', value: 50 }]
+            }
+        ]
+    },
+    {
+        id: 'beach_day',
+        name: 'Beach Day',
+        relicIds: ['green_bra', 'green_bikini', 'pink_sarong', 'orange_bandana'],
+        bonuses: [
+            {
+                pieces: 2,
+                stats: [{ name: 'physicalDefence', value: 100 }, { name: 'elementalDefence', value: 100 }]
+            },
+            {
+                pieces: 3,
+                stats: [{ name: 'physicalDefence', value: 150 }, { name: 'elementalDefence', value: 150 }]
+            },
+            {
+                pieces: 4,
+                stats: [{ name: 'physicalDefence', value: 200 }, { name: 'elementalDefence', value: 200 }]
             }
         ]
     }

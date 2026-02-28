@@ -1,7 +1,6 @@
 <script lang="ts">
     import { notificationStore, type Notification } from '$lib/stores/notificationStore';
     import { fly } from 'svelte/transition';
-    import ItemBox from './ItemBox.svelte';
 
     const typeIcons = {
         item_received: 'item_received.svg',
@@ -22,7 +21,7 @@
                 <img src="/game_icons/{typeIcons[notification.type]}" alt={notification.type} />
             </div>
             <div class="item-info">
-                <ItemBox item={notification.item} viewSize="small" base="" />
+                <img src={notification.item.image} alt="" srcset="" class="item-img">
                 <span class="item-name">{notification.item.name}</span>
                 {#if notification.quantity > 1}
                     <span class="item-quantity">x{notification.quantity}</span>
@@ -34,7 +33,7 @@
 
 <style>
     .notification-container {
-        position: fixed;
+        position: absolute;
         bottom: 20px;
         left: 20px;
         display: flex;
@@ -49,7 +48,7 @@
         background-color: var(--surface-3);
         border: 1px solid;
         border-radius: 5px;
-        padding: 0.25rem 0.5rem;
+        padding: 0rem 0.5rem;
         width: 200px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         color: var(--color-text);
@@ -73,8 +72,8 @@
     }
 
     .icon img {
-        width: 20px;
-        height: 20px;
+        width: 10px;
+        height: 10px;
     }
 
     .item-info {

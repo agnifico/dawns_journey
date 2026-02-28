@@ -1,55 +1,113 @@
-import { writable } from 'svelte/store';
-import type { MapData, Position, LandscapeData } from '$lib/types'; // Import Position and LandscapeData
+import { writable, derived } from 'svelte/store';
+import type { MapData, Position, LandscapeData, ExplorationRequirement } from '$lib/types';
+
+export interface RegionNotificationData {
+	regionName: string;
+	requirements?: ExplorationRequirement[];
+	visible: boolean;
+}
 
 export interface MapState {
-    currentMapId: string;
-    mapData: MapData | null;
-    playerX: number; // Added
-    playerY: number; // Added
+	currentMapId: string;
+	maps: { [mapId: string]: MapData };
+	playerX: number;
+	playerY: number;
+	regionNotification: RegionNotificationData;
+	landscape: LandscapeData | null;
 }
 
 const initialState: MapState = {
-    currentMapId: 'dragon_island',
-    mapData: null,
-    playerX: 0, // Initial default
-    playerY: 0, // Initial default
+	currentMapId: 'dragon_island',
+	maps: {},
+	playerX: 0,
+	playerY: 0,
+	regionNotification: {
+		regionName: '',
+		requirements: [],
+		visible: false
+	},
+	landscape: null
 };
 
 function createMapStore() {
-    const { subscribe, update, set } = writable<MapState>(initialState);
+	const { subscribe, update, set } = writable<MapState>(initialState);
 
-    return {
-        subscribe,
-        set,
-        update,
-        addObject: (object: any) => {
-            update(state => {
-                if (!state.mapData) return state;
-                // Prevent adding duplicates
-                const objectExists = state.mapData.objects.some(o => o.x === object.x && o.y === object.y);
-                if (objectExists) return state;
+	return {
+		subscribe,
+		set,
+		update,
+		addObject: (object: any) => {
+			update((state) => {
+				const mapData = state.maps[state.currentMapId];
+				if (!mapData) return state;
 
-                const newObjects = [...state.mapData.objects, object];
-                const newMapData = { ...state.mapData, objects: newObjects };
-                return { ...state, mapData: newMapData };
-            });
-        },
-        setMapData: (newMapData: MapData) => { // Added function
-            update(state => ({
-                ...state,
-                mapData: newMapData,
-                playerX: newMapData.playerStart.x, // Set initial player position from map data
-                playerY: newMapData.playerStart.y, // Set initial player position from map data
-            }));
-        },
-        setPlayerPosition: (x: number, y: number) => { // Added function
-            update(state => ({
-                ...state,
-                playerX: x,
-                playerY: y,
-            }));
-        }
-    };
+				const objectExists = mapData.objects.some((o) => o.x === object.x && o.y === object.y);
+				if (objectExists) return state;
+
+				const newObjects = [...mapData.objects, object];
+				const newMapData = { ...mapData, objects: newObjects };
+				const newMaps = { ...state.maps, [state.currentMapId]: newMapData };
+				return { ...state, maps: newMaps };
+			});
+		},
+		setMapData: (mapId: string, newMapData: MapData) => {
+			update((state) => ({
+				...state,
+				maps: { ...state.maps, [mapId]: newMapData },
+			}));
+		},
+		setPlayerPosition: (x: number, y: number) => {
+			update((state) => ({
+				...state,
+				playerX: x,
+				playerY: y
+			}));
+		},
+		showRegionNotification: (regionName: string, requirements?: ExplorationRequirement[]) => {
+			update((state) => ({
+				...state,
+				regionNotification: {
+					regionName,
+					requirements,
+					visible: true
+				}
+			}));
+		},
+		hideRegionNotification: () => {
+			update((state) => ({
+				...state,
+				regionNotification: {
+					...state.regionNotification,
+					visible: false
+				}
+			}));
+		}
+	};
 }
 
 export const mapStore = createMapStore();
+
+export const currentMapData = derived(mapStore, ($mapStore) => {
+	return $mapStore.maps[$mapStore.currentMapId] ?? null;
+});
+
+export const landscapeImage = derived([mapStore, currentMapData], ([$mapStore, $currentMapData]) => {
+	const { playerX, playerY } = $mapStore;
+	if (!$currentMapData) return '';
+
+	let currentLandscape;
+	for (const landscape of $currentMapData.landscapes) {
+		if (
+			playerX >= landscape.x &&
+			playerX < landscape.x + landscape.width &&
+			playerY >= landscape.y &&
+			playerY < landscape.y + landscape.height
+		) {
+			currentLandscape = landscape.landscape;
+			break;
+		}
+	}
+
+	const landscapeId = currentLandscape || $currentMapData.defaultLandscape;
+	return landscapeId ? `/locations/${landscapeId}.jpg` : '';
+});

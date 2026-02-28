@@ -27,8 +27,6 @@
 
     .combat-modal-content {
         width: 80%;
-        max-width: 800px;
         height: 80%;
-        max-height: 600px;
     }
 </style>

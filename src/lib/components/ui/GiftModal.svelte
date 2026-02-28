@@ -2,7 +2,7 @@
     import { isGiftModalOpen, closeGiftModal, giftTargetNpcId } from '$lib/stores/uiStore';
     import { playerStore } from '$lib/stores/playerStore';
     import { npcStore } from '$lib/stores/npcStore';
-    import { getAllItems } from '$lib/services/ItemDataService';
+    import { getAllItems, countInventoryItem } from '$lib/services/InventoryService';
     import { fade } from 'svelte/transition';
     import type { GiftingOption } from '$lib/types';
 
@@ -27,7 +27,6 @@
     function handleConfirm(option: GiftingOption) {
         if (!$giftTargetNpcId) return;
         npcStore.fulfillGiftingOption($giftTargetNpcId, option);
-        // Maybe close the modal or update the view depending on desired UX
     }
 
     function handleCancel() {
@@ -35,8 +34,7 @@
     }
 
     function playerHasItems(option: GiftingOption): boolean {
-        const itemInInventory = $playerStore.inventory.find(i => i.itemId === option.itemId);
-        return itemInInventory ? itemInInventory.amount >= option.quantity : false;
+        return countInventoryItem($playerStore.inventory, option.itemId) >= option.quantity;
     }
 </script>
 

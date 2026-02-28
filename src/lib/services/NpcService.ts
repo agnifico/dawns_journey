@@ -2,11 +2,12 @@ import type { NPC, Player, Requirement, Reward, GiftingOption, RankData, Quest }
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { mapStore } from '$lib/stores/mapStore';
-import { addItem, removeItem } from './ItemService';
+import { addItems, removeItemsByItemId } from './InventoryService';
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
 import { questStore } from '$lib/stores/questStore';
 import { checkRequirement, checkQuestTriggers } from './QuestService';
+import { increaseFactionScore } from './FactionService';
 
 
 function createRequirementSnapshot(player: Player, requirement: Requirement): any {
@@ -40,7 +41,7 @@ function handleRewards(player: Player, rewards: Reward[]): Player {
     let newPlayer = { ...player };
     for (const reward of rewards) {
         if (reward.type === 'item') {
-            newPlayer = addItem(newPlayer, reward.itemId, reward.quantity);
+            newPlayer = addItems(newPlayer, reward.itemId, reward.quantity);
         } else if (reward.type === 'tag') {
             if (!newPlayer.worldTags.includes(reward.tagId)) {
                 newPlayer.worldTags.push(reward.tagId);
@@ -110,13 +111,13 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                 if (rankData.stages.length === 1) {
                     questStore.setQuestState(quest.id, 'COMPLETED');
                     updatedNpc.swordRank++;
-                    messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
                     updatedPlayer = checkQuestTriggers(updatedPlayer);
                 } else {
                     questStore.advanceQuestStage(quest.id);
                 }
             } else {
-                dialogueStore.startDialogue(firstStage.intro_dialogue || ["A new opportunity awaits."], npc.name);
+                dialogueStore.startDialogue(firstStage.intro_dialogue || ["I have a NEW TASK for you."], npc.name);
             }
         }
         return { updatedNpc, updatedPlayer };
@@ -143,7 +144,7 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
             if (currentStageIndex >= rankData.stages.length - 1) {
                 questStore.setQuestState(quest.id, 'COMPLETED');
                 updatedNpc.swordRank++;
-                messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
                 updatedPlayer = checkQuestTriggers(updatedPlayer);
             } else {
                 questStore.advanceQuestStage(quest.id);
@@ -160,14 +161,22 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                 updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
             }
             
-            if (stage.success_dialogue) {
-                dialogueStore.startDialogue(stage.success_dialogue, npc.name);
+            let finalDialogue = stage.success_dialogue || [];
+            if (currentStageIndex < rankData.stages.length - 1) {
+                const nextStage = rankData.stages[currentStageIndex + 1];
+                if (nextStage && nextStage.intro_dialogue) {
+                    finalDialogue = [...finalDialogue, ...nextStage.intro_dialogue];
+                }
+            }
+
+            if (finalDialogue.length > 0) {
+                dialogueStore.startDialogue(finalDialogue, npc.name);
             }
 
             if (currentStageIndex >= rankData.stages.length - 1) {
                 questStore.setQuestState(quest.id, 'COMPLETED');
                 updatedNpc.swordRank++;
-                messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+                messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
                 updatedPlayer = checkQuestTriggers(updatedPlayer);
             } else {
                 questStore.advanceQuestStage(quest.id);
@@ -213,7 +222,7 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                 dialogueStore.startDialogue(finalStage.success_dialogue, npc.name);
             }
             updatedNpc.swordRank++;
-            messageStore.addMessage(`Your Sword Rank with ${npc.name} is now ${npc.swordRank}.`, ['World', 'Update']);
+            messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'Update']);
             updatedPlayer = checkQuestTriggers(updatedPlayer);
         } else {
             const dialogue = rankData.post_completion_dialogue || [`${npc.name} has nothing new to say.`];
@@ -255,6 +264,11 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
                 updatedNpc.heartRank++;
                 updatedNpc.heartState = 'NOT_STARTED';
                 updatedNpc.affinity -= 10;
+
+                if (updatedNpc.faction) {
+                    const multiplier = heartRankData.factionScoreMultiplier || 1;
+                    increaseFactionScore(updatedNpc.faction, 1 * multiplier);
+                }
                 
                 if (heartRankData.rank_up_dialogue) {
                     dialogueStore.startDialogue(heartRankData.rank_up_dialogue, updatedNpc.name);
@@ -296,7 +310,7 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
 export function fulfillGiftingOption(npc: NPC, player: Player, option: GiftingOption): { updatedNpc: NPC, updatedPlayer: Player } {
     let updatedNpc = JSON.parse(JSON.stringify(npc));
     
-    const itemInInventory = player.inventory.find(i => i.itemId === option.itemId);
+    const itemInInventory = player.inventory.find(i => i.id === option.itemId);
     if (!itemInInventory || itemInInventory.amount < option.quantity) {
         messageStore.addMessage(`You don't have enough ${option.itemId}.`, ['World', 'Error']);
         return { updatedNpc, updatedPlayer: player };
@@ -311,7 +325,7 @@ export function fulfillGiftingOption(npc: NPC, player: Player, option: GiftingOp
         messageStore.addMessage(`You feel your connection with ${updatedNpc.name} has deepened. You should Talk to them.`, ['World', 'Update']);
     }
 
-    const updatedPlayer = removeItem(player, option.itemId, option.quantity);
+    const updatedPlayer = removeItemsByItemId(player, option.itemId, option.quantity);
     
     return { updatedNpc, updatedPlayer };
 }

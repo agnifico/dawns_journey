@@ -3,22 +3,20 @@
 	import { game } from '$lib/game/game';
 	import type { Item, Set } from '$lib/types';
 	import ItemBox from './ItemBox.svelte';
-	import { getItemById } from '$lib/services/ItemDataService';
+	import { getItemById } from '$lib/services/InventoryService';
 	import { getSetForRelic } from '$lib/services/SetDataService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
 	import Stat from './Stat.svelte';
 	import { afterUpdate } from 'svelte';
+	import { derived } from 'svelte/store';
 	import ExploBubble from './ExploBubble.svelte';
 	import MasteryDisplay from './ui/MasteryDisplay.svelte';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import InstantEffectDisplay from './ui/InstantEffectDisplay.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
-	import { activeItem } from '$lib/stores/uiStore';
-
-	let currentTab: 'general' | 'weapons' | 'relics' | 'homestead' = 'general';
-	let homesteadSubTab: 'farming' | 'crafting' = 'farming';
-	let scrollContent: HTMLDivElement;
-	let isScrollable = false;
+	import { activeItem, inventoryTab, homesteadSubTab } from '$lib/stores/uiStore';
+    import InventoryFilterBar from './ui/InventoryFilterBar.svelte';
+    import { inventoryFilterStore } from '$lib/stores/inventoryFilterStore';
 
 	const isConsumable = (item: Item) =>
 		item.type === 'general' &&
@@ -26,25 +24,92 @@
 			(item.activeEffects && item.activeEffects.length > 0));
 	const isEquippable = (item: Item) => item.type === 'weapon' || item.type === 'relic';
 
-	$: filteredInventory = $playerStore.inventory.filter((inventoryItem) => {
-		const item = getItemById(inventoryItem.itemId);
-		if (!item) return false;
-		switch (currentTab) {
-			case 'weapons':
-				return item.type === 'weapon';
-			case 'relics':
-				return item.type === 'relic';
-			case 'homestead':
-				if (homesteadSubTab === 'farming') {
-					return item.flags?.includes('crop') || item.flags?.includes('seed');
+    $: ({ elementFilter, tagFilters, statSort } = $inventoryFilterStore);
+
+	const filteredInventory = derived(
+		[playerStore, inventoryTab, homesteadSubTab, inventoryFilterStore],
+		([$playerStore, $inventoryTab, $homesteadSubTab, $inventoryFilterStore]) => {
+			let itemsToFilter = $playerStore.inventory.filter((item) => {
+				if (!item) return false;
+				switch ($inventoryTab) {
+					case 'weapons':
+						return item.type === 'weapon';
+					case 'relics':
+						return item.type === 'relic';
+					case 'homestead':
+						if ($homesteadSubTab === 'farming') {
+							return item.flags?.includes('crop') || item.flags?.includes('seed');
+						}
+						return false;
+					case 'general':
+					default:
+						return (
+							item.type === 'general' &&
+							!item.flags?.includes('seed') &&
+							!item.flags?.includes('crop')
+						);
 				}
-				return false;
-			case 'general':
-			default:
-				return (
-					item.type === 'general' && !item.flags?.includes('crop') && !item.flags?.includes('seed')
-				);
+			});
+
+            // Apply element filter (only for weapons tab)
+            if ($inventoryFilterStore.elementFilter && $inventoryTab === 'weapons') {
+                itemsToFilter = itemsToFilter.filter(item =>
+                    item.type === 'weapon' && item.element === $inventoryFilterStore.elementFilter
+                );
+            }
+
+            // Apply tag filters
+            if ($inventoryFilterStore.tagFilters.length > 0) {
+                itemsToFilter = itemsToFilter.filter(item =>
+                    item.flags?.some(flag => $inventoryFilterStore.tagFilters.includes(flag))
+                );
+            }
+
+            // Apply stat sorting
+            if ($inventoryFilterStore.statSort) {
+                const { statId, direction } = $inventoryFilterStore.statSort;
+                itemsToFilter.sort((a, b) => {
+                    const getStatValue = (item: Item, id: string) => {
+                        const stat = item.stats?.find(s => s.name === id);
+                        return stat ? stat.value : 0;
+                    };
+
+                    const aStat = getStatValue(a, statId);
+                    const bStat = getStatValue(b, statId);
+
+                    if (direction === 'asc') {
+                        return aStat - bStat;
+                    } else {
+                        return bStat - aStat;
+                    }
+                });
+            }
+
+			return itemsToFilter;
 		}
+	);
+
+	const groupedInventory = derived(filteredInventory, ($filteredInventory) => {
+		const grouped = new Map<string, Item>();
+		const nonStackable: Item[] = [];
+
+		for (const item of $filteredInventory) {
+			if (item.flags?.includes('stackable')) {
+				if (grouped.has(item.id)) {
+					const existingItem = grouped.get(item.id)!;
+					existingItem.amount = (existingItem.amount || 0) + 1;
+				} else {
+					// Create a new representative item for the stack
+					const stackableItem = { ...item, amount: 1 };
+					grouped.set(item.id, stackableItem);
+				}
+			} else {
+				// Non-stackable items are just added to a separate list
+				nonStackable.push(item);
+			}
+		}
+		// Combine the grouped stackable items with the non-stackable items
+		return [...Array.from(grouped.values()), ...nonStackable];
 	});
 
 	let relicSet: Set | undefined;
@@ -56,6 +121,8 @@
 		}
 	}
 
+	let scrollContent: HTMLDivElement;
+	let isScrollable = false;
 	afterUpdate(() => {
 		if (scrollContent) {
 			isScrollable = scrollContent.scrollHeight > scrollContent.clientHeight;
@@ -72,7 +139,7 @@
 	<div class="item-info-box">
 		<div class="item-image">
 			{#if $activeItem}
-				<ItemBox item={$activeItem} viewSize="large" base="" />
+				<ItemBox item={$activeItem} viewSize="large" />
 			{:else}
 				<div class="empty-active-item"></div>
 			{/if}
@@ -93,42 +160,46 @@
 	</div>
 
 	<div class="tabs">
-		<button on:click={() => (currentTab = 'general')} class:active={currentTab === 'general'}
+		<button on:click={() => ($inventoryTab = 'general')} class:active={$inventoryTab === 'general'}
 			>General</button
 		>
-		<button on:click={() => (currentTab = 'weapons')} class:active={currentTab === 'weapons'}
+		<button on:click={() => ($inventoryTab = 'weapons')} class:active={$inventoryTab === 'weapons'}
 			>Weapons</button
 		>
-		<button on:click={() => (currentTab = 'relics')} class:active={currentTab === 'relics'}
+		<button on:click={() => ($inventoryTab = 'relics')} class:active={$inventoryTab === 'relics'}
 			>Relics</button
 		>
-		<button on:click={() => (currentTab = 'homestead')} class:active={currentTab === 'homestead'}
+		<button on:click={() => ($inventoryTab = 'homestead')} class:active={$inventoryTab === 'homestead'}
 			>Homestead</button
 		>
 	</div>
 
-	{#if currentTab === 'homestead'}
+	{#if $inventoryTab === 'homestead'}
 		<div class="sub-tabs">
 			<button
-				on:click={() => (homesteadSubTab = 'farming')}
-				class:active={homesteadSubTab === 'farming'}>Farming</button
+				on:click={() => ($homesteadSubTab = 'farming')}
+				class:active={$homesteadSubTab === 'farming'}>Farming</button
 			>
 			<button
-				on:click={() => (homesteadSubTab = 'crafting')}
-				class:active={homesteadSubTab === 'crafting'}>Crafting</button
+				on:click={() => ($homesteadSubTab = 'crafting')}
+				class:active={$homesteadSubTab === 'crafting'}>Crafting</button
 			>
 		</div>
 	{/if}
 
+    {#if $inventoryTab === 'weapons'}
+        <InventoryFilterBar isWeaponTab={true} />
+    {/if}
+    {#if $inventoryTab === 'relics'}
+        <InventoryFilterBar isWeaponTab={false} />
+    {/if}
+
 	<div class="grid-wrapper">
 		<div class="item-grid">
-			{#each filteredInventory as inventoryItem (inventoryItem.itemId)}
-				{@const item = getItemById(inventoryItem.itemId)}
-				{#if item}
-					<div class="grid-item" on:click={() => ($activeItem = item)}>
-						<ItemBox item={{ ...item, amount: inventoryItem.amount }} viewSize="small" base="" />
-					</div>
-				{/if}
+			{#each $groupedInventory as item (item.instanceId || item.id)}
+				<div class="grid-item" on:click={() => ($activeItem = item)}>
+					<ItemBox {item} viewSize="small" base="" />
+				</div>
 			{/each}
 		</div>
 	</div>
@@ -150,7 +221,7 @@
 
 				<!-- Mastery -->
 				{#if $activeItem.type === 'weapon' && $activeItem.mastery}
-					<MasteryDisplay mastery={$activeItem.mastery} elements={[$activeItem.element]} />
+					<MasteryDisplay mastery={$activeItem.mastery} elements={[$activeItem.element]} size="mini"/>
 				{/if}
 
 				<!-- Set Info -->
@@ -197,10 +268,10 @@
 			</div>
 			<div class="buttons">
 				{#if isConsumable($activeItem)}
-					<button class="action-button" on:click={() => game.useItem($activeItem.id)}>Use</button>
+					<button class="action-button" on:click={() => game.useItem($activeItem.instanceId)}>Use</button>
 				{/if}
 				{#if isEquippable($activeItem)}
-					<button class="action-button" on:click={() => game.equipItem($activeItem.id)}
+					<button class="action-button" on:click={() => game.equipItem($activeItem.instanceId)}
 						>Equip</button
 					>
 				{/if}
@@ -213,14 +284,13 @@
 		{/if}
 	</div>
 </div>
-
 <style>
 	.inventory {
 		display: flex;
 		flex-direction: column;
 		padding: 1em;
 		box-sizing: border-box;
-		background-color: var(--color-surface-1);
+		background-color: var(--surface-1);
 		height: 100%;
 		border-radius: 12px;
 		box-shadow: #00000056 0 -6px 0 6px inset;
@@ -253,7 +323,7 @@
 
 	.item-description {
 		flex-grow: 1;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 		color: var(--color-text);
 		padding: 0.5em 1em;
 		/* border: 3px solid var(--color-border); */
@@ -295,6 +365,8 @@
 		flex-grow: 1;
 		overflow-y: auto;
 		padding-top: 0.5em;
+		/* line-break: normal; */
+		white-space: pre-line;
 	}
 
 	/* ====== BOTTOM BOX ====== */
@@ -302,7 +374,7 @@
 		position: relative;
 		/* border: 3px solid var(--color-border); */
 		border-radius: 5px;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 		margin-bottom: 1rem;
 		flex-grow: 1;
 		min-height: 0; /* Prevent flex overflow */
@@ -410,14 +482,14 @@
 	.tabs {
 		display: flex;
 		flex-shrink: 0;
-		border-inline: 3px solid color-mix(in srgb, var(--color-surface-2) 50%, black);
+		border-inline: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
 	}
 
 	.tabs button {
 		font-family: var(--font-family-pixel);
 		font-size: 1rem;
 		box-sizing: border-box;
-		background-color: color-mix(in srgb, var(--color-surface-2) 70%, black);
+		background-color: color-mix(in srgb, var(--surface-2) 70%, black);
 		color: var(--text-muted);
 		padding: 0.5rem 1rem;
 		cursor: pointer;
@@ -426,7 +498,7 @@
 		/* border-radius: 6px; */
 		/* box-shadow: #00000056 0 -3px 0 3px inset; */
 		transition: all 0.2s ease-in-out;
-		border-top: 3px solid color-mix(in srgb, var(--color-surface-2) 50%, black);
+		border-top: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
 	}
 
 	.tabs button.active {
@@ -442,13 +514,13 @@
 		display: flex;
 		/* margin-bottom: 0.5em; */
 		flex-shrink: 0;
-		background-color: color-mix(in srgb, var(--color-surface-2) 70%, black);
-		border-inline: 3px solid color-mix(in srgb, var(--color-surface-2) 50%, black);
+		background-color: color-mix(in srgb, var(--surface-2) 70%, black);
+		border-inline: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
 	}
 
 	.sub-tabs button {
 		border: none;
-		background: var(--color-surface-2);
+		background: var(--surface-2);
 		background-color: transparent;
 		color: var(--color-text-muted);
 		padding: 0.25rem 0.75rem;
@@ -463,7 +535,7 @@
 
 	.grid-wrapper {
 		background-color: transparent;
-		/* overflow-y: auto; */
+		overflow-y: auto;
 		height: calc(5 * (40px + 10px));
 		scrollbar-width: none;
 		margin-bottom: 1rem;
@@ -471,7 +543,7 @@
 		box-shadow: #00000056 0 -6px 0 3px inset;
 		border-top: 3px solid #00000056;
 		transition: all 0.2s ease-in-out;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 	}
 
 	.item-grid {
@@ -491,7 +563,7 @@
 		align-items: center;
 		cursor: pointer;
 		background-color: rgba(0, 0, 0, 0.208);
-		background-color: var(--surface-3);
+		background-color: rgb(68, 65, 78);
 		/* border: 1px solid var(--color-border); */
 		box-shadow: #00000056 0 -2px 0 2px inset;
 		border-top: 2px solid #00000056;
@@ -518,10 +590,28 @@
 		line-height: 1;
 		white-space: nowrap;
 		cursor: pointer;
-		border-radius: 3px;
-		padding-bottom: 9px;
-		box-shadow: #00000056 0 -2px 0 1px inset;
-		transition: all 0.2s ease-in-out;
+		box-shadow:
+			inset 0 30px 30px -15px rgba(255, 255, 255, 0.1),
+			inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+			inset 0 1px 20px rgba(0, 0, 0, 0),
+			0 3px 0 #00000056,
+			0 3px 2px rgba(0, 0, 0, 0.2),
+			0 5px 10px rgba(0, 0, 0, 0.1),
+			0 10px 20px rgba(0, 0, 0, 0.1);
+		border-radius: 6px;
+		transition: 150ms all ease-in-out;
+
+		&:active {
+			transform: translateY(3px);
+			box-shadow:
+				inset 0 16px 2px -15px rgba(0, 0, 0, 0),
+				inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+				inset 0 1px 20px rgba(0, 0, 0, 0.1),
+				0 0 0 #00000056,
+				0 0 0 2px rgba(255, 255, 255, 0.5),
+				0 0 0 rgba(0, 0, 0, 0),
+				0 0 0 rgba(0, 0, 0, 0);
+		}
 	}
 
 	@media (max-width: 768px) {

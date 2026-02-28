@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
 	import { get } from 'svelte/store';
 	import { game } from '$lib/game/game';
 	import { playerStore } from '$lib/stores/playerStore';
 	import { npcStore } from '$lib/stores/npcStore';
-	import { mapStore } from '$lib/stores/mapStore';
+	import { mapStore, currentMapData } from '$lib/stores/mapStore';
+	import { time } from '$lib/stores/timeStore';
 	import { combatStore } from '$lib/stores/combatStore';
 	import { dialogueStore } from '$lib/stores/dialogueStore';
+	import { checkForTileInteraction } from '$lib/services/InteractionService';
+	import { checkForRandomEncounter } from '$lib/services/EncounterService';
+	import { processBuffs } from '$lib/services/BuffService';
+	import * as AchievementService from '$lib/services/AchievementService';
+	import { getRegionForPosition } from '$lib/services/MapService';
 	import {
 		mobileInfoPanelView,
 		switchToEventView,
@@ -14,7 +20,8 @@
 		showQuestTracker,
 		showHomesteadTracker,
 		showMessageBox,
-		eventScreen
+		eventScreen,
+		clearEvent
 	} from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
@@ -30,9 +37,12 @@
 	import { questStore } from '$lib/stores/questStore';
 	import ChoiceMenu from '$lib/components/ui/ChoiceMenu.svelte';
 	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
+	import MapHUD from '$lib/components/ui/MapHUD.svelte';
+	import RegionNotification from '$lib/components/RegionNotification.svelte';
 
 	let mainElement: HTMLElement;
 	let isMobile = false;
+	let lastSteps = $playerStore.stepsTaken;
 
 	onMount(async () => {
 		const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -51,6 +61,42 @@
 		return () => mediaQuery.removeEventListener('change', handler);
 	});
 
+	$: if ($playerStore.stepsTaken > lastSteps) {
+		(async () => {
+			const player = get(playerStore);
+			const mapData = get(currentMapData);
+			if (!mapData) return;
+
+			// Process buffs
+			const nextTime = get(time) + 1;
+			const buffedPlayer = processBuffs(player, nextTime);
+			playerStore.update((p) => ({ ...p, ...buffedPlayer }));
+
+			// Update time and other stores
+			time.update((t) => t + 1);
+			AchievementService.checkMilestone('steps');
+			mapStore.setPlayerPosition(player.position.x, player.position.y);
+			clearEvent();
+
+			// Region-related logic
+			const regionInfo = getRegionForPosition(player.position, mapData);
+			if (regionInfo && get(mapStore).landscape?.id !== regionInfo.id) {
+				mapStore.showRegionNotification(regionInfo.name);
+				setTimeout(() => {
+					mapStore.hideRegionNotification();
+				}, 3000);
+			}
+			mapStore.update((s) => ({ ...s, landscape: regionInfo }));
+
+			// Check for interactions and encounters
+			const interactionOccurred = await checkForTileInteraction();
+			if (!interactionOccurred) {
+				checkForRandomEncounter();
+			}
+		})();
+		lastSteps = $playerStore.stepsTaken;
+	}
+
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
 
@@ -58,6 +104,7 @@
 
 		switch (event.key) {
 			case ' ': // A button
+			case 'z':
 				handleActionButton();
 				break;
 		}
@@ -92,7 +139,7 @@
 	}
 
 	function handleActionButton() {
-		// Placeholder for context-sensitive action
+		checkForTileInteraction();
 	}
 
 	function toggleMobileView() {
@@ -104,20 +151,23 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <main on:keydown={handleKeyDown} tabindex="0" bind:this={mainElement}>
 	<CombatModal />
-	{#if $showQuestTracker}
+	<!-- <RegionNotification /> -->
+	<!-- {#if $showQuestTracker}
 		<QuestTracker />
 	{/if}
 	{#if $showHomesteadTracker}
 		<HomesteadStatus />
-	{/if}
+	{/if} -->
 
 	{#if isMobile}
 		<!-- Mobile layout remains unchanged for now -->
 		<div class="game-view-container">
-			{#if $mapStore.mapData && $playerStore.position}
-				<MapDisplay mapData={$mapStore.mapData} player={$playerStore} />
+			{#if $currentMapData && $playerStore.position}
+				<MapDisplay mapData={$currentMapData} player={$playerStore} />
 			{:else}
 				<p>Loading map...</p>
 			{/if}
@@ -131,40 +181,41 @@
 			</div>
 		</div>
 	{:else}
-	<div class="console-super">
-		<div class="console">
-			<!-- Desktop Layout -->
-			<div class="left-panel">
-				<button class="logo-button"><TimeDisplay /></button>
-				<LeftControlPanel />
-			</div>
-	
-			<div class="center-panel">
-				<div class="game-view-container">
-					<CoordinateDisplay />
-					{#if $mapStore.mapData && $playerStore.position}
-						<MapDisplay mapData={$mapStore.mapData} player={$playerStore} />
-					{:else}
-						<p>Loading map...</p>
+		<div class="console-super">
+			<div class="console">
+				<!-- Desktop Layout -->
+				<div class="left-panel">
+					<button class="logo-button"><TimeDisplay /></button>
+					<LeftControlPanel />
+				</div>
+
+				<div class="center-panel">
+					<div class="game-view-container">
+						<!-- <CoordinateDisplay /> -->
+						{#if $currentMapData && $playerStore.position}
+						<MapHUD/>
+							<MapDisplay mapData={$currentMapData} player={$playerStore} />
+						{:else}
+							<p>Loading map...</p>
+						{/if}
+					</div>
+					{#if $showMessageBox}
+						<div class="message-log-wrapper">
+							<MessageLog />
+						</div>
 					{/if}
 				</div>
-				{#if $showMessageBox}
-					<div class="message-log-wrapper">
-						<MessageLog />
-					</div>
-				{/if}
+
+				<div class="right-panel">
+					<EventScreen />
+					<!-- <DialogueBox /> -->
+					{#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource' || ($eventScreen.type === 'enemy' && $eventScreen.data.isLegendary)}
+						<ChoiceMenu />
+					{/if}
+				</div>
 			</div>
-	
-			<div class="right-panel">
-				<EventScreen />
-				<!-- <DialogueBox /> -->
-				{#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource' || ($eventScreen.type === 'enemy' && $eventScreen.data.isLegendary)}
-					<ChoiceMenu />
-				{/if}
-			</div>
+			<!-- <p>Dawn's Journey (c)</p> -->
 		</div>
-		<!-- <p>Dawn's Journey (c)</p> -->
-	</div>
 	{/if}
 </main>
 
@@ -173,7 +224,7 @@
 		position: relative;
 		box-sizing: border-box;
 		width: 100%;
-		/* height: 100vh; */
+		height: 100%;
 		display: flex;
 		border: none;
 		outline: none;
@@ -183,7 +234,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		/* gap: 2rem; */
 		padding-block: 1rem 2rem;
 		padding-inline: 1rem;
 		background-color: #e27a7a;
@@ -191,7 +241,8 @@
 		box-shadow: #00000056 0 -12px 0 0px inset;
 		box-sizing: border-box;
 		border-radius: 24px;
-		margin: 2rem auto 2rem 2rem;
+		margin: auto;
+		/* flex-grow: 1; */
 
 		p {
 			position: absolute;
@@ -200,7 +251,7 @@
 			font-family: var(--font-family-main);
 		}
 	}
-	
+
 	.console {
 		display: flex;
 		align-items: flex-start;
@@ -213,7 +264,7 @@
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
-		gap: .5rem;
+		gap: 0.5rem;
 	}
 
 	.logo-button {
@@ -223,7 +274,7 @@
 		aspect-ratio: 1;
 		border-radius: 18px;
 		box-sizing: border-box;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 		box-sizing: border-box;
 		border: 6px solid #00000056;
 		box-sizing: border-box;
@@ -237,7 +288,7 @@
 		gap: 1rem;
 		padding: 1rem;
 		box-sizing: border-box;
-		background-color: var(--color-surface-1);
+		background-color: var(--surface-1);
 		padding-bottom: 2rem;
 		border: 6px solid #00000056;
 		box-shadow: #00000056 0 -12px 0 0px inset;
@@ -252,10 +303,10 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 600px;
+		width: 800px;
 		height: 400px;
 		background-color: #222;
-		border: 3px solid var(--color-surface-2);
+		border: 3px solid var(--surface-2);
 		box-sizing: border-box;
 	}
 
@@ -263,7 +314,7 @@
 		height: 150px;
 		width: 600px;
 		display: flex;
-		border: 3px solid var(--color-surface-2);
+		border: 3px solid var(--surface-2);
 		border-radius: 12px;
 		overflow: hidden;
 	}
@@ -273,10 +324,9 @@
 		gap: 1rem;
 		flex-direction: column;
 		width: 400px;
-		/* height: 400px; */
 		flex-shrink: 0;
 		padding: 1rem;
-		background-color: var(--color-surface-1);
+		background-color: var(--surface-1);
 		padding-bottom: 2rem;
 		border: 6px solid #00000056;
 		box-shadow: #00000056 0 -12px 0 0px inset;

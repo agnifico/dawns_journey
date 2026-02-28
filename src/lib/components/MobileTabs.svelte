@@ -23,13 +23,13 @@
     .tab-button {
         flex-grow: 1;
         padding: 1em;
-        background-color: var(--color-surface-2);
+        background-color: var(--surface-2);
         color: var(--color-text);
         border: none;
         cursor: pointer;
     }
     .tab-button.active {
-        background-color: var(--color-surface-1);
+        background-color: var(--surface-1);
     }
     .tab-content {
         /* padding: 1em; */

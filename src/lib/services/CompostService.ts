@@ -1,7 +1,7 @@
 import { playerStore } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { v4 as uuidv4 } from 'uuid';
-import { addItem, removeItem } from './ItemService';
+import { addItems, removeItemsByItemId } from './InventoryService';
 
 const LEAVES_PER_COMPOST = 5;
 const DURATION_PER_COMPOST_MS = 1 * 60 * 60 * 1000; // 1 hour
@@ -29,7 +29,7 @@ export function startComposting(leavesToUse: number) {
         const totalDuration = compostToProduce * DURATION_PER_COMPOST_MS;
 
         // Consume leaves
-        newPlayer = removeItem(newPlayer, 'leaves', leavesToUse);
+        newPlayer = removeItemsByItemId(newPlayer, 'leaves', leavesToUse);
 
         const newCompostTask = {
             id: uuidv4(),
@@ -67,7 +67,7 @@ export function claimCompost(taskId: string) {
         }
 
         // Add compost to inventory
-        newPlayer = addItem(newPlayer, 'compost', task.compostToProduce);
+        newPlayer = addItems(newPlayer, 'compost', task.compostToProduce);
 
         // Remove task from queue
         newPlayer.homestead.compostQueue.splice(taskIndex, 1);

@@ -24,7 +24,8 @@
         "speed": 60,
         "evasion": 40,
         "critChance": 0.15,
-        "critDamage": 1.6
+        "critDamage": 1.6,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,
@@ -83,7 +84,7 @@
                     "objective": "Gather 10 Mushrooms",
                     "requirement": {
                         "type": "have_item",
-                        "itemId": "shrooms",
+                        "itemId": "mushroom",
                         "quantity": 10
                     },
                     "intro_dialogue": [
@@ -149,7 +150,7 @@
             ],
             "giftingOptions": [
                 {
-                    "itemId": "shrooms",
+                    "itemId": "mushrooms",
                     "quantity": 5,
                     "value": 5,
                     "dialogue": [

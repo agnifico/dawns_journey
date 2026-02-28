@@ -7,11 +7,7 @@
         "/images/characters/ariana/ariana0.png",
         "/images/characters/ariana/ariana1.png",
         "/images/characters/ariana/ariana2.png",
-        "/images/characters/ariana/ariana3.png",
-        "/images/characters/ariana/ariana4.png",
-        "/images/characters/ariana/ariana5.png",
-        "/images/characters/ariana/ariana6.png",
-        "/images/characters/ariana/ariana7.png"
+        "/images/characters/ariana/ariana3.png"
     ],
     "isCombatant": true,
     "types": [
@@ -29,7 +25,8 @@
         "speed": 30,
         "evasion": 20,
         "critChance": 0.05,
-        "critDamage": 1.5
+        "critDamage": 1.5,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,

@@ -4,7 +4,8 @@ import { mapStore } from '../stores/mapStore';
 import { loadMap } from '../services/MapService';
 import { movePlayer as movePlayerService } from '../services/PlayerMovementService';
 import { gatherResource as gatherResourceService } from '../services/InteractionService';
-import * as ItemService from '../services/ItemService';
+import * as InventoryService from '../services/InventoryService';
+import type { Position } from '$lib/types';
 
 export const game = {
     /**
@@ -14,12 +15,18 @@ export const game = {
         const currentPlayer = get(playerStore);
         const mapToLoad = mapId || get(mapStore).currentMapId;
         const mapData = await loadMap(mapToLoad);
-        if (mapData) {
-            if (!currentPlayer.isInitialized) {
-                playerStore.update(p => ({ ...p, position: mapData.playerStart }));
-            }
-            mapStore.set({ currentMapId: mapToLoad, mapData });
+        if (mapData && !currentPlayer.isInitialized) {
+            playerStore.update(p => ({ ...p, position: mapData.playerStart }));
+            mapStore.setPlayerPosition(mapData.playerStart.x, mapData.playerStart.y);
         }
+    },
+
+    /**
+     * Switches the current map and moves the player to the specified position.
+     */
+    switchMap: async (mapId: string, position: Position) => {
+        await loadMap(mapId);
+        playerStore.update(p => ({ ...p, position }));
     },
 
     /**
@@ -40,20 +47,20 @@ export const game = {
      * Unequips an item from an equipment slot.
      */
     unequipItem: (slotType: 'weapon_slots' | 'relic_slots', slotIndex: number) => {
-        ItemService.unequipItem(slotType, slotIndex);
+        InventoryService.unequipItem(slotType, slotIndex);
     },
 
     /**
      * Equips an item from the inventory.
      */
-    equipItem: (itemId: string) => {
-        ItemService.equipItem(itemId);
+    equipItem: (instanceId: string) => {
+        InventoryService.equipItem(instanceId);
     },
 
     /**
      * Consumes an item, applying its effects and removing it from inventory.
      */
-    useItem: (itemId: string) => {
-        ItemService.useItem(itemId);
+    useItem: (instanceId: string) => {
+        InventoryService.useItem(instanceId);
     }
 };

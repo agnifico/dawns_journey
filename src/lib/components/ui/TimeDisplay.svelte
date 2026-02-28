@@ -17,15 +17,15 @@
 
 <style>
 	.time-display {
+		position: relative;
 		/* background-color: #4f2475; */
 		padding: 0.25em;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		cursor: help;
 	}
 	.time-display:hover {
-		background-color: #ffffff;
+		/* background-color: #ffffff; */
 		/* border-color: #777; */
 	}
 	img {
@@ -36,9 +36,15 @@
 	.dawnrise {
 		filter: brightness(0) saturate(100%) invert(74%) sepia(89%) saturate(335%) hue-rotate(359deg)
 			brightness(104%) contrast(95%);
+            &:hover {
+              filter: invert(0);  
+            }
 	}
 	.duskfall {
 		filter: brightness(0) saturate(100%) invert(62%) sepia(83%) saturate(1426%) hue-rotate(219deg)
 			brightness(97%) contrast(83%);
+            &:hover {
+              filter: invert();  
+            }
 	}
 </style>

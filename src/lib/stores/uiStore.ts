@@ -2,6 +2,12 @@ import { writable } from 'svelte/store';
 import type { Item, NPC, LocationEvent, Enemy, ResourceNode } from '$lib/types';
 import { persistentStore } from './persistentStore';
 
+// --- Inventory Tabs ---
+export type InventoryTab = 'general' | 'weapons' | 'relics' | 'homestead';
+export type HomesteadSubTab = 'farming' | 'crafting';
+export const inventoryTab = writable<InventoryTab>('general');
+export const homesteadSubTab = writable<HomesteadSubTab>('farming');
+
 // --- Active Item ---
 export const activeItem = writable<Item | null>(null);
 
@@ -102,18 +108,23 @@ export function closeGiftModal() {
 // --- Draggable Widgets ---
 export interface WidgetState {
     isCollapsed: boolean;
+    isSummarised: boolean;
 }
 
 // Quest Tracker
-const initialQuestTrackerState: WidgetState = { isCollapsed: false };
+const initialQuestTrackerState: WidgetState = { isCollapsed: false, isSummarised: false };
 export const questTrackerState = persistentStore<WidgetState>('questTrackerState', initialQuestTrackerState);
 
 export function toggleQuestTracker() {
     questTrackerState.update(s => ({ ...s, isCollapsed: !s.isCollapsed }));
 }
 
+export function toggleSummarised() {
+    questTrackerState.update(s => ({ ...s, isSummarised: !s.isSummarised }));
+}
+
 // Homestead Status
-const initialHomesteadStatusState: WidgetState = { isCollapsed: true };
+const initialHomesteadStatusState: WidgetState = { isCollapsed: true, isSummarised: false };
 export const homesteadStatusState = persistentStore<WidgetState>('homesteadStatusState', initialHomesteadStatusState);
 
 export function toggleHomesteadStatus() {

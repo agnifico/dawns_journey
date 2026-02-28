@@ -1,17 +1,25 @@
 import { playerStore } from '../stores/playerStore';
 import { messageStore } from '../stores/messageStore';
 import { TECH_POINTS_PER_LEVEL } from '$lib/data/progression';
-import { farmingTechTree } from '$lib/data/skilltree/farming';
+import { getXpForLevelFromData } from './SkillDataService';
+import { addItems } from './InventoryService';
+import skills from '$lib/data/skills.json';
+import type { Player } from '$lib/types';
 
 const LEVEL_EXPONENT = 1.6;
 const BASE_XP = 100;
 
-function getXpForLevel(level: number): number {
+export function getXpForLevel(skillId: string, level: number): number {
+    const xp = getXpForLevelFromData(skillId, level);
+    if (xp !== null) {
+        return xp;
+    }
+    // Fallback to original formula if data is not available for that level
     return Math.floor(BASE_XP * Math.pow(level, LEVEL_EXPONENT));
 }
 
 export function gainExperience(player: Player, skillId: string, amount: number): Player {
-    const newPlayer = { ...player };
+    let newPlayer = { ...player };
     const skillIndex = newPlayer.skills.findIndex(s => s.id === skillId);
 
     if (skillIndex === -1) {
@@ -23,14 +31,25 @@ export function gainExperience(player: Player, skillId: string, amount: number):
     skill.experience += amount;
     messageStore.addMessage(`You gain ${amount} ${skill.name} experience.`, ['World']);
 
-    let xpForNextLevel = getXpForLevel(skill.level);
+    let xpForNextLevel = getXpForLevel(skillId, skill.level);
     while (skill.experience >= xpForNextLevel) {
         skill.level++;
         skill.experience -= xpForNextLevel;
         newPlayer.techPoints += TECH_POINTS_PER_LEVEL;
         messageStore.addMessage(`${skill.name} level is now ${skill.level}!`, ['System', 'LevelUp']);
         messageStore.addMessage(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`, ['System', 'LevelUp']);
-        xpForNextLevel = getXpForLevel(skill.level);
+
+        // Add rewards for the new level
+        const skillData = (skills as any)[skillId];
+        const levelData = skillData?.levels?.[skill.level];
+        if (levelData?.rewards) {
+            for (const reward of levelData.rewards) {
+                newPlayer = addItems(newPlayer, reward.itemId, reward.amount);
+                messageStore.addMessage(`You received ${reward.amount} ${reward.itemId}!`, ['System', 'Reward']);
+            }
+        }
+
+        xpForNextLevel = getXpForLevel(skillId, skill.level);
     }
 
     newPlayer.skills[skillIndex] = skill;

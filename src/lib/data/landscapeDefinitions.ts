@@ -112,4 +112,84 @@ export const landscapeDefinitions: { [key: string]: LandscapeDefinition } = {
         image: '/locations/church.jpg',
     },
 
+    bridge: {
+        id: 'bridge',
+        name: 'Bridge',
+        image: '/locations/bridge.jpg',
+    },
+    agnes_garden: {
+        id: 'agnes_garden',
+        name: 'Agnes\' Garden',
+        image: '/locations/agnes_garden.jpg',
+    },
+    sewers: {
+        id: 'sewers',
+        name: 'Sewers',
+        image: '/locations/sewers.jpg',
+    },
+    courtyard: {
+        id: 'courtyard',
+        name: 'Courtyard',
+        image: '/locations/courtyard.jpg',
+    },
+    fountain: {
+        id: 'fountain',
+        name: 'Fountain',
+        image: '/locations/fountain.jpg',
+    },
+    backforest: {
+        id: 'backforest',
+        name: 'Backforest',
+        image: '/locations/backforest.jpg',
+    },
+    tower_top: {
+        id: 'tower_top',
+        name: 'Tower Top',
+        image: '/locations/tower_top.jpg',
+    },
+    tower_balcony: {
+        id: 'tower_balcony',
+        name: 'Tower Balcony',
+        image: '/locations/tower_balcony.jpg',
+    },
+    tower_wall: {
+        id: 'tower_wall',
+        name: 'Tower Wall',
+        image: '/locations/tower_wall.jpg',
+    },
+    church_roof: {
+        id: 'church_roof',
+        name: 'Church Roof',
+        image: '/locations/church_roof.jpg',
+    },
+    cross: {
+        id: 'cross',
+        name: 'Cross',
+        image: '/locations/cross.jpg',
+    },
+    church_wall: {
+        id: 'church_wall',
+        name: 'Church Wall',
+        image: '/locations/church_wall.jpg',
+    },
+    offshore_cliff: {
+        id: 'offshore_cliff',
+        name: 'Offshore Cliff',
+        image: '/locations/offshore_cliff.jpg',
+    },
+    mountain_coast: {
+        id: 'mountain_coast',
+        name: 'Mountain Coast',
+        image: '/locations/mountain_coast.jpg',
+    },
+    gwens_island: {
+        id: 'gwens_island',
+        name: 'Gwen\'s Island',
+        image: '/locations/gwens_island.jpg',
+    },
+    marjana_trench: {
+        id: 'marjana_trench',
+        name: 'Marjana Trench',
+        image: '/locations/marjana_trench.jpg',
+    }
 };

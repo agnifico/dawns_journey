@@ -1,140 +1,247 @@
-import type { Combatant, CombatLogMessage } from '$lib/types';
-import { get } from 'svelte/store';
-import { combatStore } from '$lib/stores/combatStore';
+// CombatEngine.ts
+
+import type { Combatant, CombatLogMessage, CombatLogSide, StatusEffect } from '$lib/types';
 import { calculateDamage, calculateEvasion } from './combatCalculations';
+import { getAbilityById } from '../data/abilities';
+import * as EffectHandlers from './abilityEffects';
+import type { AnyAbilityEffect, EffectResult } from './abilityEffects';
+
+// ---------------------------------------------------------------------------
+// Private helpers
+// ---------------------------------------------------------------------------
 
 function applyDamage(combatant: Combatant, damage: number): Combatant {
-    const newCombatant = { ...combatant };
-    let remainingDamage = damage;
-
-    if (newCombatant.auraShield > 0) {
-        const shieldDamage = Math.min(newCombatant.auraShield, remainingDamage);
-        newCombatant.auraShield -= shieldDamage;
-        remainingDamage -= shieldDamage;
+    const next = { ...combatant };
+    let remaining = damage;
+    if (next.auraShield > 0) {
+        const absorbed = Math.min(next.auraShield, remaining);
+        next.auraShield -= absorbed;
+        remaining -= absorbed;
     }
-
-    if (remainingDamage > 0) {
-        newCombatant.hp -= remainingDamage;
-    }
-
-    return newCombatant;
+    if (remaining > 0) next.hp -= remaining;
+    return next;
 }
 
-function executeAttack(
+function sideOf(combatant: Combatant): CombatLogSide {
+    return combatant.isPlayer ? 'player' : 'opponent';
+}
+
+/**
+ * Rebuilds every live stat from baseStats, then multiplies in all active
+ * status effect stat modifiers.
+ * Gear passives (inflictedBy: 'equipment' | 'innate') never carry statModifiers
+ * so they are skipped for clarity.
+ */
+function applyStatModifiers(combatant: Combatant): Combatant {
+    const c = { ...combatant };
+    c.physicalAttack   = c.baseStats.physicalAttack;
+    c.elementalAttack  = c.baseStats.elementalAttack;
+    c.physicalDefence  = c.baseStats.physicalDefence;
+    c.elementalDefence = c.baseStats.elementalDefence;
+    c.speed            = c.baseStats.speed;
+    c.evasion          = c.baseStats.evasion;
+    c.critChance       = c.baseStats.critChance;
+    c.critDamage       = c.baseStats.critDamage;
+    c.precision        = c.baseStats.precision ?? 0;
+
+    for (const effect of c.statusEffects) {
+        if (effect.inflictedBy === 'equipment' || effect.inflictedBy === 'innate') continue;
+        const m = effect.statModifiers;
+        if (!m) continue;
+        if (m.physicalAttack   !== undefined) c.physicalAttack   *= m.physicalAttack;
+        if (m.elementalAttack  !== undefined) c.elementalAttack  *= m.elementalAttack;
+        if (m.physicalDefence  !== undefined) c.physicalDefence  *= m.physicalDefence;
+        if (m.elementalDefence !== undefined) c.elementalDefence *= m.elementalDefence;
+        if (m.speed            !== undefined) c.speed            *= m.speed;
+        if (m.evasion          !== undefined) c.evasion          += m.evasion; // additive
+        if (m.critChance       !== undefined) c.critChance       *= m.critChance;
+        if (m.critDamage       !== undefined) c.critDamage       *= m.critDamage;
+        if (m.precision        !== undefined) c.precision        += m.precision; // additive, can go negative
+    }
+
+    return c;
+}
+
+function isStunned(combatant: Combatant): boolean {
+    return combatant.statusEffects.some(e => e.isStunned === true);
+}
+
+// ---------------------------------------------------------------------------
+// Public: tick status effects at the start of a turn
+// ---------------------------------------------------------------------------
+
+export function applyStatusEffects(
+    combatant: Combatant
+): { updatedCombatant: Combatant; logs: CombatLogMessage[] } {
+    let updated = { ...combatant };
+    const logs: CombatLogMessage[] = [];
+    const surviving: StatusEffect[] = [];
+    const actorName = updated.isPlayer ? 'Player' : updated.name;
+    const side = sideOf(updated);
+
+    for (const effect of updated.statusEffects) {
+        // Gear passives are permanent — skip tick/countdown entirely.
+        if (effect.inflictedBy === 'equipment' || effect.inflictedBy === 'innate') {
+            surviving.push(effect);
+            continue;
+        }
+
+        let current = { ...effect };
+
+        if (current.remainingTurns === undefined) {
+            current.remainingTurns = current.duration;
+        }
+
+        // Damage over time
+        if (current.damagePerTurn) {
+            const damage = Math.round(updated.maxHp * current.damagePerTurn);
+            updated = applyDamage(updated, damage);
+            logs.push({
+                type: 'status_tick',
+                side,
+                targetName: actorName,
+                statusName: current.name,
+                amount: damage,
+            });
+        }
+
+        // Heal over time
+        if (current.healPerTurn) {
+            const healAmount = Math.round(updated.maxHp * current.healPerTurn);
+            updated = { ...updated, hp: Math.min(updated.maxHp, updated.hp + healAmount) };
+            logs.push({
+                type: 'status_heal',
+                side,
+                targetName: actorName,
+                statusName: current.name,
+                amount: healAmount,
+            });
+        }
+
+        current.remainingTurns--;
+
+        if (current.remainingTurns > 0) {
+            surviving.push(current);
+        } else {
+            logs.push({
+                type: 'status_expire',
+                side,
+                targetName: actorName,
+                statusName: current.name,
+            });
+        }
+    }
+
+    updated.statusEffects = surviving;
+    return { updatedCombatant: updated, logs };
+}
+
+// ---------------------------------------------------------------------------
+// Private: route a single effect to its handler
+// ---------------------------------------------------------------------------
+
+function executeEffect(
     attacker: Combatant,
     defender: Combatant,
-    attackType: 'physical' | 'elemental',
-    activeElements: string[] = []
-): { logs: CombatLogMessage[], damage: number } {
+    effect: AnyAbilityEffect,
+    abilityAccuracy: number,
+    lastDamageHit: boolean,
+): EffectResult {
+    switch (effect.type) {
+        case 'damage':
+            return EffectHandlers.executeDamageEffect(
+                attacker, defender, effect,
+                calculateDamage, applyDamage, calculateEvasion,
+                abilityAccuracy
+            );
+        case 'conditional_damage':
+            return EffectHandlers.executeConditionalDamageEffect(
+                attacker, defender, effect, calculateDamage, applyDamage
+            );
+        case 'heal':
+            return EffectHandlers.executeHealEffect(attacker, defender, effect);
+        case 'apply_status':
+            return EffectHandlers.executeStatusEffect(attacker, defender, effect, lastDamageHit);
+        case 'stat_modifier':
+            return EffectHandlers.executeStatModifierEffect(attacker, defender, effect);
+        case 'shield_manipulate':
+            return EffectHandlers.executeShieldEffect(attacker, defender, effect);
+        case 'stat_transfer':
+            return EffectHandlers.executeStatTransferEffect(attacker, defender, effect);
+        case 'heal_percent_max_hp':
+            return EffectHandlers.executeHealPercentMaxHpEffect(attacker, defender, effect);
+        case 'heal_full':
+            return EffectHandlers.executeHealFullEffect(attacker, defender, effect);
+        case 'cleanse':
+            return EffectHandlers.executeCleanseEffect(attacker, defender, effect);
+        case 'lifesteal':
+            return EffectHandlers.executeLifestealEffect(
+                attacker, defender, effect,
+                calculateDamage, applyDamage, calculateEvasion
+            );
+        default:
+            effect satisfies never;
+            console.warn(`Unknown effect type: ${(effect as any).type}`);
+            return { updatedAttacker: attacker, updatedDefender: defender, logs: [], totalDamage: 0 };
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Public: execute a full ability
+// ---------------------------------------------------------------------------
+
+export function executeAbility(
+    attacker: Combatant,
+    defender: Combatant,
+    abilityId: string
+): { updatedAttacker: Combatant; updatedDefender: Combatant; logs: CombatLogMessage[] } {
     const logs: CombatLogMessage[] = [];
     const attackerName = attacker.isPlayer ? 'Player' : attacker.name;
-    const defenderName = defender.isPlayer ? 'Player' : defender.name;
 
-    const attackTypeText = attackType === 'physical' ? 'Physical Attack' : `${activeElements[0]} Attack`;
-    
-    const attackLog = { text: `${attackerName} uses a ${attackTypeText}...`, class: `${attackType}-attack` };
-    if (attacker.isPlayer) {
-        logs.push({ left: attackLog });
-    } else {
-        logs.push({ right: attackLog });
+    const ability = getAbilityById(abilityId);
+    if (!ability) {
+        logs.push({ type: 'system', text: `Ability "${abilityId}" not found!` });
+        return { updatedAttacker: attacker, updatedDefender: defender, logs };
     }
 
-    if (calculateEvasion(defender)) {
-        const evasionLog = { text: `${defenderName} evaded!`, class: 'evasion' };
-        if (defender.isPlayer) {
-            logs.push({ left: evasionLog });
-        } else {
-            logs.push({ right: evasionLog });
+    let currentAttacker = applyStatModifiers(attacker);
+    let currentDefender = applyStatModifiers(defender);
+
+    if (isStunned(currentAttacker)) {
+        logs.push({ type: 'stun', side: sideOf(attacker), actorName: attackerName });
+        return { updatedAttacker: attacker, updatedDefender: defender, logs };
+    }
+
+    logs.push({
+        type: 'ability_use',
+        side: sideOf(attacker),
+        actorName: attackerName,
+        abilityName: ability.name,
+    });
+
+    // lastDamageHit starts true so status-only abilities always apply;
+    // flips false only when a damage effect explicitly misses.
+    let lastDamageHit = true;
+
+    for (const effect of ability.effects) {
+        const result = executeEffect(
+            currentAttacker,
+            currentDefender,
+            effect,
+            ability.accuracy ?? 1.0,
+            lastDamageHit,
+        );
+
+        currentAttacker = result.updatedAttacker;
+        currentDefender = result.updatedDefender;
+        logs.push(...result.logs);
+
+        if (result.didHit !== undefined) {
+            lastDamageHit = result.didHit;
         }
-        return { logs, damage: 0 };
+
+        if (currentDefender.hp <= 0) break;
     }
 
-    const { damage, isCritical } = calculateDamage(attacker, defender, attackType, activeElements);
-    
-    let damageLogText = `and deals ${damage} damage.`;
-    if (isCritical) {
-        damageLogText += ' (CRIT!)';
-    }
-    const damageLog = { text: damageLogText, class: isCritical ? 'crit' : '' };
-    if (attacker.isPlayer) {
-        logs.push({ left: damageLog });
-    } else {
-        logs.push({ right: damageLog });
-    }
-
-    return { logs, damage };
-}
-
-
-/**
- * Executes a full turn for the player.
- */
-export function executePlayerTurn(player: Combatant, opponent: Combatant) {
-    let logs: CombatLogMessage[] = [];
-    let updatedOpponent = { ...opponent };
-
-    // --- 1. Physical Attack ---
-    const physicalAttackResult = executeAttack(player, updatedOpponent, 'physical');
-    updatedOpponent = applyDamage(updatedOpponent, physicalAttackResult.damage);
-    logs = logs.concat(physicalAttackResult.logs);
-
-    if (updatedOpponent.hp <= 0) {
-        return { updatedOpponent, logs };
-    }
-
-    // --- 2. Elemental Attack ---
-    const playerWeaponIndex = get(combatStore).playerWeaponIndex;
-    const attackingWeapon = player.equipment.weapon_slots[playerWeaponIndex];
-    const attackElement = attackingWeapon?.element || 'None';
-
-    // Check for Coherence Buff
-    const coherenceActive =
-        player.equipment.weapon_slots[0] &&
-        player.equipment.weapon_slots[1] &&
-        player.equipment.weapon_slots[0].element === player.equipment.weapon_slots[1].element;
-
-    let elementalAttack = player.elementalAttack || 0;
-    if (coherenceActive) {
-        elementalAttack *= 1.3;
-        logs.push({ left: { text: 'Coherence Buff active! (+30% E.ATK)', class: 'buff' } });
-    }
-
-    const attackerWithBuffs: Combatant = {
-        ...player,
-        elementalAttack,
-    };
-
-    const elementalAttackResult = executeAttack(attackerWithBuffs, updatedOpponent, 'elemental', [attackElement]);
-    updatedOpponent = applyDamage(updatedOpponent, elementalAttackResult.damage);
-    logs = logs.concat(elementalAttackResult.logs);
-
-    return { updatedOpponent, logs };
-}
-
-/**
- * Executes a full turn for the opponent.
- */
-export function executeEnemyTurn(opponent: Combatant, player: Combatant) {
-    let logs: CombatLogMessage[] = [];
-    let updatedPlayer = { ...player };
-
-    // --- 1. Physical Attack ---
-    const physicalAttackResult = executeAttack(opponent, updatedPlayer, 'physical');
-    updatedPlayer = applyDamage(updatedPlayer, physicalAttackResult.damage);
-    logs = logs.concat(physicalAttackResult.logs);
-
-    if (updatedPlayer.hp <= 0) {
-        return { updatedPlayer, logs };
-    }
-
-    // --- 2. Elemental Attack ---
-    const turnNumber = get(combatStore).turnNumber;
-    const elementIndex = (turnNumber - 1) % (opponent.elements?.length || 1);
-    const attackElement = opponent.elements ? opponent.elements[elementIndex] : 'None';
-
-    const elementalAttackResult = executeAttack(opponent, updatedPlayer, 'elemental', [attackElement]);
-    updatedPlayer = applyDamage(updatedPlayer, elementalAttackResult.damage);
-    logs = logs.concat(elementalAttackResult.logs);
-
-    return { updatedPlayer, logs };
+    return { updatedAttacker: currentAttacker, updatedDefender: currentDefender, logs };
 }

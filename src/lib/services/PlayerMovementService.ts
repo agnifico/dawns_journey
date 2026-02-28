@@ -8,16 +8,18 @@ import { checkForTileInteraction } from './InteractionService';
 import { checkForRandomEncounter } from './EncounterService';
 import { getRegionForPosition } from './MapService';
 import { processBuffs } from './BuffService';
+import * as AchievementService from './AchievementService';
 import type { MapData } from '$lib/types';
 
 /**
  * Moves the player and triggers appropriate interactions or encounters.
  */
 export async function movePlayer(dx: number, dy: number) {
-    const mapData = get(mapStore).mapData;
+    const mapStoreState = get(mapStore);
+    const mapData = mapStoreState.maps[mapStoreState.currentMapId];
     if (!mapData) return;
 
-    let player = get(playerStore);
+    const player = get(playerStore);
     const newPosition = { x: player.position.x + dx, y: player.position.y + dy };
 
     // Check boundaries
@@ -44,25 +46,21 @@ export async function movePlayer(dx: number, dy: number) {
             }
         }
         if (!canPass) {
-            messageStore.addMessage('You shall not pass.', ['World', 'Help'], undefined, regionInfo.gates.map(r => ({ name: r.element, level: r.level })));
+            mapStore.showRegionNotification(regionInfo.name, regionInfo.gates.map(r => ({ name: r.element, level: r.level })));
+            setTimeout(() => {
+                mapStore.hideRegionNotification();
+            }, 3000);
             return;
         }
     }
 
-    // Process buffs before updating time and position
-    const nextTime = get(time) + 1;
-    player = processBuffs(player, nextTime);
-
-    // Update player position and time
+    // All checks passed, update player position
     const direction = dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up';
-    playerStore.update(p => ({ ...player, position: newPosition, direction, isMoving: true }));
-    mapStore.setPlayerPosition(newPosition.x, newPosition.y); // NEW LINE: Update mapStore with player position
-    time.update(t => t + 1);
-    clearEvent();
-
-    // Check for interactions and encounters
-    const interactionOccurred = await checkForTileInteraction();
-    if (!interactionOccurred) {
-        checkForRandomEncounter();
-    }
+    playerStore.update(p => ({
+        ...p,
+        position: newPosition,
+        direction,
+        isMoving: true,
+        stepsTaken: p.stepsTaken + 1,
+    }));
 }

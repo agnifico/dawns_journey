@@ -14,19 +14,25 @@
     "types": [
         "Earth"
     ],
+    "abilityCycle": [
+        "basic_slash",
+        "elemental_smite",
+        "basic_poison"
+    ],
     "baseStats": {
-        "hp": 100,
-        "maxHp": 100,
-        "auraShield": 20,
-        "maxAuraShield": 20,
-        "physicalAttack": 15,
+        "hp": 50,
+        "maxHp": 50,
+        "auraShield": 10,
+        "maxAuraShield": 10,
+        "physicalAttack": 50,
         "physicalDefence": 10,
-        "elementalAttack": 20,
+        "elementalAttack": 50,
         "elementalDefence": 15,
-        "speed": 30,
-        "evasion": 20,
+        "speed": 40,
+        "evasion": 10,
         "critChance": 0.05,
-        "critDamage": 1.5
+        "critDamage": 1.5,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,
@@ -50,6 +56,23 @@
         "Over 3 days, with her own hands, no magic, she raised mountains, planted forest, and covered Ymir with a landform,",
         "one that is blessed of life. That is the story of Dragon Island. "
     ],
+    "drops": [
+        {
+            "itemId": "bread",
+            "chance": 1,
+            "quantity": 20
+        },
+        {
+            "itemId": "wheat_seed",
+            "chance": 1,
+            "quantity": 6
+        },
+        {
+            "itemId": "potato_seed",
+            "chance": 1,
+            "quantity": 6
+        }
+    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -66,7 +89,7 @@
                     "value": 1,
                     "dialogue": [
                         "You fought well, but the forest is stronger.",
-                        "(Hint: You should equip the weapon - Vine Whip. Check out your Inventory, 'treasure chest' icon on top.)"
+                        "(Hint: You should equip the weapon - Basic Bow/Sword. Check out your Inventory, 'treasure chest' icon on top.)"
                     ]
                 }
             ]
@@ -152,6 +175,11 @@
                     "reminder_dialogue": [
                         "The trees of the island are bountiful. You can gather some wood from them."
                     ],
+                    "intro_dialogue": [
+                        "There are several locations that could be of interest to you - sometimes marked, and sometimes not.",
+                        "For example, certain TREE icons indicate a Resource - in this case, one you can gather Wood from.",
+                        "Can you gather 10 Wood first?"
+                    ],
                     "success_dialogue": [
                         "Perfect, you now have enough Wood for a rainy day."
                     ]
@@ -164,11 +192,20 @@
                         "rankType": "heart",
                         "value": 1
                     },
+                    "intro_dialogue": [
+                        "I need some Wood. Would you care to gift me some?",
+                        "If you need more context, talk to me again."
+                    ],
                     "reminder_dialogue": [
-                        "I need some Wood. Would you care to gift me some?"
+                        "I need some Wood. Would you care to GIFT me some?",
+                        "Characters (like me) will often have list of Items you can Gift them.",
+                        "When you Gift an Item, your rapport with them increases.",
+                        "Once the rapport is adequate, the Character's Heart Rank levels up.",
+                        "Meaning now you are closer to them <3"
                     ],
                     "success_dialogue": [
-                        "You have shown your kindness. The forest thanks you."
+                        "Perfect! *blushes* Wood, I mean, the Wood is just what I needed.",
+                        "Here's a gift for you too. My favourite whip..."
                     ],
                     "success_rewards": [
                         {
@@ -203,18 +240,30 @@
                     "unavailable_dialogue": [
                         "The forest is quiet today."
                     ],
+                    "intro_dialogue": [
+                        "Hey youu, back for some more?",
+                        "Defeat 5 of these monsters called Greenhorns.",
+                        "They're sprawling around these parts. You know those lil baby dragons which keep fluttering around?",
+                        "And again, if you need further help, Talk to me."
+                    ],
                     "reminder_dialogue": [
-                        "The Greenhorn dragons are getting a bit too numerous...",
-                        "(Hint: You should equip the weapon - Vine Whip. Check out your Inventory, 'treasure chest' icon on top.)"
+                        "You need help? Start by Equip-ing the Vine Whip I gave you last quest.",
+                        "Go to the Inventory, and Equip it.",
+                        "You'll see yourself having some 'Weapon Mastery'",
+                        "Combat against these monsters is simple: if you have an element and a number higher the ones listed in this screen area, you win. No fuss.",
+                        "So Greenhorns can be handled with 15 Earth Mastery or 25 Fire Mastery.",
+                        "Remember: OR, not AND. Either will do. And the game prioritizes flow, and progress, so there's no 'real combat' against these enemies.",
+                        "However, Characters (with a capital 'C') like me, are a different story entirely.",
+                        "Well, maybe not me, because I'm a tutorial character and I'm designed and coded for you, *bites lips* ... to have an easy time with me."
                     ],
                     "success_dialogue": [
-                        "Thank you. The forest is a little safer now."
+                        "Ooh I see you're good with that whip, mommy."
                     ],
                     "success_rewards": [
                         {
                             "type": "item",
-                            "itemId": "hymn",
-                            "quantity": 1
+                            "itemId": "citrine",
+                            "quantity": 2
                         },
                         {
                             "type": "tag",
@@ -247,11 +296,20 @@
                     "unavailable_dialogue": [
                         "I am not ready to face you yet."
                     ],
+                    "intro_dialogue": [
+                        "Look at you, growing up strong!",
+                        "It's time for a small taste of combat.",
+                        "Fight me. Dominate me."
+                    ],
                     "reminder_dialogue": [
-                        "I need to see your strength in battle first."
+                        "Combat against Characters: You should check out the Arena page. The button with the Gladiator Helmet on top.",
+                        "The page has a detailed explanation of how combat works.",
+                        "But for now, assume Combat vs. Characters is the mystery, the strategy aspect of the game,",
+                        "and I highly suggest you finish the Dragon Island questline first, acquire all the Story granted Items and get stronger first.",
+                        "If you're new to RPG games, we'll guide you through it eventually."
                     ],
                     "success_dialogue": [
-                        "Well fought. Now, I need you to face another challenger."
+                        "Was that too hard? I hope not! xD"
                     ]
                 },
                 {
@@ -261,16 +319,24 @@
                         "npcId": "hela",
                         "quantity": 1
                     },
+                    "intro_dialogue": [
+                        "Next, I sense this weird sense of power around this island. I don't know who or what is this source of strange, dark, yet liberating aura.",
+                        "Maybe it's someone over on the dildo shaped island to the West. No wonder we call it Pleasure Island xD",
+                        "Pleasure Island to the North, and a Treasure Island, along the same X-Axis to the south.",
+                        "Can you go and see what this aura is coming from?"
+                    ],
                     "reminder_dialogue": [
-                        "Hela awaits. Go and test your might."
+                        "Hint: You might have to fight this 'source of power'."
                     ],
                     "success_dialogue": [
-                        "You have faced her. That is all I ask. Here is your reward."
+                        "Hela, you say? Hmm, is she hot?",
+                        "I might have to go and find out myself sometime.",
+                        "Thank you, we should rest up for the night."
                     ],
                     "success_rewards": [
                         {
                             "type": "item",
-                            "itemId": "requiem",
+                            "itemId": "sylvies_shorts",
                             "quantity": 1
                         },
                         {
@@ -300,14 +366,25 @@
                     "unavailable_dialogue": [
                         "The time is not right."
                     ],
-                    "reminder_dialogue": [
+                    "intro_dialogue": [
                         "It's time you tried out Farming! Grow 5 potatoes and show me.",
                         "Go to the Homestead area (you can find it as the 'House' icon on top).",
                         "There, you can find your Homestead, and your Farming area.",
                         "Plant one potato seed per plot, water them, and wait."
                     ],
+                    "reminder_dialogue": [
+                        "Go to the Homestead area (you can find it as the 'House' icon on top).",
+                        "There, you can find your Homestead, and your Farming area.",
+                        "Plant one potato seed per plot, water them, and wait.",
+                        "For now, ignore Actions - these are technical upgrades to your Plot that allow you to plant more crops.",
+                        "You'll figure out in due time, promise."
+                    ],
                     "success_dialogue": [
-                        "Yayy potaayytoooozz!!!"
+                        "Yayy potaayytoooozz!!!",
+                        "But yay, you also finished the basic tutorial!",
+                        "As a gift for our time together, I gave you something. Do check your Inventory later.",
+                        "Thank you for playing this game so far, and I hope you have a good time here.",
+                        "I know, I did, with you <3"
                     ],
                     "success_rewards": [
                         {
@@ -327,15 +404,15 @@
     "heartRanks": [
         {
             "rank_up_dialogue": [
-                "Thank you for your kindness. I feel we have grown closer."
+                "You're cute, I like you."
             ],
             "giftingOptions": [
                 {
                     "itemId": "wood",
-                    "quantity": 2,
-                    "value": 2,
+                    "quantity": 10,
+                    "value": 10,
                     "dialogue": [
-                        "Thank you. A gift for the forest is a gift for me."
+                        "Imma build more stuff with this Wood!"
                     ]
                 },
                 {

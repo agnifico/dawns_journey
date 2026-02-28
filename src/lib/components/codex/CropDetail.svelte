@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getItemById } from '$lib/services/InventoryService';
     import type { CropDefinition } from '$lib/types';
 
     export let item: CropDefinition;
@@ -6,7 +7,8 @@
 
 <div class="detail-container">
     <div class="detail-header">
-        <img src={item.growthStages[item.growthStages.length - 1].imagePath} alt={item.name} class="detail-image" />
+        <!-- <img src={item.growthStages[item.growthStages.length - 1].imagePath} alt={item.name} class="detail-image" /> -->
+        <img src={getItemById(item.yields)?.image} alt={item.name} class="detail-image" />
         <h1>{item.name}</h1>
     </div>
     <p class="description">{item.description}</p>
@@ -17,7 +19,7 @@
         </div>
         <div class="info-item">
             <span class="info-label">Season Bonus</span>
-            <span class="info-value">{item.growthMultiplierInIdealSeason}x Growth</span>
+            <span class="info-value">{item.idealSeasonYieldMultiplier}x Yield</span>
         </div>
         <div class="info-item">
             <span class="info-label">Watering</span>
@@ -34,6 +36,10 @@
          <div class="info-item">
             <span class="info-label">Unlock Level</span>
             <span class="info-value">{item.unlockLevel || 1}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Time Per Stage</span>
+            <span class="info-value">{item.growthStages[0].duration / (60*1000)} min(s)</span>
         </div>
     </div>
 </div>

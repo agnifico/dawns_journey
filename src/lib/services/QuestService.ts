@@ -1,8 +1,7 @@
 import { get } from 'svelte/store';
 import { questStore } from '$lib/stores/questStore';
-import { npcStore } from '$lib/stores/npcStore';
 import type { Requirement, Player, NPC, RequirementCondition } from '$lib/types';
-import { removeItem } from './ItemService';
+import { removeItemsByItemId, hasItem } from './InventoryService';
 
 type RequirementCheck = (
     condition: any,
@@ -21,13 +20,11 @@ const requirementCheckers: Record<string, RequirementCheck> = {
     },
     dialogue: () => true,
     have_item: (condition, player) => {
-        const item = player.inventory.find(i => i.itemId === condition.itemId);
-        return item ? item.amount >= condition.quantity : false;
+        return hasItem(player.inventory, condition.itemId, condition.quantity);
     },
     give_item: (condition, player, npc, globalNpcs, isStartRequirement, postCheckActions) => {
-        const hasItem = player.inventory.find(i => i.itemId === condition.itemId && i.amount >= condition.quantity);
-        if (hasItem) {
-            postCheckActions.push((p: Player) => removeItem(p, condition.itemId, condition.quantity));
+        if (hasItem(player.inventory, condition.itemId, condition.quantity)) {
+            postCheckActions.push((p: Player) => removeItemsByItemId(p, condition.itemId, condition.quantity));
             return true;
         }
         return false;
@@ -127,6 +124,8 @@ export function checkRequirement(
     return { met, postCheckActions: met ? postCheckActions : [] };
 }
 
+
+import { npcStore } from '$lib/stores/npcStore';
 
 export function checkQuestTriggers(player: Player): Player {
     let newPlayer = { ...player };

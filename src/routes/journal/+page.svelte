@@ -1,13 +1,15 @@
 <script lang="ts">
     import GameDesignChapter from './GameDesignChapter.svelte';
     import HowToPlayChapter from './HowToPlayChapter.svelte';
+    import AchievementsChapter from './AchievementsChapter.svelte';
 
-    type Chapter = 'dev_notes' | 'how_to_play';
+    type Chapter = 'dev_notes' | 'how_to_play' | 'achievements';
     let activeChapter: Chapter = 'dev_notes';
 
     const chapters: { id: Chapter, title: string }[] = [
         { id: 'dev_notes', title: "Developer's Notes" },
         { id: 'how_to_play', title: 'How to Play' },
+        { id: 'achievements', title: 'Achievements' },
         // { id: 'characters', title: 'Characters' }, // Future chapters
         // { id: 'storyline', title: 'Storyline' },
         // { id: 'world', title: 'World' },
@@ -41,6 +43,8 @@
                 <GameDesignChapter />
             {:else if activeChapter === 'how_to_play'}
                 <HowToPlayChapter />
+            {:else if activeChapter === 'achievements'}
+                <AchievementsChapter />
             {/if}
         </main>
     </div>

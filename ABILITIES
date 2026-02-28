@@ -1,0 +1,54 @@
+  ABILITIES
+  ┌──────────────────────────────────┬────────────────────┐
+  │ Ability Name                     │ ID                 │
+  ├──────────────────────────────────┼────────────────────┤
+  │ Basic / shared abilities         │                    │
+  │ Basic Slash                      │ basic_slash        │
+  │ Minor Heal                       │ minor_heal         │
+  │ Elemental Blast                  │ elemental_blast    │
+  │ Elemental Blast 2                │ elemental_smite   │
+  │ Elemental Blast 3                │ spirit_storm   │
+  │ Elemental Blast 4                │ cataclysm   │
+  │ Basic Poison                     │ basic_poison       │
+  │ Rapid Strike                     │ rapid_strike       │
+  │ Hammer Smite                     │ hammer_smite       │
+  │ Stun                             │ stun               │
+  │ Execution                        │ execution          │
+  │ Shield Breaker                   │ shield_breaker     │
+  │ Smokescreen                      │ smokescreen        │
+  │ Fury                             │ fury               │
+  │ Fortify                          │ fortify            │
+  │ Demoralise                       │ demoralise         │
+  │ Penetrate                        │ penetrate          │
+  │ Cygwin — The Iron Lioness        │                    │
+  │ Iron Wall                        │ iron_wall          │
+  │ Crushing Poison                  │ crushing_poison    │
+  │ War Cry                          │ warcry_stun        │
+  │ Second Wind                      │ second_wind     │
+  │ Final Resolve                    │ final_resolve     │
+  │ Claudia — The Ice Aristocrat     │                    │
+  │ Glass Cannon                     │ frost_reaper       │
+  │ Blizzard Surge                   │ blizzard_surge     │
+  │ Frozen Ground                    │ frozen_ground      │
+  │ Guinevere — The Holy Commander   │                    │
+  │ Unshackled                       │ unshackled         │
+  │ Divine Judgment                  │ divine_judgment    │
+  │ Hela — Queen of Hell and Night   │                    │
+  │ Queen's Resurrection             │ resurrection       │
+  │ Abyssal Toxin                    │ abyss_poison       │
+  │ Hellfire                         │ hellfire           │
+  │ Armor Shatter                    │ armor_shatter      │
+  │ Night's Curse                    │ night_curse        │
+  │ Reaping Blow                     │ reaping_blow       │
+  │ Sylvie (updated arena abilities) │                    │
+  │ Thorned Poison                   │ thorned_poison     │
+  │ Aoife — The Pirate Captain      │                    │
+  │ Rapid Volley                     │ rapid_volley       │
+  │ Powder Keg                       │ powder_keg         │
+  │ Flintlock Barrage                │ flintlock_barrage  │
+  │ Marjane — Queen of the Sea       │                    │
+  │ Sea Ward                         │ sea_ward           │
+  │ Seal of Tides                    │ seal_of_tides      │
+  │ Tidal Surge                      │ tidal_surge        │
+  │ Oceanic Ascendance               │ oceanic_ascendance │
+  └──────────────────────────────────┴────────────────────┘

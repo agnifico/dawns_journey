@@ -1,7 +1,7 @@
 {
     "id": "guinevere",
     "name": "Guinevere",
-    "profileImage": "/images/characters/guinevere/guinevere_profile.png",
+    "profileImage": "/images/characters/guinevere/guinevere_avatar.png",
     "image": "/images/characters/guinevere/guinevere1.png",
     "galleryImages": [
         "/images/characters/guinevere/guinevere0.png",
@@ -11,22 +11,23 @@
         "/images/characters/guinevere/guinevere4.png"
     ],
     "description": "The local branch head of the Solis Saints, dedicated to bringing stability to the island through 'purification'.",
-    "faction": "Solis Saints",
+    "faction": "solis_saints",
     "isCombatant": true,
     "types": ["Light", "Dark"],
     "baseStats": {
-        "hp": 500,
-        "maxHp": 500,
+        "hp": 700,
+        "maxHp": 700,
         "auraShield": 100,
         "maxAuraShield": 100,
-        "physicalAttack": 50,
-        "physicalDefence": 40,
-        "elementalAttack": 70,
-        "elementalDefence": 40,
+        "physicalAttack": 400,
+        "physicalDefence": 400,
+        "elementalAttack": 400,
+        "elementalDefence": 400,
         "speed": 60,
-        "evasion": 40,
-        "critChance": 0.15,
-        "critDamage": 1.6
+        "evasion": 150,
+        "critChance": 0.5,
+        "critDamage": 1.6,
+        "precision": 75
     },
     "swordRank": 0,
     "heartRank": 0,

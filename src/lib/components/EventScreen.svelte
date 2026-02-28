@@ -3,7 +3,7 @@
 	import { eventScreen, clearEvent } from '$lib/stores/uiStore';
 	import { npcStore } from '$lib/stores/npcStore';
 	import { resourceStore } from '$lib/stores/resourceStore';
-	import { mapStore } from '$lib/stores/mapStore'; // Import mapStore
+	import { mapStore, landscapeImage } from '$lib/stores/mapStore'; // Import mapStore
 	import { time } from '$lib/stores/timeStore';
 	import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
 	import { triggerEventEffect } from '$lib/services/LocationEventService';
@@ -24,32 +24,6 @@
 	}
 
 	// Derived store for landscape image
-	const landscapeImage = derived(mapStore, ($mapStore) => {
-		const { mapData, playerX, playerY } = $mapStore;
-		if (!mapData) return '';
-
-		let currentLandscape: string | undefined;
-
-		// Find matching landscape
-		for (const landscape of mapData.landscapes) {
-			if (
-				playerX >= landscape.x &&
-				playerX < landscape.x + landscape.width &&
-				playerY >= landscape.y &&
-				playerY < landscape.y + landscape.height
-			) {
-				currentLandscape = landscape.landscape;
-				break;
-			}
-		}
-
-		// Use default if no specific landscape found
-		const landscapeId = currentLandscape || mapData.defaultLandscape;
-		// Construct image path (assuming images are in /static/locations/ and are .jpg)
-		// I will assume .jpg for now, but if some are .png, this logic might need to be more sophisticated.
-		// For now, based on the directory listing, most landscapes are .jpg
-		return landscapeId ? `/locations/${landscapeId}.jpg` : '';
-	});
 
 	// --- Component State ---
 	let lightboxVisible = false;
@@ -146,7 +120,7 @@
 		<div class="placeholder"></div>
 	{:else}
 		<div class="container">
-			{#if $eventScreen.type === 'npc'}
+			{#if $eventScreen.type === 'npc' && npc}
 				<div class="npc-card">
 					<button class="avatar-button" on:click={() => openLightbox(npc.image)}>
 						<img src={$eventScreen.image} alt="NPC Avatar" class="npc-image" />
@@ -155,13 +129,14 @@
 						<div class="top">
 							<div class="npc-name">{npc.name}</div>
 							<div class="npc-title">{npc.title}</div>
-							
 						</div>
 						<div class="mid">
 							<div class="elements">
-								{#each npc.types as type}
-									<ElementTag element={type} />
-								{/each}
+								{#if npc && npc.types}
+									{#each npc.types as type}
+										<ElementTag element={type} />
+									{/each}
+								{/if}
 							</div>
 							<button
 								class="info-button"
@@ -185,6 +160,8 @@
 						</div>
 					</div>
 				</div>
+			{:else if $eventScreen.type === 'npc'}
+				<p>Could not find NPC data.</p>
 			{:else}
 				<div class="image-container">
 					{#if $eventScreen.image}
@@ -268,6 +245,7 @@
 		display: flex;
 		flex-direction: column;
 		padding-top: 2rem;
+		flex-grow: 1;
 		/* align-items: center; */
 		/* justify-content: center; */
 		/* margin: 1rem 0 auto 1rem; */
@@ -337,7 +315,7 @@
 		height: 400px;
 		box-sizing: border-box;
 		gap: 1rem;
-		border: 3px solid var(--color-surface-2);
+		border: 3px solid var(--surface-2);
 		border-radius: 12px;
 		overflow: hidden;
 	}
@@ -410,7 +388,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: 0.5rem;
-		background-color: var(--color-surface-2);
+		background-color: var(--surface-2);
 		padding: 4px 8px 4px 4px;
 	}
 	.cooldown-icon {
@@ -461,7 +439,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
-			gap: .5rem;
+			gap: 0.5rem;
 			/* background-color: #555;
 			width: fit-content;
 			padding-right: .5rem;

@@ -37,7 +37,7 @@
         <div
             class="plot-area"
             class:selected={$selectedPlotId === plot.id}
-            style="left: {plot.x}px; top: {plot.y}px; width: {plot.width}px; height: {plot.height}px;"
+            style="left: {plot.x*1.25}px; top: {plot.y*1.25}px; width: {plot.width*1.25}px; height: {plot.height*1.25}px;"
             on:click={() => handlePlotClick(plot)}
             title="Plot #{plot.plotNumber}"
         >

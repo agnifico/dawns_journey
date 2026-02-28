@@ -1,15 +1,16 @@
 {
     "id": "akari",
-    "name": "Akari",
+    "name": "Alice",
     "profileImage": "/images/characters/akari/akari_avatar.png",
     "image": "/images/characters/akari/akari1.png",
     "galleryImages": [
         "/images/characters/akari/akari0.png",
         "/images/characters/akari/akari1.png",
-        "/images/characters/akari/akari2.png"
+        "/images/characters/akari/akari2.png",
+        "/images/characters/akari/akari3.png"
     ],
     "description": "A mysterious agent of the Shadowhand, working to thwart the plans of the Solis Saints.",
-    "faction": "Shadowhand",
+    "faction": "shadowhand",
     "isCombatant": true,
     "types": [
         "Fire"
@@ -26,7 +27,8 @@
         "speed": 30,
         "evasion": 20,
         "critChance": 0.05,
-        "critDamage": 1.5
+        "critDamage": 1.5,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,
@@ -111,5 +113,9 @@
             ]
         }
     ],
-    "heartRanks": []
+    "heartRanks": [
+        {
+            "factionScoreMultiplier": 3
+        }
+    ]
 }

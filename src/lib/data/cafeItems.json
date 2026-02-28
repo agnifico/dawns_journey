@@ -1,0 +1,272 @@
+[
+    {
+        "id": "curry",
+        "name": "Curry",
+        "description": "A warm, savory curry served in a dish.",
+        "image": "/cafe/33_curry_dish.png",
+        "type": "general",
+        "price": 18,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "apple_pie",
+        "name": "Apple Pie",
+        "description": "A slice of classic apple pie with a flaky crust.",
+        "image": "/cafe/06_apple_pie_dish.png",
+        "type": "general",
+        "price": 10,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "bread_dish",
+        "name": "Fresh baked Bread",
+        "description": "Freshly baked bread with a soft center.",
+        "image": "/cafe/08_bread_dish.png",
+        "type": "general",
+        "price": 6,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "baguette",
+        "name": "Baguette",
+        "description": "A crusty, traditional French baguette.",
+        "image": "/cafe/10_baguette_dish.png",
+        "type": "general",
+        "price": 8,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "bacon_dish",
+        "name": "Bacon",
+        "description": "Crispy strips of fried bacon.",
+        "image": "/cafe/14_bacon_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "burger",
+        "name": "Burger",
+        "description": "A standard beef burger served on a napkin.",
+        "image": "/cafe/17_burger_napkin.png",
+        "type": "general",
+        "price": 15,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "burrito",
+        "name": "Burrito",
+        "description": "A hearty burrito filled with savory ingredients.",
+        "image": "/cafe/19_burrito_dish.png",
+        "type": "general",
+        "price": 14,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "chocolate_cake",
+        "name": "Chocolate Cake",
+        "description": "A rich and moist slice of chocolate cake.",
+        "image": "/cafe/31_chocolatecake_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "dumplings",
+        "name": "Dumplings",
+        "description": "A portion of steamed dumplings.",
+        "image": "/cafe/37_dumplings_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "fried_egg",
+        "name": "Fried Egg",
+        "description": "A single fried egg, cooked sunny-side up.",
+        "image": "/cafe/39_friedegg_dish.png",
+        "type": "general",
+        "price": 5,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "egg_salad",
+        "name": "Egg Salad",
+        "description": "A bowl of freshly prepared egg salad.",
+        "image": "/cafe/41_eggsalad_bowl.png",
+        "type": "general",
+        "price": 9,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "french_fries",
+        "name": "French Fries",
+        "description": "Golden, crispy potato fries.",
+        "image": "/cafe/45_frenchfries_dish.png",
+        "type": "general",
+        "price": 8,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "fruitcake",
+        "name": "Fruitcake",
+        "description": "A dense cake containing dried fruits and nuts.",
+        "image": "/cafe/47_fruitcake_dish.png",
+        "type": "general",
+        "price": 10,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "hot_dog",
+        "name": "Hot Dog",
+        "description": "A classic hot dog served in a soft bun.",
+        "image": "/cafe/56_hotdog_dish.png",
+        "type": "general",
+        "price": 10,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "ice_cream",
+        "name": "Ice Cream",
+        "description": "A bowl of chilled, creamy ice cream.",
+        "image": "/cafe/58_icecream_bowl.png",
+        "type": "general",
+        "price": 9,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "jelly",
+        "name": "Jelly",
+        "description": "A sweet and wobbly fruit-flavored jelly.",
+        "image": "/cafe/60_jelly_dish.png",
+        "type": "general",
+        "price": 7,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "mac_n_cheese",
+        "name": "Mac n Cheese",
+        "description": "Creamy pasta with a rich cheese sauce.",
+        "image": "/cafe/68_macncheese_dish.png",
+        "type": "general",
+        "price": 14,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "meatballs",
+        "name": "Meatballs",
+        "description": "Savory seasoned meatballs.",
+        "image": "/cafe/70_meatball_dish.png",
+        "type": "general",
+        "price": 16,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "nachos",
+        "name": "Nachos",
+        "description": "Crunchy tortilla chips with various toppings.",
+        "image": "/cafe/72_nacho_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "pudding",
+        "name": "Pudding",
+        "description": "A smooth and creamy sweet pudding.",
+        "image": "/cafe/76_pudding_dish.png",
+        "type": "general",
+        "price": 8,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "pizza",
+        "name": "Pizza",
+        "description": "A delicious slice of pizza with classic toppings.",
+        "image": "/cafe/82_pizza_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "roasted_chicken",
+        "name": "Roasted Chicken",
+        "description": "Tender and flavorful roasted chicken.",
+        "image": "/cafe/86_roastedchicken_dish.png",
+        "type": "general",
+        "price": 22,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "ramen",
+        "name": "Ramen",
+        "description": "A hot bowl of ramen noodles in broth.",
+        "image": "/cafe/87_ramen.png",
+        "type": "general",
+        "price": 18,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "salmon",
+        "name": "Salmon",
+        "description": "A cooked salmon fillet served as a main dish.",
+        "image": "/cafe/89_salmon_dish.png",
+        "type": "general",
+        "price": 25,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "strawberry_cake",
+        "name": "Strawberry Cake",
+        "description": "A light sponge cake with fresh strawberries.",
+        "image": "/cafe/91_strawberrycake_dish.png",
+        "type": "general",
+        "price": 11,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "sandwich",
+        "name": "Sandwich",
+        "description": "A freshly made sandwich with various fillings.",
+        "image": "/cafe/93_sandwich_dish.png",
+        "type": "general",
+        "price": 12,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "spaghetti",
+        "name": "Spaghetti",
+        "description": "Long pasta served with a savory sauce.",
+        "image": "/cafe/94_spaghetti.png",
+        "type": "general",
+        "price": 16,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "steak",
+        "name": "Steak",
+        "description": "A grilled steak cooked to your preference.",
+        "image": "/cafe/96_steak_dish.png",
+        "type": "general",
+        "price": 28,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "sushi",
+        "name": "Sushi",
+        "description": "A selection of fresh sushi pieces.",
+        "image": "/cafe/98_sushi_dish.png",
+        "type": "general",
+        "price": 20,
+        "flags": ["stackable", "cafe"]
+    },
+    {
+        "id": "taco",
+        "name": "Taco",
+        "description": "A crispy taco filled with meat and vegetables.",
+        "image": "/cafe/100_taco_dish.png",
+        "type": "general",
+        "price": 10,
+        "flags": ["stackable", "cafe"]
+    }
+]

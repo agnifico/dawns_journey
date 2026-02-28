@@ -1,39 +1,43 @@
 <script lang="ts">
-    export let element: string;
+	export let element: string;
+	export let size = 'full';
 </script>
 
-<div class="element-tag" title={element}>
-    <img src={`/images/${element.toLowerCase()}.png`} alt={element} class="element-icon" />
-    <span class="element-name {element.toLowerCase()}">{element.toUpperCase() }</span>
+<div class="element-tag" title={element} class:full={size==='full'}>
+	<img src={`/images/${element.toLowerCase()}.png`} alt={element} class="element-icon" />
+	{#if size !== 'mini'}
+		<span class="element-name {element.toLowerCase()}">{element.toUpperCase()}</span>
+	{/if}
 </div>
 
 <style>
-    .element-tag {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem;
-        background-color: var(--black);      
-        padding: 0.2rem 0.25em 0.2rem 0.25rem;
-        border-radius: 6px;
-        border: 1px solid var(--color-border);
-        font-family: var(--font-family-pixel);
-        font-size: .50rem;
-        color: var(--color-text-muted);
+	.element-tag {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		background-color: var(--black);
+		border-radius: 6px;
+		border: 1px solid var(--color-border);
+		font-family: var(--font-family-pixel);
+		font-size: 0.5rem;
+		color: var(--color-text-muted);
+	}
+    .full {
         border: 2px solid rgba(0, 0, 0, 0.5);
+        padding: 0.2rem 0.25em 0.2rem 0.25rem;
     }
-    .element-icon {
-        width: 20px;
-        height: 20px;
-    }
-    .element-name {
-        /* font-weight: bold; */
-        margin-bottom: 0;
-        margin-top: auto;
-    }
+	.element-icon {
+		width: 20px;
+		height: 20px;
+	}
+	.element-name {
+		/* font-weight: bold; */
+		margin-bottom: 0;
+		margin-top: auto;
+	}
 
-
-    .fire {
+	.fire {
 		color: #cc4113;
 	}
 

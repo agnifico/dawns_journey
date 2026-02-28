@@ -1,0 +1,14 @@
+{
+    "levels": {
+        "1": { "xp": 0, "rewards": [] },
+        "2": { "xp": 100, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "3": { "xp": 300, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "4": { "xp": 600, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "5": { "xp": 1000, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "6": { "xp": 1500, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "7": { "xp": 2100, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "8": { "xp": 2800, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "9": { "xp": 3600, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] },
+        "10": { "xp": 4500, "rewards": [{ "type": "item", "itemId": "level_up_point", "amount": 1, "name": "Level-Up Point" }] }
+    }
+}

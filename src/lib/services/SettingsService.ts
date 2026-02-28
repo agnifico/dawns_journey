@@ -3,29 +3,31 @@ import { playerStore } from '$lib/stores/playerStore';
 import { npcStore } from '$lib/stores/npcStore';
 import { questStore } from '$lib/stores/questStore';
 import { time } from '$lib/stores/timeStore';
-import { items as allItems } from '$lib/data/items';
+import { getAllItems, addItems } from '$lib/services/InventoryService';
 import { playerDev, devNpcState, devQuestState } from '$lib/data/player.dev';
 import { checkQuestTriggers } from '../services/QuestService';
-import type { InventoryItem, ActiveEffect } from '$lib/types';
+import * as AchievementService from './AchievementService';
+import type { Item, ActiveEffect } from '$lib/types';
 
 /**
  * Replaces the player's inventory with a full set of all items in the game.
  */
 export function addAllItems() {
-    const newInventory: InventoryItem[] = [];
+    playerStore.update(p => {
+        let newPlayer = { ...p, inventory: [] }; // Clear existing inventory
+        const allItems = getAllItems();
 
-    for (const item of allItems) {
-        if (item.type === 'general') {
-            newInventory.push({ itemId: item.id, amount: 5 });
-        } else if (item.type === 'weapon' || item.type === 'relic') {
-            newInventory.push({ itemId: item.id, amount: 1 });
+        for (const item of allItems) {
+            if (item.flags?.includes('stackable')) {
+                newPlayer = addItems(newPlayer, item.id, 99, false);
+            } else {
+                newPlayer = addItems(newPlayer, item.id, 1, false);
+            }
         }
-    }
+        return newPlayer;
+    });
 
-    playerStore.update(p => ({
-        ...p,
-        inventory: newInventory,
-    }));
+    AchievementService.checkCollection();
 }
 
 /**

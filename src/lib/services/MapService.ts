@@ -1,7 +1,15 @@
+import { get } from 'svelte/store';
+import { mapStore } from '$lib/stores/mapStore';
 import type { MapData } from '../types';
 import { regionDefinitions } from '$lib/data/regionDefinitions';
 
 export const loadMap = async (mapId: string): Promise<MapData | null> => {
+    const existingMaps = get(mapStore).maps;
+    if (existingMaps[mapId]) {
+        mapStore.update(s => ({ ...s, currentMapId: mapId }));
+        return existingMaps[mapId];
+    }
+
     try {
         const mapModules = import.meta.glob('$lib/data/maps/final/*.json');
         const mapPath = `/src/lib/data/maps/final/${mapId}.json`;
@@ -18,6 +26,8 @@ export const loadMap = async (mapId: string): Promise<MapData | null> => {
             mapData.objects = [];
         }
 
+        mapStore.setMapData(mapId, mapData);
+        mapStore.update(s => ({ ...s, currentMapId: mapId }));
         return mapData;
     } catch (error) {
         console.error(`Failed to load map: ${mapId}`, error);

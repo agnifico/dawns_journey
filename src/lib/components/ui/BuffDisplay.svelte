@@ -9,13 +9,18 @@
 
 <div class="buff-display" class:buff={isBuff} class:debuff={!isBuff} title={`${effect.name} from ${effect.source}`}>
     <img src={`/game_icons/${effect.stat}.png`} alt={effect.stat} class="stat-icon" />
+    {#if effect.stat === 'critChance' || effect.stat === 'critDamage'}
+    <span class="value">{parseInt(valueDisplay,10)*100}</span>
+    {:else}
     <span class="value">{valueDisplay}</span>
+      
+    {/if}
     <img src={`/game_icons/${isBuff ? 'up' : 'down'}.png`} alt={isBuff ? 'Up' : 'Down'} class="direction-icon" />
 </div>
 
 <style>
     .buff-display {
-        display: inline-flex;
+        /* display: inline-flex; */
         align-items: center;
         gap: 0.3em;
         padding: 0.2em 0.5em;

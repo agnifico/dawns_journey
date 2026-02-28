@@ -7,6 +7,8 @@
         "thumbnailImage": "/images/enemies/aquamech_shark.png",
         "types": ["Water"],
         "masteryRequirements": { "Water": 40 },
+        "xp": 50,
+        "hpCost": 5,
         "drops": [
             { "itemId": "shark_fin", "quantity": 1 },
             { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
@@ -20,6 +22,8 @@
         "thumbnailImage": "/images/enemies/greenhorn.png",
         "types": ["Earth"],
         "masteryRequirements": { "Earth": 15, "Fire": 25 },
+        "xp": 10,
+        "hpCost": 1,
         "drops": [
             { "itemId": "meat", "quantity": 1 },
             { "itemId": "argentum", "quantity": 100, "chance": 0.5 }
@@ -33,6 +37,8 @@
         "thumbnailImage": "/images/enemies/white_wyvern.png",
         "types": ["Wind"],
         "masteryRequirements": { "Wind": 75 },
+        "xp": 100,
+        "hpCost": 8,
         "drops": [
             { "itemId": "dragon_fang", "quantity": 1 },
             { "itemId": "azurite", "quantity": 1, "chance": 0.5 },
@@ -47,10 +53,13 @@
         "thumbnailImage": "/images/enemies/woodmech_bear.png",
         "types": ["Earth"],
         "masteryRequirements": { "Fire": 50, "Earth": 25 },
+        "xp": 60,
+        "hpCost": 6,
         "drops": [
             { "itemId": "bear_skin", "quantity": 3 },
             { "itemId": "blueberries", "quantity": 1, "chance": 0.5 },
-            { "itemId": "argentum", "quantity": 100 }
+            { "itemId": "argentum", "quantity": 100 },
+            { "itemId": "basic_axe", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -61,6 +70,8 @@
         "thumbnailImage": "/images/enemies/vanguard_siren.png",
         "types": ["Water"],
         "masteryRequirements": { "Water": 70 },
+        "xp": 90,
+        "hpCost": 7,
         "drops": [
             { "itemId": "shark_fin", "quantity": 2 },
             { "itemId": "tranquility_pearl", "quantity": 1, "chance": 0.1 },
@@ -75,6 +86,8 @@
         "thumbnailImage": "/images/enemies/biceon.png",
         "types": ["Water", "Earth"],
         "masteryRequirements": { "Water": 35, "Earth": 20 },
+        "xp": 40,
+        "hpCost": 4,
         "drops": [
             { "itemId": "bear_skin", "quantity": 2 },
             { "itemId": "argentum", "quantity": 150 }
@@ -88,6 +101,8 @@
         "thumbnailImage": "/images/enemies/coral-eyes.png",
         "types": ["Water"],
         "masteryRequirements": { "Water": 30 },
+        "xp": 30,
+        "hpCost": 3,
         "drops": [
             { "itemId": "coral_reef", "quantity": 3 },
             { "itemId": "argentum", "quantity": 120, "chance": 0.8 }
@@ -101,9 +116,12 @@
         "thumbnailImage": "/images/enemies/forest_prowler.png",
         "types": ["Earth", "Wind"],
         "masteryRequirements": { "Earth": 45, "Wind": 15 },
+        "xp": 55,
+        "hpCost": 5,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
-            { "itemId": "argentum", "quantity": 200 }
+            { "itemId": "argentum", "quantity": 200 },
+            { "itemId": "basic_claw", "quantity": 1, "chance": 0.3 }
         ]
     },
     {
@@ -114,9 +132,12 @@
         "thumbnailImage": "/images/enemies/inkjet_ray.png",
         "types": ["Earth", "Wind"],
         "masteryRequirements": { "Water": 45, "Wind": 15 },
+        "xp": 55,
+        "hpCost": 5,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
-            { "itemId": "argentum", "quantity": 200 }
+            { "itemId": "argentum", "quantity": 200 },
+            { "itemId": "basic_bow", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -127,9 +148,12 @@
         "thumbnailImage": "/images/enemies/mountain_basilisk.png",
         "types": ["Earth"],
         "masteryRequirements": { "Earth": 60 },
+        "xp": 70,
+        "hpCost": 7,
         "drops": [
             { "itemId": "stone", "quantity": 5 },
-            { "itemId": "argentum", "quantity": 400 }
+            { "itemId": "argentum", "quantity": 400 },
+            { "itemId": "basic_bow", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -140,9 +164,12 @@
         "thumbnailImage": "/images/enemies/punching_tortoise.png",
         "types": ["Water", "Earth"],
         "masteryRequirements": { "Water": 20, "Earth": 20 },
+        "xp": 25,
+        "hpCost": 2,
         "drops": [
             { "itemId": "stone", "quantity": 2 },
-            { "itemId": "meat", "quantity": 1 }
+            { "itemId": "meat", "quantity": 1 },
+            { "itemId": "basic_polearm", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -153,6 +180,8 @@
         "thumbnailImage": "/images/enemies/rock_lion.png",
         "types": ["Earth"],
         "masteryRequirements": { "Earth": 50 },
+        "xp": 60,
+        "hpCost": 6,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
             { "itemId": "argentum", "quantity": 250 }
@@ -166,9 +195,14 @@
         "thumbnailImage": "/images/enemies/shark_soldier.png",
         "types": ["Water"],
         "masteryRequirements": { "Water": 55 },
+        "xp": 65,
+        "hpCost": 6,
         "drops": [
             { "itemId": "shark_fin", "quantity": 1 },
-            { "itemId": "metal", "quantity": 1 }
+            { "itemId": "metal", "quantity": 1 },
+            { "itemId": "basic_axe", "quantity": 1, "chance": 0.33 },
+            { "itemId": "basic_polearm", "quantity": 1, "chance": 0.33 },
+            { "itemId": "basic_bow", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -179,9 +213,13 @@
         "thumbnailImage": "/images/enemies/solis_sentinel.png",
         "types": ["Light"],
         "masteryRequirements": { "Light": 50, "Fire": 30 },
+        "xp": 80,
+        "hpCost": 8,
         "drops": [
             { "itemId": "citrine", "quantity": 1, "chance": 0.3 },
-            { "itemId": "argentum", "quantity": 600 }
+            { "itemId": "argentum", "quantity": 600 },
+            { "itemId": "basic_axe", "quantity": 1, "chance": 0.33 },
+            { "itemId": "basic_sword", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -192,9 +230,11 @@
         "thumbnailImage": "/images/enemies/toxolotl.png",
         "types": ["Water", "Dark"],
         "masteryRequirements": { "Water": 25, "Dark": 10 },
+        "xp": 30,
+        "hpCost": 3,
         "drops": [
             { "itemId": "fish", "quantity": 1 },
-            { "itemId": "shrooms", "quantity": 1, "chance": 0.5 }
+            { "itemId": "mushrooms", "quantity": 1, "chance": 0.5 }
         ]
     },
     {
@@ -205,9 +245,12 @@
         "thumbnailImage": "/images/enemies/water_spirit_beast.png",
         "types": ["Water"],
         "masteryRequirements": { "Water": 80 },
+        "xp": 120,
+        "hpCost": 9,
         "drops": [
             { "itemId": "aquamarine", "quantity": 1, "chance": 0.4 },
-            { "itemId": "azurite", "quantity": 1, "chance": 0.2 }
+            { "itemId": "sapphire", "quantity": 1, "chance": 0.2 },
+            { "itemId": "basic_claw", "quantity": 1, "chance": 0.3 }
         ]
     },
     {
@@ -225,10 +268,13 @@
             "elementalAttack": 180, "elementalDefence": 90,
             "speed": 150, "evasion": 0.2, "critChance": 0.25, "critDamage": 1.75
         },
+        "xp": 500,
+        "hpCost": 9,
         "drops": [
             { "itemId": "gold", "quantity": 1, "chance": 0.5 },
             { "itemId": "azurite", "quantity": 5, "chance": 0.3 },
-            { "itemId": "argentum", "quantity": 2000 }
+            { "itemId": "argentum", "quantity": 2000 },
+            { "itemId": "basic_sword", "quantity": 1, "chance": 0.33 }
         ]
     },
     {
@@ -246,6 +292,8 @@
             "elementalAttack": 50, "elementalDefence": 120,
             "speed": 40, "evasion": 0, "critChance": 0.05, "critDamage": 1.5
         },
+        "xp": 1000,
+        "hpCost": 9,
         "drops": [
             { "itemId": "tranquility_pearl", "quantity": 1 },
             { "itemId": "argentum", "quantity": 5000 }
@@ -266,9 +314,12 @@
             "elementalAttack": 150, "elementalDefence": 110,
             "speed": 110, "evasion": 0.1, "critChance": 0.15, "critDamage": 1.6
         },
+        "xp": 750,
+        "hpCost": 9,
         "drops": [
             { "itemId": "aquamarine", "quantity": 3 },
-            { "itemId": "argentum", "quantity": 1500 }
+            { "itemId": "argentum", "quantity": 1500 },
+            { "itemId": "basic_polearm", "quantity": 1, "chance": 0.33 }
         ]
     }
 ]

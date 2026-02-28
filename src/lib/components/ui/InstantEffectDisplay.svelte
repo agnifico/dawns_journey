@@ -30,7 +30,7 @@
         font-family: var(--font-family-pixel);
         font-size: 0.8em;
         border: 2px solid var(--color-secondary);
-        background-color: var(--color-surface-1);
+        background-color: var(--surface-1);
         color: var(--color-secondary);
     }
     .stat-icon {

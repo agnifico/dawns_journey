@@ -59,7 +59,7 @@
 		inset: 0;
 		width: 100%;
 		height: 100%;
-		z-index: 9999;
+		z-index: 9;
 		pointer-events: none;
 		transition: all 0.1s linear;
         background-color: none;

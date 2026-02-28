@@ -25,15 +25,16 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
                 effects: [{ type: 'RESTORE_AURA', value: 100 }],
             },
         ],
+        reusable: true
     },
     treasure_chest: {
         id: 'treasure_chest',
-        name: 'Treasure Chest',
+        name: 'Abandoned Shack',
         image: '/locations/shack.jpg',
         shortDesc: 'A weathered treasure chest.',
         stepOnMessage: 'You\'ve found a treasure chest!',
         message: 'You opened the chest and found a stash of mead!',
-        effects: [{ type: 'GIVE_ITEM', itemId: 'forza_mead', quantity: 10 }],
+        effects: [{ type: 'give_item', itemId: 'forza_mead', quantity: 10 }],
         afterDescription: 'An empty treasure chest. You remember finding some mead here.',
     },
     ancient_dragons_fang_shrine: {
@@ -150,5 +151,35 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             responseMessage: "You have cast your lot with the Shadowhand. You gain favor in the underworld, but have made a powerful enemy in the light."
           }
         ]
+    },
+    teleport_to_cathedral: {
+        id: 'teleport_to_cathedral',
+        name: 'Teleporter to Cathedral',
+        image: '/locations/shrine.png',
+        shortDesc: 'A strange portal humming with energy.',
+        stepOnMessage: 'You found a teleporter to the Cathedral.',
+        message: 'Do you want to travel to the Cathedral?',
+        actions: [
+            {
+                text: 'Travel',
+                effects: [{ type: 'switch_map', mapId: 'cathedral', x: 14, y: 31 }],
+            },
+        ],
+        reusable: true
+    },
+    teleport_to_dragon_island: {
+        id: 'teleport_to_dragon_island',
+        name: 'Teleporter to Dragon Island',
+        image: '/locations/shrine.png',
+        shortDesc: 'A strange portal humming with energy.',
+        stepOnMessage: 'You found a teleporter to Dragon Island.',
+        message: 'Do you want to travel to Dragon Island?',
+        actions: [
+            {
+                text: 'Travel',
+                effects: [{ type: 'switch_map', mapId: 'dragon_island', x: 27, y: 1 }],
+            },
+        ],
+        reusable: true
     }
 };

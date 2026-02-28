@@ -7,11 +7,26 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
         skillId: 'woodcutting',
         requiredLevel: 1,
         reward: { itemId: 'wood', amount: 1 },
-        cooldown: 5,
+        cooldown: 3,
         image: './locations/tree.png',
         dialogue: {
             success: 'You chop down the oak tree.',
             failure: 'The oak tree has already been harvested.'
+        },
+        maxGathers: 10,
+        xpPerLevel: 10
+    },
+    gem_fountain: {
+        id: 'gem_fountain',
+        name: 'Gem Fountain',
+        skillId: 'herblore',
+        requiredLevel: 1,
+        reward: { itemId: 'aquamarine', amount: 1 },
+        cooldown: 3,
+        image: './locations/fountain.png',
+        dialogue: {
+            success: 'You find a shiny gem in the fountain!',
+            failure: 'The fountain is out of gems.'
         },
         maxGathers: 10,
         xpPerLevel: 10
@@ -36,7 +51,7 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
         name: 'Big Mushroom',
         skillId: 'herblore',
         requiredLevel: 1,
-        reward: { itemId: 'shrooms', amount: 2 },
+        reward: { itemId: 'mushroom', amount: 2 },
         cooldown: 2,
         image: './locations/big_mushroom.png',
         dialogue: {

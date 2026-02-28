@@ -25,7 +25,8 @@
 		-(player.position.y * FINAL_TILE_SIZE) + windowHeight / 2 - FINAL_TILE_SIZE / 2;
 
 	const currentLandscapeDefinition = derived(mapStore, ($mapStore) => {
-		const { mapData, playerX, playerY } = $mapStore;
+		const mapData = $mapStore.maps[$mapStore.currentMapId];
+		const { playerX, playerY } = $mapStore;
 		if (!mapData) return null;
 
 		let currentLandscapeId: string | undefined;
@@ -72,11 +73,11 @@
 	>
 		<div class="map-background" style="background-image: url({mapData.image});"></div>
 
-		{#each mapData.objects as mapObject (mapObject.type + (mapObject.npcId || mapObject.resourceId || mapObject.eventId) + mapObject.x + mapObject.y)}
-			{#if mapObject.type === 'npc'}
-				<MapObject {mapObject} {FINAL_TILE_SIZE} />
+		<!-- {#each mapData.objects as mapObject (mapObject.type === 'multi_tile_part' ? mapObject.type + mapObject.parentId + mapObject.x + mapObject.y : mapObject.type + (mapObject.npcId || mapObject.resourceId || mapObject.eventId) + mapObject.x + mapObject.y)}
+			{#if mapObject.type !== 'multi_tile_entity'}
+				<MapObject {mapObject} {FINAL_TILE_SIZE} allObjects={mapData.objects} />
 			{/if}
-		{/each}
+		{/each} -->
 
 		<PlayerIcon {player} {FINAL_TILE_SIZE} />
 

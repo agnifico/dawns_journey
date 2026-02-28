@@ -59,7 +59,7 @@ function createDialogueStore() {
                 // End of dialogue
                 setTimeout(() => {
                     update(s => ({ ...s, justClosed: false }));
-                }, 100);
+                }, 200);
                 return { ...s, isOpen: false, lines: [], currentIndex: 0, speaker: null, justClosed: true, choices: [], selectedChoice: 0 };
             }
             return { ...s, currentIndex: nextIndex };

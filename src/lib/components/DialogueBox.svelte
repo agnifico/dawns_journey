@@ -2,30 +2,22 @@
 	import { dialogueStore } from '$lib/stores/dialogueStore';
     import { fly } from 'svelte/transition';
 
-    let keyPressed = false;
-
     function handleAdvance() {
         dialogueStore.advanceDialogue();
     }
 </script>
 
 <svelte:window 
-    on:keydown={(e) => {
-        if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Enter') && !keyPressed) {
-            keyPressed = true;
+    on:keypress={(e) => {
+        if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Enter')) {
             e.preventDefault();
             handleAdvance();
         }
     }} 
-    on:keyup={(e) => {
-        if (e.key === 'z' || e.key === 'Enter') {
-            keyPressed = false;
-        }
-    }}
 />
 
 {#if $dialogueStore.isOpen}
-    <div class="dialogue-overlay" transition:fly={{ y: 50, duration: 200 }}>
+    <div class="dialogue-overlay" on:click={handleAdvance} transition:fly={{ y: 50, duration: 200 }}>
         <div class="dialogue-box">
             {#if $dialogueStore.speaker}
                 <div class="speaker-name">{$dialogueStore.speaker}</div>

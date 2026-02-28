@@ -38,7 +38,6 @@
 	.fire {
 		background-color: #cc4113;
 		border-color: hsla(0, 0%, 0%, 0.2);
-		color: #ffffff;
 	}
 
 	.water {
@@ -52,9 +51,9 @@
 	}
 
 	.wind {
-		background-color: #4bc7e3;
+		background-color: #4be3ca;
 		border-color: hsla(0, 0%, 0%, 0.2);
-		color: hsl(0, 0%, 17%);
+		color: #2b2b2b;
 	}
 
 	.light {

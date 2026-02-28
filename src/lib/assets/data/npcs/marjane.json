@@ -25,7 +25,8 @@
         "speed": 90,
         "evasion": 70,
         "critChance": 0.6,
-        "critDamage": 2
+        "critDamage": 2,
+        "precision": 1
     },
     "swordRank": 0,
     "heartRank": 0,

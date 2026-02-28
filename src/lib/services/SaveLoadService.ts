@@ -10,8 +10,30 @@ import { loadMap } from './MapService';
 import { checkQuestTriggers } from './QuestService';
 import { validateAllData } from './ValidationService';
 import { questStore } from '$lib/stores/questStore';
+import playerDefaults from '$lib/data/player';
 
 const SAVE_KEY = 'dawn_journey_save_v2';
+
+function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function deepMerge<T extends object, U extends object>(target: T, source: U): T & U {
+    let output = { ...target } as T & U;
+    if (isObject(target) && isObject(source)) {
+        Object.keys(source).forEach(key => {
+            if (isObject(source[key])) {
+                if (!(key in target))
+                    Object.assign(output, { [key]: source[key] });
+                else
+                    output[key] = deepMerge(target[key], source[key]);
+            } else {
+                Object.assign(output, { [key]: source[key] });
+            }
+        });
+    }
+    return output;
+}
 
 export function saveGame() {
     if (!browser) return; // Guard against server-side execution
@@ -48,19 +70,25 @@ export async function loadGame() {
         const savedData = JSON.parse(savedDataString);
 
         if (savedData.player) {
-            const loadedPlayer = savedData.player;
+            let loadedPlayer = deepMerge(playerDefaults, savedData.player);
+
+            // Migration for player level
+            if (loadedPlayer.level === undefined) {
+                loadedPlayer.level = 1;
+            }
+            if (loadedPlayer.xp === undefined) {
+                loadedPlayer.xp = 0;
+            }
+
             // Call the correct function for offline growth calculation
             const updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer); 
             playerStore.set({ ...updatedPlayer, isInitialized: true });
         }
-        // NEW: Load map data if available in save
+        
         if (savedData.mapStore) {
-            const mapToLoadId = savedData.mapStore.currentMapId;
-            const loadedMapData = await loadMap(mapToLoadId);
-            if (loadedMapData) {
-                mapStore.set({ currentMapId: mapToLoadId, mapData: loadedMapData });
-            }
+            mapStore.set(savedData.mapStore);
         }
+
         if (savedData.npcs) {
             await npcStore.initializeGlobalNpcs(); 
             npcStore.loadNpcs(savedData.npcs);

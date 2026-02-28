@@ -13,41 +13,40 @@
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import SetBonusDisplay from './ui/SetBonusDisplay.svelte';
 	import ExploBubble from './ExploBubble.svelte';
-
-	$: coherenceActive =
-		$playerStore.equipment.weapon_slots[0] &&
-		$playerStore.equipment.weapon_slots[1] &&
-		$playerStore.equipment.weapon_slots[0].element ===
-			$playerStore.equipment.weapon_slots[1].element;
 </script>
 
 <div class="equipment-and-skills">
 	<h2>Equipment</h2>
 	<div class="equipment">
 		<div class="weapon-slots">
-			{#each $playerStore.equipment.weapon_slots as item, i}
-				<div class="equipment-slot weapon-slot" on:click={() => ($activeItem = item)}>
-					{#if item}
-						<ItemBox {item} viewSize="large" base="" />
-						<button
-							class="unequip-button"
-							on:click|stopPropagation={() => game.unequipItem('weapon_slots', i)}>-</button
-						>
-					{:else}
-						<!-- <div class="empty-slot large-empty-slot" style="background-image: url('/game_icons/bgsq1.png');"> -->
-						<div class="empty-slot large-empty-slot">
-							<!-- <span class="slot-label">Weapon {i + 1}</span> -->
-						</div>
-					{/if}
-				</div>
-			{/each}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class="equipment-slot weapon-slot"
+				on:click={() => ($activeItem = $playerStore.equipment.weapon_slots[0])}
+			>
+				{#if $playerStore.equipment.weapon_slots[0]}
+					<ItemBox item={$playerStore.equipment.weapon_slots[0]} viewSize="large" />
+					<button
+						class="unequip-button"
+						on:click|stopPropagation={() => game.unequipItem('weapon_slots', 0)}>-</button
+					>
+				{:else}
+					<!-- <div class="empty-slot large-empty-slot" style="background-image: url('/game_icons/bgsq1.png');"> -->
+					<div class="empty-slot large-empty-slot">
+						<!-- <span class="slot-label">Weapon {i + 1}</span> -->
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<div class="relic-slots">
 			{#each $playerStore.equipment.relic_slots as item, i}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div class="equipment-slot relic-slot" on:click={() => ($activeItem = item)}>
 					{#if item}
-						<ItemBox {item} viewSize="medium" base="" />
+						<ItemBox {item} viewSize="medium" />
 						<button
 							class="unequip-button"
 							on:click|stopPropagation={() => game.unequipItem('relic_slots', i)}>-</button
@@ -60,6 +59,28 @@
 					{/if}
 				</div>
 			{/each}
+		</div>
+
+		<div class="weapon-slots">
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class="equipment-slot weapon-slot"
+				on:click={() => ($activeItem = $playerStore.equipment.weapon_slots[1])}
+			>
+				{#if $playerStore.equipment.weapon_slots[1]}
+					<ItemBox item={$playerStore.equipment.weapon_slots[1]} viewSize="large" />
+					<button
+						class="unequip-button"
+						on:click|stopPropagation={() => game.unequipItem('weapon_slots', 1)}>-</button
+					>
+				{:else}
+					<!-- <div class="empty-slot large-empty-slot" style="background-image: url('/game_icons/bgsq1.png');"> -->
+					<div class="empty-slot large-empty-slot">
+						<!-- <span class="slot-label">Weapon {i + 1}</span> -->
+					</div>
+				{/if}
+			</div>
 		</div>
 	</div>
 
@@ -80,13 +101,6 @@
 				{/each}
 			</div>
 		{/if}
-
-		{#if coherenceActive}
-			<div class="coherence-buff">
-				<img src="/game_icons/coherence.png" alt="Coherence Buff" title="Coherence Buff" />
-				<span>Coherence: +30% Elemental Attack</span>
-			</div>
-		{/if}
 	</div>
 
 	{#if $playerStore.activeEffects.length > 0}
@@ -95,6 +109,17 @@
 				<BuffDisplay {effect} />
 			{/each}
 		</div>
+	{/if}
+
+	{#if $playerStore.equipment.weapon_slots[0]}
+		{#each $playerStore.equipment.weapon_slots[0].gearPassives as effect}
+			<p>{effect.name}</p>
+		{/each}
+	{/if}
+	{#if $playerStore.equipment.weapon_slots[1]}
+		{#each $playerStore.equipment.weapon_slots[1].gearPassives as effect}
+			<p>{effect.name}</p>
+		{/each}
 	{/if}
 </div>
 
@@ -108,12 +133,14 @@
 	}
 	.equipment-and-skills {
 		padding: 1em;
-		background-color: var(--color-surface-1);
+		background-color: var(--surface-1);
 		/* height: 100%; */
 		border-radius: 12px;
 		box-shadow: #00000056 0 -6px 0 6px inset;
 		border-top: 3px solid #00000056;
 		padding-bottom: 2rem;
+		display: flex;
+		flex-direction: column;
 	}
 	.mastery-container {
 		margin-top: 1em;
@@ -146,47 +173,38 @@
 	}
 	.active-effects-container {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5em;
+		flex-direction: row;
+		/* flex-wrap: wrap; */
+		/* gap: 0.5em; */
 		/* margin-top: 1em; */
 		padding-top: 1em;
 		/* border: 1px solid var(--color-border); */
 	}
-	.coherence-buff {
-		display: flex;
-		align-items: center;
-		gap: 0.5em;
-		background-color: var(--color-surface-2);
-		color: var(--color-text);
-		padding: 0.5em;
-		border-radius: 5px;
-		/* margin-top: 1em; */
-		border: 1px solid var(--color-primary);
-	}
-	.coherence-buff img {
-		width: 24px;
-		height: 24px;
-	}
 	.equipment {
 		margin-top: 1em;
 		display: flex;
-		flex-direction: column;
-		gap: 2rem;
+		flex-direction: row;
+		gap: 0.5rem;
+		/* border: 1px solid white; */
+		justify-content: center;
+		align-items: center;
+	}
+
+	.weapon-slots {
+		display: flex;
+		/* margin: 0 auto 0 0; */
+		/* margin: auto; */
+		gap: 0.5rem;
 		/* border: 1px solid white; */
 	}
 
-	.weapon-slots,
 	.relic-slots {
-		display: flex;
-		margin: 0 auto 0 0;
-		margin: auto;
-		gap: 1rem;
-
-		&:hover {
-			.unequip-button {
-				visibility: visible;
-			}
-		}
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 0.5rem;
+		margin-bottom: auto;
+		position: relative;
 	}
 
 	.equipment-slot {
@@ -196,14 +214,12 @@
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
-		/* border: 1px solid white; */
-		/* border-radius: 8px; */
 		box-sizing: border-box;
 	}
 
 	.weapon-slot {
 		width: 120px;
-		height: 130px;
+		height: 148px;
 		box-sizing: border-box;
 		background-color: rgba(0, 0, 0, 0.5);
 		border-radius: 5px;
@@ -211,6 +227,11 @@
 		border-top: 3px solid #00000056;
 		padding-bottom: 6px;
 		background-color: var(--surface-3);
+		&:hover {
+			.unequip-button {
+				visibility: visible;
+			}
+		}
 	}
 
 	.relic-slot {
@@ -222,6 +243,12 @@
 		border-top: 3px solid #00000056;
 		padding-bottom: 6px;
 		background-color: var(--surface-3);
+
+		&:hover {
+			.unequip-button {
+				visibility: visible;
+			}
+		}
 	}
 
 	.empty-slot {

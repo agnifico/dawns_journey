@@ -3,8 +3,9 @@ import { messageStore } from '$lib/stores/messageStore';
 import { questStore } from '$lib/stores/questStore';
 import type { GameEffect, Player } from '$lib/types';
 import { get } from 'svelte/store';
-import { addItem, removeItem } from './ItemService';
-import { getItemById } from '$lib/services/ItemDataService';
+import { addItems, removeItemsByItemId } from './InventoryService';
+import { getItemById } from '$lib/services/InventoryService';
+import { game } from '$lib/game/game';
 
 type EffectHandler = (player: Player, effect: GameEffect, currentStats: any) => { newPlayer: Player, effectApplied: boolean, allEffectsApplied: boolean };
 
@@ -37,7 +38,7 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
         return { newPlayer, effectApplied, allEffectsApplied: true };
     },
     give_item: (player, effect) => {
-        const newPlayer = addItem(player, effect.itemId, effect.quantity);
+        const newPlayer = addItems(player, effect.itemId, effect.quantity);
         return { newPlayer, effectApplied: true, allEffectsApplied: true };
     },
     TAKE_ITEM: (player, effect) => {
@@ -45,7 +46,7 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
         let allEffectsApplied = true;
         const inventoryItem = newPlayer.inventory.find(i => i.itemId === effect.itemId);
         if (inventoryItem && inventoryItem.amount >= effect.quantity) {
-            newPlayer = removeItem(newPlayer, effect.itemId, effect.quantity);
+            newPlayer = removeItemsByItemId(newPlayer, effect.itemId, effect.quantity);
             return { newPlayer, effectApplied: true, allEffectsApplied };
         } else {
             allEffectsApplied = false;
@@ -59,8 +60,8 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
         let allEffectsApplied = true;
         const itemToTake = newPlayer.inventory.find(i => i.itemId === effect.takeItemId);
         if (itemToTake && itemToTake.amount >= effect.takeQuantity) {
-            newPlayer = removeItem(newPlayer, effect.takeItemId, effect.takeQuantity);
-            newPlayer = addItem(newPlayer, effect.giveItemId, effect.giveQuantity);
+            newPlayer = removeItemsByItemId(newPlayer, effect.takeItemId, effect.takeQuantity);
+            newPlayer = addItems(newPlayer, effect.giveItemId, effect.giveQuantity);
             return { newPlayer, effectApplied: true, allEffectsApplied };
         } else {
             allEffectsApplied = false;
@@ -92,5 +93,9 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
         let newPlayer = { ...player };
         newPlayer.factionReputation[effect.faction] = (newPlayer.factionReputation[effect.faction] || 0) + effect.amount;
         return { newPlayer, effectApplied: true, allEffectsApplied: true };
+    },
+    switch_map: (player, effect) => {
+        game.switchMap(effect.mapId, { x: effect.x, y: effect.y });
+        return { newPlayer: player, effectApplied: true, allEffectsApplied: true };
     }
 };

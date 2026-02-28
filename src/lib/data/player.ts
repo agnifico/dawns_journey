@@ -1,12 +1,13 @@
-import type { Player, InventoryItem, Weapon, FarmPlot } from '../types';
+import type { Player, Item, Weapon, FarmPlot } from '../types';
 import { items } from './items';
 import skills from './skills.json';
 import { farmingTechTree } from './skilltree/farming'; // Import the farming tech tree
 import homesteadPlots from './homesteadPlots.json';
 import { v4 as uuidv4 } from 'uuid';
+import { createItems } from '../services/ItemFactory';
 
-const initialInventory: InventoryItem[] = [
-    // { itemId: 'compost', amount: 20 }
+const initialInventory: Item[] = [
+    ...createItems('bread', 20),
 ];
 
 const initialSkills = Object.keys(skills).map(skillId => ({
@@ -40,9 +41,14 @@ startingPlots.forEach(plot => {
 
 export const player: Player = {
     isInitialized: false,
+    level: 1,
+    xp: 0,
     position: { x: 0, y: 0 },
     direction: 'down',
     isMoving: false,
+    profile: {
+        avatar: '/images/characters/player1.png',
+    },
     baseStats: {
         hp: 100,
         maxHp: 100,
@@ -56,6 +62,7 @@ export const player: Player = {
         evasion: 30,
         critChance: 0.05, // 5% default
         critDamage: 1.5, // 1.5x default
+        precision: 30, // 100% default
     },
     equipment: {
         weapon_slots: [null, null],
@@ -79,6 +86,12 @@ export const player: Player = {
         compostQueue: [],
     },
     lastPlayedTimestamp: Date.now(),
+    
+    // Achievements and milestones
+    achievements: {},
+    stepsTaken: 0,
+    cropsHarvested: 0,
+    factions: {},
 };
 
 export default player;

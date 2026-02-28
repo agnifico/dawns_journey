@@ -10,9 +10,10 @@ import { npcStore, getNpcData } from '$lib/stores/npcStore';
 import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
 import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { gainExperience } from '$lib/services/SkillService';
-import { addItem } from '$lib/services/ItemService';
+import { addItems } from '$lib/services/InventoryService';
 import { triggerEventEffect } from '$lib/services/LocationEventService';
 import { checkRequirement } from '$lib/services/QuestService';
+import { game } from '$lib/game/game';
 
 /**
  * Checks for and handles interactions with fixed objects on the current tile.
@@ -20,10 +21,22 @@ import { checkRequirement } from '$lib/services/QuestService';
  */
 export async function checkForTileInteraction(): Promise<boolean> {
     const player = get(playerStore);
-    const mapData = get(mapStore).mapData;
+    const mapStoreState = get(mapStore);
+    const mapData = mapStoreState.maps[mapStoreState.currentMapId];
     if (!mapData) return false;
 
-    const mapObject = (mapData.objects || []).find(obj => obj.x === player.position.x && obj.y === player.position.y);
+    let mapObject = (mapData.objects || []).find(obj => obj.x === player.position.x && obj.y === player.position.y);
+
+    if (mapObject) {
+        if (mapObject.type === 'multi_tile_part') {
+            const parentObject = (mapData.objects || []).find(obj => obj.id === mapObject.parentId);
+            if (parentObject) {
+                mapObject = { ...parentObject, type: parentObject.entityType };
+            }
+        } else if (mapObject.type === 'multi_tile_entity') {
+            mapObject.type = mapObject.entityType;
+        }
+    }
 
     if (mapObject) {
         switch (mapObject.type) {
@@ -75,7 +88,7 @@ export async function checkForTileInteraction(): Promise<boolean> {
                             return true;
                         }
                     }
-                    
+
                     // Default behavior for events that are not completed or are repeatable
                     showEvent('location_event', eventData.image, eventData);
                     // Only trigger effects immediately if there are no actions to display
@@ -84,16 +97,20 @@ export async function checkForTileInteraction(): Promise<boolean> {
                     }
                     return true;
                 }
+            case 'teleport':
+                game.switchMap(mapObject.targetMap, { x: mapObject.targetX, y: mapObject.targetY });
+                return true;
             // Add other cases for different object types here
         }
     }
-    
+
     // If no object is found, or the object is not interactive in a way that opens a UI,
     // ensure the dialogue is closed.
-    if (get(dialogueStore).isOpen) {
+    const dialogue = get(dialogueStore);
+    if (dialogue.isOpen && !dialogue.justClosed) {
         dialogueStore.closeDialogue();
     }
-    
+
     return false;
 }
 
@@ -103,12 +120,25 @@ export async function checkForTileInteraction(): Promise<boolean> {
 export function gatherResource() {
     console.log("gatherResource called at", new Date().getTime());
     const player = get(playerStore);
-    const mapData = get(mapStore).mapData;
+    const mapStoreState = get(mapStore);
+    const mapData = mapStoreState.maps[mapStoreState.currentMapId];
     if (!mapData) {
         return;
     }
 
-    const mapObject = (mapData.objects || []).find(obj => obj.x === player.position.x && obj.y === player.position.y);
+    let mapObject = (mapData.objects || []).find(obj => obj.x === player.position.x && obj.y === player.position.y);
+
+    if (mapObject) {
+        if (mapObject.type === 'multi_tile_part') {
+            const parentObject = (mapData.objects || []).find(obj => obj.id === mapObject.parentId);
+            if (parentObject) {
+                mapObject = { ...parentObject, type: parentObject.entityType };
+            }
+        } else if (mapObject.type === 'multi_tile_entity') {
+            mapObject.type = mapObject.entityType;
+        }
+    }
+
     if (!mapObject || mapObject.type !== 'resource') {
         messageStore.addMessage('There is nothing to gather here.', ['World']);
         return;
@@ -127,7 +157,7 @@ export function gatherResource() {
     }
 
     const resourceNodeKey = `${get(mapStore).currentMapId}-${mapObject.x}-${mapObject.y}`;
-    
+
     resourceStore.update(rs => {
         const currentTime = get(time);
         let currentState = rs.resourceNodeStates[resourceNodeKey] || { currentGatherCount: 0, cooldownEndTime: 0 };
@@ -167,7 +197,7 @@ export function gatherResource() {
             let newPlayer = { ...p };
             const calculatedXP = Math.max(1, Math.floor(node.xpPerLevel / skill.level));
             newPlayer = gainExperience(newPlayer, node.skillId, calculatedXP);
-            newPlayer = addItem(newPlayer, node.reward.itemId, node.reward.amount);
+            newPlayer = addItems(newPlayer, node.reward.itemId, node.reward.amount);
             return newPlayer;
         });
 

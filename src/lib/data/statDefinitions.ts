@@ -68,7 +68,7 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         name: 'Speed',
         abbr: 'SPD',
         description: 'Determines who acts first in combat.',
-        color: '#FA75B1' // DarkGray
+        color: '#dad7cd' // LightGray
     },
     evasion: {
         id: 'evasion',
@@ -97,5 +97,34 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         abbr: 'Mastery',
         description: 'Your overall proficiency, used for exploration and overcoming wild creatures.',
         color: '#9370DB' // MediumPurple
+    },
+    precision: {
+        id: 'precision',
+        name: 'Precision',
+        abbr: 'PRS',
+        description: 'Point-for-Point reduction to enemy Evasion.',
+        color: '#FA75B1' // MediumPurple
     }
+};
+
+export const elementColors: { [key: string]: string } = {
+    fire: '#ffffff',
+    water: '#ffffff',
+    earth: '#ffffff',
+    wind: '#2b2b2b',
+    light: '#111111',
+    dark: '#f8a6d4',
+    normal: '#222',
+    none: '#666666' // Default color for 'None' element
+};
+
+export const elementBgs: { [key: string]: string } = {
+    fire: '#cc4113',
+    water: '#276b9f',
+    earth: '#2d7645',
+    wind: '#4bc7e3',
+    light: '#f0e68c',
+    dark: '#452e6f',
+    normal: '#fff',
+    none: '#ffffff' // Default color for 'None' element
 };
