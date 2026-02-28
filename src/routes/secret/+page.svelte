@@ -36,6 +36,15 @@
         { src: '/images/characters/nsfw/33.png', alt: 'Main Characters' },
         { src: '/images/characters/nsfw/34.png', alt: 'Main Characters' },
         { src: '/images/characters/nsfw/35.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/36.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/37.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/38.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/39.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/40.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/41.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/42.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/43.png', alt: 'Main Characters' },
+        { src: '/images/characters/nsfw/44.png', alt: 'Main Characters' },
 	];
 	let currentImageIndex = 0;
     
