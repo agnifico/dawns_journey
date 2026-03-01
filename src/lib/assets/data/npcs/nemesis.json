@@ -85,7 +85,6 @@
                 "type": "have_tag",
                 "tag": "sylvie_sword_5_complete"
             },
-            "autoStart": true,
             "stages": [
                 {
                     "objective": "Meet an old friend (8, 18)",

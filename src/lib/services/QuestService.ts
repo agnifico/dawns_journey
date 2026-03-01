@@ -19,6 +19,7 @@ const requirementCheckers: Record<string, RequirementCheck> = {
         return quest ? quest.state === condition.state : false;
     },
     dialogue: () => true,
+    talk: () => true,
     have_item: (condition, player) => {
         return hasItem(player.inventory, condition.itemId, condition.quantity);
     },
@@ -29,7 +30,6 @@ const requirementCheckers: Record<string, RequirementCheck> = {
         }
         return false;
     },
-    talk: () => true,
     kill: (condition, player, npc, globalNpcs, isStartRequirement) => {
         const currentKills = player.killCounts[condition.enemyId] || 0;
         if (isStartRequirement || !npc) {
@@ -87,6 +87,24 @@ const requirementCheckers: Record<string, RequirementCheck> = {
         }
     },
     have_tag: (condition, player) => player.worldTags.includes(condition.tag),
+
+    // NEW: true when the player does NOT have the tag — use to lock quests after a faction choice
+    not_tag: (condition, player) => !player.worldTags.includes(condition.tag),
+
+    // NEW: true when player's faction rank >= minRank
+    faction_rank: (condition, player) => {
+        const factionData = player.factions[condition.factionId];
+        if (!factionData) return false;
+        return factionData.rank >= condition.minRank;
+    },
+
+    // NEW: true when player's raw faction score >= minScore (finer-grained than rank)
+    faction_score: (condition, player) => {
+        const factionData = player.factions[condition.factionId];
+        if (!factionData) return false;
+        return factionData.score >= condition.minScore;
+    },
+
     stat_check: (condition, player) => player.baseStats[condition.stat] >= condition.value,
     element_exploration_level_check: (condition, player) => player.equipment.weapon_slots.some(w => w?.exploration?.some(e => e.name === condition.element && e.level >= condition.level)),
 };
@@ -94,9 +112,9 @@ const requirementCheckers: Record<string, RequirementCheck> = {
 export function checkRequirement(
     requirement: Requirement,
     player: Player,
-    npc: NPC | null, // The NPC context for the check
+    npc: NPC | null,
     globalNpcs: Record<string, NPC>,
-    isStartRequirement: boolean = false // Flag to ignore snapshots
+    isStartRequirement: boolean = false
 ): { met: boolean; postCheckActions: ((p: Player) => Player)[] } {
     const postCheckActions: ((p: Player) => Player)[] = [];
 
@@ -105,22 +123,33 @@ export function checkRequirement(
         if (checker) {
             return checker(condition, player, npc, globalNpcs, isStartRequirement, postCheckActions);
         }
+        console.warn(`[QuestService] Unknown requirement type: ${(condition as any).type}`);
         return false;
+    };
+
+    const checkRequirementNode = (req: Requirement): boolean => {
+        if (!req) return true;
+
+        if ('operator' in req) {
+            if (req.operator === 'AND') {
+                return (req as any).conditions.every((c: RequirementCondition) => checkCondition(c));
+            }
+            if (req.operator === 'OR') {
+                return (req as any).conditions.some((c: RequirementCondition) => checkCondition(c));
+            }
+            // NEW: NOT operator — wraps a single child requirement and inverts it
+            if (req.operator === 'NOT') {
+                const inner = checkRequirementNode((req as any).condition);
+                return !inner;
+            }
+        }
+
+        return checkCondition(requirement as RequirementCondition);
     };
 
     if (!requirement) return { met: true, postCheckActions: [] };
 
-    let met = false;
-    if ('operator' in requirement) {
-        if (requirement.operator === 'AND') {
-            met = requirement.conditions.every(checkCondition);
-        } else if (requirement.operator === 'OR') {
-            met = requirement.conditions.some(checkCondition);
-        }
-    } else {
-        met = checkCondition(requirement as RequirementCondition);
-    }
-
+    const met = checkRequirementNode(requirement);
     return { met, postCheckActions: met ? postCheckActions : [] };
 }
 
@@ -136,14 +165,14 @@ export function checkQuestTriggers(player: Player): Player {
         const quest = allQuests[questId];
         if (quest.state === 'LOCKED' && quest.startRequirement) {
             const giverNpc = globalNpcs[quest.giver] || null;
-            
+
             const { met } = checkRequirement(quest.startRequirement, newPlayer, giverNpc, globalNpcs, true);
 
             if (met) {
                 const rankData = giverNpc?.swordRanks.find(r => r.questId === questId);
                 if (rankData?.autoStart) {
                     questStore.setQuestState(quest.id, 'ACTIVE');
-                    
+
                     // Consume the "can_start" tag
                     const conditions = 'conditions' in rankData.startRequirement ? rankData.startRequirement.conditions : [rankData.startRequirement];
                     const startTagCondition = conditions.find(c => c.type === 'have_tag' && c.tag.startsWith('can_start_'));
@@ -155,6 +184,37 @@ export function checkQuestTriggers(player: Player): Player {
                 }
             }
         }
+
+        // NEW: auto-fail ACTIVE quests whose startRequirement is now broken by a faction choice.
+        // Use case: player sided with Saints, Shadowhand quests that require not_tag('sided_with_saints')
+        // will be caught here and failed automatically.
+        if (quest.state === 'ACTIVE' && quest.startRequirement) {
+            const giverNpc = globalNpcs[quest.giver] || null;
+            // Only re-check if the requirement contains not_tag or faction conditions —
+            // we don't want to fail quests for unrelated reasons.
+            if (requirementContainsFactionCondition(quest.startRequirement)) {
+                const { met } = checkRequirement(quest.startRequirement, newPlayer, giverNpc, globalNpcs, true);
+                if (!met) {
+                    questStore.setQuestState(quest.id, 'FAILED');
+                }
+            }
+        }
     }
     return newPlayer;
+}
+
+/**
+ * Returns true if a requirement tree contains any faction-sensitive conditions.
+ * Used to decide whether to re-evaluate an active quest after a faction choice.
+ */
+function requirementContainsFactionCondition(req: Requirement): boolean {
+    if (!req) return false;
+    if ('operator' in req) {
+        if (req.operator === 'NOT') {
+            return requirementContainsFactionCondition((req as any).condition);
+        }
+        return (req as any).conditions.some((c: Requirement) => requirementContainsFactionCondition(c));
+    }
+    const type = (req as RequirementCondition).type;
+    return type === 'not_tag' || type === 'faction_rank' || type === 'faction_score';
 }

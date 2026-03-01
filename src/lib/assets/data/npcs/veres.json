@@ -150,7 +150,7 @@
             ],
             "giftingOptions": [
                 {
-                    "itemId": "mushrooms",
+                    "itemId": "mushroom",
                     "quantity": 5,
                     "value": 5,
                     "dialogue": [

@@ -7,7 +7,7 @@
 	import { mapStore, currentMapData } from '$lib/stores/mapStore';
 	import { time } from '$lib/stores/timeStore';
 	import { combatStore } from '$lib/stores/combatStore';
-	import { dialogueStore } from '$lib/stores/dialogueStore';
+	// import { dialogueStore } from '$lib/stores/dialogueStore';
 	import { checkForTileInteraction } from '$lib/services/InteractionService';
 	import { checkForRandomEncounter } from '$lib/services/EncounterService';
 	import { processBuffs } from '$lib/services/BuffService';
@@ -17,28 +17,29 @@
 		mobileInfoPanelView,
 		switchToEventView,
 		switchToLogView,
-		showQuestTracker,
-		showHomesteadTracker,
+		// showQuestTracker,
+		// showHomesteadTracker,
 		showMessageBox,
 		eventScreen,
-		clearEvent
+		clearEvent,
 	} from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
 	import EventScreen from '$lib/components/EventScreen.svelte';
-	import MobileInfoPanel from '$lib/components/MobileInfoPanel.svelte';
-	import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
+	// import MobileInfoPanel from '$lib/components/MobileInfoPanel.svelte';
+	// import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
 	import CombatModal from '$lib/components/CombatModal.svelte';
-	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
-	import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
+	// import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
+	// import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
 	// import DialogueBox from '$lib/components/DialogueBox.svelte';
 	import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
 	import { validateAllData } from '$lib/services/ValidationService';
 	import { questStore } from '$lib/stores/questStore';
 	import ChoiceMenu from '$lib/components/ui/ChoiceMenu.svelte';
-	import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
+	// import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
 	import MapHUD from '$lib/components/ui/MapHUD.svelte';
-	import RegionNotification from '$lib/components/RegionNotification.svelte';
+	// import RegionNotification from '$lib/components/RegionNotification.svelte';
+	import MobileLayout from '$lib/components/MobileLayout.svelte';
 
 	let mainElement: HTMLElement;
 	let isMobile = false;
@@ -164,28 +165,12 @@
 	{/if} -->
 
 	{#if isMobile}
-		<!-- Mobile layout remains unchanged for now -->
-		<div class="game-view-container">
-			{#if $currentMapData && $playerStore.position}
-				<MapDisplay mapData={$currentMapData} player={$playerStore} />
-			{:else}
-				<p>Loading map...</p>
-			{/if}
-		</div>
-		<div class="mobile-bottom-bar">
-			<div class="mobile-info-wrapper">
-				<MobileInfoPanel />
-			</div>
-			<div class="mobile-controls">
-				<!-- Mobile controls -->
-			</div>
-		</div>
+		<MobileLayout />
 	{:else}
 		<div class="console-super">
 			<div class="console">
 				<!-- Desktop Layout -->
 				<div class="left-panel">
-					<button class="logo-button"><TimeDisplay /></button>
 					<LeftControlPanel />
 				</div>
 
@@ -243,6 +228,7 @@
 		border-radius: 24px;
 		margin: auto;
 		/* flex-grow: 1; */
+		/* max-width: 100%; */
 
 		p {
 			position: absolute;
@@ -257,6 +243,7 @@
 		align-items: flex-start;
 		overflow: hidden;
 		gap: 1rem;
+		/* width: 100%; */
 	}
 
 	.left-panel {
@@ -304,6 +291,7 @@
 		justify-content: center;
 		align-items: center;
 		width: 800px;
+		/* flex-grow: 1; */
 		height: 400px;
 		background-color: #222;
 		border: 3px solid var(--surface-2);
@@ -312,7 +300,7 @@
 
 	.message-log-wrapper {
 		height: 150px;
-		width: 600px;
+		flex-grow: 1;
 		display: flex;
 		border: 3px solid var(--surface-2);
 		border-radius: 12px;

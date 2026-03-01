@@ -1,6 +1,7 @@
 {
     "id": "sylvie",
     "name": "Sylvie",
+    "description": "A ranger in the forest. She is sharp with her bow, and handy with a rope - both in the field and at night.",
     "profileImage": "/images/characters/sylvie/sylvie_avatar.png",
     "image": "/images/characters/sylvie/sylvie1.png",
     "galleryImages": [
@@ -99,7 +100,7 @@
         {
             "questId": "sylvie_sword_1",
             "title": "A Friend in the Forest",
-            "description": "Sylvie, a guardian of the forest, has asked for your help.",
+            "description": "As you enter this brave new world, you run into someone who seems to need some assistance. A cute green haired forest ranger?",
             "startState": "ACTIVE",
             "stages": [
                 {
@@ -156,7 +157,7 @@
         {
             "questId": "sylvie_sword_2",
             "title": "Heart of the Forest",
-            "description": "Sylvie wants to teach you more about the forest.",
+            "description": "Sylvie will teach you further about the game: Resources, and Gifting.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_1_complete"
@@ -224,7 +225,7 @@
         {
             "questId": "sylvie_sword_3",
             "title": "Dragon Taming",
-            "description": "Sylvie is concerned about the growing number of dragons.",
+            "description": "Sylvie wants to see you grow stronger! She will teach you about Overworld monsters (Toxolotl, Woodmech Bears, Greenhorns etc.)",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_2_complete"
@@ -280,7 +281,7 @@
         {
             "questId": "sylvie_sword_4",
             "title": "A Test of Mettle",
-            "description": "Sylvie wants to test your strength.",
+            "description": "Sylvie isn't playing anymore (or is she?), and wants you to 'dominate' her.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_3_complete"
@@ -350,7 +351,7 @@
         {
             "questId": "sylvie_sword_5",
             "title": "A Simple Meal",
-            "description": "A New Gameplay Mode - Farming",
+            "description": "You have grown close to the woodland ranger, and she wants to teach you Farming next.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_4_complete"

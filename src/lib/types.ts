@@ -18,6 +18,7 @@ export interface GearPassive {
 }
 
 export interface Item {
+	price?: any;
     id: string;
     instanceId: string;
     name: string;
@@ -25,7 +26,8 @@ export interface Item {
     image: string;
     type: ItemType;
     stats?: Stat[];
-    consumableEffects?: { hp?: number; auraShield?: number; }[];
+    effects?: { hp?: number; auraShield?: number; }[];
+    activeEffects?: ActiveEffect[];
     element?: string;
     flags?: string[];
     mastery?: number;
@@ -214,6 +216,17 @@ export interface FarmPlot {
     appliedTech: string[];
 }
 
+export interface ActiveEffect {
+    id: string;
+    name: string;
+    duration: number;
+    expiryTime: number;
+    type: 'flat' | 'percentage';
+    stat: keyof PlayerBaseStats;
+    value: number;
+    source?: string;
+}
+
 export interface Player {
     isInitialized: boolean;
     level: number;
@@ -225,7 +238,7 @@ export interface Player {
     baseStats: PlayerBaseStats;
     equipment: { weapon_slots: (Weapon | null)[]; relic_slots: (Relic | null)[]; };
     inventory: Item[];
-    activeEffects: any[];
+    activeEffects: ActiveEffect[];
     statusEffects: StatusEffect[];
     worldTags: string[];
     skills: any[];
@@ -272,19 +285,33 @@ export type RequirementCondition =
     | { type: 'give_item'; itemId: string; quantity: number }
     | { type: 'finish_location_event'; eventId: string; quantity?: number; timing?: 'history' | 'future' }
     | { type: 'have_tag'; tag: string }
+    | { type: 'not_tag'; tag: string }                                          // NEW: true if player does NOT have this tag
+    | { type: 'faction_rank'; factionId: string; minRank: number }              // NEW: true if player has >= minRank with faction
+    | { type: 'faction_score'; factionId: string; minScore: number }            // NEW: true if player has >= minScore with faction
     | { type: 'stat_check'; stat: keyof Player['baseStats']; value: number }
     | { type: 'element_check'; element: string; value: number }
     | { type: 'element_exploration_level_check'; element: string; level: number }
     | { type: 'dialogue' };
 
-export type Requirement = { operator: 'AND' | 'OR'; conditions: RequirementCondition[]; } | RequirementCondition;
+/**
+ * Requirement tree.
+ * - AND / OR: all or any conditions must be met.
+ * - NOT: wraps a single requirement and inverts it.
+ */
+export type Requirement =
+    | { operator: 'AND'; conditions: RequirementCondition[] }
+    | { operator: 'OR';  conditions: RequirementCondition[] }
+    | { operator: 'NOT'; condition: Requirement }                               // NEW: inverts child requirement
+    | RequirementCondition;
 
 export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
+    | { type: 'remove_tag'; tagId: string; }                                    // NEW: explicitly remove a world tag
     | { type: 'change_reputation'; faction: 'Solis Saints' | 'Shadowhand'; amount: number; }
+    | { type: 'faction_score'; factionId: string; amount: number; }            // NEW: direct faction score delta
     | { type: 'complete_quest_stage'; questId: string; }
-    | { type: 'fail_quest'; questId: string; };
+    | { type: 'fail_quest'; questId: string; };                                 // already existed in type, now handled
 
 export type GameEffect =
     | { type: 'RESTORE_HP'; value: number }
@@ -294,13 +321,15 @@ export type GameEffect =
     | { type: 'TAKE_ITEM'; itemId: string; quantity: number }
     | { type: 'SWAP_ITEM'; takeItemId: string; takeQuantity: number; giveItemId: string; giveQuantity: number }
     | { type: 'trigger_faction_choice' }
-    | { type: 'CHOOSE_FACTION', faction: 'Solis Saints' | 'Shadowhand' }
-    | { type: 'add_tag', tag: string }
-    | { type: 'give_item', itemId: string, quantity: number }
+    | { type: 'CHOOSE_FACTION'; faction: 'Solis Saints' | 'Shadowhand' }
+    | { type: 'add_tag'; tag: string }
+    | { type: 'remove_tag'; tag: string }                                       // NEW
+    | { type: 'give_item'; itemId: string; quantity: number }
     | { type: 'complete_quest_stage' }
-    | { type: 'set_quest_state', questId: string, state: QuestState }
-    | { type: 'add_reputation', faction: string, amount: number }
-    | { type: 'switch_map', mapId: string, x: number, y: number };
+    | { type: 'set_quest_state'; questId: string; state: QuestState }
+    | { type: 'fail_quest'; questId: string }                                   // NEW explicit effect
+    | { type: 'add_reputation'; faction: string; amount: number }
+    | { type: 'switch_map'; mapId: string; x: number; y: number };
 
 export interface GiftingOption {
     itemId: string;
@@ -312,6 +341,7 @@ export interface GiftingOption {
 export interface QuestStage {
     objective: string;
     requirement: Requirement;
+    intro_dialogue?: string[];                                                   // NEW: shown when stage first becomes active
     reminder_dialogue?: string[];
     success_dialogue?: string[];
     success_rewards?: Reward[];
@@ -337,6 +367,7 @@ export interface HeartRankData {
     rank_up_dialogue?: string[];
     rank_up_rewards?: Reward[];
     rankUpRequirement?: Requirement;
+    factionScoreMultiplier?: number;
 }
 
 export interface LandscapeData {
@@ -383,6 +414,7 @@ export interface EventAction {
     text: string;
     effects: GameEffect[];
     responseMessage?: string;
+    requirement?: Requirement;                                                   // NEW: hide/disable action if not met
 }
 
 export interface LocationEvent {
@@ -397,8 +429,8 @@ export interface LocationEvent {
     actions?: EventAction[];
     afterImage?: string;
     afterDescription?: string;
-    requirement?: Requirement;
-    requirementNotMetMessage?: string;
+    requirement?: Requirement;          // already existed — now actually enforced
+    requirementNotMetMessage?: string;  // already existed — now actually shown
     reusable?: boolean;
 }
 
@@ -499,6 +531,12 @@ export interface Faction {
     icon: string;
     score: number;
     rank: number;
+    /**
+     * rivalFactions: when this faction's score increases, all listed rival factions
+     * receive a penalty of `rivalPenaltyRatio` × the amount gained.
+     * e.g. rivalPenaltyRatio: 0.5 means gaining 10 Saints score costs 5 Shadowhand score.
+     */
+    rivalFactions?: { factionId: string; penaltyRatio: number }[];             // NEW
     ranks: {
         scoreThreshold: number;
         rewards: Reward[];

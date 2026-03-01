@@ -25,10 +25,10 @@
 <nav class="navbar">
     <div class="navbar-left">
         <a href="/" class="brand">Dawn's Journey</a>
-        <div class="nav-stat-bars">
+        <!-- <div class="nav-stat-bars">
             <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
             <StatBar current={$playerStats.auraShield} max={$playerStats.maxAuraShield} color="#a98467" />
-        </div>
+        </div> -->
     </div>
 
     <div class="navbar-right desktop-only">

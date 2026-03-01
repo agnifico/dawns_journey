@@ -248,7 +248,7 @@ export const generalItems: Item[] = [
         effects: [{ hp: 2 }],
         activeEffects: [
             { id: "onion_pd_buff", name: "Onion PD Buff", stat: "physicalAttack", value: 15, duration: 50, type: "flat", source: "onion" },
-            { id: "onion_pd_debuff", name: "Onion PD Debuff", stat: "physicalDefence", value: -10, duration: 50, type: "flat", source: "onion" },
+            { id: "onion_pd_debuff", name: "Onion PD Debuff", stat: "physicalDefence", value: -.10, duration: 50, type: "percentage", source: "onion" },
         ],
     },
     {

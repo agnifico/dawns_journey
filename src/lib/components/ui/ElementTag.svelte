@@ -12,19 +12,23 @@
 
 <style>
 	.element-tag {
+		width: fit-content;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		background-color: var(--black);
 		border-radius: 6px;
 		border: 1px solid var(--color-border);
 		font-family: var(--font-family-pixel);
 		font-size: 0.5rem;
 		color: var(--color-text-muted);
+		background-color: hsla(0, 0%, 0%, 0.25);
+		padding: 4px;
+		flex-direction: row;
 	}
     .full {
-        border: 2px solid rgba(0, 0, 0, 0.5);
+		flex-direction: column;
+		background-color: var(--black);
+		border: 2px solid rgba(0, 0, 0, 0.5);
         padding: 0.2rem 0.25em 0.2rem 0.25rem;
     }
 	.element-icon {

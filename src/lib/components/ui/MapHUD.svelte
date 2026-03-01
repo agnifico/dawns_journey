@@ -138,5 +138,8 @@
 		.tracker {
 			display: none;
 		}
+		.top-left, .top-right {
+			margin-top: 2rem;
+		}
 	}
 </style>

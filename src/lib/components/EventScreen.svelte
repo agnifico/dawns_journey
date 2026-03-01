@@ -6,7 +6,6 @@
 	import { mapStore, landscapeImage } from '$lib/stores/mapStore'; // Import mapStore
 	import { time } from '$lib/stores/timeStore';
 	import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
-	import { triggerEventEffect } from '$lib/services/LocationEventService';
 	import StatBar from './ui/StatBar.svelte';
 	import MasteryTag from './ui/MasteryTag.svelte';
 	import Tooltip from './ui/Tooltip.svelte';
@@ -14,7 +13,7 @@
 	import { goto } from '$app/navigation';
 	import DialogueBox from '$lib/components/DialogueBox.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
-	// import ChoiceMenu from './ui/ChoiceMenu.svelte';
+	import ChoiceMenu from './ui/ChoiceMenu.svelte';
 
 	let npc;
 	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
@@ -37,12 +36,6 @@
 	function closeLightbox() {
 		lightboxVisible = false;
 		lightboxImage = '';
-	}
-
-	function handleAction(action) {
-		const eventData = $eventScreen.data;
-		triggerEventEffect(eventData.id, action.effects, action.responseMessage || eventData.message);
-		clearEvent();
 	}
 
 	const resourceNodeKey = derived([eventScreen, mapStore], ([$eventScreen, $mapStore]) => {

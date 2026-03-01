@@ -139,6 +139,10 @@
 		border-radius: 3px;
 	}
 
+	.text {
+		white-space: pre-line;
+	}
+
 	.timestamp {
 		margin-right: 10px;
 		color: #888;

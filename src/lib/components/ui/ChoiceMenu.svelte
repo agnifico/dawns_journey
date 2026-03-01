@@ -3,10 +3,13 @@
 	import { npcStore } from '$lib/stores/npcStore';
 	import { questStore } from '$lib/stores/questStore';
 	import { dialogueStore } from '$lib/stores/dialogueStore';
+	import { playerStore } from '$lib/stores/playerStore';
 	import * as CombatService from '$lib/services/CombatService';
 	import * as LocationEventService from '$lib/services/LocationEventService';
 	import { gatherResource } from '$lib/services/InteractionService';
+	import { checkRequirement } from '$lib/services/QuestService';
 	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import type { NPC } from '$lib/types';
 
 	let actions = [];
@@ -14,9 +17,23 @@
 
 	const keymap = ['z', 'x', 'c', 'v', 'b'];
 
-	// Reactive statement to build actions based on the current event
+	// ---------------------------------------------------------------------------
+	// Helper: check whether a location event action's requirement is met
+	// Returns true if no requirement (always show), false if not met (hide action)
+	// ---------------------------------------------------------------------------
+	function isActionAvailable(action): boolean {
+		if (!action.requirement) return true;
+		const player = get(playerStore);
+		const globalNpcs = get(npcStore).globalNpcs;
+		const { met } = checkRequirement(action.requirement, player, null, globalNpcs, true);
+		return met;
+	}
+
+	// ---------------------------------------------------------------------------
+	// Reactive action builder
+	// ---------------------------------------------------------------------------
 	$: {
-		npc = null; // Reset npc on event change
+		npc = null;
 		if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
 			npc = $npcStore.globalNpcs[$eventScreen.data.npcId];
 			if (npc) {
@@ -53,16 +70,21 @@
 				];
 			}
 		} else if ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) {
-			actions = $eventScreen.data.actions.map((act, index) => ({
+			// Build actions from the event definition.
+			// Per-action requirements are evaluated here — actions that fail are hidden entirely.
+			// This means the hotkey list is tight: only available actions get keys assigned.
+			const eventData = $eventScreen.data;
+			const availableActions = eventData.actions.filter(isActionAvailable);
+
+			actions = availableActions.map((act, index) => ({
 				id: `event_action_${index}`,
 				label: act.text,
 				hotkey: keymap[index] || null,
+				// FIX: call triggerEventAction so the requirement is double-checked server-side
+				// and the correct responseMessage (not event.message) is used
 				action: () => {
-					LocationEventService.triggerEventEffect(
-						$eventScreen.data.id,
-						act.effects,
-						$eventScreen.data.message
-					);
+					const originalIndex = eventData.actions.indexOf(act);
+					LocationEventService.triggerEventAction(eventData, originalIndex);
 					clearEvent();
 				}
 			}));
@@ -81,18 +103,18 @@
 				id: enemy.id,
 				name: enemy.name,
 				image: enemy.image,
-				profileImage: enemy.thumbnailImage, // Assuming thumbnailImage can be used as profileImage
+				profileImage: enemy.thumbnailImage,
 				isCombatant: true,
-				baseStats: enemy.baseStats!, // We've added baseStats to legendary enemies
-				swordRank: 0, // Default for non-NPCs
-				heartRank: 0, // Default for non-NPCs
-				affinity: 0, // Default
-				swordState: 'NOT_STARTED', // Default
-				heartState: 'NOT_STARTED', // Default
-				swordRanks: [], // Empty for non-NPCs
-				heartRanks: [], // Empty for non-NPCs
-				statGrowth: [], // Empty
-				battleAftermathsBySwordRank: [], // Empty
+				baseStats: enemy.baseStats,
+				swordRank: 0,
+				heartRank: 0,
+				affinity: 0,
+				swordState: 'NOT_STARTED',
+				heartState: 'NOT_STARTED',
+				swordRanks: [],
+				heartRanks: [],
+				statGrowth: [],
+				battleAftermathsBySwordRank: [],
 				types: enemy.types,
 				requirementSnapshot: {},
 				swordRankMaxedDialogue: [],
@@ -115,6 +137,9 @@
 		}
 	}
 
+	// ---------------------------------------------------------------------------
+	// Keyboard handler
+	// ---------------------------------------------------------------------------
 	const handleKeydown = (e: KeyboardEvent) => {
 		if ($dialogueStore.isOpen || ($dialogueStore as any).justClosed) return;
 
@@ -165,15 +190,9 @@
 <style>
 	.interaction-menu {
 		position: relative;
-		/* bottom: 2%;
-		left: 62%;
-		right: 2%; */
-
 		padding: 16px 16px 22px;
 		background-color: #cb997e;
 		border-top: 3px solid #00000056;
-		/* width: 80%; */
-		/* margin-inline: auto; */
 		border-radius: 0 0 12px 12px;
 		box-shadow: #00000056 0 -6px 0 3px inset;
 		background-color: var(--surface-2);
@@ -192,18 +211,14 @@
 		align-items: center;
 		width: 100%;
 		padding: 0.25rem 0.5rem 0.5rem;
-		background-color: #9c6f58;
-		border: 3px solid #5e4335;
-		border: none;
 		background-color: var(--surface-3);
 		color: var(--text-header);
 		box-shadow: #00000056 0 -3px 0 3px inset;
-		/* border: none; */
+		border: none;
 		border-radius: 6px;
 		font-family: 'Silkscreen', sans-serif;
 		text-align: left;
 		font-size: 0.9rem;
-		/* box-sizing: border-box; */
 	}
 	button:hover,
 	button:focus {

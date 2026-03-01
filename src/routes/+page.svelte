@@ -11,6 +11,7 @@
 	import { profiles } from '$lib/data/profiles';
 	import { applyProfile } from '$lib/services/ProfileService';
 	import player from '$lib/data/player';
+	import NpcViewer from '$lib/components/NpcViewer.svelte';
 
 	const groupImages = [
 		{ src: '/images/characters/group/g0.png', alt: 'Main Characters' },
@@ -125,7 +126,9 @@
 					>
 				{/if}
 			</div>
-			<div class="grid-box div7"></div>
+			<div class="grid-box div7">
+				<NpcViewer />
+			</div>
 			<div class="grid-box div8"></div>
 		</div>
 
@@ -306,17 +309,9 @@
 		grid-column: span 2 / span 1;
 	}
 
-	.start-game-button-container {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		z-index: 1;
-	}
 
 	.start-game-button {
 		font-family: var(--font-family-pixel);
-		/* background-color: var(--color-accent); */
 		background-color: transparent;
 		color: var(--text-white);
 		border: none;
@@ -371,6 +366,7 @@
 	}
 
 	.div6 {
+		padding: 0;
 		position: relative;
 		grid-column: span 2 / span 2;
 		grid-column-start: 3;
@@ -390,8 +386,8 @@
 		grid-row: span 2 / span 2;
 		grid-column-start: 3;
 		grid-row-start: 4;
-		background-color: #3a3a3a;
-		background-color: #e9d9ca;
+		background-color: #2e2e2e;
+		/* background-color: #e9d9ca; */
 	}
 
 	.div8 {

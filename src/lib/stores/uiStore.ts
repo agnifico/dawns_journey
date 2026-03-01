@@ -8,6 +8,9 @@ export type HomesteadSubTab = 'farming' | 'crafting';
 export const inventoryTab = writable<InventoryTab>('general');
 export const homesteadSubTab = writable<HomesteadSubTab>('farming');
 
+export const hideNavbar = writable(false);
+
+
 // --- Active Item ---
 export const activeItem = writable<Item | null>(null);
 

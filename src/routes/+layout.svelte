@@ -12,6 +12,7 @@
 	import { messageStore } from '$lib/stores/messageStore';
 	import { skillTreeStore } from '$lib/stores/skillTreeStore'; // Import skillTreeStore
 	import { onMount } from 'svelte';
+	import { hideNavbar } from '$lib/stores/uiStore';
 	// import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
 	// import { playerStore } from '$lib/stores/playerStore';
 
@@ -36,9 +37,11 @@
 	<title>Dawn's Journey : A serverless browser based game</title>
 </svelte:head>
 
-<Navbar />
+{#if !$hideNavbar}
+	<Navbar />
+{/if}
 
-<div class="page-content">
+<div class="page-content" class:no-nav={$hideNavbar}>
 	{@render children?.()}
 	<!-- {#if $playerStore.isInitialized}
 		<div class="lcp-wr">
@@ -58,9 +61,12 @@
 	.page-content {
 		position: relative;
 		height: 100%;
-		height: 100%;
 		padding-top: 50px;
 		box-sizing: border-box;
+	}
+
+	.page-content.no-nav {
+		padding-top: 0;
 	}
 
 	.lcp-wr {

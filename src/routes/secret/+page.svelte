@@ -26,30 +26,30 @@
 		{ src: '/images/characters/nsfw/23.png', alt: 'Main Characters' },
 		{ src: '/images/characters/nsfw/24.png', alt: 'Main Characters' },
 		{ src: '/images/characters/nsfw/25.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/26.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/27.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/28.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/29.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/30.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/31.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/32.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/33.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/34.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/35.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/36.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/37.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/38.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/39.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/40.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/41.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/42.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/43.png', alt: 'Main Characters' },
-        { src: '/images/characters/nsfw/44.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/26.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/27.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/28.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/29.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/30.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/31.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/32.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/33.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/34.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/35.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/36.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/37.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/38.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/39.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/40.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/41.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/42.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/43.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/44.png', alt: 'Main Characters' }
 	];
 	let currentImageIndex = 0;
-    
+
 	function changeImage(direction: number) {
-        if (!images) return;
+		if (!images) return;
 		const newIndex = currentImageIndex + direction;
 		if (newIndex >= 0 && newIndex < images.length) {
 			currentImageIndex = newIndex;
@@ -86,28 +86,29 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
+		image-rendering:smooth;
 	}
 	.slideshow-container {
 		position: relative;
 		text-align: center;
 		margin-bottom: 2rem;
-        height: 100%;
+		height: 100%;
 	}
 	.main-image {
 		position: relative;
 		width: 100%;
 		height: 100%;
 		margin-bottom: 1rem;
-        object-fit: contain;
+		object-fit: contain;
 	}
 	.slideshow-controls {
 		position: absolute;
-        top: 50%;
-        left: 2rem;
-        right: 2rem;
-        /* width: 100%; */
+		top: 50%;
+		left: 2rem;
+		right: 2rem;
+		/* width: 100%; */
 		display: flex;
-        flex-direction: row;
+		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
 		gap: 1rem;
@@ -118,8 +119,8 @@
 		border: none;
 		padding: 0;
 		cursor: pointer;
-        font-size: 3rem;
-        margin: 0;
+		font-size: 3rem;
+		margin: 0;
 	}
 	.slideshow-controls button:disabled {
 		background: #333;

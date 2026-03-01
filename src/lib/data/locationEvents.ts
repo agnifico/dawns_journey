@@ -130,6 +130,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         actions: [
           {
             text: "Side with the Solis Saints",
+            requirement: { "type": "have_tag", "tag": "guinevere_ready_for_f3" },
             effects: [
               { type: "set_quest_state", questId: "guinevere_sword_4", state: "COMPLETED" },
               { type: "set_quest_state", questId: "akari_sword_2", state: "FAILED" },
@@ -141,6 +142,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
           },
           {
             text: "Side with the Shadowhand",
+            requirement: { "type": "have_tag", "tag": "akari_ready_for_f3" },
             effects: [
               { type: "set_quest_state", questId: "akari_sword_2", state: "COMPLETED" },
               { type: "set_quest_state", questId: "guinevere_sword_4", state: "FAILED" },
