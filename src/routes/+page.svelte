@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store'; // Import get
+	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import { playerStore } from '$lib/stores/playerStore';
 	import { mapStore } from '$lib/stores/mapStore';
 	import { npcStore } from '$lib/stores/npcStore';
 	import * as SaveLoadService from '$lib/services/SaveLoadService';
 	import ImageSlideshow from '$lib/components/ImageSlideshow.svelte';
-	import { loadMapData } from '$lib/services/MapLoaderService'; // Import the new service
+	import { loadMapData } from '$lib/services/MapLoaderService';
 	import { profiles } from '$lib/data/profiles';
 	import { applyProfile } from '$lib/services/ProfileService';
 	import player from '$lib/data/player';
@@ -27,9 +27,7 @@
 		{ src: '/images/characters/group/g10.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g11.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g12.png', alt: 'Main Characters' },
-		// { src: '/images/characters/group/main.png', alt: 'Main character' },
-		// { src: '/images/characters/group/sylvie,hela,akari-3.png', alt: 'Sylvie, Hela, and Akari' },
-		// { src: '/images/characters/group/veres,hanabi,marjane.png', alt: 'Veres, hanabi, and Marjane' }
+		{ src: '/images/characters/group/g13.png', alt: 'Main Characters' },
 	];
 	const slideshowImages = [...groupImages];
 
@@ -48,8 +46,7 @@
 		} else if (availableMaps.length > 0) {
 			selectedMapId = availableMaps[0].id;
 		}
-		// Load initial map data
-		loadMapData(get(mapStore).currentMapId); // Load the map data
+		loadMapData(get(mapStore).currentMapId);
 	});
 
 	async function startNewGame() {
@@ -68,8 +65,11 @@
 </script>
 
 <main class="new-player-view" class:initialized={$playerStore.isInitialized}>
-	<!-- <ImageSlideshow images={slideshowImages} /> -->
-	<div class="overlay">
+
+	<!-- ============================================================
+	     DESKTOP LAYOUT (unchanged)
+	     ============================================================ -->
+	<div class="overlay desktop-only">
 		<div class="grid-container">
 			<div class="grid-box div1">
 				<h1>Dawn's <br />Adventure</h1>
@@ -81,18 +81,12 @@
 					{#each profiles as profile (profile.id)}
 						<label class="radio-label" class:selected={selectedProfileId === profile.id}>
 							<img class="avatar" src={profile.avatar} alt="" />
-							<input
-								type="radio"
-								name="profile-select"
-								value={profile.id}
-								bind:group={selectedProfileId}
-							/>
+							<input type="radio" name="profile-select" value={profile.id} bind:group={selectedProfileId} />
 							<p>{profile.name}</p>
 						</label>
 					{/each}
 				</div>
 			</div>
-
 			<div class="grid-box div5">
 				<ImageSlideshow images={slideshowImages} />
 			</div>
@@ -111,19 +105,16 @@
 						<button on:click={SaveLoadService.clearSave} class="danger">Delete Save</button>
 						<button on:click={() => goto('/settings')}>Settings</button>
 						<button on:click={() => goto('/secret')}>Vault</button>
-						{:else}
+					{:else}
 						<button on:click={SaveLoadService.loadGame}>Load Game</button>
-						<button on:click={() => goto('/secret')}>Vault</button>
-						{/if}
+					{/if}
 				</div>
 			</div>
 			<div class="grid-box div6">
 				{#if $playerStore.isInitialized}
 					<button class="start-game-button" on:click={continueGame}>Continue Game</button>
 				{:else}
-					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}
-						>New Game</button
-					>
+					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}>New Game</button>
 				{/if}
 			</div>
 			<div class="grid-box div7">
@@ -131,39 +122,114 @@
 			</div>
 			<div class="grid-box div8"></div>
 		</div>
+	</div>
 
-		<!-- <div class="start-game-button-container">
-			
-		</div> -->
+	<!-- ============================================================
+	     MOBILE LAYOUT
+	     ============================================================ -->
+	<div class="mobile-only mobile-root">
+
+		<!-- SECTION 1: Hero — full bleed slideshow + title + primary CTA -->
+		<section class="m-section m-hero">
+			<!-- Slideshow bleeds as background -->
+			<div class="m-hero-bg">
+				<ImageSlideshow images={slideshowImages} />
+			</div>
+			<!-- Gradient scrim so text is readable -->
+			<div class="m-hero-scrim"></div>
+
+			<div class="m-hero-content">
+				<div class="m-title-block">
+					<h1>Dawn's<br />Adventure</h1>
+					<p>A serverless browser RPG.</p>
+				</div>
+
+				{#if $playerStore.isInitialized}
+					<button class="m-cta-primary" on:click={continueGame}>
+						▶ Continue Game
+					</button>
+					<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}>
+						Load Save
+					</button>
+				{:else}
+					<div class="m-new-game-block">
+						<!-- Profile selector: horizontal scroll row -->
+						<p class="m-section-label">Choose your profile</p>
+						<div class="m-profile-row">
+							{#each profiles as profile (profile.id)}
+								<label class="m-radio-label" class:selected={selectedProfileId === profile.id}>
+									<img src={profile.avatar} alt={profile.name} />
+									<span>{profile.name}</span>
+									<input type="radio" name="m-profile-select" value={profile.id} bind:group={selectedProfileId} />
+								</label>
+							{/each}
+						</div>
+						<button class="m-cta-primary" on:click={startNewGame} disabled={!selectedMapId}>
+							▶ New Game
+						</button>
+					</div>
+				{/if}
+			</div>
+
+			<!-- Scroll hint -->
+			<div class="m-scroll-hint">↓</div>
+		</section>
+
+		<!-- SECTION 2: Game Actions -->
+		{#if $playerStore.isInitialized}
+			<section class="m-section m-actions">
+				<p class="m-section-label">Game Actions</p>
+				<div class="m-actions-grid">
+					<button class="m-action-btn" on:click={() => goto('/map')}>🗺 Map</button>
+					<button class="m-action-btn" on:click={() => goto('/arena')}>⚔ Arena</button>
+					<button class="m-action-btn" on:click={() => goto('/crafting')}>🔨 Crafting</button>
+					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}>🌱 Farming</button>
+					<button class="m-action-btn" on:click={() => goto('/journal')}>📖 Journal</button>
+					<button class="m-action-btn" on:click={() => goto('/shop')}>🏪 Shop</button>
+					<button class="m-action-btn" on:click={() => goto('/settings')}>⚙ Settings</button>
+					<button class="m-action-btn" on:click={() => goto('/secret')}>🔒 Vault</button>
+				</div>
+				<div class="m-save-row">
+					<button class="m-save-btn save" on:click={SaveLoadService.saveGame}>💾 Save Game</button>
+					<button class="m-save-btn" on:click={SaveLoadService.loadGame}>📂 Load</button>
+					<button class="m-save-btn danger" on:click={SaveLoadService.clearSave}>🗑 Delete</button>
+				</div>
+			</section>
+		{/if}
+
+		<!-- SECTION 3: Characters -->
+		<section class="m-section m-characters">
+			<p class="m-section-label">Characters</p>
+			<div class="m-npc-wrapper">
+				<NpcViewer />
+			</div>
+		</section>
+
 	</div>
 </main>
 
 <style>
-	/* :root {
-		--color-surface-1: #2a2a2a;
-		--color-surface-2: #3a3a3a;
-		--color-accent: #4caf50;
-		--color-secondary: #555;
-		--color-orange: #ff9800;
-		--color-text: #eee;
-		--color-text-muted: #ccc;
-		--text-white: #fff;
-	} */
-
+	/* ============================================================
+	   SHARED
+	   ============================================================ */
 	.new-player-view {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		margin: auto;
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		color: var(--color-text);
-		overflow: hidden; /* Hide overflow for the cut-in effect */
+		overflow: hidden;
 		background-color: #141414;
 	}
+
+	/* ============================================================
+	   DESKTOP (unchanged)
+	   ============================================================ */
+	.mobile-only  { display: none; }
+	.desktop-only { display: flex; width: 100%; height: 100%; }
 
 	.overlay {
 		position: absolute;
@@ -186,9 +252,7 @@
 		gap: 1rem;
 		width: 90%;
 		height: 90%;
-		position: relative;
 		z-index: 0;
-		/* border: 1px solid white; */
 	}
 
 	.grid-box {
@@ -217,14 +281,10 @@
 		line-height: 3.5rem;
 	}
 
-	.grid-box p {
-		font-size: 1em;
-		/* color: var(--color-text-muted); */
-	}
+	.grid-box p { font-size: 1em; }
 
 	.grid-box h3 {
 		font-family: var(--font-family-pixel);
-		/* color: var(--color-accent); */
 		margin-top: 0;
 		margin-bottom: 1rem;
 		font-size: 1.2em;
@@ -247,43 +307,21 @@
 		flex-direction: column;
 		transition: 0.2s ease-in all;
 		padding: 0.5rem;
-		img {
-			filter: saturate(0);
-			height: 100px;
-			width: 100px;
-		}
-		&:hover {
-			img {
-				filter: saturate(0) brightness(1.1);
-			}
-		}
 	}
-	.radio-label.selected {
-		background-color: hsla(0, 0%, 100%, 0.5);
-		img {
-			filter: saturate(1);
-		}
-		p {
-			color: #222;
-		}
-	}
-	.radio-label input[type='radio'] {
-		display: none;
-	}
-	.avatar {
-		position: relative;
-		max-width: 120px;
-		max-height: 120px;
-		margin-bottom: 8px;
-		image-rendering: auto;
-	}
+	.radio-label img { filter: saturate(0); height: 100px; width: 100px; }
+	.radio-label:hover img { filter: saturate(0) brightness(1.1); }
+	.radio-label.selected { background-color: hsla(0, 0%, 100%, 0.5); }
+	.radio-label.selected img { filter: saturate(1); }
+	.radio-label.selected p { color: #222; }
+	.radio-label input[type='radio'] { display: none; }
+
+	.avatar { position: relative; max-width: 120px; max-height: 120px; margin-bottom: 8px; image-rendering: auto; }
 
 	.game-actions {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: .5rem;
 	}
-
 	.game-actions button {
 		font-family: var(--font-family-pixel);
 		background-color: var(--color-secondary);
@@ -295,40 +333,27 @@
 		box-shadow: #00000056 0 -3px 0 3px inset;
 		transition: 150ms all ease-in-out;
 	}
-
-	.game-actions button:hover {
-		transform: translateY(1px);
-		box-shadow: #00000056 0 -2px 0 2px inset;
-	}
-
-	.game-actions button.danger:hover {
-		background-color: #c53030;
-	}
+	.game-actions button:hover { transform: translateY(1px); box-shadow: #00000056 0 -2px 0 2px inset; }
+	.game-actions button.danger:hover { background-color: #c53030; }
 	.game-actions button.save {
 		background-color: #435e52;
 		grid-column: span 2 / span 1;
 	}
-
 
 	.start-game-button {
 		font-family: var(--font-family-pixel);
 		background-color: transparent;
 		color: var(--text-white);
 		border: none;
-		width: 100%;
-		height: 100%;
+		width: 100%; height: 100%;
 		padding: 1.5rem 3rem;
 		font-size: 1.8em;
 		cursor: pointer;
-		box-shadow:
-			#00000056 0 5px 15px rgba(0, 0, 0, 0.5),
-			inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+		box-shadow: #00000056 0 5px 15px rgba(0,0,0,0.5), inset 0 -5px 10px rgba(0,0,0,0.3);
 		transition: all 0.2s ease-in-out;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		display: flex; align-items: center; justify-content: center;
 		text-align: center;
-		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+		text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 	}
 
 	.div1 {
@@ -339,7 +364,6 @@
 		flex-direction: column;
 		align-items: flex-start;
 	}
-
 	.div2 {
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
@@ -347,14 +371,12 @@
 		background-color: #cd804d;
 		color: #222;
 	}
-
 	.div4 {
 		grid-row: span 3 / span 3;
 		grid-column-start: 5;
 		background-color: #e9d9ca;
 		color: #cd804d;
 	}
-
 	.div5 {
 		grid-column: span 2 / span 2;
 		grid-row: span 3 / span 3;
@@ -364,7 +386,6 @@
 		padding-bottom: 1rem;
 		overflow: hidden;
 	}
-
 	.div6 {
 		padding: 0;
 		position: relative;
@@ -372,24 +393,19 @@
 		grid-column-start: 3;
 		grid-row-start: 3;
 		background-color: #435e52;
-		&:hover {
-			background-color: #34453d;
-			transform: translateY(2px);
-			box-shadow:
-				#00000056 0 8px 20px rgba(0, 0, 0, 0.6),
-				inset 0 -7px 12px rgba(0, 0, 0, 0.4);
-		}
 	}
-
+	.div6:hover {
+		background-color: #34453d;
+		transform: translateY(2px);
+		box-shadow: #00000056 0 8px 20px rgba(0,0,0,0.6), inset 0 -7px 12px rgba(0,0,0,0.4);
+	}
 	.div7 {
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
 		grid-column-start: 3;
 		grid-row-start: 4;
 		background-color: #2e2e2e;
-		/* background-color: #e9d9ca; */
 	}
-
 	.div8 {
 		grid-row: span 2 / span 2;
 		grid-column-start: 5;
@@ -397,51 +413,290 @@
 		background-color: #cd804d;
 	}
 
-	/* Mobile Responsiveness */
+	/* ============================================================
+	   MOBILE
+	   ============================================================ */
 	@media (max-width: 768px) {
-		.grid-container {
-			grid-template-columns: 1fr;
-			grid-template-rows: repeat(4, 1fr);
-			height: 100%;
+		.desktop-only { display: none !important; }
+		.mobile-only  { display: flex; }
+
+		.new-player-view {
+			overflow-y: auto;
+			align-items: stretch;
+			justify-content: flex-start;
+		}
+
+		/* ---- Root ---- */
+		.mobile-root {
+			flex-direction: column;
 			width: 100%;
-			overflow-y: scroll;
+			min-height: 100%;
+			overflow-y: auto;
 			scroll-snap-type: y mandatory;
-			gap: 0; /* Remove gap for scroll-snapped panels */
+			-webkit-overflow-scrolling: touch;
 		}
 
-		.grid-box {
-			height: 100vh; /* Each panel takes full viewport height */
+		/* ---- Sections ---- */
+		.m-section {
 			scroll-snap-align: start;
-			border-radius: 0; /* No border-radius for full-height panels */
-			border: none;
-			box-shadow: none;
-			padding-top: 100px; /* Adjust for fixed header if any */
-			padding-bottom: 100px; /* Adjust for fixed footer if any */
+			flex-shrink: 0;
+			box-sizing: border-box;
+			width: 100%;
 		}
 
-		.start-game-button-container {
-			position: fixed;
-			bottom: 20px;
-			top: auto;
+		/* ---- HERO ---- */
+		.m-hero {
+			position: relative;
+			min-height: 100svh;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			overflow: hidden;
+		}
+
+		/* Slideshow fills entire hero */
+		.m-hero-bg {
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+		}
+
+		/* Strip slideshow of any internal padding/border for full bleed */
+		.m-hero-bg :global(*) {
+			width: 100% !important;
+			height: 100% !important;
+			border-radius: 0 !important;
+			border: none !important;
+			object-fit: cover !important;
+		}
+
+		/* Gradient scrim — heavy at bottom where text sits */
+		.m-hero-scrim {
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			background: linear-gradient(
+				to bottom,
+				rgba(0,0,0,0.1) 0%,
+				rgba(0,0,0,0.2) 40%,
+				rgba(20,20,20,0.85) 70%,
+				rgba(20,20,20,0.97) 100%
+			);
+		}
+
+		.m-hero-content {
+			position: relative;
+			z-index: 2;
+			padding: 2rem 1.5rem 5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.m-title-block h1 {
+			font-family: 'Lexend', monospace;
+			font-size: 3.2rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			line-height: 1;
+			color: #e9d9ca;
+			margin: 0 0 0.25rem;
+			text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+		}
+
+		.m-title-block p {
+			font-family: var(--font-family-pixel);
+			font-size: 0.7rem;
+			color: rgba(255,255,255,0.5);
+			margin: 0;
+			letter-spacing: 0.05em;
+		}
+
+		/* Profile selector — horizontal scroll */
+		.m-new-game-block {
+			display: flex;
+			flex-direction: column;
+			gap: 0.75rem;
+		}
+
+		.m-section-label {
+			font-family: var(--font-family-pixel);
+			font-size: 0.6rem;
+			letter-spacing: 0.15em;
+			text-transform: uppercase;
+			color: #cd804d;
+			margin: 0;
+		}
+
+		.m-profile-row {
+			display: flex;
+			gap: 10px;
+			overflow-x: auto;
+			padding-bottom: 4px;
+			-webkit-overflow-scrolling: touch;
+			scrollbar-width: none;
+		}
+		.m-profile-row::-webkit-scrollbar { display: none; }
+
+		.m-radio-label {
+			flex-shrink: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 5px;
+			padding: 8px;
+			border-radius: 10px;
+			background: rgba(255,255,255,0.07);
+			border: 2px solid transparent;
+			cursor: pointer;
+			transition: all 0.18s ease;
+		}
+		.m-radio-label img {
+			width: 72px;
+			height: 72px;
+			object-fit: cover;
+			border-radius: 6px;
+			filter: saturate(0) brightness(0.8);
+		}
+		.m-radio-label span {
+			font-family: var(--font-family-pixel);
+			font-size: 0.6rem;
+			color: rgba(255,255,255,0.5);
+		}
+		.m-radio-label input { display: none; }
+		.m-radio-label.selected {
+			background: rgba(205, 128, 77, 0.25);
+			border-color: #cd804d;
+		}
+		.m-radio-label.selected img {
+			filter: saturate(1) brightness(1);
+		}
+		.m-radio-label.selected span {
+			color: #cd804d;
+		}
+
+		/* CTAs */
+		.m-cta-primary {
+			font-family: var(--font-family-pixel);
+			font-size: 1rem;
+			background-color: #435e52;
+			color: #e9d9ca;
+			border: none;
+			border-radius: 10px;
+			padding: 1rem 1.5rem;
+			cursor: pointer;
+			width: 100%;
+			box-shadow: #00000056 0 -4px 0 3px inset, 0 4px 20px rgba(0,0,0,0.4);
+			transition: 150ms all ease-in-out;
+			letter-spacing: 0.05em;
+		}
+		.m-cta-primary:active { transform: translateY(3px); box-shadow: #00000056 0 -1px 0 2px inset; }
+		.m-cta-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+		.m-cta-secondary {
+			font-family: var(--font-family-pixel);
+			font-size: 0.75rem;
+			background: rgba(255,255,255,0.07);
+			color: rgba(255,255,255,0.6);
+			border: 1px solid rgba(255,255,255,0.12);
+			border-radius: 8px;
+			padding: 0.6rem 1rem;
+			cursor: pointer;
+			width: 100%;
+			transition: 150ms all ease-in-out;
+		}
+		.m-cta-secondary:active { background: rgba(255,255,255,0.12); }
+
+		/* Scroll hint */
+		.m-scroll-hint {
+			position: absolute;
+			bottom: 1.5rem;
 			left: 50%;
 			transform: translateX(-50%);
-			width: 80%;
-			max-width: 300px;
-			height: auto;
+			z-index: 2;
+			font-size: 1.2rem;
+			color: rgba(255,255,255,0.3);
+			animation: bounce 2s ease-in-out infinite;
 		}
 
-		.start-game-button {
-			width: 100%;
-			height: auto;
-			border-radius: 10px; /* Make it a rounded rectangle on mobile */
-			clip-path: none;
-			padding: 1rem 2rem;
-			font-size: 1.5em;
+		@keyframes bounce {
+			0%, 100% { transform: translateX(-50%) translateY(0); }
+			50%       { transform: translateX(-50%) translateY(6px); }
 		}
 
-		/* Column-reversed for continuing players on mobile */
-		.new-player-view.initialized .grid-container {
-			flex-direction: column-reverse;
+		/* ---- ACTIONS ---- */
+		.m-actions {
+			min-height: 100svh;
+			background-color: #1a1a1a;
+			padding: 3rem 1.5rem 2rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.25rem;
+			justify-content: center;
+		}
+
+		.m-actions-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 0.6rem;
+		}
+
+		.m-action-btn {
+			font-family: var(--font-family-pixel);
+			font-size: 0.75rem;
+			background-color: var(--color-secondary, #3a3a3a);
+			color: var(--text-white, #fff);
+			border: none;
+			border-radius: 10px;
+			padding: 1rem 0.75rem;
+			cursor: pointer;
+			box-shadow: #00000056 0 -3px 0 3px inset;
+			transition: 150ms all ease-in-out;
+			text-align: left;
+			min-height: 52px;
+		}
+		.m-action-btn:active { transform: translateY(2px); box-shadow: #00000056 0 -1px 0 2px inset; }
+
+		.m-save-row {
+			display: grid;
+			grid-template-columns: 2fr 1fr 1fr;
+			gap: 0.6rem;
+		}
+
+		.m-save-btn {
+			font-family: var(--font-family-pixel);
+			font-size: 0.65rem;
+			background-color: var(--color-secondary, #3a3a3a);
+			color: var(--text-white, #fff);
+			border: none;
+			border-radius: 8px;
+			padding: 0.75rem 0.5rem;
+			cursor: pointer;
+			box-shadow: #00000056 0 -2px 0 2px inset;
+			transition: 150ms all ease-in-out;
+		}
+		.m-save-btn.save { background-color: #435e52; }
+		.m-save-btn.danger:active { background-color: #c53030; }
+		.m-save-btn:active { transform: translateY(2px); }
+
+		/* ---- CHARACTERS ---- */
+		.m-characters {
+			min-height: 40svh;
+			background-color: #141414;
+			padding: 2rem 1.5rem 3rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.m-npc-wrapper {
+			flex: 1;
+			min-height: 160px;
+			background-color: #2e2e2e;
+			border-radius: 14px;
+			border: 3px solid #00000056;
+			box-shadow: #00000056 0 -4px 0 0 inset;
+			overflow: hidden;
 		}
 	}
 </style>

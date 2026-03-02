@@ -17,15 +17,16 @@
 	};
 
 	const getMessageColor = (types: MessageType[]): string => {
-		if (types.includes('Combat')) return '#FF6347'; // Tomato
-		if (types.includes('NPC')) return '#87CEEB'; // Sky Blue
-		if (types.includes('Help')) return '#90EE90'; // Light Green
-		if (types.includes('World')) return '#fff';
-		if (types.includes('System')) return '#aaa';
-		return '#fff';
+		if (types.includes('Help')) return '#90a955'; // Light Green
+		if (types.includes('Combat')) return '#ff928b'; // Tomato
+		if (types.includes('NPC')) return '#48cae4'; // Sky Blue
+		if (types.includes('World')) return '#f4a261';
+		if (types.includes('Player')) return '#e0aaff';
+		if (types.includes('System')) return '#a2d2ff';
+		return '#f5ebe0';
 	};
 
-	const filters: (MessageType | 'All')[] = ['All', 'System', 'World', 'NPC', 'Help', 'Combat'];
+	const filters: (MessageType | 'All')[] = ['All', 'System', 'World', 'NPC', 'Help', 'Combat', 'Player'];
 
 	afterUpdate(() => {
 		if (messagesContainer) {
@@ -74,7 +75,6 @@
 
 <style>
 	.message-log-container {
-		width: 100%;
 		/* background-color: rgba(0, 0, 0, 0.7); */
 		background-color: var(--surface-3);
 		/* border: 1px solid #444; */

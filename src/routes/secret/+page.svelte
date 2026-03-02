@@ -44,7 +44,9 @@
 		{ src: '/images/characters/nsfw/41.png', alt: 'Main Characters' },
 		{ src: '/images/characters/nsfw/42.png', alt: 'Main Characters' },
 		{ src: '/images/characters/nsfw/43.png', alt: 'Main Characters' },
-		{ src: '/images/characters/nsfw/44.png', alt: 'Main Characters' }
+		{ src: '/images/characters/nsfw/44.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/45.png', alt: 'Main Characters' },
+		{ src: '/images/characters/nsfw/46.png', alt: 'Main Characters' }
 	];
 	let currentImageIndex = 0;
 

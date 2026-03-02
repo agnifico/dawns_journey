@@ -11,28 +11,60 @@ import { gainExperience } from './PlayerLevelService';
 import { startCombat } from './CombatService';
 import type { MapData, NPC, Enemy, Item } from '$lib/types';
 
-// Helper to convert an Enemy to a combat-ready NPC
-function enemyToNpc(enemy: Enemy): NPC {
-    return {
-        id: enemy.id,
-        name: enemy.name,
-        image: enemy.image,
-        profileImage: enemy.thumbnailImage || enemy.image,
-        isCombatant: true,
-        baseStats: enemy.baseStats,
-        swordRank: 1,
-        heartRank: 1,
-        affinity: 0,
-        swordState: 'NOT_STARTED',
-        heartState: 'NOT_STARTED',
-        swordRanks: [],
-        heartRanks: [],
-        statGrowth: [],
-        battleAftermathsBySwordRank: [],
-        types: enemy.types,
-        abilityCycle: [], // Legendary enemies might have special abilities, but we'll handle that later
-    };
+// ---------------------------------------------------------------------------
+// Wild encounter flavour lines — keyed by weapon element
+// ---------------------------------------------------------------------------
+const ENCOUNTER_FLAVOUR: Record<string, string[]> = {
+    Fire: [
+        'You unleash a torrent of flame, and the {enemy} retreats through the smoke.',
+        'A surge of fire from your weapon scorches the {enemy} into submission.',
+        "The air ignites around the {enemy} — it doesn't wait to see what comes next.",
+        'You drive the {enemy} back with a blazing arc that lights up the terrain.',
+    ],
+    Water: [
+        'You loose a volley of ice shards, and the {enemy} staggers back through the frost.',
+        'A crashing wave surges from your weapon, sweeping the {enemy} aside.',
+        'You encase the {enemy} in a shell of ice, then shatter it — they scatter.',
+        'A freezing mist rolls out from your strike, leaving the {enemy} sluggish and retreating.',
+    ],
+    Wind: [
+        'You summon a howling gale that sends the {enemy} tumbling across the ground.',
+        'Thunder splits the air above the {enemy} — the shockwave does the rest.',
+        "A spiral of cutting wind shreds through the {enemy}'s defences.",
+        'You call down a squall, and the {enemy} is swallowed by the storm.',
+    ],
+    Earth: [
+        'A tangle of vines erupts from the ground, binding the {enemy} until it gives up the fight.',
+        'You strike with a leaf-blade storm, and the {enemy} disappears into the whirlwind.',
+        'Toxic spores flood the air around the {enemy}, sapping every last bit of their resolve.',
+        'The ground cracks and heaves beneath the {enemy}, and they decide elsewhere is safer.',
+    ],
+    Light: [
+        'Divine light breaks open above the {enemy}, leaving it dazed and retreating.',
+        'You conjure a blinding illusion — the {enemy} flees something that isn\'t there.',
+        'A beam of searing light pins the {enemy} in place, then releases it, broken.',
+        'The sky opens on your command, and the {enemy} is subdued by what falls through.',
+    ],
+    Dark: [
+        'Dark clouds swallow the {enemy} whole — when they clear, it\'s already gone.',
+        'You unleash a tide of nightmares, and the {enemy} buckles under visions only it can see.',
+        'Toxic fumes billow from your weapon, and the {enemy} staggers away delirious.',
+        'You dissolve into shadow and strike from everywhere at once — the {enemy} doesn\'t know where to run.',
+    ],
+    Normal: [
+        'You meet the {enemy} with measured, precise force — it never stood a chance.',
+        "You don't flinch. The {enemy} does. That's the whole story.",
+        'The {enemy} comes in loud. You end it quietly.',
+        "Steady, controlled, and utterly decisive — the {enemy} retreats before it even understands what hit it.",
+    ],
+};
+
+function getEncounterFlavourLine(element: string, enemyName: string): string {
+    const pool = ENCOUNTER_FLAVOUR[element] ?? ENCOUNTER_FLAVOUR['Normal'];
+    const line = pool[Math.floor(Math.random() * pool.length)];
+    return line.replace(/\{enemy\}/g, enemyName);
 }
+
 
 /**
  * Checks for and handles random encounters in the player's current region.
@@ -84,8 +116,14 @@ export function checkForRandomEncounter() {
                 }
 
                 if (canDefeat) {
-                    const message = enemyData.isLegendary ? `You defeated ${enemyData.name}.` : `You defeated the ${enemyData.name}.`;
-                    messageStore.addMessage(message, ['World']);
+                    const activeElements = get(playerActiveElements);
+                    const winningElement = activeElements.find(el => {
+                        const req = enemyData.masteryRequirements?.[el];
+                        return req !== undefined && get(playerMastery) >= req;
+                    }) ?? 'Normal';
+
+                    const message = getEncounterFlavourLine(winningElement, enemyData.name);
+                    messageStore.addMessage(message, ['World', 'Help', 'Combat']);
                     playerStore.update(p => {
                         let newPlayer = { ...p };
                         newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
@@ -104,18 +142,18 @@ export function checkForRandomEncounter() {
 
                         // Apply HP cost
                         newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - enemyData.hpCost);
-                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['Combat']);
+                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['World', 'Combat']);
 
                         return newPlayer;
                     });
                 } else {
-                    messageStore.addMessage("You escape the stronger enemy...for now.", ['World', 'Help']);
-                    
+                    messageStore.addMessage("You escape the stronger enemy...for now.", ['World', 'Combat']);
+
                     // Apply HP cost even on failure
                     playerStore.update(p => {
                         let newPlayer = { ...p };
                         newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - enemyData.hpCost);
-                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['Combat']);
+                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['World', 'Combat']);
                         return newPlayer;
                     });
                 }

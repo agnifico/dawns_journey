@@ -245,7 +245,7 @@ export function equipItem(instanceId: string) {
             notificationStore.add('item_unequipped', unequippedItem, 1);
         }
 
-        messageStore.addMessage(`Equipped ${itemToEquip.name}.`, ['System']);
+        messageStore.addMessage(`Equipped ${itemToEquip.name}.`, ['System', 'Player']);
         notificationStore.add('item_equipped', itemToEquip, 1);
 
         return newPlayer;

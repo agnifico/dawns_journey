@@ -2,10 +2,16 @@
     "id": "nyx",
     "name": "Nyx",
     "profileImage": "/images/characters/nyx/nyx_avatar.png",
-    "image": "/images/characters/nyx/nyx1.png",
+    "image": "/images/characters/nyx/nyx0.png",
     "galleryImages": [
         "/images/characters/nyx/nyx0.png",
-        "/images/characters/nyx/nyx1.png"
+        "/images/characters/nyx/nyx1.png",
+        "/images/characters/nyx/nyx2.png",
+        "/images/characters/nyx/nyx3.png",
+        "/images/characters/nyx/nyx4.png",
+        "/images/characters/nyx/nyx5.png",
+        "/images/characters/nyx/nyx6.png",
+        "/images/characters/nyx/nyx7.png"
     ],
     "isCombatant": true,
     "types": [

@@ -8,7 +8,9 @@
         "/images/characters/guinevere/guinevere1.png",
         "/images/characters/guinevere/guinevere2.png",
         "/images/characters/guinevere/guinevere3.png",
-        "/images/characters/guinevere/guinevere4.png"
+        "/images/characters/guinevere/guinevere4.png",
+        "/images/characters/guinevere/guinevere5.png",
+        "/images/characters/guinevere/guinevere6.png"
     ],
     "description": "The local branch head of the Solis Saints, dedicated to bringing stability to the island through 'purification'.",
     "faction": "solis_saints",

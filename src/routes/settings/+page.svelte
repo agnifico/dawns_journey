@@ -145,4 +145,23 @@
     .btn-primary:hover {
         background-color: #7878f0;
     }
+
+    .icon-button {
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        background-color: rgba(215, 33, 33, 0.549);
+        padding: .5rem 1rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-button img {
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
 </style>

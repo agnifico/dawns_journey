@@ -2,9 +2,10 @@ import { writable, get } from 'svelte/store';
 import { time } from './timeStore';
 import type { Item, NpcInteraction } from '$lib/types';
 
-export type MessageType = 'System' | 'World' | 'NPC' | 'Help' | 'Combat' | 'Update' | 'LevelUp';
+export type MessageType = 'System' | 'World' | 'NPC' | 'Help' | 'Combat' | 'Player';
 
 let messageIdCounter = 0;
+
 
 export interface Message {
     id: number;

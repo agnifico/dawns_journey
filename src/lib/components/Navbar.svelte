@@ -57,6 +57,9 @@
         <button class="icon-button" on:click={() => goto('/settings')} title="Settings">
             <img src="/game_icons/settings.png" alt="Settings" />
         </button>
+        <button class="icon-button" on:click={() => goto('/secret')}>
+            <img src="/game_icons/black_flag.png" alt="Vault" />
+        </button>
 
         <TimeDisplay />
 
@@ -119,6 +122,7 @@
                 <img src="/game_icons/settings.png" alt="Settings" />
                 <span>Settings</span>
             </button>
+
         </div>
     </div>
 
@@ -141,6 +145,10 @@
             <button class="icon-button danger" on:click={() => { SaveLoadService.clearSave(); menuOpen = false; }} title="Delete Save">
                 <img src="/game_icons/cancel.png" alt="Delete" />
                 <span>Delete</span>
+            </button>
+            <button class="icon-button" on:click={() => goto('/secret')}>
+                <img src="/game_icons/black_flag.png" alt="Vault" />
+                <span>Vault</span>
             </button>
         </div>
     </div>
@@ -171,7 +179,7 @@
     .navbar-left .brand {
         color: white;
         text-decoration: none;
-        font-weight: bold;
+        /* font-weight: bold; */
         font-family: 'Silkscreen';
         font-size: 1.2em;
         white-space: nowrap;

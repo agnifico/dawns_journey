@@ -2,12 +2,15 @@
     "id": "veres",
     "name": "Veres",
     "profileImage": "/images/characters/veres/veres_avatar.png",
-    "image": "/images/characters/veres/veres1.png",
+    "image": "/images/characters/veres/veres0.png",
     "galleryImages": [
         "/images/characters/veres/veres1.png",
         "/images/characters/veres/veres2.png",
-        "/images/characters/veres/veres0.png",
-        "/images/characters/veres/veres4.png"
+        "/images/characters/veres/veres3.png",
+        "/images/characters/veres/veres4.png",
+        "/images/characters/veres/veres5.png",
+        "/images/characters/veres/veres6.png",
+        "/images/characters/veres/veres7.png"
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
     "isCombatant": true,

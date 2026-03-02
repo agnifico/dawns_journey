@@ -4,11 +4,9 @@
     "profileImage": "/images/characters/bonnie/bonnie_avatar.png",
     "image": "/images/characters/bonnie/bonnie0.png",
     "galleryImages": [
-        "/images/characters/bonnie/bonnie0.png",
         "/images/characters/bonnie/bonnie1.png",
         "/images/characters/bonnie/bonnie2.png",
-        "/images/characters/bonnie/bonnie3.png",
-        "/images/characters/bonnie/bonnie4.png"
+        "/images/characters/bonnie/bonnie3.png"
 
     ],
     "isCombatant": true,

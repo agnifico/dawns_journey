@@ -13,7 +13,12 @@
         "/images/characters/hela/hela6.png",
         "/images/characters/hela/hela8.png",
         "/images/characters/hela/hela9.png",
-        "/images/characters/hela/hela10.png"
+        "/images/characters/hela/hela10.png",
+        "/images/characters/hela/hela11.png",
+        "/images/characters/hela/hela12.png",
+        "/images/characters/hela/hela13.png",
+        "/images/characters/hela/hela14.png",
+        "/images/characters/hela/hela15.png"
     ],
     "isCombatant": true,
     "types": [
