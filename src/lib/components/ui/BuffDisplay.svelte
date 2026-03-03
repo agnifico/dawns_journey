@@ -11,6 +11,8 @@
     <img src={`/game_icons/${effect.stat}.png`} alt={effect.stat} class="stat-icon" />
     {#if effect.stat === 'critChance' || effect.stat === 'critDamage'}
     <span class="value">{parseInt(valueDisplay,10)*100}</span>
+    {:else if effect.type === 'percentage'}
+    <span class="value">{parseFloat(valueDisplay)*100}%</span>
     {:else}
     <span class="value">{valueDisplay}</span>
       

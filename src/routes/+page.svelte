@@ -76,7 +76,7 @@
 				<p>A serverless, no database browser based game.</p>
 			</div>
 			<div class="grid-box div2">
-				<h3>Select Profile</h3>
+				<h3>Starting Profile</h3>
 				<div class="profile-selector">
 					{#each profiles as profile (profile.id)}
 						<label class="radio-label" class:selected={selectedProfileId === profile.id}>
@@ -295,8 +295,8 @@
 
 	.profile-selector {
 		display: flex;
+		/* flex-direction: column; */
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 10px;
 	}
 
@@ -307,18 +307,19 @@
 		cursor: pointer;
 		display: flex;
 		align-items: center;
-		flex-direction: column;
+		/* flex-direction: column; */
 		transition: 0.2s ease-in all;
 		padding: 0.5rem;
+		width: fit-content;
 	}
-	.radio-label img { filter: saturate(0); height: 100px; width: 100px; }
+	.radio-label img { filter: saturate(0); height: 50px; width: 50px; }
 	.radio-label:hover img { filter: saturate(0) brightness(1.1); }
 	.radio-label.selected { background-color: hsla(0, 0%, 100%, 0.5); }
 	.radio-label.selected img { filter: saturate(1); }
 	.radio-label.selected p { color: #222; }
 	.radio-label input[type='radio'] { display: none; }
 
-	.avatar { position: relative; max-width: 120px; max-height: 120px; margin-bottom: 8px; image-rendering: auto; }
+	.avatar { position: relative; max-width: 120px; max-height: 120px; margin-right:.5rem; image-rendering: auto; }
 
 	.game-actions {
 		display: grid;
@@ -373,6 +374,7 @@
 		grid-column-start: 3;
 		background-color: #cd804d;
 		color: #222;
+		/* overflow: scroll; */
 	}
 	.div4 {
 		grid-row: span 3 / span 3;

@@ -11,7 +11,6 @@
 
 	$: timePointCount = getTimePointCount($playerStore.inventory);
 
-	// ── Tab state ──────────────────────────────────────────────────────────────
 	type Tab = 'smithing' | 'cooking' | 'alchemy' | 'materials';
 	let activeTab: Tab = 'smithing';
 
@@ -22,8 +21,6 @@
 		{ id: 'materials', label: 'Materials', icon: '💎', accent: '#4aadcc', skillId: 'smithing' }
 	];
 
-	// ── Derived data ───────────────────────────────────────────────────────────
-	$: activeRecipes = craftingRecipes.filter((r) => r.skillId === activeTab);
 	$: activeAccent = tabs.find((t) => t.id === activeTab)?.accent ?? '#c0843a';
 
 	$: rawRecipes =
@@ -75,32 +72,37 @@
 		craft(recipeId);
 	}
 
-	// ── Selected recipe (detail panel) ────────────────────────────────────────
 	let selectedRecipe: CraftingRecipe | null = null;
-	$: if (activeTab) selectedRecipe = null; // clear on tab switch
+	// ── NEW: track whether mobile detail drawer is open ──
+	let mobileDetailOpen = false;
+
+	$: if (activeTab) { selectedRecipe = null; mobileDetailOpen = false; }
 	$: detailCraftable = selectedRecipe ? canCraft(selectedRecipe) : false;
 	$: detailLocked = selectedRecipe ? isLevelLocked(selectedRecipe) : false;
 	$: detailOutputItem = selectedRecipe ? itemDictionary[selectedRecipe.output.itemId] : null;
+
+	function selectRecipe(recipe: CraftingRecipe) {
+		selectedRecipe = recipe;
+		mobileDetailOpen = true; // open drawer on mobile when a card is tapped
+	}
+
+	function closeDetail() {
+		mobileDetailOpen = false;
+	}
 </script>
 
-<!-- ══════════════════════════════════════════════════════ MARKUP ══════════ -->
 <div class="workshop" style="--accent: {activeAccent}">
-	<!-- Header -->
 	<header class="ws-header">
 		<div class="ws-title-row">
 			<span class="ws-icon">🔧</span>
 			<h1 class="ws-title">Workshop</h1>
-			<div
-				class="tp-display"
-				title="Time Points — earned by spending time in the Workshop. Used in Cooking recipes."
-			>
+			<div class="tp-display" title="Time Points">
 				<span class="tp-icon">⏳</span>
 				<span class="tp-count">{timePointCount}</span>
 				<span class="tp-label">Time Points</span>
 			</div>
 		</div>
 
-		<!-- Tab bar -->
 		<nav class="tab-bar">
 			{#each tabs as tab}
 				<button
@@ -117,9 +119,7 @@
 		</nav>
 	</header>
 
-	<!-- Body: recipe grid + detail panel -->
 	<div class="ws-body">
-		<!-- Recipe grid -->
 		<section class="recipe-grid">
 			{#each groupedRecipes as item (isHeader(item) ? `h-${item.levelHeader}` : item.id)}
 				{#if isHeader(item)}
@@ -140,7 +140,7 @@
 						class:craftable
 						class:locked
 						class:selected={selectedRecipe?.id === recipe.id}
-						on:click={() => (selectedRecipe = recipe)}
+						on:click={() => selectRecipe(recipe)}
 					>
 						<div class="card-img-wrap">
 							<img
@@ -163,7 +163,7 @@
 			{/each}
 		</section>
 
-		<!-- Detail panel -->
+		<!-- Desktop detail panel (hidden on mobile) -->
 		<aside class="detail-panel">
 			{#if selectedRecipe}
 				<div class="detail-img-wrap">
@@ -173,16 +173,13 @@
 						class="detail-img"
 					/>
 				</div>
-
 				<h2 class="detail-name">{selectedRecipe.name}</h2>
 				<p class="detail-desc">{selectedRecipe.description ?? ''}</p>
-
 				{#if selectedRecipe.requiredLevel && selectedRecipe.requiredLevel > 1}
 					<p class="detail-req" class:req-fail={detailLocked}>
 						Requires {tabs.find((t) => t.id === selectedRecipe.skillId)?.label} Lv {selectedRecipe.requiredLevel}
 					</p>
 				{/if}
-
 				<div class="ingredients-list">
 					<p class="ingredients-heading">Ingredients</p>
 					{#each selectedRecipe.ingredients as ing}
@@ -196,7 +193,6 @@
 						</div>
 					{/each}
 				</div>
-
 				<div class="detail-output">
 					<p class="ingredients-heading">Output</p>
 					<div class="output-row">
@@ -205,19 +201,14 @@
 						<span class="ing-qty">× {selectedRecipe.output.quantity}</span>
 					</div>
 				</div>
-
 				<button
 					class="craft-btn"
 					disabled={!detailCraftable}
 					on:click={() => handleCraft(selectedRecipe.id)}
 				>
-					{#if detailLocked}
-						🔒 Level too low
-					{:else if detailCraftable}
-						✦ Craft
-					{:else}
-						Missing ingredients
-					{/if}
+					{#if detailLocked}🔒 Level too low
+					{:else if detailCraftable}✦ Craft
+					{:else}Missing ingredients{/if}
 				</button>
 			{:else}
 				<div class="detail-empty">
@@ -229,14 +220,69 @@
 	</div>
 </div>
 
+<!-- ── Mobile bottom-sheet drawer ── -->
+{#if mobileDetailOpen && selectedRecipe}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div class="mobile-overlay" on:click={closeDetail}></div>
+	<div class="mobile-drawer" style="--accent: {activeAccent}">
+		<div class="drawer-handle-row">
+			<div class="drawer-handle"></div>
+			<button class="drawer-close" on:click={closeDetail}>✕</button>
+		</div>
+
+		<div class="detail-img-wrap">
+			<img
+				src={selectedRecipe.image ?? itemDictionary[selectedRecipe.output.itemId]?.image}
+				alt={selectedRecipe.name}
+				class="detail-img"
+			/>
+		</div>
+		<h2 class="detail-name">{selectedRecipe.name}</h2>
+		<p class="detail-desc">{selectedRecipe.description ?? ''}</p>
+		{#if selectedRecipe.requiredLevel && selectedRecipe.requiredLevel > 1}
+			<p class="detail-req" class:req-fail={detailLocked}>
+				Requires {tabs.find((t) => t.id === selectedRecipe.skillId)?.label} Lv {selectedRecipe.requiredLevel}
+			</p>
+		{/if}
+		<div class="ingredients-list">
+			<p class="ingredients-heading">Ingredients</p>
+			{#each selectedRecipe.ingredients as ing}
+				{@const item = itemDictionary[ing.itemId]}
+				{@const have = ingredientCount(ing.itemId)}
+				{@const enough = have >= ing.quantity}
+				<div class="ingredient-row" class:lacking={!enough}>
+					<img src={item?.image} alt={item?.name} class="ing-img" />
+					<span class="ing-name">{item?.name ?? ing.itemId}</span>
+					<span class="ing-qty">{have}/{ing.quantity}</span>
+				</div>
+			{/each}
+		</div>
+		<div class="detail-output">
+			<p class="ingredients-heading">Output</p>
+			<div class="output-row">
+				<img src={detailOutputItem?.image} alt={detailOutputItem?.name} class="ing-img" />
+				<span>{detailOutputItem?.name ?? selectedRecipe.output.itemId}</span>
+				<span class="ing-qty">× {selectedRecipe.output.quantity}</span>
+			</div>
+		</div>
+		<button
+			class="craft-btn"
+			disabled={!detailCraftable}
+			on:click={() => { handleCraft(selectedRecipe.id); closeDetail(); }}
+		>
+			{#if detailLocked}🔒 Level too low
+			{:else if detailCraftable}✦ Craft
+			{:else}Missing ingredients{/if}
+		</button>
+	</div>
+{/if}
+
 <Notification />
 
-<!-- ══════════════════════════════════════════════════════ STYLES ══════════ -->
 <style>
-	/* ── Fonts ── */
 	@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
 
-	/* ── Tokens ── */
 	.workshop {
 		--bg0: #12100e;
 		--bg1: #1c1915;
@@ -245,21 +291,20 @@
 		--border: #3a3228;
 		--text: #e8dfc8;
 		--muted: #7a7060;
-		--accent: #c0843a; /* overridden per-tab via inline style */
+		--accent: #c0843a;
 		--danger: #c04040;
 		--success: #6aad50;
 
 		font-family: 'Crimson Pro', Georgia, serif;
 		background: var(--bg0);
 		color: var(--text);
-		min-height: 100vh;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.level-header {
 		grid-column: 1 / -1;
-		position: sticky;
 		top: 0;
 		z-index: 10;
 		display: flex;
@@ -307,9 +352,7 @@
 		margin-bottom: 1rem;
 	}
 
-	.ws-icon {
-		font-size: 1.4rem;
-	}
+	.ws-icon { font-size: 1.4rem; }
 
 	.ws-title {
 		font-family: 'Cinzel', serif;
@@ -321,7 +364,6 @@
 		text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 40%, transparent);
 	}
 
-	/* ── Time Point display ── */
 	.tp-display {
 		margin-left: auto;
 		display: flex;
@@ -334,10 +376,7 @@
 		font-size: 0.8rem;
 	}
 
-	.tp-icon {
-		font-size: 0.9rem;
-	}
-
+	.tp-icon { font-size: 0.9rem; }
 	.tp-count {
 		font-family: 'Cinzel', serif;
 		font-size: 0.95rem;
@@ -345,19 +384,10 @@
 		font-weight: 600;
 		min-width: 1.5ch;
 	}
-
 	.tp-label {
 		color: var(--muted);
 		font-size: 0.72rem;
 		font-style: italic;
-	}
-
-	.tp-session {
-		font-size: 0.65rem;
-		color: var(--success);
-		font-style: italic;
-		padding-left: 0.3rem;
-		border-left: 1px solid var(--border);
 	}
 
 	/* ── Tab bar ── */
@@ -380,19 +410,12 @@
 		color: var(--muted);
 		font-family: 'Crimson Pro', serif;
 		font-size: 0.85rem;
-		transition:
-			color 0.2s,
-			background 0.2s,
-			border-color 0.2s;
+		transition: color 0.2s, background 0.2s, border-color 0.2s;
 		position: relative;
 		bottom: -1px;
 	}
 
-	.tab-btn:hover {
-		color: var(--text);
-		background: var(--bg2);
-	}
-
+	.tab-btn:hover { color: var(--text); background: var(--bg2); }
 	.tab-btn.active {
 		background: var(--bg0);
 		border-color: var(--border);
@@ -400,19 +423,14 @@
 		color: var(--tab-accent);
 	}
 
-	.tab-icon {
-		font-size: 1.1rem;
-	}
+	.tab-icon { font-size: 1.1rem; }
 	.tab-label {
 		font-family: 'Cinzel', serif;
 		font-size: 0.7rem;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
-	.tab-lvl {
-		font-size: 0.7rem;
-		color: var(--muted);
-	}
+	.tab-lvl { font-size: 0.7rem; color: var(--muted); }
 	.tab-btn.active .tab-lvl {
 		color: color-mix(in srgb, var(--tab-accent) 70%, var(--muted));
 	}
@@ -446,50 +464,31 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.35rem;
-		transition:
-			border-color 0.15s,
-			transform 0.1s,
-			background 0.15s;
+		transition: border-color 0.15s, transform 0.1s, background 0.15s;
 		opacity: 0.55;
 		text-align: center;
 	}
 
-	.recipe-card:hover {
-		background: var(--bg3);
-		border-color: var(--muted);
-	}
-	.recipe-card.craftable {
-		opacity: 1;
-	}
+	.recipe-card:hover { background: var(--bg3); border-color: var(--muted); }
+	.recipe-card.craftable { opacity: 1; }
 	.recipe-card.selected {
 		border-color: var(--accent);
 		background: var(--bg3);
 		box-shadow: 0 0 0 1px var(--accent);
 	}
-	.recipe-card.locked {
-		opacity: 0.35;
-		cursor: default;
-	}
+	.recipe-card.locked { opacity: 0.35; cursor: default; }
 
-	.card-img-wrap {
-		position: relative;
-		width: 64px;
-		height: 64px;
-	}
-
+	.card-img-wrap { position: relative; width: 64px; height: 64px; }
 	.card-img {
-		width: 100%;
-		height: 100%;
+		width: 100%; height: 100%;
 		object-fit: contain;
 		image-rendering: pixelated;
 	}
 
 	.ready-pip {
 		position: absolute;
-		top: 2px;
-		right: 2px;
-		width: 8px;
-		height: 8px;
+		top: 2px; right: 2px;
+		width: 8px; height: 8px;
 		border-radius: 50%;
 		background: var(--success);
 		box-shadow: 0 0 6px var(--success);
@@ -498,7 +497,7 @@
 	.lock-overlay {
 		position: absolute;
 		inset: 0;
-		background: rgba(0, 0, 0, 0.65);
+		background: rgba(0,0,0,0.65);
 		border-radius: 4px;
 		display: flex;
 		align-items: center;
@@ -517,11 +516,7 @@
 		line-height: 1.2;
 	}
 
-	.card-xp {
-		font-size: 0.6rem;
-		color: var(--accent);
-		font-style: italic;
-	}
+	.card-xp { font-size: 0.6rem; color: var(--accent); font-style: italic; }
 
 	/* ── Detail panel ── */
 	.detail-panel {
@@ -534,14 +529,9 @@
 		overflow-y: auto;
 	}
 
-	.detail-img-wrap {
-		display: flex;
-		justify-content: center;
-	}
-
+	.detail-img-wrap { display: flex; justify-content: center; }
 	.detail-img {
-		width: 96px;
-		height: 96px;
+		width: 96px; height: 96px;
 		object-fit: contain;
 		image-rendering: pixelated;
 		filter: drop-shadow(0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent));
@@ -572,11 +562,8 @@
 		color: var(--success);
 		margin: 0;
 	}
-	.detail-req.req-fail {
-		color: var(--danger);
-	}
+	.detail-req.req-fail { color: var(--danger); }
 
-	/* ── Ingredients ── */
 	.ingredients-heading {
 		font-family: 'Cinzel', serif;
 		font-size: 0.65rem;
@@ -610,27 +597,15 @@
 	}
 
 	.ing-img {
-		width: 24px;
-		height: 24px;
+		width: 24px; height: 24px;
 		object-fit: contain;
 		image-rendering: pixelated;
 		flex-shrink: 0;
 	}
 
-	.ing-name {
-		flex: 1;
-		color: var(--text);
-	}
-
-	.ing-qty {
-		font-size: 0.78rem;
-		color: var(--muted);
-		white-space: nowrap;
-	}
-
-	.ingredient-row.lacking .ing-qty {
-		color: var(--danger);
-	}
+	.ing-name { flex: 1; color: var(--text); }
+	.ing-qty { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+	.ingredient-row.lacking .ing-qty { color: var(--danger); }
 
 	/* ── Craft button ── */
 	.craft-btn {
@@ -645,19 +620,11 @@
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		cursor: pointer;
-		transition:
-			filter 0.15s,
-			transform 0.1s;
+		transition: filter 0.15s, transform 0.1s;
 	}
 
-	.craft-btn:hover:not(:disabled) {
-		filter: brightness(1.15);
-		transform: translateY(-1px);
-	}
-	.craft-btn:active:not(:disabled) {
-		transform: translateY(0);
-	}
-
+	.craft-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-1px); }
+	.craft-btn:active:not(:disabled) { transform: translateY(0); }
 	.craft-btn:disabled {
 		background: var(--bg3);
 		color: var(--muted);
@@ -677,20 +644,141 @@
 		font-style: italic;
 	}
 
-	.detail-empty-icon {
-		font-size: 2.5rem;
-		opacity: 0.4;
-	}
+	.detail-empty-icon { font-size: 2.5rem; opacity: 0.4; }
 
 	/* ── Scrollbar ── */
-	::-webkit-scrollbar {
-		width: 4px;
+	::-webkit-scrollbar { width: 4px; }
+	::-webkit-scrollbar-track { background: var(--bg1); }
+	::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+	/* ══════════════════════════════════════════════════
+	   MOBILE  (≤ 600px)
+	══════════════════════════════════════════════════ */
+	@media (max-width: 600px) {
+		/* Tighter header padding */
+		.ws-header {
+			padding: 0.75rem 0.75rem 0;
+		}
+
+		.ws-title { font-size: 1.2rem; }
+		.ws-icon  { font-size: 1.1rem; }
+
+		/* Hide the "Time Points" text label, keep icon + count */
+		.tp-label { display: none; }
+		.tp-display { padding: 0.25rem 0.5rem; }
+
+		/* Tab bar: equal-width flex items, no horizontal scroll needed */
+		.tab-bar {
+			gap: 0;
+		}
+
+		.tab-btn {
+			flex: 1;          /* each tab takes equal width */
+			padding: 0.4rem 0.25rem 0.5rem;
+			font-size: 0.75rem;
+		}
+
+		.tab-label {
+			font-size: 0.55rem;
+			letter-spacing: 0.05em;
+		}
+
+		.tab-lvl { font-size: 0.6rem; }
+
+		/* Body: single column — recipe grid fills everything */
+		.ws-body {
+			grid-template-columns: 1fr;
+		}
+
+		/* Hide the desktop detail panel on mobile */
+		.detail-panel {
+			display: none;
+		}
+
+		/* Slightly smaller cards on narrow screens */
+		.recipe-grid {
+			padding: 0.75rem;
+			grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+			gap: 0.5rem;
+		}
+
+		.card-img-wrap { width: 52px; height: 52px; }
 	}
-	::-webkit-scrollbar-track {
+
+	/* ══════════════════════════════════════════════════
+	   MOBILE BOTTOM-SHEET DRAWER
+	══════════════════════════════════════════════════ */
+
+	/* Dim overlay behind the drawer */
+	.mobile-overlay {
+		display: none;
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.6);
+		z-index: 100;
+	}
+
+	/* The drawer itself */
+	.mobile-drawer {
+		display: none;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		max-height: 80dvh;
 		background: var(--bg1);
+		border-top: 1px solid var(--border);
+		border-radius: 16px 16px 0 0;
+		padding: 0 1.25rem 2rem;
+		overflow-y: auto;
+		z-index: 101;
+		flex-direction: column;
+		gap: 0.85rem;
+
+		/* CSS variables inherited from .workshop need to be re-declared
+		   since the drawer is outside .workshop in the DOM */
+		--bg0: #12100e;
+		--bg1: #1c1915;
+		--bg2: #252118;
+		--bg3: #2f2a1f;
+		--border: #3a3228;
+		--text: #e8dfc8;
+		--muted: #7a7060;
+		--danger: #c04040;
+		--success: #6aad50;
 	}
-	::-webkit-scrollbar-thumb {
-		background: var(--border);
+
+	.drawer-handle-row {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 0 0.5rem;
+		position: relative;
+	}
+
+	.drawer-handle {
+		width: 40px;
+		height: 4px;
 		border-radius: 2px;
+		background: var(--border);
+	}
+
+	.drawer-close {
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		color: var(--muted);
+		font-size: 1rem;
+		cursor: pointer;
+		padding: 0.25rem 0.5rem;
+	}
+
+	/* Show overlay + drawer only on mobile */
+	@media (max-width: 600px) {
+		.mobile-overlay { display: block; }
+		.mobile-drawer  { display: flex;  }
 	}
 </style>

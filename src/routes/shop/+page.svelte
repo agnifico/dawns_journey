@@ -3,5 +3,17 @@
     import Notification from '$lib/components/Notification.svelte';
 </script>
 
-<Shop />
-<Notification />
+<main>
+    <Shop />
+    <Notification />
+</main>
+
+<style>
+    main {
+        /* padding: 1rem; */
+        position: relative;
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+    }
+</style>

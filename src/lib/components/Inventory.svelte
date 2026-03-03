@@ -221,7 +221,8 @@
 
 				<!-- Mastery -->
 				{#if $activeItem.type === 'weapon' && $activeItem.mastery}
-					<MasteryDisplay mastery={$activeItem.mastery} elements={[$activeItem.element]} size="mini"/>
+				<Stat statId="mastery" value={$activeItem.mastery} />
+					<!-- <MasteryDisplay mastery={$activeItem.mastery} elements={[$activeItem.element]} size="mini"/> -->
 				{/if}
 
 				<!-- Set Info -->

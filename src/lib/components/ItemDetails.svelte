@@ -16,14 +16,12 @@
 			<h3>{item.name}</h3>
 			<div class="elements">
 				{#if item.type === 'weapon'}
-					<ElementTag element={item.element} size="mini"/>
+					<ElementTag element={item.element} size="mini" />
 				{/if}
 			</div>
 		</div>
 		<p class="description">{item.description}</p>
-		{#if item.type === 'weapon' && item.mastery}
-			<MasteryDisplay mastery={item.mastery} elements={[item.element]} size="mini"/>
-		{/if}
+
 		{#if item.stats && item.stats.length > 0}
 			<div class="stats-grid">
 				{#each item.stats as stat}
@@ -31,6 +29,11 @@
 						<Stat statId={stat.name} value={stat.value} />
 					</div>
 				{/each}
+				<div class="stat-line">
+					{#if item.type === 'weapon' && item.mastery}
+						<Stat statId="mastery" value={item.mastery} />
+					{/if}
+				</div>
 			</div>
 		{/if}
 		{#if item.effects && item.effects.length > 0}
@@ -53,7 +56,7 @@
 
 <style>
 	.item-details-panel {
-        border-radius: 15px 15px 15px 0;
+		border-radius: 15px 15px 15px 0;
 		position: absolute;
 		left: 100%;
 		bottom: 100%;
@@ -73,7 +76,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: top;
-        width: 100%;
+		width: 100%;
 		/* gap: 1em; */
 	}
 
@@ -97,10 +100,11 @@
 	}
 
 	.item-details-panel .stats-grid {
+		margin-top: .5rem;
 		display: grid;
 		grid-template-columns: auto auto;
-		gap: 0.2em 1em;
-		font-size: 0.8em;
+		gap: 0.5rem .5rem;
+		font-size: 0.8rem;
 		color: #eee;
 	}
 

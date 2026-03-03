@@ -511,6 +511,7 @@ export function startCombat(opponentNpc: NPC): void {
         abilities: allAbilities,
         statusEffects: resolvePlayerGearPassives(playerCopy),
         activeElement: currentPlayer.equipment.weapon_slots[0]?.element || 'None',
+        gearPassives: []
     };
 
     const opponentStats     = getNpcCombatStats(opponentNpc);
