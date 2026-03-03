@@ -8,8 +8,6 @@ import * as AchievementService from './AchievementService';
 import { items } from '../data/items';
 import { weapons } from '../data/weapons';
 import { relics } from '../data/relics';
-import cafeItems from '../data/cafeItems.json'; // New import
-import groceryItems from '../data/groceryItems.json'; // New import
 import { createItem, createItems } from './ItemFactory';
 import { activeItem } from '$lib/stores/uiStore'; // Import activeItem
 
@@ -17,7 +15,7 @@ import { activeItem } from '$lib/stores/uiStore'; // Import activeItem
 // Item data lookup (merged from ItemDataService)
 // ---------------------------------------------------------------------------
 
-const allItems: Item[] = [...items, ...cafeItems, ...groceryItems];
+const allItems: Item[] = [...items];
 const itemMap = new Map(allItems.map(item => [item.id, item]));
 
 /** Returns every item template in the game. */

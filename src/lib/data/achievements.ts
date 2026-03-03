@@ -40,7 +40,7 @@ export const allAchievements: Achievement[] = [
         category: 'sighting',
         isSecret: true,
         target: 'wilhemina',
-        reward: { type: 'item', id: 'aquamarine', quantity: 1 },
+        reward: { type: 'item', id: 'turquoise', quantity: 1 },
     },
     {
         id: 'sighting_archangel_one',
@@ -61,7 +61,7 @@ export const allAchievements: Achievement[] = [
         target: 'total',
         tiers: {
             1: { threshold: 10, reward: { type: 'item', id: 'citrine', quantity: 5 } },
-            2: { threshold: 100, reward: { type: 'item', id: 'aquamarine', quantity: 5 } },
+            2: { threshold: 100, reward: { type: 'item', id: 'turquoise', quantity: 5 } },
             3: { threshold: 1000, reward: { type: 'tag', id: 'master_slayer' } },
         }
     },
@@ -73,7 +73,7 @@ export const allAchievements: Achievement[] = [
         target: 'white_wyvern',
         tiers: {
             1: { threshold: 10, reward: { type: 'item', id: 'citrine', quantity: 2 } },
-            2: { threshold: 50, reward: { type: 'item', id: 'aquamarine', quantity: 2 } },
+            2: { threshold: 50, reward: { type: 'item', id: 'turquoise', quantity: 2 } },
             3: { threshold: 100, reward: { type: 'tag', id: 'wyvern_bane' } },
         }
     },
@@ -151,7 +151,7 @@ export const allAchievements: Achievement[] = [
         target: 'crops',
         tiers: {
             1: { threshold: 1, reward: { type: 'item', id: 'citrine', quantity: 1 } },
-            2: { threshold: 60, reward: { type: 'item', id: 'aquamarine', quantity: 10 } },
+            2: { threshold: 60, reward: { type: 'item', id: 'turquoise', quantity: 10 } },
             3: { threshold: 150, reward: { type: 'tag', id: 'master_farmer' } },
         }
     },

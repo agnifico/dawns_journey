@@ -3,16 +3,12 @@ import type { Item } from '$lib/types';
 import { items } from '$lib/data/items';
 import { weapons } from '$lib/data/weapons';
 import { relics } from '$lib/data/relics';
-import cafeItems from '$lib/data/cafeItems.json'; // New import
-import groceryItems from '$lib/data/groceryItems.json'; // New import
 
 // Combine all item templates into one map for easy lookup.
 const itemTemplates = new Map<string, Item>();
 items.forEach(item => itemTemplates.set(item.id, item));
 weapons.forEach(item => itemTemplates.set(item.id, item));
 relics.forEach(item => itemTemplates.set(item.id, item));
-cafeItems.forEach(item => itemTemplates.set(item.id, item)); // New line
-groceryItems.forEach(item => itemTemplates.set(item.id, item)); // New line
 
 
 /**

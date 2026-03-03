@@ -76,7 +76,7 @@ export const player: Player = {
     killCounts: {},
     combatHistory: [],
     farmingLevel: 1,
-    farmingXp: 0,
+    // farmingXp: 0,
     techPoints: 0,
     unlockedTech: ['env_open_field'], // Start with only the open field unlocked
     locationEventHistory: {},
@@ -86,7 +86,7 @@ export const player: Player = {
         compostQueue: [],
     },
     lastPlayedTimestamp: Date.now(),
-    
+    lastTimePointClaimTimestamp: Date.now(),
     // Achievements and milestones
     achievements: {},
     stepsTaken: 0,

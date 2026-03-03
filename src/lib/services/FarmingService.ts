@@ -16,6 +16,27 @@ import { notificationStore } from '$lib/stores/notificationStore';
 const FARMING_SKILL_ID = 'farming';
 
 /**
+ * Returns the player's current farming skill level, or 1 as a safe default.
+ */
+function getFarmingLevel(player: Player): number {
+    return player.skills.find(s => s.id === FARMING_SKILL_ID)?.level ?? player.farmingLevel ?? 1;
+}
+
+/**
+ * Checks whether a crop's watering requirement is satisfied for advancing
+ * a stage, given its definition and current state.
+ *
+ * - lifetime_based: wateredCount must have reached the threshold at least once
+ *   across the entire lifecycle. The count is never reset, so this is a
+ *   one-time gate.
+ * - stage_based: wateredCount must reach the threshold since the last stage
+ *   advance. The count resets to 0 each time a stage advances.
+ */
+function isWateringMet(crop: Crop, plantDef: CropDefinition): boolean {
+    return crop.wateredCount >= plantDef.wateringRequirementValue;
+}
+
+/**
  * Plants a crop in a specified farm plot.
  */
 export function plantCrop(plotId: string, plantId: string, useCompost: boolean) {
@@ -38,13 +59,35 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
             return player;
         }
 
-        // Check for compost requirement
+        // Level gate
+        const farmingLevel = getFarmingLevel(newPlayer);
+        if (farmingLevel < plantDef.unlockLevel) {
+            messageStore.addMessage(
+                `You need Farming level ${plantDef.unlockLevel} to plant ${plantDef.name}.`,
+                ['System']
+            );
+            return player;
+        }
+
+        // Environment check
+        if (plantDef.requiredEnvironment.length > 0 && !plantDef.requiredEnvironment.includes(plot.environment)) {
+            messageStore.addMessage(
+                `${plantDef.name} cannot be grown in this environment.`,
+                ['System']
+            );
+            return player;
+        }
+
+        // Compost requirement: crop must require it AND the plot must have the tech applied
         if (plantDef.requiredTechs.includes('tech_compost_bin')) {
+            if (!plot.appliedTech.includes('tech_compost_bin')) {
+                messageStore.addMessage(`This plot needs a Compost Bin applied before planting ${plantDef.name}.`, ['System']);
+                return player;
+            }
             if (!useCompost) {
                 messageStore.addMessage(`${plantDef.name} requires compost.`, ['System']);
                 return player;
             }
-            // hasItem uses item.id (template ID), not itemId
             if (!hasItem(newPlayer.inventory, 'compost', 1)) {
                 messageStore.addMessage('You do not have any compost.', ['System']);
                 return player;
@@ -59,7 +102,6 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
             return player;
         }
 
-        // hasItem uses item.id (template ID) — matches seedItemId correctly
         if (!hasItem(newPlayer.inventory, plantDef.seedItemId, 1)) {
             messageStore.addMessage(`You don't have any ${plantDef.name} seeds.`, ['System']);
             return player;
@@ -77,6 +119,7 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
             currentGrowthStage: 0,
             lastWateredTimestamp: 0,
             wateredCount: 0,
+            needsWater: false,
         };
 
         plot.crop = newCrop;
@@ -89,6 +132,8 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
 
 /**
  * Waters a crop in a specified farm plot.
+ * After watering, immediately attempts a growth check so that stage-based
+ * crops which were time-ready but blocked on water advance right away.
  */
 export function waterCrop(plotId: string) {
     playerStore.update(player => {
@@ -103,14 +148,21 @@ export function waterCrop(plotId: string) {
         const plantDef = cropDefinitions[plot.crop.plantId];
         if (!plantDef) return player;
 
+        if (plot.crop.currentGrowthStage >= plantDef.growthStages.length - 1) {
+            messageStore.addMessage(`The ${plantDef.name} is already fully grown — harvest it!`, ['System']);
+            return player;
+        }
+
         plot.crop.wateredCount++;
         plot.crop.lastWateredTimestamp = Date.now();
+        // Clear the flag — we'll re-evaluate it in calculateOfflineGrowth below
+        plot.crop.needsWater = false;
 
         messageStore.addMessage(`You watered the ${plantDef.name}.`, ['World']);
 
-        refreshHomestead();
-
-        return newPlayer;
+        // Run a growth check immediately so a stage-based crop that was
+        // time-ready but blocked on water advances without a page reload.
+        return calculateOfflineGrowth(newPlayer);
     });
 }
 
@@ -136,7 +188,7 @@ export function harvestCrop(plotId: string) {
         const currentSeason = get(seasonStore);
         if (plantDef.idealSeason === currentSeason) {
             totalYieldMultiplier = plantDef.idealSeasonYieldMultiplier;
-            messageStore.addMessage(`Bonus yield for harvesting in the ideal season!`, ['System']);
+            messageStore.addMessage(`Bonus yield for harvesting in the ideal season!`, ['World']);
         }
 
         const amount = Math.floor(plantDef.yieldsAmount * totalYieldMultiplier);
@@ -156,6 +208,7 @@ export function harvestCrop(plotId: string) {
         }
 
         newPlayer.skills = gainExperience(newPlayer, FARMING_SKILL_ID, plantDef.xpYield).skills;
+        newPlayer.cropsHarvested = (newPlayer.cropsHarvested ?? 0) + 1;
         plot.crop = null;
 
         return newPlayer;
@@ -163,11 +216,23 @@ export function harvestCrop(plotId: string) {
 }
 
 /**
- * Main function to process growth on game load or manual refresh.
- * This is the core logic that handles stage advancement.
+ * Core offline growth simulation. Called automatically on app load and after
+ * watering. Advances crops through as many stages as time and watering allow.
+ *
+ * Design rules:
+ * - Time and watering must BOTH be satisfied for a stage to advance.
+ * - lifetime_based crops: wateredCount accumulates forever; once the threshold
+ *   is reached the gate is open for all future stages.
+ * - stage_based crops: wateredCount resets to 0 on every stage advance;
+ *   the player must re-water for each new stage.
+ * - If time has passed but watering is not met, the crop is marked
+ *   `needsWater: true` and the loop stops — the stage is locked until watered.
+ * - Timestamp correction uses actual overflow time, not an approximation,
+ *   so multiple offline stage advances don't accumulate drift.
  */
 export function calculateOfflineGrowth(player: Player): Player {
     const now = Date.now();
+    const currentSeason = get(seasonStore);
     const newPlayer = { ...player };
 
     newPlayer.homestead.farmPlots.forEach(plot => {
@@ -176,46 +241,68 @@ export function calculateOfflineGrowth(player: Player): Player {
         const plantDef = cropDefinitions[plot.crop.plantId];
         if (!plantDef) return;
 
-        if (plot.crop.currentGrowthStage >= plantDef.growthStages.length - 1) return;
+        const finalStage = plantDef.growthStages.length - 1;
+        if (plot.crop.currentGrowthStage >= finalStage) return;
 
         let tempCrop = { ...plot.crop };
         let advanced = false;
 
-        while (tempCrop.currentGrowthStage < plantDef.growthStages.length - 1) {
+        while (tempCrop.currentGrowthStage < finalStage) {
             const stageDef = plantDef.growthStages[tempCrop.currentGrowthStage];
-            const timeElapsedInStage = now - tempCrop.stageStartedTimestamp;
 
-            const currentSeason = get(seasonStore);
-            const growthMultiplier = plantDef.idealSeason === currentSeason
-                ? plantDef.growthMultiplierInIdealSeason
-                : 1;
+            const growthMultiplier =
+                plantDef.idealSeason === currentSeason
+                    ? plantDef.growthMultiplierInIdealSeason
+                    : 1;
+
+            const timeElapsedInStage = now - tempCrop.stageStartedTimestamp;
+            // Scale elapsed time by the multiplier — a 2× multiplier means
+            // the crop experiences time twice as fast.
             const effectiveTimeElapsed = timeElapsedInStage * growthMultiplier;
 
+            // Gate 1: has enough time passed?
             if (effectiveTimeElapsed < stageDef.duration) break;
 
-            let wateringMet = false;
-            if (plantDef.wateringRequirementType === 'lifetime_based') {
-                wateringMet = tempCrop.wateredCount >= plantDef.wateringRequirementValue;
-            } else {
-                wateringMet = tempCrop.wateredCount >= plantDef.wateringRequirementValue;
+            // Gate 2: is the watering requirement satisfied?
+            if (!isWateringMet(tempCrop, plantDef)) {
+                // Time is ready but the player hasn't watered — flag it and stop.
+                tempCrop.needsWater = true;
+                break;
             }
 
-            if (!wateringMet) break;
-
+            // Both gates passed — advance the stage.
+            tempCrop.needsWater = false;
             advanced = true;
             tempCrop.currentGrowthStage++;
 
-            const timeSpentOnPreviousStage = Math.round(stageDef.duration / growthMultiplier);
-            tempCrop.stageStartedTimestamp += timeSpentOnPreviousStage;
+            // Precise timestamp correction: carry forward only the time that
+            // actually elapsed in this stage (accounting for the multiplier),
+            // so the next stage timer starts from the exact moment this one
+            // completed rather than from "now". This prevents drift across
+            // multiple offline stage advances.
+            const realDurationForStage = stageDef.duration / growthMultiplier;
+            tempCrop.stageStartedTimestamp += realDurationForStage;
 
+            // stage_based crops reset their watering count on advance so
+            // the player must water again for the next stage.
             if (plantDef.wateringRequirementType === 'stage_based') {
                 tempCrop.wateredCount = 0;
             }
+            // lifetime_based: wateredCount is never reset — once watered enough,
+            // it stays satisfied for the whole lifecycle.
         }
 
-        if (advanced) {
+        if (advanced || tempCrop.needsWater !== plot.crop.needsWater) {
             plot.crop = tempCrop;
-            messageStore.addMessage(`The ${plantDef.name} grew to stage ${tempCrop.currentGrowthStage + 1}!`, ['World', 'Update']);
+            if (advanced) {
+                const stageLabel = tempCrop.currentGrowthStage >= finalStage
+                    ? 'fully grown'
+                    : `stage ${tempCrop.currentGrowthStage + 1}`;
+                messageStore.addMessage(
+                    `The ${plantDef.name} is now ${stageLabel}!`,
+                    ['World']
+                );
+            }
         }
     });
 
@@ -224,14 +311,20 @@ export function calculateOfflineGrowth(player: Player): Player {
 }
 
 /**
- * Processes growth when the user manually refreshes or on load.
+ * Called on app load. Simulates offline growth automatically — no button
+ * needed for this path.
  */
-export function refreshHomestead() {
-    playerStore.update(player => {
-        const playerAfterGrowth = calculateOfflineGrowth(player);
-        messageStore.addMessage('Homestead crops refreshed.', ['System']);
-        return playerAfterGrowth;
-    });
+export function initHomesteadOnLoad() {
+    playerStore.update(player => calculateOfflineGrowth(player));
+}
+
+/**
+ * Mid-session sync triggered by the "Check crops" button on the farming page.
+ * Only fires after the player has been playing for a while and wants to see
+ * if anything has advanced without reloading the page.
+ */
+export function syncHomestead() {
+    playerStore.update(player => calculateOfflineGrowth(player));
 }
 
 /**
@@ -249,7 +342,7 @@ export function applyTechToPlot(plotId: string, techId: string) {
 
         if (newPlayer.unlockedTech.includes(techId) && !plot.appliedTech.includes(techId)) {
             plot.appliedTech.push(techId);
-            messageStore.addMessage(`Applied ${techId} to plot ${plotId}.`, ['World', 'Update']);
+            messageStore.addMessage(`Applied ${techId} to plot ${plotId}.`, ['World']);
         } else {
             messageStore.addMessage(`Could not apply ${techId} to plot ${plotId}.`, ['System']);
         }

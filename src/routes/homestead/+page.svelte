@@ -6,8 +6,7 @@
     <h1>Homestead</h1>
     <nav class="homestead-nav">
         <button on:click={() => goto('/homestead/farming')}>Farming Area</button>
-        <button on:click={() => goto('/homestead/fishing')}>Fishing Area (Coming Soon)</button>
-        <button on:click={() => goto('/homestead/cooking')}>Cooking Area (Coming Soon)</button>
+        <button on:click={() => goto('/homestead/workshop')}>Crafting Workshop</button>
     </nav>
 </main>
 

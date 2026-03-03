@@ -15,13 +15,15 @@ export interface Profile {
     initialInventory: { itemId: string; amount: number }[];
     equippedWeapons: string[];
     equippedRelics: string[];
+    description?: string;
 }
 
 export const profiles: Profile[] = [
     {
         id: 'fresh',
-        name: 'Fresh',
+        name: 'Starter',
         avatar: '/images/characters/player1.png',
+        description: 'Face the brave new world, with nothing but your curiosity. Most recommneded for a first timer.',
         initialInventory: [],
         equippedWeapons: [],
         equippedRelics: [],
@@ -30,6 +32,7 @@ export const profiles: Profile[] = [
         id: 'shieldmaiden',
         name: 'Shieldmaiden',
         avatar: '/images/characters/gladiator.png',
+        description: 'Start with the best-in-slot Defensive gear, and all items unlocked. Use as a testing tool.',
         initialInventory: [
             ...allWeapons.map(item => ({ itemId: item.id, amount: 1 })),
             ...allRelics.map(item => ({ itemId: item.id, amount: 1 })),
@@ -42,6 +45,7 @@ export const profiles: Profile[] = [
         id: 'mage',
         name: 'Mage',
         avatar: '/images/characters/mage.png',
+        description: 'Start with the best-in-slot Elemental Attack gear, and all items unlocked. Meant to be a testing tool.',
         initialInventory: [
             ...allWeapons.map(item => ({ itemId: item.id, amount: 1 })),
             ...allRelics.map(item => ({ itemId: item.id, amount: 1 })),

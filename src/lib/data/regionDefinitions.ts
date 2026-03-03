@@ -20,7 +20,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         enemies: [{ id: 'toxolotl', chance: 0.0 }],
         items: [
             { id: 'fish', chance: 0.9 },
-            { id: 'aquamarine', chance: 0.05 },
+            { id: 'turquoise', chance: 0.05 },
             { id: 'sapphire', chance: 0.05 }
         ]
     },
@@ -30,8 +30,9 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         gates: null,
         enemies: [{ id: 'greenhorn', chance: 0.5 }, { id: 'woodmech_bear', chance: 0.5 }],
         items: [
-            { id: 'meat', chance: 0.5 },
-            { id: 'cotton', chance: 0.5 }
+            { id: 'meat', chance: 0.3 },
+            { id: 'cotton', chance: 0.3 },
+            { id: 'fire_tulip', chance: 0.3 }
         ]
     },
     solo_forest: {
@@ -83,7 +84,8 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         enemies: [{ id: 'white_wyvern', chance: 0.5 }, { id: 'rock_lion', chance: 0.5 }],
         items: [
             { id: 'feather', chance: 0.6 },
-            { id: 'meat', chance: 0.4 }
+            { id: 'meat', chance: 0.1 },
+            { id: 'fire_tulip', chance: 0.3 }
         ]
     },
     south_coast: {
@@ -151,7 +153,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
             { id: 'aquamech_shark', chance: 0.4 },
             { id: 'water_spirit_beast', chance: 0.2 }
         ],
-        items: [{ id: 'fish', chance: 0.9 }, { id: 'aquamarine', chance: 0.1 }]
+        items: [{ id: 'fish', chance: 0.9 }, { id: 'turquoise', chance: 0.1 }]
     },
     marjana_trench: {
         id: 'marjana_trench',
@@ -163,7 +165,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
             { id: 'shark_soldier', chance: 0.3 }
         ],
         items: [
-            { id: 'aquamarine', chance: 0.4 },
+            { id: 'turquoise', chance: 0.4 },
             { id: 'coral_reef', chance: 0.6 }
         ]
     },

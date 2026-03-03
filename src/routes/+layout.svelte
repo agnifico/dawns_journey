@@ -15,6 +15,9 @@
 	import { hideNavbar } from '$lib/stores/uiStore';
 	// import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
 	// import { playerStore } from '$lib/stores/playerStore';
+	// in _layout.svelte onMount, alongside skillTreeStore.initialize():
+	import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
+	import { playerStore } from '$lib/stores/playerStore';
 
 	let { children } = $props();
 
@@ -29,6 +32,9 @@
 
 	onMount(async () => {
 		await skillTreeStore.initialize(); // Initialize the skill tree
+		setInterval(() => {
+			playerStore.update((player) => claimAccumulatedTimePoints(player));
+		}, 60_000);
 	});
 </script>
 

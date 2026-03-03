@@ -51,7 +51,7 @@
         <button class="icon-button" on:click={() => goto('/arena')} title="Arena">
             <img src="/game_icons/arena_helmet.png" alt="Arena" />
         </button>
-        <button class="icon-button" on:click={() => goto('/crafting')} title="Crafting">
+        <button class="icon-button" on:click={() => goto('/homestead/workshop')} title="Crafting">
             <img src="/game_icons/crafting_gloves.png" alt="Crafting" />
         </button>
         <button class="icon-button" on:click={() => goto('/settings')} title="Settings">
@@ -114,7 +114,7 @@
                 <img src="/game_icons/arena_helmet.png" alt="Arena" />
                 <span>Arena</span>
             </button>
-            <button class="icon-button" on:click={() => navigate('/crafting')} title="Crafting">
+            <button class="icon-button" on:click={() => navigate('/homestead/workshop')} title="Crafting">
                 <img src="/game_icons/crafting_gloves.png" alt="Crafting" />
                 <span>Crafting</span>
             </button>

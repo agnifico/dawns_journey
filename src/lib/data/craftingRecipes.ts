@@ -1,108 +1,66 @@
-import type { Item } from '../types';
-import { itemDictionary } from './items';
+import type { CraftingRecipe } from '../types';
 
-export interface CraftingRecipe {
-    id: string;
-    name: string;
-    description: string;
-    ingredients: { itemId: string; quantity: number }[];
-    output: { itemId: string; quantity: number };
-    image?: string; // Optional: for recipe book, etc.
-}
+export const smithingRecipes: CraftingRecipe[] = [
+    { id: 'basic_sword', name: 'Iron Sword', description: 'A basic sword forged from wood and stone.', skillId: 'smithing', ingredients: [{ itemId: 'wood', quantity: 1 }, { itemId: 'stone', quantity: 1 }], output: { itemId: 'basic_sword', quantity: 1 }, image: '/weapons/basic_sword.png', xpYield: 100, requiredLevel: 1 },
+    { id: 'basic_bow', name: 'Basic Bow', description: 'A simple bow made from wood and feathers.', skillId: 'smithing', ingredients: [{ itemId: 'wood', quantity: 2 }, { itemId: 'feather', quantity: 2 }], output: { itemId: 'basic_bow', quantity: 1 }, image: '/weapons/basic_bow.png', xpYield: 80, requiredLevel: 1 },
+    { id: 'unity', name: 'Unity', description: 'A legendary blade fused with the essence of every gem.', skillId: 'smithing', ingredients: [{ itemId: 'basic_sword', quantity: 1 }, { itemId: 'emerald', quantity: 1 }, { itemId: 'citrine', quantity: 1 }, { itemId: 'turquoise', quantity: 1 }, { itemId: 'amethyst', quantity: 1 }, { itemId: 'sapphire', quantity: 1 }, { itemId: 'ruby', quantity: 1 }], output: { itemId: 'unity', quantity: 1 }, image: '/weapons/unity.png', xpYield: 500, requiredLevel: 5 },
+    { id: 'advanced_polearm', name: 'Advanced Polearm', description: 'An upgraded polearm, sharper and better balanced.', skillId: 'smithing', ingredients: [{ itemId: 'basic_polearm', quantity: 1 }, { itemId: 'metal', quantity: 2 }], output: { itemId: 'advanced_polearm', quantity: 1 }, image: '/weapons/advanced_polearm.png', xpYield: 150, requiredLevel: 3 },
+    { id: 'advanced_claw', name: 'Advanced Claw', description: 'Refined claws with a keener edge.', skillId: 'smithing', ingredients: [{ itemId: 'basic_claw', quantity: 1 }, { itemId: 'metal', quantity: 2 }], output: { itemId: 'advanced_claw', quantity: 1 }, image: '/weapons/advanced_claw.png', xpYield: 150, requiredLevel: 3 },
+    { id: 'advanced_bow', name: 'Advanced Bow', description: 'A reinforced bow with greater draw weight.', skillId: 'smithing', ingredients: [{ itemId: 'basic_bow', quantity: 1 }, { itemId: 'feather', quantity: 4 }], output: { itemId: 'advanced_bow', quantity: 1 }, image: '/weapons/advanced_bow.png', xpYield: 150, requiredLevel: 3 },
+    { id: 'basic_halberd', name: 'Basic Halberd', description: 'An axe and polearm merged into one brutal weapon.', skillId: 'smithing', ingredients: [{ itemId: 'basic_axe', quantity: 1 }, { itemId: 'basic_polearm', quantity: 1 }], output: { itemId: 'basic_halberd', quantity: 1 }, image: '/weapons/basic_halberd.png', xpYield: 200, requiredLevel: 4 },
+];
+
+export const cookingRecipes: CraftingRecipe[] = [
+    // ── Quick / No-cook ───────────────────────────────────────────────────────
+    { id: 'cook_sandwich', name: 'Sandwich', description: 'Layered fillings between two slices of bread. No fire needed.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 1 }, { itemId: 'butter', quantity: 1 }, { itemId: 'tomato', quantity: 1 }, { itemId: 'time_point', quantity: 2 }], output: { itemId: 'sandwich', quantity: 1 }, image: '/cafe/93_sandwich_dish.png', xpYield: 20, requiredLevel: 1 },
+    { id: 'cook_egg_salad', name: 'Egg Salad', description: 'Boiled eggs mixed with a creamy dressing.', skillId: 'cooking', ingredients: [{ itemId: 'plain_yogurt', quantity: 1 }, { itemId: 'mustard', quantity: 1 }, { itemId: 'time_point', quantity: 3 }], output: { itemId: 'egg_salad', quantity: 1 }, image: '/cafe/41_eggsalad_bowl.png', xpYield: 25, requiredLevel: 1 },
+    // ── Light cooking ─────────────────────────────────────────────────────────
+    { id: 'cook_fried_egg', name: 'Fried Egg', description: 'A sunny-side up egg, simple and satisfying.', skillId: 'cooking', ingredients: [{ itemId: 'butter', quantity: 1 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'fried_egg', quantity: 1 }, image: '/cafe/39_friedegg_dish.png', xpYield: 30, requiredLevel: 1 },
+    { id: 'cook_omelette', name: 'Omelette', description: 'Whisked eggs folded over a filling.', skillId: 'cooking', ingredients: [{ itemId: 'butter', quantity: 1 }, { itemId: 'milk_pack', quantity: 1 }, { itemId: 'mushroom', quantity: 1 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'omelette', quantity: 1 }, image: '/general/omelette.png', xpYield: 35, requiredLevel: 1 },
+    { id: 'cook_french_fries', name: 'French Fries', description: 'Potato strips fried until golden and crisp.', skillId: 'cooking', ingredients: [{ itemId: 'potato', quantity: 3 }, { itemId: 'olive_oil', quantity: 1 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'french_fries', quantity: 1 }, image: '/cafe/45_frenchfries_dish.png', xpYield: 35, requiredLevel: 1 },
+    { id: 'cook_bacon', name: 'Bacon', description: 'Crispy strips of salted pork belly.', skillId: 'cooking', ingredients: [{ itemId: 'bacon', quantity: 2 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'bacon_dish', quantity: 1 }, image: '/cafe/14_bacon_dish.png', xpYield: 30, requiredLevel: 1 },
+    { id: 'cook_hot_dog', name: 'Hot Dog', description: 'A grilled sausage in a soft bun with classic condiments.', skillId: 'cooking', ingredients: [{ itemId: 'sausage_p', quantity: 1 }, { itemId: 'flour', quantity: 1 }, { itemId: 'mustard', quantity: 1 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'hot_dog', quantity: 1 }, image: '/cafe/56_hotdog_dish.png', xpYield: 40, requiredLevel: 2 },
+    { id: 'cook_nachos', name: 'Nachos', description: 'Toasted corn chips piled with toppings.', skillId: 'cooking', ingredients: [{ itemId: 'corn', quantity: 2 }, { itemId: 'ketchup', quantity: 1 }, { itemId: 'time_point', quantity: 5 }], output: { itemId: 'nachos', quantity: 1 }, image: '/cafe/72_nacho_dish.png', xpYield: 35, requiredLevel: 2 },
+    // ── Proper cooking ────────────────────────────────────────────────────────
+    { id: 'cook_bread', name: 'Bread', description: 'A basic loaf, baked until the crust is golden.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 3 }, { itemId: 'baking_powder', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'bread', quantity: 2 }, image: '/general/bread.png', xpYield: 50, requiredLevel: 1 },
+    { id: 'cook_onigiri', name: 'Onigiri', description: 'Hand-pressed rice balls, simple and filling.', skillId: 'cooking', ingredients: [{ itemId: 'wheat', quantity: 2 }, { itemId: 'fish', quantity: 1 }, { itemId: 'time_point', quantity: 8 }], output: { itemId: 'onigiri', quantity: 1 }, image: '/general/onigiri.png', xpYield: 45, requiredLevel: 2 },
+    { id: 'cook_taco', name: 'Taco', description: 'A crispy corn shell filled with seasoned meat and vegetables.', skillId: 'cooking', ingredients: [{ itemId: 'corn', quantity: 2 }, { itemId: 'meat', quantity: 1 }, { itemId: 'tomato', quantity: 1 }, { itemId: 'time_point', quantity: 8 }], output: { itemId: 'taco', quantity: 1 }, image: '/cafe/100_taco_dish.png', xpYield: 60, requiredLevel: 2 },
+    { id: 'cook_jelly', name: 'Jelly', description: 'Set fruit juice, wobbling and bright.', skillId: 'cooking', ingredients: [{ itemId: 'sugar', quantity: 2 }, { itemId: 'strawberry_jam', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'jelly', quantity: 1 }, image: '/cafe/60_jelly_dish.png', xpYield: 50, requiredLevel: 2 },
+    { id: 'cook_vegetable_stew', name: 'Vegetable Stew', description: 'A hearty mix of root vegetables, slow simmered.', skillId: 'cooking', ingredients: [{ itemId: 'potato', quantity: 2 }, { itemId: 'carrot', quantity: 1 }, { itemId: 'onion', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'vegetable_stew', quantity: 1 }, image: '/general/vegetable_stew.png', xpYield: 60, requiredLevel: 2 },
+    { id: 'cook_mac_n_cheese', name: 'Mac n Cheese', description: 'Pasta stirred through a rich, buttery cheese sauce.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'butter', quantity: 1 }, { itemId: 'milk_pack', quantity: 2 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'mac_n_cheese', quantity: 1 }, image: '/cafe/68_macncheese_dish.png', xpYield: 55, requiredLevel: 2 },
+    { id: 'cook_spaghetti', name: 'Spaghetti', description: 'Long pasta with a slow-cooked tomato sauce.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'tomato', quantity: 3 }, { itemId: 'olive_oil', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'spaghetti', quantity: 1 }, image: '/cafe/94_spaghetti.png', xpYield: 60, requiredLevel: 2 },
+    { id: 'cook_curry', name: 'Curry', description: 'A warming spiced curry with vegetables and fragrant cardamom.', skillId: 'cooking', ingredients: [{ itemId: 'potato', quantity: 2 }, { itemId: 'carrot', quantity: 1 }, { itemId: 'cardamom', quantity: 1 }, { itemId: 'olive_oil', quantity: 1 }, { itemId: 'time_point', quantity: 12 }], output: { itemId: 'curry', quantity: 1 }, image: '/cafe/33_curry_dish.png', xpYield: 75, requiredLevel: 3 },
+    { id: 'cook_meatballs', name: 'Meatballs', description: 'Seasoned ground meat rolled and pan-fried.', skillId: 'cooking', ingredients: [{ itemId: 'meat', quantity: 3 }, { itemId: 'onion', quantity: 1 }, { itemId: 'barbeque_sauce', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'meatballs', quantity: 1 }, image: '/cafe/70_meatball_dish.png', xpYield: 70, requiredLevel: 3 },
+    { id: 'cook_burger', name: 'Burger', description: 'A seasoned beef patty in a freshly baked bun.', skillId: 'cooking', ingredients: [{ itemId: 'meat', quantity: 2 }, { itemId: 'flour', quantity: 1 }, { itemId: 'ketchup', quantity: 1 }, { itemId: 'mustard', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'burger', quantity: 1 }, image: '/cafe/17_burger_napkin.png', xpYield: 70, requiredLevel: 3 },
+    { id: 'cook_burrito', name: 'Burrito', description: 'A flour wrap stuffed with spiced meat and beans.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'meat', quantity: 1 }, { itemId: 'fava_bean', quantity: 1 }, { itemId: 'ketchup', quantity: 1 }, { itemId: 'time_point', quantity: 10 }], output: { itemId: 'burrito', quantity: 1 }, image: '/cafe/19_burrito_dish.png', xpYield: 65, requiredLevel: 3 },
+    { id: 'cook_pizza', name: 'Pizza', description: 'Hand-stretched dough topped with tomato, cheese, and herbs.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 3 }, { itemId: 'tomato', quantity: 2 }, { itemId: 'olive_oil', quantity: 1 }, { itemId: 'time_point', quantity: 15 }], output: { itemId: 'pizza', quantity: 1 }, image: '/cafe/82_pizza_dish.png', xpYield: 80, requiredLevel: 3 },
+    { id: 'cook_dumplings', name: 'Dumplings', description: 'Delicate dough parcels filled with minced meat and vegetables.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'meat', quantity: 1 }, { itemId: 'kale', quantity: 1 }, { itemId: 'time_point', quantity: 12 }], output: { itemId: 'dumplings', quantity: 1 }, image: '/cafe/37_dumplings_dish.png', xpYield: 75, requiredLevel: 3 },
+    { id: 'cook_pudding', name: 'Pudding', description: 'A steamed sponge pudding, soft and sweet.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 1 }, { itemId: 'sugar', quantity: 2 }, { itemId: 'milk_pack', quantity: 2 }, { itemId: 'butter', quantity: 1 }, { itemId: 'time_point', quantity: 20 }], output: { itemId: 'pudding', quantity: 1 }, image: '/cafe/76_pudding_dish.png', xpYield: 100, requiredLevel: 3 },
+    { id: 'cook_apple_pie', name: 'Apple Pie', description: 'A classic double-crust pie filled with spiced fruit.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 3 }, { itemId: 'butter', quantity: 2 }, { itemId: 'sugar', quantity: 2 }, { itemId: 'time_point', quantity: 20 }], output: { itemId: 'apple_pie', quantity: 1 }, image: '/cafe/06_apple_pie_dish.png', xpYield: 100, requiredLevel: 3 },
+    { id: 'cook_ice_cream', name: 'Ice Cream', description: 'Churned cream and sugar, frozen slowly until smooth.', skillId: 'cooking', ingredients: [{ itemId: 'milk_pack', quantity: 3 }, { itemId: 'sugar', quantity: 2 }, { itemId: 'time_point', quantity: 20 }], output: { itemId: 'ice_cream', quantity: 1 }, image: '/cafe/58_icecream_bowl.png', xpYield: 90, requiredLevel: 3 },
+    // ── Slow cook / Baking ────────────────────────────────────────────────────
+    { id: 'cook_roasted_meat', name: 'Roasted Meat', description: 'Seasoned and slow-roasted over an open flame.', skillId: 'cooking', ingredients: [{ itemId: 'meat', quantity: 2 }, { itemId: 'island_herb', quantity: 1 }, { itemId: 'barbeque_sauce', quantity: 1 }, { itemId: 'time_point', quantity: 15 }], output: { itemId: 'roasted_meat', quantity: 1 }, image: '/general/roasted_meat.png', xpYield: 80, requiredLevel: 3 },
+    { id: 'cook_steak', name: 'Steak', description: 'A thick cut, rested and seared to perfection.', skillId: 'cooking', ingredients: [{ itemId: 'meat', quantity: 3 }, { itemId: 'butter', quantity: 1 }, { itemId: 'island_herb', quantity: 1 }, { itemId: 'time_point', quantity: 20 }], output: { itemId: 'steak', quantity: 1 }, image: '/cafe/96_steak_dish.png', xpYield: 110, requiredLevel: 4 },
+    { id: 'cook_salmon', name: 'Salmon', description: 'Pan-seared salmon fillet with a crisp skin.', skillId: 'cooking', ingredients: [{ itemId: 'fish', quantity: 2 }, { itemId: 'olive_oil', quantity: 1 }, { itemId: 'island_herb', quantity: 1 }, { itemId: 'time_point', quantity: 20 }], output: { itemId: 'salmon', quantity: 1 }, image: '/cafe/89_salmon_dish.png', xpYield: 110, requiredLevel: 4 },
+    { id: 'cook_chocolate_cake', name: 'Chocolate Cake', description: 'A rich layered cake with deep cocoa flavour.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 3 }, { itemId: 'butter', quantity: 2 }, { itemId: 'sugar', quantity: 3 }, { itemId: 'milk_pack', quantity: 1 }, { itemId: 'baking_powder', quantity: 1 }, { itemId: 'time_point', quantity: 25 }], output: { itemId: 'chocolate_cake', quantity: 1 }, image: '/cafe/31_chocolatecake_dish.png', xpYield: 120, requiredLevel: 4 },
+    { id: 'cook_strawberry_cake', name: 'Strawberry Cake', description: 'A light vanilla sponge topped with fresh strawberries.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 3 }, { itemId: 'butter', quantity: 1 }, { itemId: 'sugar', quantity: 2 }, { itemId: 'strawberry_jam', quantity: 2 }, { itemId: 'baking_powder', quantity: 1 }, { itemId: 'time_point', quantity: 25 }], output: { itemId: 'strawberry_cake', quantity: 1 }, image: '/cafe/91_strawberrycake_dish.png', xpYield: 120, requiredLevel: 4 },
+    { id: 'cook_fruitcake', name: 'Fruitcake', description: 'A dense, long-keeping cake packed with dried fruit.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'sugar', quantity: 2 }, { itemId: 'butter', quantity: 1 }, { itemId: 'dragon_fruit', quantity: 1 }, { itemId: 'baking_powder', quantity: 1 }, { itemId: 'time_point', quantity: 30 }], output: { itemId: 'fruitcake', quantity: 1 }, image: '/cafe/47_fruitcake_dish.png', xpYield: 130, requiredLevel: 4 },
+    { id: 'cook_ramen', name: 'Ramen', description: 'A deeply flavoured broth with noodles, slow-built over time.', skillId: 'cooking', ingredients: [{ itemId: 'flour', quantity: 2 }, { itemId: 'meat', quantity: 1 }, { itemId: 'mushroom', quantity: 2 }, { itemId: 'ginseng', quantity: 1 }, { itemId: 'time_point', quantity: 30 }], output: { itemId: 'ramen', quantity: 1 }, image: '/cafe/87_ramen.png', xpYield: 120, requiredLevel: 4 },
+    { id: 'cook_roasted_chicken', name: 'Roasted Chicken', description: 'A whole bird, seasoned and roasted low and slow.', skillId: 'cooking', ingredients: [{ itemId: 'meat', quantity: 4 }, { itemId: 'island_herb', quantity: 2 }, { itemId: 'butter', quantity: 1 }, { itemId: 'time_point', quantity: 30 }], output: { itemId: 'roasted_chicken', quantity: 1 }, image: '/cafe/86_roastedchicken_dish.png', xpYield: 130, requiredLevel: 4 },
+    { id: 'cook_sushi', name: 'Sushi', description: 'Vinegared rice with fresh fish. Requires a delicate hand.', skillId: 'cooking', ingredients: [{ itemId: 'fish', quantity: 3 }, { itemId: 'wheat', quantity: 2 }, { itemId: 'wasabi', quantity: 1 }, { itemId: 'time_point', quantity: 25 }], output: { itemId: 'sushi', quantity: 1 }, image: '/cafe/98_sushi_dish.png', xpYield: 130, requiredLevel: 5 },
+];
+
+export const alchemyRecipes: CraftingRecipe[] = [
+    { id: 'iron_resolve_potion', name: 'Iron Resolve Potion', description: 'A dense amber brew that reinforces the body against physical blows.', skillId: 'alchemy', ingredients: [{ itemId: 'ginseng', quantity: 2 }, { itemId: 'mushroom', quantity: 1 }, { itemId: 'stone', quantity: 1 }], output: { itemId: 'iron_resolve_potion', quantity: 1 }, image: '/general/iron_resolve_potion.png', xpYield: 70, requiredLevel: 1 },
+    { id: 'swiftroot_elixir', name: 'Swiftroot Elixir', description: 'A vivid green elixir. Sharpens speed and evasion for a time.', skillId: 'alchemy', ingredients: [{ itemId: 'wasabi', quantity: 1 }, { itemId: 'snow_pea', quantity: 2 }, { itemId: 'island_herb', quantity: 1 }], output: { itemId: 'swiftroot_elixir', quantity: 1 }, image: '/general/swiftroot_elixir.png', xpYield: 70, requiredLevel: 1 },
+    { id: 'saffron_sight_tonic', name: 'Saffron Sight Tonic', description: 'Brewed from rare saffron threads. Sharpens elemental precision.', skillId: 'alchemy', ingredients: [{ itemId: 'saffron', quantity: 1 }, { itemId: 'wine_red', quantity: 1 }, { itemId: 'island_herb', quantity: 2 }], output: { itemId: 'saffron_sight_tonic', quantity: 1 }, image: '/general/saffron_sight_tonic.png', xpYield: 100, requiredLevel: 2 },
+    { id: 'cardamom_clarity_potion', name: 'Cardamom Clarity Potion', description: 'A warm, spiced potion that heightens elemental attack.', skillId: 'alchemy', ingredients: [{ itemId: 'cardamom', quantity: 2 }, { itemId: 'mushroom', quantity: 1 }, { itemId: 'olive_oil', quantity: 1 }], output: { itemId: 'cardamom_clarity_potion', quantity: 1 }, image: '/general/cardamom_clarity_potion.png', xpYield: 90, requiredLevel: 2 },
+    { id: 'shadow_veil_tincture', name: 'Shadow Veil Tincture', description: 'A dark, bitter tincture of pumpkin and night herbs. Boosts evasion sharply.', skillId: 'alchemy', ingredients: [{ itemId: 'pumpkin', quantity: 2 }, { itemId: 'mushroom', quantity: 2 }, { itemId: 'wine_red', quantity: 1 }], output: { itemId: 'shadow_veil_tincture', quantity: 1 }, image: '/general/shadow_veil_tincture.png', xpYield: 120, requiredLevel: 3 },
+    { id: 'dragon_vitality_brew', name: 'Dragon Vitality Brew', description: 'A volatile red brew of dragon fruit and rare minerals. Surges physical attack.', skillId: 'alchemy', ingredients: [{ itemId: 'dragon_fruit', quantity: 2 }, { itemId: 'gold', quantity: 1 }, { itemId: 'ginseng', quantity: 1 }], output: { itemId: 'dragon_vitality_brew', quantity: 1 }, image: '/general/dragon_vitality_brew.png', xpYield: 150, requiredLevel: 3 },
+];
 
 export const craftingRecipes: CraftingRecipe[] = [
-    {
-        id: 'basic_sword',
-        name: 'Iron Sword',
-        description: 'A basic sword crafted from wood and stone.',
-        ingredients: [
-            { itemId: 'wood', quantity: 1 },
-            { itemId: 'stone', quantity: 1 },
-        ],
-        output: { itemId: 'basic_sword', quantity: 1 },
-        image: '/weapons/basic_sword.png',
-    },
-    {
-        id: 'basic_bow',
-        name: 'Basic Bow',
-        description: 'A simple bow made from wood and feathers.',
-        ingredients: [
-            { itemId: 'wood', quantity: 2 },
-            { itemId: 'feather', quantity: 2 },
-        ],
-        output: { itemId: 'basic_bow', quantity: 1 },
-        image: '/weapons/basic_bow.png',
-    },
-    {
-        id: 'bread',
-        name: 'Bread',
-        description: 'A loaf of freshly baked bread.',
-        ingredients: [
-            { itemId: 'wheat', quantity: 3 },
-        ],
-        output: { itemId: 'bread', quantity: 1 },
-        image: '/general/bread.png',
-    },
-    {
-        id: 'unity',
-        name: 'Unity',
-        description: 'A basic sword crafted from wood and stone.',
-        ingredients: [
-            { itemId: 'basic_sword', quantity: 1 },
-            { itemId: 'emerald', quantity: 1 },
-            { itemId: 'citrine', quantity: 1 },
-            { itemId: 'aquamarine', quantity: 1 },
-            { itemId: 'amethyst', quantity: 1 },
-            { itemId: 'sapphire', quantity: 1 },
-            { itemId: 'ruby', quantity: 1 },
-        ],
-        output: { itemId: 'unity', quantity: 1 },
-        image: '/weapons/unity.png',
-    },
-
-    {
-        id: 'advanced_polearm',
-        name: 'Advanced Polearm',
-        description: 'Basic → Advanced Polearm',
-        ingredients: [
-            { itemId: 'basic_polearm', quantity: 1 },
-        ],
-        output: { itemId: 'advanced_polearm', quantity: 1 },
-        image: '/weapons/advanced_polearm.png',
-    },
-
-    {
-        id: 'advanced_claw',
-        name: 'Advanced Claw',
-        description: 'Basic → Advanced claw',
-        ingredients: [
-            { itemId: 'basic_claw', quantity: 1 },
-        ],
-        output: { itemId: 'advanced_claw', quantity: 1 },
-        image: '/weapons/advanced_claw.png',
-    },
-
-    {
-        id: 'advanced_bow',
-        name: 'Advanced Bow',
-        description: 'Basic → Advanced bow',
-        ingredients: [
-            { itemId: 'basic_bow', quantity: 1 },
-        ],
-        output: { itemId: 'advanced_bow', quantity: 1 },
-        image: '/weapons/advanced_bow.png',
-    },
-
-    {
-        id: 'basic_halberd',
-        name: 'Basic Halberd',
-        description: 'Basic Halberd',
-        ingredients: [
-            { itemId: 'basic_axe', quantity: 1 },
-            { itemId: 'basic_polearm', quantity: 1 },
-        ],
-        output: { itemId: 'basic_halberd', quantity: 1 },
-        image: '/weapons/basic_halberd.png',
-    },
-    
+    ...smithingRecipes,
+    ...cookingRecipes,
+    ...alchemyRecipes,
 ];

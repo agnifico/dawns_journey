@@ -91,7 +91,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
                 "text": "Press the Button",
                 "effects": [
                     { "type": "add_tag", "tag": "f1_complete" },
-                    { "type": "give_item", "itemId": "aquamarine", "quantity": 1 }
+                    { "type": "give_item", "itemId": "turquoise", "quantity": 1 }
                 ]
             }
         ]

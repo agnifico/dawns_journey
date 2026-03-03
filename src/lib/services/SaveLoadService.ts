@@ -12,6 +12,7 @@ import { questStore } from '$lib/stores/questStore';
 import { getItemById } from './InventoryService';
 import playerDefaults from '$lib/data/player';
 import type { Player, NPC } from '$lib/types';
+import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
 
 const SAVE_KEY = 'dawn_journey_save_v3';
 const COMBAT_HISTORY_CAP = 100; // keep only last 100 fights
@@ -263,7 +264,8 @@ export async function loadGame() {
             if (loadedPlayer.xp === undefined) loadedPlayer.xp = 0;
 
             const updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer);
-            playerStore.set({ ...updatedPlayer, isInitialized: true });
+            const updatedPlayer2 = claimAccumulatedTimePoints(updatedPlayer);
+            playerStore.set({ ...updatedPlayer2, isInitialized: true });
         }
 
         // ── Map ─────────────────────────────────────────────────────────────

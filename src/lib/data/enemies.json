@@ -248,7 +248,7 @@
         "xp": 120,
         "hpCost": 9,
         "drops": [
-            { "itemId": "aquamarine", "quantity": 1, "chance": 0.4 },
+            { "itemId": "turquoise", "quantity": 1, "chance": 0.4 },
             { "itemId": "sapphire", "quantity": 1, "chance": 0.2 },
             { "itemId": "basic_claw", "quantity": 1, "chance": 0.3 }
         ]
@@ -317,7 +317,7 @@
         "xp": 750,
         "hpCost": 9,
         "drops": [
-            { "itemId": "aquamarine", "quantity": 3 },
+            { "itemId": "turquoise", "quantity": 3 },
             { "itemId": "argentum", "quantity": 1500 },
             { "itemId": "basic_polearm", "quantity": 1, "chance": 0.33 }
         ]

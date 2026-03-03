@@ -4,7 +4,7 @@ import { persistentStore } from './persistentStore';
 
 // --- Inventory Tabs ---
 export type InventoryTab = 'general' | 'weapons' | 'relics' | 'homestead';
-export type HomesteadSubTab = 'farming' | 'crafting';
+export type HomesteadSubTab = 'farming' | 'workshop';
 export const inventoryTab = writable<InventoryTab>('general');
 export const homesteadSubTab = writable<HomesteadSubTab>('farming');
 

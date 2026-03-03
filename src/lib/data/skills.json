@@ -1,6 +1,6 @@
 {
-    "herblore": {
-        "name": "Herblore",
+    "alchemy": {
+        "name": "Alchemy",
         "description": "The art of brewing potions and transmuting materials.",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -47,9 +47,21 @@
             "6": { "xp": 1500, "rewards": [{ "itemId": "bread", "amount": 2 }] }
         }
     },
-    "crafting": {
-        "name": "Crafting",
+    "smithing": {
+        "name": "Smithing",
         "description": "The art of forging weapons, and outfits.",
+        "levels": {
+            "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "3": { "xp": 300, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "4": { "xp": 600, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "5": { "xp": 1000, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "6": { "xp": 1500, "rewards": [{ "itemId": "bread", "amount": 2 }] }
+        }
+    },
+    "cooking": {
+        "name": "Cooking",
+        "description": "The art of turning ingredients into delicious nourishment.",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },

@@ -19,9 +19,9 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
     gem_fountain: {
         id: 'gem_fountain',
         name: 'Gem Fountain',
-        skillId: 'herblore',
+        skillId: 'alchemy',
         requiredLevel: 1,
-        reward: { itemId: 'aquamarine', amount: 1 },
+        reward: { itemId: 'turquoise', amount: 1 },
         cooldown: 3,
         image: './locations/fountain.png',
         dialogue: {
@@ -49,7 +49,7 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
     big_mushroom: {
         id: 'big_mushroom',
         name: 'Big Mushroom',
-        skillId: 'herblore',
+        skillId: 'alchemy',
         requiredLevel: 1,
         reward: { itemId: 'mushroom', amount: 2 },
         cooldown: 2,

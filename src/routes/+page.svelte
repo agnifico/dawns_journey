@@ -95,7 +95,7 @@
 				<div class="game-actions">
 					{#if $playerStore.isInitialized}
 						<button on:click={() => goto('/arena')}>Arena</button>
-						<button on:click={() => goto('/crafting')}>Crafting</button>
+						<button on:click={() => goto('/homestead/workshop')}>Workshop</button>
 						<button on:click={() => goto('/homestead/farming')}>Farming</button>
 						<button on:click={() => goto('/journal')}>Journal</button>
 						<button on:click={() => goto('/shop')}>Shop</button>
@@ -164,6 +164,9 @@
 								</label>
 							{/each}
 						</div>
+						<p class="m-profile-desc">
+							{profiles.find((p) => p.id === selectedProfileId).description}
+						</p>
 						<button class="m-cta-primary" on:click={startNewGame} disabled={!selectedMapId}>
 							▶ New Game
 						</button>
@@ -182,7 +185,7 @@
 				<div class="m-actions-grid">
 					<button class="m-action-btn" on:click={() => goto('/map')}>🗺 Map</button>
 					<button class="m-action-btn" on:click={() => goto('/arena')}>⚔ Arena</button>
-					<button class="m-action-btn" on:click={() => goto('/crafting')}>🔨 Crafting</button>
+					<button class="m-action-btn" on:click={() => goto('/homestead/workshop')}>🔨 Workshop</button>
 					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}>🌱 Farming</button>
 					<button class="m-action-btn" on:click={() => goto('/journal')}>📖 Journal</button>
 					<button class="m-action-btn" on:click={() => goto('/shop')}>🏪 Shop</button>
@@ -535,6 +538,10 @@
 			padding-bottom: 4px;
 			-webkit-overflow-scrolling: touch;
 			scrollbar-width: none;
+		}
+		.m-profile-desc{
+			font-family: var(--font-family-pixel);
+			font-size: 0.75rem;
 		}
 		.m-profile-row::-webkit-scrollbar { display: none; }
 

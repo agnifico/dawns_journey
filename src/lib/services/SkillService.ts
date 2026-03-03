@@ -36,8 +36,8 @@ export function gainExperience(player: Player, skillId: string, amount: number):
         skill.level++;
         skill.experience -= xpForNextLevel;
         newPlayer.techPoints += TECH_POINTS_PER_LEVEL;
-        messageStore.addMessage(`${skill.name} level is now ${skill.level}!`, ['System', 'LevelUp']);
-        messageStore.addMessage(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`, ['System', 'LevelUp']);
+        messageStore.addMessage(`${skill.name} level is now ${skill.level}!`, ['Player']);
+        messageStore.addMessage(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`, ['Player']);
 
         // Add rewards for the new level
         const skillData = (skills as any)[skillId];
@@ -45,7 +45,7 @@ export function gainExperience(player: Player, skillId: string, amount: number):
         if (levelData?.rewards) {
             for (const reward of levelData.rewards) {
                 newPlayer = addItems(newPlayer, reward.itemId, reward.amount);
-                messageStore.addMessage(`You received ${reward.amount} ${reward.itemId}!`, ['System', 'Reward']);
+                messageStore.addMessage(`You received ${reward.amount} ${reward.itemId}!`, ['Player']);
             }
         }
 

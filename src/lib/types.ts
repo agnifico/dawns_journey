@@ -20,7 +20,7 @@ export interface GearPassive {
 export interface Item {
 	price?: any;
     id: string;
-    instanceId: string;
+    instanceId?: string;
     name: string;
     description: string;
     image: string;
@@ -203,6 +203,12 @@ export interface Crop {
     currentGrowthStage: number;
     lastWateredTimestamp: number;
     wateredCount: number;
+    /**
+     * Set to true when a stage's time requirement is met but the watering
+     * requirement is not. The UI should surface this clearly to the player.
+     * Cleared automatically once watering is satisfied and the stage advances.
+     */
+    needsWater: boolean;
 }
 
 export interface FarmPlot {
@@ -220,7 +226,7 @@ export interface ActiveEffect {
     id: string;
     name: string;
     duration: number;
-    expiryTime: number;
+    expiryTime?: number;
     type: 'flat' | 'percentage';
     stat: keyof PlayerBaseStats;
     value: number;
@@ -249,8 +255,14 @@ export interface Player {
         compostQueue: any[];
     };
     lastPlayedTimestamp: number;
+    /**
+     * Unix ms timestamp of the last Time Point claim.
+     * Elapsed minutes since this = Time Points to award on next load.
+     * Set to Date.now() when a new game starts.
+     */
+    lastTimePointClaimTimestamp: number;
     farmingLevel: number;
-    farmingXp: number;
+    // farmingXp: number;
     techPoints: number;
     unlockedTech: string[];
     locationEventHistory: { [eventId: string]: number };
@@ -523,6 +535,29 @@ export interface CropDefinition {
     idealSeasonYieldMultiplier: number;
     totalGrowthTime: number;
     leavesYield: number;
+}
+
+/**
+ * A single crafting recipe. Both `xpYield` and `requiredLevel` are optional
+ * so that existing recipe data doesn't need to be updated all at once —
+ * missing values default to 0 in CraftingService.
+ */
+export interface CraftingRecipe {
+    id: string;
+    name: string;
+    description?: string;
+    image?: string;
+    /**
+     * Which skill this recipe belongs to and awards XP towards.
+     * Maps to a skill id: 'smithing' | 'cooking' | 'alchemy' | 'crafting'
+     */
+    skillId?: string;
+    ingredients: { itemId: string; quantity: number }[];
+    output: { itemId: string; quantity: number };
+    /** Crafting XP awarded on success. Defaults to 0 if omitted. */
+    xpYield?: number;
+    /** Minimum skill level required. Defaults to 1 if omitted. */
+    requiredLevel?: number;
 }
 
 export interface Faction {

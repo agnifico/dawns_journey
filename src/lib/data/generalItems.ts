@@ -21,10 +21,10 @@ export const generalItems: Item[] = [
         instanceId: ''
     },
     {
-        id: "aquamarine",
-        name: "Aquamarine",
+        id: "turquoise",
+        name: "turquoise",
         description: "A sparkling blue-green gemstone.",
-        image: "/general/aquamarine.png",
+        image: "/general/turquoise.png",
         type: "general",
         flags: ['stackable',],
         instanceId: ''
@@ -121,6 +121,15 @@ export const generalItems: Item[] = [
         instanceId: ''
     },
     {
+        id: "fire_tulip",
+        name: "Fire Tulip",
+        description: "A sign of renewal. Said to grow only on the remnants of scorched earth.",
+        image: "/general/fire_tulip.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
         id: "corn",
         name: "Corn",
         description: "A cob of sweet corn.",
@@ -180,7 +189,7 @@ export const generalItems: Item[] = [
         description: "A potent mead that invigorates the spirit for 150 steps.",
         image: "/general/forza_mead.png",
         type: "general",
-        flags: ['stackable','special'],
+        flags: ['stackable', 'special'],
         activeEffects: [{ id: "forza_buff", name: "Forza Buff", stat: "physicalAttack", value: 10, duration: 150, type: "flat", source: "forza_mead" }],
     },
     {
@@ -575,6 +584,36 @@ export const generalItems: Item[] = [
         flags: ['stackable', 'material'],
         instanceId: ''
     },
+    // ─────────────────────────────────────────────────────────────────────────────
+    // ADD THESE ENTRIES TO generalItems.ts
+    // ─────────────────────────────────────────────────────────────────────────────
 
-    
+    // ── Time Point ───────────────────────────────────────────────────────────────
+    // Awarded at 1 per real minute of playtime. Used as a cooking ingredient
+    // to simulate the time cost of slow-cooking without actual timers.
+    {
+        id: "time_point",
+        name: "Time Point",
+        description: "A crystallised moment. Earned by playing — one per minute. Spent in cooking to simulate real preparation time.",
+        image: "/general/time_point.png",
+        type: "general",
+        flags: ['stackable', 'internal'],
+        instanceId: ''
+    },
+
+
+    // Cooking outputs
+    { id: "vegetable_stew", name: "Vegetable Stew", description: "A warming bowl of slow-cooked vegetables. Restores HP and briefly fortifies elemental defence.", image: "/general/vegetable_stew.png", type: "general", flags: ["stackable"], effects: [{ hp: 80 }, { auraShield: 200 }], activeEffects: [{ id: "stew_ed_buff", name: "Well Fed", stat: "elementalDefence", value: 12, duration: 80, type: "flat", source: "vegetable_stew" }], instanceId: "" },
+    { id: "roasted_meat", name: "Roasted Meat", description: "Slow-roasted over an open flame. Restores HP and boosts physical attack.", image: "/general/roasted_meat.png", type: "general", flags: ["stackable"], effects: [{ hp: 120 }], activeEffects: [{ id: "roast_pa_buff", name: "Carnivore Edge", stat: "physicalAttack", value: 18, duration: 100, type: "flat", source: "roasted_meat" }], instanceId: "" },
+
+    // Alchemy outputs
+    { id: "iron_resolve_potion", name: "Iron Resolve Potion", description: "A dense amber brew. Temporarily reinforces physical defence.", image: "/general/iron_resolve_potion.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "iron_resolve_pd_buff", name: "Iron Resolve", stat: "physicalDefence", value: 30, duration: 120, type: "flat", source: "iron_resolve_potion" }], instanceId: "" },
+    { id: "swiftroot_elixir", name: "Swiftroot Elixir", description: "A vivid green elixir. Sharpens speed and evasion for a time.", image: "/general/swiftroot_elixir.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "swiftroot_spd_buff", name: "Swiftroot Rush", stat: "speed", value: 15, duration: 100, type: "flat", source: "swiftroot_elixir" }, { id: "swiftroot_eva_buff", name: "Swiftroot Rush", stat: "evasion", value: 0.08, duration: 100, type: "percentage", source: "swiftroot_elixir" }], instanceId: "" },
+    { id: "saffron_sight_tonic", name: "Saffron Sight Tonic", description: "A golden tonic brewed from rare saffron. Sharpens elemental precision.", image: "/general/saffron_sight_tonic.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "saffron_prec_buff", name: "Saffron Sight", stat: "precision", value: 20, duration: 100, type: "flat", source: "saffron_sight_tonic" }], instanceId: "" },
+    { id: "cardamom_clarity_potion", name: "Cardamom Clarity Potion", description: "A warm, spiced brew that temporarily heightens elemental attack.", image: "/general/cardamom_clarity_potion.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "cardamom_ea_buff", name: "Spiced Clarity", stat: "elementalAttack", value: 25, duration: 100, type: "flat", source: "cardamom_clarity_potion" }], instanceId: "" },
+    { id: "shadow_veil_tincture", name: "Shadow Veil Tincture", description: "A dark, bitter brew. Dramatically boosts evasion for a short window.", image: "/general/shadow_veil_tincture.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "shadow_eva_buff", name: "Shadow Veil", stat: "evasion", value: 0.18, duration: 80, type: "percentage", source: "shadow_veil_tincture" }], instanceId: "" },
+    { id: "dragon_vitality_brew", name: "Dragon Vitality Brew", description: "A volatile red brew of dragon fruit and gold. Surges physical attack.", image: "/general/dragon_vitality_brew.png", type: "general", flags: ["stackable", "special"], activeEffects: [{ id: "dragon_pa_buff", name: "Dragon Surge", stat: "physicalAttack", value: 40, duration: 120, type: "flat", source: "dragon_vitality_brew" }], instanceId: "" },
+
+
+
 ];
