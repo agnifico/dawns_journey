@@ -243,5 +243,9 @@ export function executeAbility(
         if (currentDefender.hp <= 0) break;
     }
 
-    return { updatedAttacker: currentAttacker, updatedDefender: currentDefender, logs };
+    return {
+        updatedAttacker: applyStatModifiers(currentAttacker),
+        updatedDefender: applyStatModifiers(currentDefender),
+        logs,
+    };
 }

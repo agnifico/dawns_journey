@@ -17,3 +17,7 @@ export function setRenderScale(newScale: number) {
         return { ...s, renderScale: scale };
     });
 }
+
+import { writable } from 'svelte/store';
+import { ABILITY_MODE } from '$lib/config/abilityConfig';
+export const abilityMode = writable<'dev' | 'live'>(ABILITY_MODE);

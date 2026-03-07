@@ -4,42 +4,52 @@
 	import AbilityTag from './ui/AbilityTag.svelte';
 	import type { Ability } from '$lib/types';
 
-	$: abilities     = $combatStore.player?.abilities ?? [];
+	$: abilities = $combatStore.player?.abilities ?? [];
 	$: activeElement = $combatStore.player?.activeElement;
-	$: isPlayerTurn  = $combatStore.turnPhase === 'player_selecting';
+	$: isPlayerTurn = $combatStore.turnPhase === 'player_selecting';
 
 	// Group by abilityType
 	const TAB_ORDER = ['Physical Damage', 'Elemental Damage', 'Special'] as const;
-	type TabKey = typeof TAB_ORDER[number];
+	type TabKey = (typeof TAB_ORDER)[number];
 
 	const TAB_LABELS: Record<TabKey, string> = {
-		'Physical Damage':  '⚔ Physical',
+		'Physical Damage': '⚔ Physical',
 		'Elemental Damage': '✦ Elemental',
-		'Special':          '★ Special',
+		Special: '★ Special'
 	};
 
 	let activeTab: TabKey = 'Physical Damage';
 
-	$: grouped = TAB_ORDER.reduce((acc, type) => {
-		acc[type] = abilities.filter(a => a.abilityType === type);
-		return acc;
-	}, {} as Record<TabKey, Ability[]>);
+	$: grouped = TAB_ORDER.reduce(
+		(acc, type) => {
+			acc[type] = (abilities as Ability[]).filter(
+				(a): a is Ability & { abilityType: TabKey } => a.abilityType === type
+			);
+			return acc;
+		},
+		{} as Record<TabKey, Ability[]>
+	);
 
 	// Count per tab for the badge
-	$: counts = TAB_ORDER.reduce((acc, type) => {
-		acc[type] = grouped[type]?.length ?? 0;
-		return acc;
-	}, {} as Record<TabKey, number>);
+	$: counts = TAB_ORDER.reduce(
+		(acc, type) => {
+			acc[type] = grouped[type]?.length ?? 0;
+			return acc;
+		},
+		{} as Record<TabKey, number>
+	);
 
 	// Touch swipe support
 	let touchStartX = 0;
-	function onTouchStart(e: TouchEvent) { touchStartX = e.touches[0].clientX; }
+	function onTouchStart(e: TouchEvent) {
+		touchStartX = e.touches[0].clientX;
+	}
 	function onTouchEnd(e: TouchEvent) {
 		const dx = e.changedTouches[0].clientX - touchStartX;
 		if (Math.abs(dx) < 40) return;
-		const idx  = TAB_ORDER.indexOf(activeTab);
+		const idx = TAB_ORDER.indexOf(activeTab);
 		if (dx < 0 && idx < TAB_ORDER.length - 1) activeTab = TAB_ORDER[idx + 1];
-		if (dx > 0 && idx > 0)                     activeTab = TAB_ORDER[idx - 1];
+		if (dx > 0 && idx > 0) activeTab = TAB_ORDER[idx - 1];
 	}
 </script>
 
@@ -65,11 +75,7 @@
 
 	<!-- Ability grid — swipeable -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div
-		class="ability-grid"
-		on:touchstart={onTouchStart}
-		on:touchend={onTouchEnd}
-	>
+	<div class="ability-grid" on:touchstart={onTouchStart} on:touchend={onTouchEnd}>
 		{#each grouped[activeTab] ?? [] as ability (ability.id)}
 			<AbilityTag
 				{ability}
@@ -133,7 +139,10 @@
 		box-shadow: #00000056 0 -3px 0 0px inset;
 	}
 
-	.tab-btn:disabled { opacity: 0.35; cursor: default; }
+	.tab-btn:disabled {
+		opacity: 0.35;
+		cursor: default;
+	}
 
 	.tab-count {
 		background-color: #00000040;
@@ -144,7 +153,10 @@
 		min-width: 1rem;
 		text-align: center;
 	}
-	.tab-btn.active .tab-count { color: #e9d9ca; background-color: #00000056; }
+	.tab-btn.active .tab-count {
+		color: #e9d9ca;
+		background-color: #00000056;
+	}
 
 	/* ── Grid ── */
 	.ability-grid {
@@ -169,7 +181,12 @@
 	}
 
 	@media (max-width: 600px) {
-		.ability-grid { grid-template-columns: repeat(2, 1fr); }
-		.tab-btn { font-size: 0.52rem; padding: 0.3rem 0.35rem; }
+		.ability-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.tab-btn {
+			font-size: 0.52rem;
+			padding: 0.3rem 0.35rem;
+		}
 	}
 </style>

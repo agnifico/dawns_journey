@@ -1,4 +1,5 @@
 import type { Ability } from '$lib/types';
+import { ABILITY_MODE } from '$lib/config/abilityConfig';
 
 /**
  * All game abilities.
@@ -14,8 +15,7 @@ import type { Ability } from '$lib/types';
  * maxUses is intentionally absent from Ability. Use ArenaTrigger.oneShot or
  * ArenaPhaseAbility { id, maxUses } for per-NPC limits.
  */
-export const allAbilities: Ability[] = [
-
+export const playerAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     // Basic / shared
     // -------------------------------------------------------------------------
@@ -220,7 +220,9 @@ export const allAbilities: Ability[] = [
             }
         }]
     },
+];
 
+export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     // Cygwin — The Iron Lioness
     // -------------------------------------------------------------------------
@@ -232,7 +234,7 @@ export const allAbilities: Ability[] = [
         effects: [{
             type: 'stat_transfer',
             transfers: [
-                { sourceStat: 'physicalAttack',  targetStat: 'physicalDefence',  retainRatio: 0.20 },
+                { sourceStat: 'physicalAttack', targetStat: 'physicalDefence', retainRatio: 0.20 },
                 { sourceStat: 'elementalAttack', targetStat: 'elementalDefence', retainRatio: 0.20 }
             ]
         }]
@@ -307,7 +309,7 @@ export const allAbilities: Ability[] = [
         effects: [{
             type: 'stat_transfer',
             transfers: [
-                { sourceStat: 'physicalDefence',  targetStat: 'physicalAttack',  retainRatio: 0.20 },
+                { sourceStat: 'physicalDefence', targetStat: 'physicalAttack', retainRatio: 0.20 },
                 { sourceStat: 'elementalDefence', targetStat: 'elementalAttack', retainRatio: 0.20 }
             ]
         }]
@@ -484,8 +486,8 @@ export const allAbilities: Ability[] = [
         name: 'Rapid Volley',
         description: 'Fires 6 shots in quick succession, each dealing 10% Physical Attack. 85% accuracy.',
         abilityType: 'Physical Damage',
-        accuracy: 0.85,
-        effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.10, hitCount: 6 }]
+        accuracy: 0.55,
+        effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.02, hitCount: 100 }]
     },
     {
         id: 'powder_keg',
@@ -748,5 +750,10 @@ export const allAbilities: Ability[] = [
 ];
 
 export function getAbilityById(id: string): Ability | undefined {
-    return allAbilities.find(ability => ability.id === id);
+    return playerAbilities.find(ability => ability.id === id) || npcAbilities.find(ability => ability.id === id);
 }
+
+export const allAbilities: Ability[] =
+    ABILITY_MODE === 'dev'
+        ? [...playerAbilities, ...npcAbilities]
+        : playerAbilities;

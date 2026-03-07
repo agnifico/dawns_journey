@@ -60,5 +60,27 @@ export const sets: Set[] = [
                 stats: [{ name: 'physicalDefence', value: 200 }, { name: 'elementalDefence', value: 200 }]
             }
         ]
+    },
+    {
+        id: 'sky_jewels',
+        name: 'Trinkets of the Sky Goddes',
+        relicIds: ['ring_of_the_sky', 'brooch_of_the_sky'],
+        bonuses: [
+            {
+                pieces: 2,
+                stats: [{ name: 'precision', value: 20 }, { name: 'evasion', value: 20 }]
+            }
+        ]
+    },
+    {
+        id: 'dragon_rider',
+        name: 'Dragon Rider',
+        relicIds: ['dragon_rider_helmet', 'bite_mark'],
+        bonuses: [
+            {
+                pieces: 2,
+                stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }]
+            }
+        ]
     }
 ];

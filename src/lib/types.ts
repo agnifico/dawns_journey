@@ -18,7 +18,7 @@ export interface GearPassive {
 }
 
 export interface Item {
-	price?: any;
+    price?: any;
     id: string;
     instanceId?: string;
     name: string;
@@ -111,15 +111,16 @@ export interface StatusEffect {
 // ---------------------------------------------------------------------------
 
 export type ArenaTriggerCondition =
-    | { type: 'PLAYER_HP_BELOW';      value: number }
-    | { type: 'SELF_HP_BELOW';        value: number }
-    | { type: 'SELF_HP_ABOVE';        value: number }
+    | { type: 'PLAYER_HP_BELOW'; value: number }
+    | { type: 'SELF_HP_BELOW'; value: number }
+    | { type: 'SELF_HP_ABOVE'; value: number }
     | { type: 'ENEMY_STATUS_MISSING'; statusId: string }
     | { type: 'ENEMY_STATUS_PRESENT'; statusId: string }
-    | { type: 'SELF_STATUS_PRESENT';  statusId: string }
-    | { type: 'TURN_MULTIPLE_OF';     value: number }
-    | { type: 'TURN_NUMBER_IS';       value: number }
-    | { type: 'ENEMY_HAS_FLAG';       flag: string };
+    | { type: 'SELF_STATUS_PRESENT'; statusId: string }
+    | { type: 'TURN_MULTIPLE_OF'; value: number }
+    | { type: 'TURN_NUMBER_IS'; value: number }
+    | { type: 'SELF_STATUS_MISSING'; statusId: string }
+    | { type: 'ENEMY_HAS_FLAG'; flag: string };
 
 export interface ArenaTrigger {
     condition: ArenaTriggerCondition;
@@ -146,7 +147,7 @@ export interface ArenaBehavior {
 // ---------------------------------------------------------------------------
 
 export interface Combatant {
-	gearPassives: GearPassive[];
+    gearPassives: GearPassive[];
     baseStats: PlayerBaseStats;
     hp: number;
     maxHp: number;
@@ -312,7 +313,7 @@ export type RequirementCondition =
  */
 export type Requirement =
     | { operator: 'AND'; conditions: RequirementCondition[] }
-    | { operator: 'OR';  conditions: RequirementCondition[] }
+    | { operator: 'OR'; conditions: RequirementCondition[] }
     | { operator: 'NOT'; condition: Requirement }                               // NEW: inverts child requirement
     | RequirementCondition;
 
@@ -495,25 +496,31 @@ export interface Enemy {
 export type CombatLogSide = 'player' | 'opponent' | 'none';
 
 export type CombatLogMessage =
-    | { type: 'turn_banner';        turn: number }
-    | { type: 'ability_use';        side: CombatLogSide; actorName: string; abilityName: string }
-    | { type: 'damage';             side: CombatLogSide; amount: number; isCritical: boolean;
-                                    damageType: 'physical' | 'elemental'; element?: string;
-                                    hitIndex?: number; totalHits?: number }
-    | { type: 'miss';               side: CombatLogSide; defenderName: string; reason: 'dodge' | 'accuracy' }
-    | { type: 'multi_hit_summary';  side: CombatLogSide; hitCount: number; totalHits: number; totalDamage: number }
-    | { type: 'heal';               side: CombatLogSide; targetName: string; amount: number; healType: 'hp' | 'aura_shield' }
-    | { type: 'status_apply';       side: CombatLogSide; targetName: string; statusName: string; isBuff: boolean }
-    | { type: 'status_tick';        side: CombatLogSide; targetName: string; statusName: string; amount: number }
-    | { type: 'status_heal';        side: CombatLogSide; targetName: string; statusName: string; amount: number }
-    | { type: 'status_expire';      side: CombatLogSide; targetName: string; statusName: string }
-    | { type: 'stat_change';        side: CombatLogSide; targetSide: CombatLogSide; targetName: string;
-                                    stats: string[]; direction: 'up' | 'down' }
-    | { type: 'stat_transfer';      side: CombatLogSide; actorName: string; description: string; suppressed: boolean }
-    | { type: 'stun';               side: CombatLogSide; actorName: string }
-    | { type: 'immune';             side: CombatLogSide; targetName: string; what: string }
-    | { type: 'defeated';           side: CombatLogSide; name: string }
-    | { type: 'system';             text: string };
+    | { type: 'turn_banner'; turn: number }
+    | { type: 'ability_use'; side: CombatLogSide; actorName: string; abilityName: string }
+    | {
+        type: 'damage'; side: CombatLogSide; amount: number; isCritical: boolean;
+        damageType: 'physical' | 'elemental'; element?: string;
+        hitIndex?: number; totalHits?: number
+    }
+    | { type: 'miss'; side: CombatLogSide; defenderName: string; reason: 'dodge' | 'accuracy' }
+    | { type: 'multi_hit_summary'; side: CombatLogSide; hitCount: number; totalHits: number; totalDamage: number }
+    | { type: 'heal'; side: CombatLogSide; targetName: string; amount: number; healType: 'hp' | 'aura_shield' }
+    | { type: 'status_apply'; side: CombatLogSide; targetName: string; statusName: string; isBuff: boolean }
+    | { type: 'status_tick'; side: CombatLogSide; targetName: string; statusName: string; amount: number }
+    | { type: 'status_heal'; side: CombatLogSide; targetName: string; statusName: string; amount: number }
+    | { type: 'status_expire'; side: CombatLogSide; targetName: string; statusName: string }
+    | {
+        type: 'stat_change'; side: CombatLogSide; targetSide: CombatLogSide; targetName: string;
+        stats: string[]; direction: 'up' | 'down'
+    }
+    | { type: 'stat_transfer'; side: CombatLogSide; actorName: string; description: string; suppressed: boolean }
+    | { type: 'stun'; side: CombatLogSide; actorName: string }
+    | { type: 'immune'; side: CombatLogSide; targetName: string; what: string }
+    | { type: 'defeated'; side: CombatLogSide; name: string }
+    | { type: 'system'; text: string }
+    | { type: 'cleanse'; side: CombatLogSide; targetName: string; count: number }
+    | { type: 'dispel'; side: CombatLogSide; targetName: string; count: number };
 
 export interface CropDefinition {
     id: string;

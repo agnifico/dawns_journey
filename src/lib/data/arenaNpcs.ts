@@ -420,7 +420,7 @@ const arenaNpcs: Record<string, Combatant> = {
                 },
                 // Refresh mending aura whenever it lapses
                 {
-                    condition: { type: 'ENEMY_STATUS_MISSING', statusId: 'lifebind' },
+                    condition: { type: 'SELF_STATUS_MISSING', statusId: 'lifebind' },
                     responseAbility: 'lifebind', priority: 30
                 },
                 // Purifying light when low — cleanses + HoT
@@ -656,7 +656,7 @@ const arenaNpcs: Record<string, Combatant> = {
     },
     akari: {
         ...akariTemplate,
-        baseStats: { ...withAccuracy(marjaneTemplate.baseStats), hp: 240, maxHp: 240 },
+        baseStats: { ...withAccuracy(akariTemplate.baseStats), hp: 240, maxHp: 240 },
         arenaBehavior: {
             phases: [
                 {

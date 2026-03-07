@@ -11,7 +11,12 @@
          "/images/characters/nemesis/nemesis4.png",
          "/images/characters/nemesis/nemesis5.png",
          "/images/characters/nemesis/nemesis6.png",
-         "/images/characters/nemesis/nemesis7.png"
+         "/images/characters/nemesis/nemesis7.png",
+         "/images/characters/nemesis/nemesis8.png",
+         "/images/characters/nemesis/nemesis9.png",
+         "/images/characters/nemesis/nemesis10.png",
+         "/images/characters/nemesis/nemesis11.png",
+         "/images/characters/nemesis/nemesis12.png"
     ],
     "isCombatant": true,
     "types": [

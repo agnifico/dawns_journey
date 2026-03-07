@@ -5,6 +5,9 @@ import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { openCombatModal } from '$lib/stores/uiStore';
 import { getArenaNpc } from '$lib/data/arenaNpcs';
 import { allAbilities, getAbilityById } from '$lib/data/abilities';
+import { abilityMode } from '$lib/stores/settingsStore';
+import { playerAbilities, npcAbilities } from '$lib/data/abilities';
+
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -71,6 +74,10 @@ function resolveNpcGearPassives(gearPassives: GearPassive[] | undefined): Status
 // ---------------------------------------------------------------------------
 
 export function startArenaCombat(opponentId: string): void {
+    const mode = get(abilityMode);
+    const availableAbilities = mode === 'dev'
+        ? [...playerAbilities, ...npcAbilities]
+        : playerAbilities;
     const opponentData = getArenaNpc(opponentId);
     if (!opponentData) {
         console.error(`[ArenaCombatService] Arena opponent "${opponentId}" not found!`);
@@ -105,7 +112,7 @@ export function startArenaCombat(opponentId: string): void {
         ...sandboxedStats,
         equipment: playerCopy.equipment,
         elements: playerElements,
-        abilities: allAbilities,
+        abilities: availableAbilities,
         statusEffects: resolvePlayerGearPassives(playerCopy),
         activeElement: playerElements[0] ?? 'None',
         gearPassives: [],
