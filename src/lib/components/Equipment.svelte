@@ -184,7 +184,7 @@
 		margin-top: 1em;
 		display: flex;
 		flex-direction: row;
-		gap: 0.5rem;
+		/* gap: 0.5rem; */
 		/* border: 1px solid white; */
 		justify-content: center;
 		align-items: center;
@@ -194,7 +194,7 @@
 		display: flex;
 		/* margin: 0 auto 0 0; */
 		/* margin: auto; */
-		gap: 0.5rem;
+		/* gap: 0.5rem; */
 		/* border: 1px solid white; */
 	}
 
@@ -202,7 +202,7 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 1fr 1fr;
-		gap: 0.5rem;
+		/* gap: 0.5rem; */
 		margin-bottom: auto;
 		position: relative;
 	}
@@ -218,14 +218,15 @@
 	}
 
 	.weapon-slot {
-		width: 120px;
-		height: 148px;
+		width: 128px;
+		height: 128px;
 		box-sizing: border-box;
 		background-color: rgba(0, 0, 0, 0.5);
-		border-radius: 5px;
-		box-shadow: #00000056 0 -6px 0 3px inset;
-		border-top: 3px solid #00000056;
-		padding-bottom: 6px;
+		/* border: 3px dashed #00000056; */
+		/* border-radius: 5px; */
+		/* box-shadow: #00000056 0 -6px 0 3px inset; */
+		/* border-top: 3px solid #00000056; */
+		/* padding-bottom: 6px; */
 		background-color: var(--surface-3);
 		&:hover {
 			.unequip-button {
@@ -235,13 +236,15 @@
 	}
 
 	.relic-slot {
-		width: 70px;
-		height: 70px;
+		width: 64px;
+		height: 64px;
 		background-color: rgba(0, 0, 0, 0.5);
-		border-radius: 5px;
-		box-shadow: #00000056 0 -6px 0 3px inset;
-		border-top: 3px solid #00000056;
-		padding-bottom: 6px;
+		border: 1px solid black;
+		/* border: 3px dashed #00000056; */
+		/* border-radius: 5px; */
+		/* box-shadow: #00000056 0 -6px 0 3px inset; */
+		/* border-top: 3px solid #00000056; */
+		/* padding-bottom: 6px; */
 		background-color: var(--surface-3);
 
 		&:hover {

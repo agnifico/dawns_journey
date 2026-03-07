@@ -72,7 +72,7 @@
 		>
 			<div class="name-block">
 				<h2 class="name">{currentNpc.name}</h2>
-				<p class="label">CHARACTER</p>
+				<p class="label">Characters you'll meet</p>
 				<div class="name-underline"></div>
 			</div>
 

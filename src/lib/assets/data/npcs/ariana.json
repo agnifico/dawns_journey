@@ -11,7 +11,8 @@
     ],
     "isCombatant": true,
     "types": [
-        "Earth"
+        "Water",
+        "Light"
     ],
     "baseStats": {
         "hp": 100,

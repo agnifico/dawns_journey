@@ -75,12 +75,13 @@
 		gap: 6px;
 		padding: 4px 8px 4px 4px;
 		border-radius: 5px;
+		background-color: #00000080;
 		background-color: var(--tag-bg, #2a2a2a);
 		color: var(--tag-color, #eee);
-		border: 2px solid color-mix(in srgb, var(--tag-color, #eee) 30%, transparent);
-		box-shadow: inset 0 -2px 0 color-mix(in srgb, black 40%, transparent);
-		font-family: var(--font-family-pixel, 'Silkscreen', monospace);
+		/* border: 2px solid color-mix(in srgb, var(--tag-color, #eee)Z 30%, transparent); */
+		/* box-shadow: inset 0 -2px 0 color-mix(in srgb, black 40%, transparent); */
 		font-family: monospace;
+		font-family: var(--font-family-pixel);
 		font-weight: 400;
 		font-size: 1rem;
 		line-height: 2rem;
@@ -102,11 +103,12 @@
 	}
 	.ability-tag.interactive:hover:not(.disabled) {
 		filter: brightness(1.2);
-		transform: translateY(-1px);
-		box-shadow:
+		transform: translateY(-2px);
+		/* color: var(--color-accent); */
+		/* box-shadow:
 			inset 0 -2px 0 color-mix(in srgb, black 40%, transparent),
-			0 3px 8px color-mix(in srgb, var(--tag-color, #eee) 25%, transparent);
-		font-weight: bold;
+			0 3px 8px color-mix(in srgb, var(--tag-color, #eee) 25%, transparent); */
+		/* font-weight: bold; */
 	}
 	.ability-tag.interactive:active:not(.disabled) {
 		transform: translateY(1px);
@@ -121,13 +123,13 @@
 
 	/* Icon */
 	.ability-icon {
-		width: 22px;
-		height: 22px;
+		width: 32px;
+		height: 32px;
 		flex-shrink: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: color-mix(in srgb, black 30%, transparent);
+		background: color-mix(in srgb, black 80%, transparent);
 		border-radius: 3px;
 		overflow: hidden;
 	}

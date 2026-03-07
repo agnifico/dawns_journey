@@ -507,11 +507,15 @@ export function startCombat(opponentNpc: NPC): void {
         baseStats: playerBaseStats,
         ...playerBaseStats,
         equipment: currentPlayer.equipment,
-        elements: (currentPlayer.equipment.weapon_slots.map(w => w?.element).filter(Boolean) as string[]) || [],
+        elements: currentPlayer.equipment.weapon_slots
+            .map(w => w?.element)
+            .filter((e): e is string => !!e && e !== 'None'),
         abilities: allAbilities,
         statusEffects: resolvePlayerGearPassives(playerCopy),
-        activeElement: currentPlayer.equipment.weapon_slots[0]?.element || 'None',
-        gearPassives: []
+        activeElement: currentPlayer.equipment.weapon_slots
+            .map(w => w?.element)
+            .find((e): e is string => !!e && e !== 'None') ?? 'None',
+        gearPassives: [],
     };
 
     const opponentStats     = getNpcCombatStats(opponentNpc);
@@ -548,6 +552,8 @@ export function startCombat(opponentNpc: NPC): void {
         turnNumber: 1,
         playerWeaponIndex: 0,
         drops: [],
+        initialPlayerStats: { ...playerCombatant.baseStats },
+        initialOpponentStats: { ...opponentCombatant.baseStats },
     });
 
     openCombatModal();

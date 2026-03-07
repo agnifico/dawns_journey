@@ -14,19 +14,13 @@
 	onMount(() => {
 		const opponentIds = getAllArenaNpcIds();
 		opponents = opponentIds.map((id) => getArenaNpc(id)).filter(Boolean) as Combatant[];
-		if (opponents.length > 0) {
-			selectedNpc = opponents[0];
-		}
+		if (opponents.length > 0) selectedNpc = opponents[0];
 	});
 
-	function selectNpc(npc: Combatant) {
-		selectedNpc = npc;
-	}
+	function selectNpc(npc: Combatant) { selectedNpc = npc; }
 
 	function handleBattle() {
-		if (selectedNpc) {
-			startArenaCombat(selectedNpc.id);
-		}
+		if (selectedNpc) startArenaCombat(selectedNpc.id);
 	}
 
 	function getAbilities(npc: Combatant): Ability[] {
@@ -47,209 +41,461 @@
 	}
 </script>
 
-<div class="arena-container">
-	<h1 class="title">The Arena</h1>
-	<p class="description">
-		Select an opponent and press 'Battle' to begin a fight. Your health and aura will be fully
-		restored for the fight, and the outcome will not affect your main game progress.
-	</p>
+<div class="arena-page">
 
-	<div class="main-grid">
-		<div>
-			<div class="opponents-grid">
+	<!-- ═══════════════════════════════════ HEADER -->
+	<div class="page-header">
+		<h1 class="page-title">The Arena</h1>
+		<p class="page-desc">Select an opponent and press Battle to begin. Your HP and Aura will be fully restored, and the outcome won't affect your main game.</p>
+	</div>
+
+	<!-- ═══════════════════════════════════ MAIN LAYOUT -->
+	<div class="main-layout">
+
+		<!-- ── Roster ─────────────────────────────── -->
+		<div class="roster-col">
+			<div class="roster-grid">
 				{#each opponents as npc (npc.id)}
 					<button
-						class="npc-button"
+						class="npc-card"
 						class:selected={selectedNpc?.id === npc.id}
 						on:click={() => selectNpc(npc)}
 					>
-						<img src={getNpcImagePath(npc)} alt={npc.name} width="80" height="80" />
-						<span>{npc.name}</span>
+						<div class="npc-card-img-wrap">
+							<img src={getNpcImagePath(npc)} alt={npc.name} />
+						</div>
+						<span class="npc-card-name">{npc.name}</span>
 					</button>
 				{/each}
 			</div>
 		</div>
 
-		<div>
+		<!-- ── Detail panel ──────────────────────── -->
+		<div class="detail-col">
 			{#if selectedNpc}
-				<div class="npc-details">
-					<!-- <h2 class="npc-name">{selectedNpc.name}</h2> -->
-					<div class="stats-abilities-grid">
-						<div>
-							<h3 class="section-title">Stats</h3>
-							<div class="stats-grid">
-								<Stat statId="hp" value={selectedNpc.baseStats.hp} />
-								<Stat statId="auraShield" value={selectedNpc.baseStats.maxAuraShield} />
-								<Stat statId="physicalAttack" value={selectedNpc.baseStats.physicalAttack} />
-								<Stat statId="elementalAttack" value={selectedNpc.baseStats.elementalAttack} />
-								<Stat statId="physicalDefence" value={selectedNpc.baseStats.physicalDefence} />
-								<Stat statId="elementalDefence" value={selectedNpc.baseStats.elementalDefence} />
-								<Stat statId="critChance" value={selectedNpc.baseStats.critChance} />
-								<Stat statId="evasion" value={selectedNpc.baseStats.evasion} />
-								<Stat statId="critDamage" value={selectedNpc.baseStats.critDamage} />
-								<Stat statId="precision" value={selectedNpc.baseStats.precision} />
-								<Stat statId="speed" value={selectedNpc.baseStats.speed} />
-							</div>
-						</div>
-						<div>
-							<h3 class="section-title">Abilities</h3>
-							<div class="abilities-list">
-								{#each getAbilities(selectedNpc) as ability (ability.id)}
-									<div class="ability-item">
-										<!-- <span>{ability.name}</span> -->
-										<div class="ability-tooltip">
-											<p style="font-weight: bold;">{ability.name}</p>
-											<p>{@html ability.description}</p>
-										</div>
-										<AbilityTag {ability} interactive={false} disabled={false} />
-									</div>
-								{/each}
-							</div>
-							{#if selectedNpc.gearPassives}
-								<h3 class="section-title">Passives</h3>
-								{#each selectedNpc.gearPassives as gearPassive}
-									{gearPassive.name} : {gearPassive?.description}<br />
-								{/each}
+				<div class="detail-panel">
+
+					<!-- NPC identity header -->
+					<div class="detail-header">
+						<img class="detail-portrait" src={getNpcImagePath(selectedNpc)} alt={selectedNpc.name} />
+						<div class="detail-identity">
+							<h2 class="detail-name">{selectedNpc.name}</h2>
+							{#if selectedNpc.elements?.length}
+								<div class="detail-elements">
+									{#each selectedNpc.elements as el}
+										<span class="el-tag" style="background:{el}">{el}</span>
+									{/each}
+								</div>
 							{/if}
 						</div>
 					</div>
 
-					<button on:click={handleBattle} class="battle-button">
-						Battle {selectedNpc.name}
+					<!-- Stats + Abilities side by side -->
+					<div class="stats-abilities">
+						<!-- Stats -->
+						<div class="section">
+							<h3 class="section-label">Stats</h3>
+							<div class="stats-grid">
+								<Stat statId="hp"               value={selectedNpc.baseStats.hp} />
+								<Stat statId="auraShield"       value={selectedNpc.baseStats.maxAuraShield} />
+								<Stat statId="physicalAttack"   value={selectedNpc.baseStats.physicalAttack} />
+								<Stat statId="elementalAttack"  value={selectedNpc.baseStats.elementalAttack} />
+								<Stat statId="physicalDefence"  value={selectedNpc.baseStats.physicalDefence} />
+								<Stat statId="elementalDefence" value={selectedNpc.baseStats.elementalDefence} />
+								<Stat statId="critChance"       value={selectedNpc.baseStats.critChance} />
+								<Stat statId="critDamage"       value={selectedNpc.baseStats.critDamage} />
+								<Stat statId="evasion"          value={selectedNpc.baseStats.evasion} />
+								<Stat statId="precision"        value={selectedNpc.baseStats.precision} />
+								<Stat statId="speed"            value={selectedNpc.baseStats.speed} />
+							</div>
+						</div>
+
+						<!-- Abilities -->
+						<div class="section">
+							<h3 class="section-label">Abilities</h3>
+							<div class="abilities-list">
+								{#each getAbilities(selectedNpc) as ability (ability.id)}
+									<div class="ability-item">
+										<AbilityTag {ability} interactive={false} disabled={false} />
+										<div class="ability-tooltip">
+											<p class="tooltip-name">{ability.name}</p>
+											<p class="tooltip-desc">{@html ability.description}</p>
+										</div>
+									</div>
+								{/each}
+							</div>
+
+							{#if selectedNpc.gearPassives?.length}
+								<h3 class="section-label" style="margin-top: 0.75rem;">Passives</h3>
+								<div class="passives-list">
+									{#each selectedNpc.gearPassives as p}
+										<div class="passive-pill">
+											<span class="passive-name">{p.name}</span>
+											{#if p.description}<span class="passive-desc">{p.description}</span>{/if}
+										</div>
+									{/each}
+								</div>
+							{/if}
+						</div>
+					</div>
+
+					<!-- Battle button -->
+					<button class="battle-btn" on:click={handleBattle}>
+						⚔ Battle {selectedNpc.name}
 					</button>
+				</div>
+			{:else}
+				<div class="no-selection">
+					<span>← Select an opponent</span>
 				</div>
 			{/if}
 		</div>
+
 	</div>
 </div>
 
 <CombatModal />
 
 <style>
-	.arena-container {
+	/* ── Page shell ──────────────────────────────────────────────────────── */
+	.arena-page {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
 		padding: 1rem;
+		height: 100%;
+		box-sizing: border-box;
+		font-family: var(--font-family-pixel);
+		color: #e9d9ca;
+		overflow: hidden;
 	}
-	.title {
-		font-size: 1.5rem;
-		font-weight: bold;
-		margin-bottom: 1rem;
-	}
-	.description {
-		margin-bottom: 1rem;
-	}
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1rem;
-	}
-	@media (min-width: 768px) {
-		.main-grid {
-			grid-template-columns: 1fr 2fr;
-		}
-	}
-	.opponents-grid {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 0.5rem;
-		image-rendering: auto;
 
-		button {
-			display: flex;
-			flex-direction: column;
-		}
+	.page-header { flex-shrink: 0; }
+	.page-title {
+		font-size: 1.6rem;
+		font-family: 'Lexend', sans-serif;
+		font-weight: 700;
+		color: #e9d9ca;
+		margin: 0 0 0.3rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
 	}
-	@media (min-width: 640px) {
-		.opponents-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
+	.page-desc {
+		font-size: 0.65rem;
+		color: #888;
+		margin: 0;
+		line-height: 1.6;
 	}
-	@media (min-width: 768px) {
-		.opponents-grid {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-	.npc-button {
-		padding: 0.5rem;
-		border: 1px solid #4a5568;
-		border-radius: 0.25rem;
-		transition: all 0.2s;
-		background-color: #2d3748;
-		color: white;
-		cursor: pointer;
-	}
-	.npc-button.selected {
-		background-color: #4299e1;
-	}
-	.npc-button img {
-		margin: 0 auto 0.5rem;
-		width: 150px;
-		height: 150px;
-	}
-	.npc-button span {
-		font-size: 0.875rem;
-	}
-	.npc-details {
-		padding: 1rem;
-		background-color: #2d3748;
-		border-radius: 0.25rem;
-	}
-	.npc-name {
-		font-size: 1.25rem;
-		font-weight: bold;
-		margin-bottom: 0.5rem;
-	}
-	.npc-description {
-		font-size: 0.875rem;
-		font-style: italic;
-		margin-bottom: 1rem;
-	}
-	.stats-abilities-grid {
+
+	/* ── Layout ──────────────────────────────────────────────────────────── */
+	.main-layout {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
-		margin-bottom: 1rem;
+		grid-template-columns: auto 1fr;
+		gap: 0.75rem;
+		flex: 1;
+		min-height: 0;
 	}
+
+	/* ── Roster column ───────────────────────────────────────────────────── */
+	.roster-col {
+		overflow-y: auto;
+		min-height: 0;
+		/* border: 1px solid white; */
+		flex: 1;
+		box-sizing: border-box;
+		/* scrollbar-width: none; */
+	}
+	
+	.roster-grid {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 0.5rem;
+		padding-right: 1.3rem;
+		padding-bottom: 1rem;
+	}
+
+	/* NPC portrait card — full game button style */
+	.npc-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0;
+		padding: 0;
+		padding-bottom: 0.5rem;
+		background-color: #2e2e2e;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -5px 0 0px inset;
+		border-radius: 14px;
+		cursor: pointer;
+		transition: 0.1s all ease-in;
+		overflow: hidden;
+		width: 130px;
+	}
+	.npc-card:hover {
+		transform: translateY(2px);
+		box-shadow: #00000056 0 -5px 0 -3px inset;
+		background-color: #383838;
+	}
+	.npc-card.selected {
+		background-color: #435e52;
+		border-color: #6a9880;
+		box-shadow: #00000056 0 -5px 0 0px inset, 0 0 0 1px #6a9880;
+	}
+
+	.npc-card-img-wrap {
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		overflow: hidden;
+		border-radius: 11px 11px 0 0;
+	}
+	.npc-card-img-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.2s ease;
+		image-rendering:auto;
+	}
+	.npc-card:hover .npc-card-img-wrap img { transform: scale(1.04); }
+
+	.npc-card-name {
+		font-size: 0.58rem;
+		color: #cd804d;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		padding-top: 0.4rem;
+		text-align: center;
+	}
+	.npc-card.selected .npc-card-name { color: #e9d9ca; }
+
+	/* ── Detail column ───────────────────────────────────────────────────── */
+	.detail-col {
+		min-height: 0;
+		overflow-y: auto;
+		/* flex-grow: 1; */
+		width: fit-content;
+		padding-bottom: .5rem;
+		
+	}
+
+	.detail-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		height: 100%;
+		box-sizing: border-box;
+	}
+
+	/* Identity header */
+	.detail-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		background-color: #435e52;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -5px 0 0px inset;
+		border-radius: 18px;
+		padding: 0.6rem 0.75rem;
+		flex-shrink: 0;
+	}
+	.detail-portrait {
+		width: 64px;
+		height: 64px;
+		object-fit: cover;
+		border-radius: 10px;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -3px 0 0px inset;
+		flex-shrink: 0;
+	}
+	.detail-identity { display: flex; flex-direction: column; gap: 0.3rem; }
+	.detail-name {
+		font-family: 'Lexend', sans-serif;
+		font-size: 1.1rem;
+		font-weight: 700;
+		margin: 0;
+		color: #e9d9ca;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+	.detail-elements { display: flex; gap: 4px; flex-wrap: wrap; }
+	.el-tag {
+		font-size: 0.52rem;
+		padding: 2px 6px 4px;
+		border-radius: 4px;
+		border: 2px solid #00000056;
+		text-transform: capitalize;
+	}
+
+	/* Stats + Abilities */
+	.stats-abilities {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.6rem;
+		flex: 1;
+		min-height: 0;
+	}
+
+	.section {
+		background-color: #2e2e2e;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -5px 0 0px inset;
+		border-radius: 18px;
+		padding: 0.6rem 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		min-height: 0;
+		/* overflow: hidden; */
+	}
+
+	.section-label {
+		font-size: 0.6rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #cd804d;
+		margin: 0;
+	}
+
 	.stats-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 0.25rem;
+		gap: 2px;
 	}
-	.section-title {
-		font-weight: bold;
-	}
+
+	/* Abilities */
 	.abilities-list {
-		position: relative;
-		display: inline-flex;
+		display: flex;
 		flex-wrap: wrap;
-		gap: 0.25rem;
+		gap: 0.3rem;
 	}
-	.abilities-list .ability-item {
+
+	.ability-item {
 		position: relative;
-		list-style: none;
-		padding: 0;
-		margin: 0;
 	}
-	.abilities-list .ability-tooltip {
-		position: absolute;
+	.ability-tooltip {
 		display: none;
-		background-color: #1a202c;
-		color: white;
-		padding: 0.5rem;
-		border-radius: 0.25rem;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-		z-index: 10;
-		width: 256px;
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 0;
+		z-index: 50;
+		background-color: #1a1a1a;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -4px 0 0px inset, 0 4px 20px rgba(0,0,0,0.6);
+		border-radius: 12px;
+		padding: 0.5rem 0.6rem;
+		width: 220px;
+		pointer-events: none;
 	}
-	.abilities-list .ability-item:hover .ability-tooltip {
-		display: block;
+	.ability-item:hover .ability-tooltip { display: block; }
+	.tooltip-name {
+		font-size: 0.65rem;
+		color: #cd804d;
+		font-weight: bold;
+		margin: 0 0 0.25rem;
 	}
-	.battle-button {
+	.tooltip-desc {
+		font-size: 0.6rem;
+		color: #aaa;
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	/* Passives */
+	.passives-list { display: flex; flex-direction: column; gap: 0.3rem; }
+	.passive-pill {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		padding: 4px 8px 6px;
+		background-color: #262626;
+		border: 2px solid #00000056;
+		box-shadow: #00000056 0 -2px 0 0px inset;
+		border-radius: 8px;
+	}
+	.passive-name { font-size: 0.75rem; color: #7edb7e; }
+	.passive-desc { font-size: 0.68rem; color: #888; }
+
+	/* Battle button — full blocky press style */
+	.battle-btn {
 		width: 100%;
-		padding: 0.5rem 1rem;
-		background-color: #4299e1;
-		color: white;
-		border: none;
-		border-radius: 0.25rem;
+		padding: 0.75rem 1rem 1rem;
+		background-color: #435e52;
+		color: #e9d9ca;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -6px 0 0px inset;
+		border-radius: 14px;
 		cursor: pointer;
+		font-family: var(--font-family-pixel);
+		font-size: 0.85rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		transition: 0.1s all ease-in;
+		flex-shrink: 0;
+	}
+	.battle-btn:hover {
+		transform: translateY(2px);
+		box-shadow: #00000056 0 -6px 0 -4px inset;
+		background-color: #4f7060;
+	}
+	.battle-btn:active {
+		transform: translateY(4px);
+		box-shadow: #00000056 0 -6px 0 -6px inset;
+	}
+
+	.no-selection {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		color: #444;
+		font-size: 0.75rem;
+	}
+
+	/* ── Mobile ──────────────────────────────────────────────────────────── */
+	@media (max-width: 768px) {
+		.arena-page {
+			overflow-y: auto;
+			height: auto;
+			padding: 0.75rem;
+			gap: 0.6rem;
+		}
+
+		.main-layout {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto 1fr;
+			flex: none;
+		}
+
+		/* Roster becomes a horizontal scroll strip */
+		.roster-col {
+			overflow-x: auto;
+			overflow-y: visible;
+		}
+		.roster-grid {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			gap: 0.5rem;
+			padding-bottom: 0.25rem;
+		}
+		.npc-card {
+			flex-shrink: 0;
+			width: 90px;
+		}
+
+		/* Detail fills remaining space */
+		.detail-col { overflow-y: visible; }
+
+		.stats-abilities {
+			grid-template-columns: 1fr;
+		}
+
+		.detail-portrait { width: 52px; height: 52px; }
+		.detail-name { font-size: 0.9rem; }
+	}
+
+	@media (max-width: 480px) {
+		.npc-card { width: 76px; }
+		.stats-abilities { grid-template-columns: 1fr; }
 	}
 </style>

@@ -13,8 +13,8 @@
     "faction": "solis_saints",
     "isCombatant": true,
     "types": [
-        "Light",
-        "Earth"
+        "Earth",
+        "Light"
     ],
     "baseStats": {
         "hp": 500,

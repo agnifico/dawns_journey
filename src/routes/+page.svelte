@@ -27,7 +27,7 @@
 		{ src: '/images/characters/group/g10.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g11.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g12.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g13.png', alt: 'Main Characters' },
+		{ src: '/images/characters/group/g13.png', alt: 'Main Characters' }
 	];
 	const slideshowImages = [...groupImages];
 
@@ -59,13 +59,22 @@
 		}
 	}
 
+	async function exhibitionModeStart() {
+		if (selectedMapId) {
+			applyProfile('mage');
+			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
+			await npcStore.initializeGlobalNpcs();
+			playerStore.update((p) => ({ ...p, isInitialized: true }));
+			goto('/map');
+		}
+	}
+
 	function continueGame() {
 		goto('/map');
 	}
 </script>
 
 <main class="new-player-view" class:initialized={$playerStore.isInitialized}>
-
 	<!-- ============================================================
 	     DESKTOP LAYOUT (unchanged)
 	     ============================================================ -->
@@ -81,7 +90,12 @@
 					{#each profiles as profile (profile.id)}
 						<label class="radio-label" class:selected={selectedProfileId === profile.id}>
 							<img class="avatar" src={profile.avatar} alt="" />
-							<input type="radio" name="profile-select" value={profile.id} bind:group={selectedProfileId} />
+							<input
+								type="radio"
+								name="profile-select"
+								value={profile.id}
+								bind:group={selectedProfileId}
+							/>
 							<p>{profile.name}</p>
 						</label>
 					{/each}
@@ -99,7 +113,7 @@
 						<button on:click={() => goto('/homestead/farming')}>Farming</button>
 						<button on:click={() => goto('/journal')}>Journal</button>
 						<button on:click={() => goto('/shop')}>Shop</button>
-						<br>
+						<br />
 						<button on:click={SaveLoadService.saveGame} class="save">Save Game</button>
 						<button on:click={SaveLoadService.loadGame}>Load Game</button>
 						<button on:click={SaveLoadService.clearSave} class="danger">Delete Save</button>
@@ -114,7 +128,20 @@
 				{#if $playerStore.isInitialized}
 					<button class="start-game-button" on:click={continueGame}>Continue Game</button>
 				{:else}
-					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}>New Game</button>
+					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}
+						>New Game</button
+					>
+					<button
+						class="start-game-button exh-mode-btn"
+						on:click={exhibitionModeStart}
+						disabled={!selectedMapId}
+					>
+						Exhibition Mode
+						<p>
+							Start with everything unlocked, allowing you to freely look around the all parts of
+							this game.
+						</p>
+					</button>
 				{/if}
 			</div>
 			<div class="grid-box div7">
@@ -128,7 +155,6 @@
 	     MOBILE LAYOUT
 	     ============================================================ -->
 	<div class="mobile-only mobile-root">
-
 		<!-- SECTION 1: Hero — full bleed slideshow + title + primary CTA -->
 		<section class="m-section m-hero">
 			<!-- Slideshow bleeds as background -->
@@ -145,12 +171,8 @@
 				</div>
 
 				{#if $playerStore.isInitialized}
-					<button class="m-cta-primary" on:click={continueGame}>
-						▶ Continue Game
-					</button>
-					<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}>
-						Load Save
-					</button>
+					<button class="m-cta-primary" on:click={continueGame}> ▶ Continue Game </button>
+					<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}> Load Save </button>
 				{:else}
 					<div class="m-new-game-block">
 						<!-- Profile selector: horizontal scroll row -->
@@ -160,7 +182,12 @@
 								<label class="m-radio-label" class:selected={selectedProfileId === profile.id}>
 									<img src={profile.avatar} alt={profile.name} />
 									<span>{profile.name}</span>
-									<input type="radio" name="m-profile-select" value={profile.id} bind:group={selectedProfileId} />
+									<input
+										type="radio"
+										name="m-profile-select"
+										value={profile.id}
+										bind:group={selectedProfileId}
+									/>
 								</label>
 							{/each}
 						</div>
@@ -185,8 +212,12 @@
 				<div class="m-actions-grid">
 					<button class="m-action-btn" on:click={() => goto('/map')}>🗺 Map</button>
 					<button class="m-action-btn" on:click={() => goto('/arena')}>⚔ Arena</button>
-					<button class="m-action-btn" on:click={() => goto('/homestead/workshop')}>🔨 Workshop</button>
-					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}>🌱 Farming</button>
+					<button class="m-action-btn" on:click={() => goto('/homestead/workshop')}
+						>🔨 Workshop</button
+					>
+					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}
+						>🌱 Farming</button
+					>
 					<button class="m-action-btn" on:click={() => goto('/journal')}>📖 Journal</button>
 					<button class="m-action-btn" on:click={() => goto('/shop')}>🏪 Shop</button>
 					<button class="m-action-btn" on:click={() => goto('/settings')}>⚙ Settings</button>
@@ -207,7 +238,6 @@
 				<NpcViewer />
 			</div>
 		</section>
-
 	</div>
 </main>
 
@@ -231,8 +261,14 @@
 	/* ============================================================
 	   DESKTOP (unchanged)
 	   ============================================================ */
-	.mobile-only  { display: none; }
-	.desktop-only { display: flex; width: 100%; height: 100%; }
+	.mobile-only {
+		display: none;
+	}
+	.desktop-only {
+		display: flex;
+		width: 100%;
+		height: 100%;
+	}
 
 	.overlay {
 		position: absolute;
@@ -284,7 +320,9 @@
 		line-height: 3.5rem;
 	}
 
-	.grid-box p { font-size: 1em; }
+	.grid-box p {
+		font-size: 1em;
+	}
 
 	.grid-box h3 {
 		font-family: var(--font-family-pixel);
@@ -312,19 +350,39 @@
 		padding: 0.5rem;
 		width: fit-content;
 	}
-	.radio-label img { filter: saturate(0); height: 50px; width: 50px; }
-	.radio-label:hover img { filter: saturate(0) brightness(1.1); }
-	.radio-label.selected { background-color: hsla(0, 0%, 100%, 0.5); }
-	.radio-label.selected img { filter: saturate(1); }
-	.radio-label.selected p { color: #222; }
-	.radio-label input[type='radio'] { display: none; }
+	.radio-label img {
+		filter: saturate(0);
+		height: 50px;
+		width: 50px;
+	}
+	.radio-label:hover img {
+		filter: saturate(0) brightness(1.1);
+	}
+	.radio-label.selected {
+		background-color: hsla(0, 0%, 100%, 0.5);
+	}
+	.radio-label.selected img {
+		filter: saturate(1);
+	}
+	.radio-label.selected p {
+		color: #222;
+	}
+	.radio-label input[type='radio'] {
+		display: none;
+	}
 
-	.avatar { position: relative; max-width: 120px; max-height: 120px; margin-right:.5rem; image-rendering: auto; }
+	.avatar {
+		position: relative;
+		max-width: 120px;
+		max-height: 120px;
+		margin-right: 0.5rem;
+		image-rendering: auto;
+	}
 
 	.game-actions {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: .5rem;
+		gap: 0.5rem;
 	}
 	.game-actions button {
 		font-family: var(--font-family-pixel);
@@ -337,27 +395,66 @@
 		box-shadow: #00000056 0 -3px 0 3px inset;
 		transition: 150ms all ease-in-out;
 	}
-	.game-actions button:hover { transform: translateY(1px); box-shadow: #00000056 0 -2px 0 2px inset; }
-	.game-actions button.danger:hover { background-color: #c53030; }
+	.game-actions button:hover {
+		transform: translateY(1px);
+		box-shadow: #00000056 0 -2px 0 2px inset;
+	}
+	.game-actions button.danger:hover {
+		background-color: #c53030;
+	}
 	.game-actions button.save {
 		background-color: #435e52;
 		grid-column: span 2 / span 1;
 	}
 
 	.start-game-button {
+		box-sizing: border-box;
+		/* height: 100px; */
+		flex-grow: 1;
+		padding: 1rem;
 		font-family: var(--font-family-pixel);
-		background-color: transparent;
-		color: var(--text-white);
-		border: none;
-		width: 100%; height: 100%;
-		padding: 1.5rem 3rem;
-		font-size: 1.8em;
-		cursor: pointer;
-		box-shadow: #00000056 0 5px 15px rgba(0,0,0,0.5), inset 0 -5px 10px rgba(0,0,0,0.3);
-		transition: all 0.2s ease-in-out;
-		display: flex; align-items: center; justify-content: center;
-		text-align: center;
-		text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+		font-size: 1.8rem;
+		color: #e9d9ca;
+		background-color: #435e52;
+		border-radius: 18px;
+		border: 3px solid #00000056;
+		box-shadow: #00000056 0 -6px 0 0px inset;
+		transition: 0.1s all ease-in;
+	}
+	.start-game-button:hover {
+		transform: translateY(2px);
+		filter: brightness(1.4) contrast(1.5);
+		box-shadow:
+			#00000056 0 -6px 0px -4px inset,
+			color-mix(in srgb, #00000056 50%, #435e52 50%) 0px -2px 0 0px;
+		/* background-color: var(--color-accent); */
+	}
+	.exh-mode-btn {
+		p {
+			color: #cd804d;
+			font-size: 0.75rem;
+			visibility: hidden;
+			opacity: 0;
+			transition: 0.1s all ease;
+		}
+		font-size: 1rem;
+		width: 25%;
+		/* flex-grow: 0; */
+		overflow: hidden;
+		&:hover {
+			text-align: left;
+			padding-top: 1.5rem;
+			width: 100%;
+			background-color: #2e2e2e;
+			color: #e9d9ca;
+			box-shadow:
+			#00000056 0 -6px 0px -4px inset,
+			color-mix(in srgb, #00000056 50%, #2e2e2e 50%) 0px -2px 0 0px;
+			P {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
 	}
 
 	.div1 {
@@ -397,12 +494,15 @@
 		grid-column: span 2 / span 2;
 		grid-column-start: 3;
 		grid-row-start: 3;
-		background-color: #435e52;
-	}
-	.div6:hover {
-		background-color: #34453d;
-		transform: translateY(2px);
-		box-shadow: #00000056 0 8px 20px rgba(0,0,0,0.6), inset 0 -7px 12px rgba(0,0,0,0.4);
+		/* grid-row: span 2 / span ; */
+		/* overflow: hidden; */
+		display: flex;
+		gap: 1rem;
+		background-color: transparent;
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+		justify-content: space-between;
 	}
 	.div7 {
 		grid-column: span 2 / span 2;
@@ -422,8 +522,12 @@
 	   MOBILE
 	   ============================================================ */
 	@media (max-width: 768px) {
-		.desktop-only { display: none !important; }
-		.mobile-only  { display: flex; }
+		.desktop-only {
+			display: none !important;
+		}
+		.mobile-only {
+			display: flex;
+		}
 
 		.new-player-view {
 			overflow-y: auto;
@@ -482,10 +586,10 @@
 			z-index: 1;
 			background: linear-gradient(
 				to bottom,
-				rgba(0,0,0,0.1) 0%,
-				rgba(0,0,0,0.2) 40%,
-				rgba(20,20,20,0.85) 70%,
-				rgba(20,20,20,0.97) 100%
+				rgba(0, 0, 0, 0.1) 0%,
+				rgba(0, 0, 0, 0.2) 40%,
+				rgba(20, 20, 20, 0.85) 70%,
+				rgba(20, 20, 20, 0.97) 100%
 			);
 		}
 
@@ -506,13 +610,13 @@
 			line-height: 1;
 			color: #e9d9ca;
 			margin: 0 0 0.25rem;
-			text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+			text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
 		}
 
 		.m-title-block p {
 			font-family: var(--font-family-pixel);
 			font-size: 0.7rem;
-			color: rgba(255,255,255,0.5);
+			color: rgba(255, 255, 255, 0.5);
 			margin: 0;
 			letter-spacing: 0.05em;
 		}
@@ -541,11 +645,13 @@
 			-webkit-overflow-scrolling: touch;
 			scrollbar-width: none;
 		}
-		.m-profile-desc{
+		.m-profile-desc {
 			font-family: var(--font-family-pixel);
 			font-size: 0.75rem;
 		}
-		.m-profile-row::-webkit-scrollbar { display: none; }
+		.m-profile-row::-webkit-scrollbar {
+			display: none;
+		}
 
 		.m-radio-label {
 			flex-shrink: 0;
@@ -555,7 +661,7 @@
 			gap: 5px;
 			padding: 8px;
 			border-radius: 10px;
-			background: rgba(255,255,255,0.07);
+			background: rgba(255, 255, 255, 0.07);
 			border: 2px solid transparent;
 			cursor: pointer;
 			transition: all 0.18s ease;
@@ -570,9 +676,11 @@
 		.m-radio-label span {
 			font-family: var(--font-family-pixel);
 			font-size: 0.6rem;
-			color: rgba(255,255,255,0.5);
+			color: rgba(255, 255, 255, 0.5);
 		}
-		.m-radio-label input { display: none; }
+		.m-radio-label input {
+			display: none;
+		}
 		.m-radio-label.selected {
 			background: rgba(205, 128, 77, 0.25);
 			border-color: #cd804d;
@@ -595,26 +703,36 @@
 			padding: 1rem 1.5rem;
 			cursor: pointer;
 			width: 100%;
-			box-shadow: #00000056 0 -4px 0 3px inset, 0 4px 20px rgba(0,0,0,0.4);
+			box-shadow:
+				#00000056 0 -4px 0 3px inset,
+				0 4px 20px rgba(0, 0, 0, 0.4);
 			transition: 150ms all ease-in-out;
 			letter-spacing: 0.05em;
 		}
-		.m-cta-primary:active { transform: translateY(3px); box-shadow: #00000056 0 -1px 0 2px inset; }
-		.m-cta-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+		.m-cta-primary:active {
+			transform: translateY(3px);
+			box-shadow: #00000056 0 -1px 0 2px inset;
+		}
+		.m-cta-primary:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
 
 		.m-cta-secondary {
 			font-family: var(--font-family-pixel);
 			font-size: 0.75rem;
-			background: rgba(255,255,255,0.07);
-			color: rgba(255,255,255,0.6);
-			border: 1px solid rgba(255,255,255,0.12);
+			background: rgba(255, 255, 255, 0.07);
+			color: rgba(255, 255, 255, 0.6);
+			border: 1px solid rgba(255, 255, 255, 0.12);
 			border-radius: 8px;
 			padding: 0.6rem 1rem;
 			cursor: pointer;
 			width: 100%;
 			transition: 150ms all ease-in-out;
 		}
-		.m-cta-secondary:active { background: rgba(255,255,255,0.12); }
+		.m-cta-secondary:active {
+			background: rgba(255, 255, 255, 0.12);
+		}
 
 		/* Scroll hint */
 		.m-scroll-hint {
@@ -624,13 +742,18 @@
 			transform: translateX(-50%);
 			z-index: 2;
 			font-size: 1.2rem;
-			color: rgba(255,255,255,0.3);
+			color: rgba(255, 255, 255, 0.3);
 			animation: bounce 2s ease-in-out infinite;
 		}
 
 		@keyframes bounce {
-			0%, 100% { transform: translateX(-50%) translateY(0); }
-			50%       { transform: translateX(-50%) translateY(6px); }
+			0%,
+			100% {
+				transform: translateX(-50%) translateY(0);
+			}
+			50% {
+				transform: translateX(-50%) translateY(6px);
+			}
 		}
 
 		/* ---- ACTIONS ---- */
@@ -664,7 +787,10 @@
 			text-align: left;
 			min-height: 52px;
 		}
-		.m-action-btn:active { transform: translateY(2px); box-shadow: #00000056 0 -1px 0 2px inset; }
+		.m-action-btn:active {
+			transform: translateY(2px);
+			box-shadow: #00000056 0 -1px 0 2px inset;
+		}
 
 		.m-save-row {
 			display: grid;
@@ -684,9 +810,15 @@
 			box-shadow: #00000056 0 -2px 0 2px inset;
 			transition: 150ms all ease-in-out;
 		}
-		.m-save-btn.save { background-color: #435e52; }
-		.m-save-btn.danger:active { background-color: #c53030; }
-		.m-save-btn:active { transform: translateY(2px); }
+		.m-save-btn.save {
+			background-color: #435e52;
+		}
+		.m-save-btn.danger:active {
+			background-color: #c53030;
+		}
+		.m-save-btn:active {
+			transform: translateY(2px);
+		}
 
 		/* ---- CHARACTERS ---- */
 		.m-characters {

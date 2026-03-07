@@ -36,7 +36,7 @@ export interface ConditionalDamageEffect {
     type: 'conditional_damage';
     damageType: 'physical' | 'elemental';
     baseMultiplier: number;
-    condition: 'hp_below' | 'hp_above' | 'status_active' | 'self_hp_below';
+    condition: 'hp_below' | 'hp_above' | 'status_active';
     threshold?: number;
     statusId?: string;
     bonusMultiplier: number;
@@ -45,23 +45,23 @@ export interface ConditionalDamageEffect {
 export interface StatusEffectApplication {
     type: 'apply_status';
     target: 'self' | 'enemy';
+    /**
+     * 'replace' (default) — removes any existing effect with the same id
+     *   before applying. Refreshes the timer without stacking damage.
+     *   Use this for every NPC that should keep one poison/stun stack.
+     *
+     * 'stack' — allows multiple simultaneous instances of the same effect.
+     *   Use only for Sylvie's intentional multi-stack poison behaviour.
+     */
     stackBehavior?: 'replace' | 'stack';
     statusEffect: {
         id: string;
         name: string;
         duration: number;
         damagePerTurn?: number;
-        /** % of maxHp restored as HP each turn. */
-        healPerTurn?: number;
         statModifiers?: Partial<PlayerBaseStats>;
         isStunned?: boolean;
         flags?: StatusEffect['flags'];
-        /**
-         * Broad category used for immunity checks.
-         * e.g. category: 'poison' → blocked by flag 'immune_to_poison'
-         *      category: 'stun'   → blocked by flag 'immune_to_stun'
-         */
-        category?: string;
     };
 }
 
@@ -69,7 +69,7 @@ export interface StatModifierEffect {
     type: 'stat_modifier';
     target: 'self' | 'enemy';
     duration: number;
-    modifiers: Partial<Omit<PlayerBaseStats, 'hp' | 'maxHp' | 'auraShield' | 'maxAuraShield'>>;
+    modifiers: Partial<Omit<PlayerBaseStats, 'hp' | 'maxHp' | 'auraShield' | 'maxAuraShield' | 'precision'>>;
 }
 
 export interface ShieldEffect {
@@ -98,32 +98,6 @@ export interface HealFullEffect {
     target: 'self';
 }
 
-/**
- * Strips negative or positive status effects from a target.
- *
- * cleanse: 'negative' — used on self. Removes DoTs, stuns, stat debuffs.
- * cleanse: 'positive' — used on enemy (Dispel). Removes buffs and ability-granted
- *                       immunity statuses. Never removes gear passives.
- */
-export interface CleanseEffect {
-    type: 'cleanse';
-    cleanse: 'negative' | 'positive';
-    target: 'self' | 'enemy';
-}
-
-/**
- * Deals damage and heals the attacker for a percentage of damage dealt.
- * The heal scales with actual damage (including crits and element bonuses),
- * unlike a flat damage + heal combo.
- */
-export interface LifestealEffect {
-    type: 'lifesteal';
-    damageType: 'physical' | 'elemental';
-    multiplier: number;
-    /** Fraction of damage dealt restored as HP to the attacker. e.g. 0.50 = 50% lifesteal. */
-    healRatio: number;
-}
-
 export type AnyAbilityEffect =
     | DamageEffect
     | ConditionalDamageEffect
@@ -133,9 +107,7 @@ export type AnyAbilityEffect =
     | HealEffect
     | StatTransferEffect
     | HealPercentMaxHpEffect
-    | HealFullEffect
-    | CleanseEffect
-    | LifestealEffect;
+    | HealFullEffect;
 
 // ---------------------------------------------------------------------------
 // Effect result
@@ -146,6 +118,11 @@ export interface EffectResult {
     updatedDefender: Combatant;
     logs: CombatLogMessage[];
     totalDamage: number;
+    /**
+     * True if this effect was a damage effect and at least one hit landed.
+     * Used by CombatEngine to gate whether the following apply_status fires.
+     * Undefined for non-damage effects (they don't affect the gate).
+     */
     didHit?: boolean;
     hitCount?: number;
     missCount?: number;
@@ -158,30 +135,6 @@ export interface EffectResult {
 
 function sideOf(combatant: Combatant): CombatLogSide {
     return combatant.isPlayer ? 'player' : 'opponent';
-}
-
-function isImmuneToStatus(target: Combatant, category: string | undefined): boolean {
-    if (!category) return false;
-    const immunityFlag = `immune_to_${category}` as StatusEffect['flags'][number];
-    return target.statusEffects.some(s => s.flags?.includes(immunityFlag));
-}
-
-/** Returns true if the attacker has a guaranteed_hit buff active. */
-function hasGuaranteedHit(attacker: Combatant): boolean {
-    return attacker.statusEffects.some(s => s.flags?.includes('guaranteed_hit'));
-}
-
-/**
- * Consumes the guaranteed_hit buff from the attacker after it fires.
- * Removes all status effects with the guaranteed_hit flag.
- */
-function consumeGuaranteedHit(attacker: Combatant): Combatant {
-    return {
-        ...attacker,
-        statusEffects: attacker.statusEffects.filter(
-            s => !(s.flags?.includes('guaranteed_hit'))
-        ),
-    };
 }
 
 // ---------------------------------------------------------------------------
@@ -211,16 +164,18 @@ export function executeHealEffect(
         updatedTarget.auraShield = Math.min(updatedTarget.maxAuraShield, updatedTarget.auraShield + healAmount);
     }
 
+    const log: CombatLogMessage = {
+        type: 'heal',
+        side: sideOf(attacker),
+        targetName,
+        amount: healAmount,
+        healType: effect.healType,
+    };
+
     return {
         updatedAttacker: effect.target === 'self' ? updatedTarget : attacker,
         updatedDefender: effect.target === 'enemy' ? updatedTarget : defender,
-        logs: [{
-            type: 'heal',
-            side: sideOf(attacker),
-            targetName,
-            amount: healAmount,
-            healType: effect.healType,
-        }],
+        logs: [log],
         totalDamage: 0,
     };
 }
@@ -276,6 +231,10 @@ export function executeStatTransferEffect(
 ): EffectResult {
     const actorName = attacker.isPlayer ? 'Player' : attacker.name;
 
+    // immune_to_stat_reduction protects against enemy debuffs — it does NOT block
+    // self-transfers like Iron Wall / Frost Reaper.
+    // immune_to_transfer_reduction (Unshackled) means the source stat is kept
+    // at full value — the gain still happens, the loss doesn't.
     const suppressReduction = attacker.statusEffects.some(s => s.flags?.includes('immune_to_transfer_reduction'));
     const newBaseStats = { ...attacker.baseStats };
 
@@ -328,30 +287,34 @@ export function executeDamageEffect(
     let missCount = 0;
     let critCount = 0;
     let updatedDefender = { ...defender };
-    let updatedAttacker = { ...attacker };
     const hitAttempts = effect.hitCount || 1;
     const isMultiHit = hitAttempts > 1;
 
-    const guaranteed = hasGuaranteedHit(attacker);
-    if (guaranteed) {
-        updatedAttacker = consumeGuaranteedHit(updatedAttacker);
-    }
+    // Hit chance is purely the ability's accuracy value.
+    // Combatant precision is NOT a hit multiplier — it reduces defender evasion (see calculateEvasion).
+    const combinedAccuracy = abilityAccuracy;
 
     for (let i = 0; i < hitAttempts; i++) {
-        if (!guaranteed && Math.random() > abilityAccuracy) {
+        // First check accuracy (ability × combatant), then check evasion (defender-level)
+        if (Math.random() > combinedAccuracy) {
             missCount++;
-            if (!isMultiHit) logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
+            if (!isMultiHit) {
+                logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
+            }
             continue;
         }
-        if (!guaranteed && calculateEvasion(updatedDefender, attacker.precision ?? 0)) {
+
+        if (calculateEvasion(updatedDefender, attacker.precision ?? 0)) {
             missCount++;
-            if (!isMultiHit) logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
+            if (!isMultiHit) {
+                logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
+            }
             continue;
         }
 
         hitCount++;
         const { damage, isCritical } = calculateDamage(
-            updatedAttacker, updatedDefender,
+            attacker, updatedDefender,
             effect.damageType,
             effect.damageType === 'elemental' ? [attacker.activeElement] : [],
             effect.multiplier
@@ -360,32 +323,55 @@ export function executeDamageEffect(
         if (isCritical) critCount++;
         updatedDefender = applyDamage(updatedDefender, damage);
 
+        // For multi-hit, log each hit individually
         if (isMultiHit) {
             logs.push({
-                type: 'damage', side: sideOf(attacker),
-                amount: damage, isCritical, damageType: effect.damageType,
+                type: 'damage',
+                side: sideOf(attacker),
+                amount: damage,
+                isCritical,
+                damageType: effect.damageType,
                 element: effect.damageType === 'elemental' ? attacker.activeElement : undefined,
-                hitIndex: i + 1, totalHits: hitAttempts,
+                hitIndex: i + 1,
+                totalHits: hitAttempts,
             });
         }
     }
 
     if (!isMultiHit && hitCount > 0) {
+        // Single hit — one clean damage log
         logs.push({
-            type: 'damage', side: sideOf(attacker),
-            amount: totalDamage, isCritical: critCount > 0, damageType: effect.damageType,
+            type: 'damage',
+            side: sideOf(attacker),
+            amount: totalDamage,
+            isCritical: critCount > 0,
+            damageType: effect.damageType,
             element: effect.damageType === 'elemental' ? attacker.activeElement : undefined,
         });
     } else if (isMultiHit && hitCount > 0) {
+        // Summary after individual hit logs
         logs.push({
-            type: 'multi_hit_summary', side: sideOf(attacker),
-            hitCount, totalHits: hitAttempts, totalDamage,
+            type: 'multi_hit_summary',
+            side: sideOf(attacker),
+            hitCount,
+            totalHits: hitAttempts,
+            totalDamage,
         });
     } else if (isMultiHit && hitCount === 0) {
+        // All hits missed
         logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
     }
 
-    return { updatedAttacker, updatedDefender, logs, totalDamage, didHit: hitCount > 0, hitCount, missCount, critCount };
+    return {
+        updatedAttacker: attacker,
+        updatedDefender,
+        logs,
+        totalDamage,
+        didHit: hitCount > 0,
+        hitCount,
+        missCount,
+        critCount,
+    };
 }
 
 export function executeConditionalDamageEffect(
@@ -396,17 +382,17 @@ export function executeConditionalDamageEffect(
     applyDamage: ApplyDamageFunction,
 ): EffectResult {
     let multiplier = effect.baseMultiplier;
+    let conditionMet = false;
 
     if (effect.condition === 'hp_below' && effect.threshold !== undefined) {
-        if ((defender.hp / defender.maxHp) < effect.threshold) multiplier = effect.bonusMultiplier;
+        conditionMet = (defender.hp / defender.maxHp) < effect.threshold;
     } else if (effect.condition === 'hp_above' && effect.threshold !== undefined) {
-        if ((defender.hp / defender.maxHp) > effect.threshold) multiplier = effect.bonusMultiplier;
+        conditionMet = (defender.hp / defender.maxHp) > effect.threshold;
     } else if (effect.condition === 'status_active' && effect.statusId) {
-        if (defender.statusEffects.some(s => s.id === effect.statusId)) multiplier = effect.bonusMultiplier;
-    } else if (effect.condition === 'self_hp_below' && effect.threshold !== undefined) {
-        // Desperation attack — attacker's own HP is low
-        if ((attacker.hp / attacker.maxHp) < effect.threshold) multiplier = effect.bonusMultiplier;
+        conditionMet = defender.statusEffects.some(s => s.id === effect.statusId);
     }
+
+    if (conditionMet) multiplier = effect.bonusMultiplier;
 
     const { damage, isCritical } = calculateDamage(
         attacker, defender,
@@ -419,12 +405,15 @@ export function executeConditionalDamageEffect(
         updatedAttacker: attacker,
         updatedDefender: applyDamage(defender, damage),
         logs: [{
-            type: 'damage', side: sideOf(attacker),
-            amount: damage, isCritical, damageType: effect.damageType,
+            type: 'damage',
+            side: sideOf(attacker),
+            amount: damage,
+            isCritical,
+            damageType: effect.damageType,
             element: effect.damageType === 'elemental' ? attacker.activeElement : undefined,
         }],
         totalDamage: damage,
-        didHit: true,
+        didHit: true, // conditional_damage always resolves (no accuracy/evasion check)
         critCount: isCritical ? 1 : 0,
     };
 }
@@ -435,22 +424,15 @@ export function executeStatusEffect(
     effect: StatusEffectApplication,
     lastDamageHit: boolean,
 ): EffectResult {
+    // If this status effect is attached to an attack (i.e. the previous effect
+    // in the same ability was a damage effect), only apply it if that hit landed.
+    // We detect "attached to an attack" by checking if lastDamageHit was explicitly
+    // set to false (meaning a damage effect ran and missed).
     if (!lastDamageHit) {
-        return { updatedAttacker: attacker, updatedDefender: defender, logs: [], totalDamage: 0 };
-    }
-
-    const isBuff = effect.target === 'self';
-    const rawTarget = isBuff ? attacker : defender;
-    const targetName = rawTarget.isPlayer ? 'Player' : rawTarget.name;
-
-    if (isImmuneToStatus(rawTarget, effect.statusEffect.category)) {
         return {
             updatedAttacker: attacker,
             updatedDefender: defender,
-            logs: [{
-                type: 'immune', side: sideOf(rawTarget), targetName,
-                what: effect.statusEffect.category ?? effect.statusEffect.name,
-            }],
+            logs: [],
             totalDamage: 0,
         };
     }
@@ -465,15 +447,23 @@ export function executeStatusEffect(
     };
 
     const stackBehavior = effect.stackBehavior ?? 'replace';
+    const isBuff = effect.target === 'self';
+    const targetName = isBuff
+        ? (attacker.isPlayer ? 'Player' : attacker.name)
+        : (defender.isPlayer ? 'Player' : defender.name);
 
     if (isBuff) {
         if (stackBehavior === 'replace') {
-            updatedAttacker.statusEffects = updatedAttacker.statusEffects.filter(s => s.id !== effect.statusEffect.id);
+            updatedAttacker.statusEffects = updatedAttacker.statusEffects.filter(
+                s => s.id !== effect.statusEffect.id
+            );
         }
         updatedAttacker.statusEffects = [...updatedAttacker.statusEffects, newStatusEffect];
     } else {
         if (stackBehavior === 'replace') {
-            updatedDefender.statusEffects = updatedDefender.statusEffects.filter(s => s.id !== effect.statusEffect.id);
+            updatedDefender.statusEffects = updatedDefender.statusEffects.filter(
+                s => s.id !== effect.statusEffect.id
+            );
         }
         updatedDefender.statusEffects = [...updatedDefender.statusEffects, newStatusEffect];
     }
@@ -482,8 +472,11 @@ export function executeStatusEffect(
         updatedAttacker,
         updatedDefender,
         logs: [{
-            type: 'status_apply', side: sideOf(attacker), targetName,
-            statusName: effect.statusEffect.name, isBuff,
+            type: 'status_apply',
+            side: sideOf(attacker),
+            targetName,
+            statusName: effect.statusEffect.name,
+            isBuff,
         }],
         totalDamage: 0,
     };
@@ -527,8 +520,33 @@ export function executeStatModifierEffect(
         statModifiers: effect.modifiers,
     };
 
-    const updatedTarget = { ...target, statusEffects: [...target.statusEffects, statusEffect] };
+    let updatedTarget = { ...target, statusEffects: [...target.statusEffects, statusEffect] };
 
+    // Immediately rebuild live stats so the modifier takes effect visually
+    updatedTarget.physicalAttack   = updatedTarget.baseStats.physicalAttack;
+    updatedTarget.elementalAttack  = updatedTarget.baseStats.elementalAttack;
+    updatedTarget.physicalDefence  = updatedTarget.baseStats.physicalDefence;
+    updatedTarget.elementalDefence = updatedTarget.baseStats.elementalDefence;
+    updatedTarget.speed            = updatedTarget.baseStats.speed;
+    updatedTarget.evasion          = updatedTarget.baseStats.evasion;
+    updatedTarget.critChance       = updatedTarget.baseStats.critChance;
+    updatedTarget.critDamage       = updatedTarget.baseStats.critDamage;
+    updatedTarget.precision        = updatedTarget.baseStats.precision ?? 0;
+
+    for (const se of updatedTarget.statusEffects) {
+        const sm = se.statModifiers;
+        if (!sm) continue;
+        if (sm.physicalAttack   !== undefined) updatedTarget.physicalAttack   *= sm.physicalAttack;
+        if (sm.elementalAttack  !== undefined) updatedTarget.elementalAttack  *= sm.elementalAttack;
+        if (sm.physicalDefence  !== undefined) updatedTarget.physicalDefence  *= sm.physicalDefence;
+        if (sm.elementalDefence !== undefined) updatedTarget.elementalDefence *= sm.elementalDefence;
+        if (sm.speed            !== undefined) updatedTarget.speed            *= sm.speed;
+        if (sm.evasion          !== undefined) updatedTarget.evasion          += sm.evasion;
+        if (sm.critChance       !== undefined) updatedTarget.critChance       *= sm.critChance;
+        if (sm.critDamage       !== undefined) updatedTarget.critDamage       *= sm.critDamage;
+    }
+
+    // Build human-readable stat list
     const m = effect.modifiers;
     const upStats: string[] = [];
     const downStats: string[] = [];
@@ -544,16 +562,18 @@ export function executeStatModifierEffect(
     categorise('Evasion',    m.evasion, true);
     categorise('Speed',      m.speed);
     categorise('Crit Chance',m.critChance);
-    categorise('Precision',  m.precision, true); // additive, negative = reduction
 
     const logs: CombatLogMessage[] = [];
     const targetSide = sideOf(target);
     if (upStats.length)   logs.push({ type: 'stat_change', side: sideOf(attacker), targetSide, targetName, stats: upStats,   direction: 'up' });
     if (downStats.length) logs.push({ type: 'stat_change', side: sideOf(attacker), targetSide, targetName, stats: downStats, direction: 'down' });
 
+    // Return a FRESH object reference so Svelte reactivity detects the change
+    const freshTarget = { ...updatedTarget };
+    
     return {
-        updatedAttacker: isBuff ? updatedTarget : attacker,
-        updatedDefender: isBuff ? defender : updatedTarget,
+        updatedAttacker: isBuff ? freshTarget : attacker,
+        updatedDefender: isBuff ? defender : freshTarget,
         logs,
         totalDamage: 0,
     };
@@ -580,104 +600,4 @@ export function executeShieldEffect(
         logs: [{ type: 'stat_change', side: sideOf(attacker), targetSide: sideOf(defender), targetName: defenderName, stats: ['Aura Shield'], direction: 'down' }],
         totalDamage: 0,
     };
-}
-
-/**
- * Cleanse: removes negative effects from self.
- * Dispel:  removes positive effects from the enemy.
- * Gear passives (inflictedBy: 'equipment' | 'innate') are never removed.
- */
-export function executeCleanseEffect(
-    attacker: Combatant,
-    defender: Combatant,
-    effect: CleanseEffect,
-): EffectResult {
-    const isTargetingSelf = effect.target === 'self';
-    const rawTarget = isTargetingSelf ? attacker : defender;
-    const targetName = rawTarget.isPlayer ? 'Player' : rawTarget.name;
-
-    let removedCount = 0;
-    const filtered = rawTarget.statusEffects.filter(s => {
-        // Gear passives are permanent — never cleansed or dispelled
-        if (s.inflictedBy === 'equipment' || s.inflictedBy === 'innate') return true;
-
-        if (effect.cleanse === 'negative') {
-            const isDoT    = (s.damagePerTurn ?? 0) > 0;
-            const isStun   = s.isStunned === true;
-            const isDebuff = s.statModifiers
-                ? Object.values(s.statModifiers).some(v => typeof v === 'number' && v < 1.0)
-                : false;
-            if (isDoT || isStun || isDebuff) { removedCount++; return false; }
-        } else {
-            // Positive = stat buffs or ability-granted immunity flags (Unshackled, Sea Ward, etc.)
-            const isBuff = s.statModifiers
-                ? Object.values(s.statModifiers).some(v => typeof v === 'number' && v > 1.0)
-                : false;
-            const hasImmunityFlags = (s.flags?.length ?? 0) > 0;
-            if (isBuff || hasImmunityFlags) { removedCount++; return false; }
-        }
-        return true;
-    });
-
-    const updatedTarget = { ...rawTarget, statusEffects: filtered };
-    const verb = effect.cleanse === 'negative' ? 'cleansed' : 'dispelled';
-    const text = removedCount > 0
-        ? `${targetName} was ${verb} of ${removedCount} effect${removedCount > 1 ? 's' : ''}.`
-        : `${targetName} had nothing to ${verb}.`;
-
-    return {
-        updatedAttacker: isTargetingSelf ? updatedTarget : attacker,
-        updatedDefender: isTargetingSelf ? defender : updatedTarget,
-        logs: [{ type: 'system', text }],
-        totalDamage: 0,
-    };
-}
-
-/**
- * Lifesteal: deals damage and heals the attacker for a ratio of damage dealt.
- * The heal scales with actual damage including crits and element bonuses.
- * Respects guaranteed_hit the same way regular damage does.
- */
-export function executeLifestealEffect(
-    attacker: Combatant,
-    defender: Combatant,
-    effect: LifestealEffect,
-    calculateDamage: CalculateDamageFunction,
-    applyDamage: ApplyDamageFunction,
-    calculateEvasion: CalculateEvasionFunction,
-): EffectResult {
-    const logs: CombatLogMessage[] = [];
-    let updatedAttacker = { ...attacker };
-
-    const guaranteed = hasGuaranteedHit(attacker);
-    if (guaranteed) updatedAttacker = consumeGuaranteedHit(updatedAttacker);
-
-    if (!guaranteed && calculateEvasion(defender, attacker.precision ?? 0)) {
-        logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
-        return { updatedAttacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
-    }
-
-    const { damage, isCritical } = calculateDamage(
-        updatedAttacker, defender,
-        effect.damageType,
-        effect.damageType === 'elemental' ? [attacker.activeElement] : [],
-        effect.multiplier
-    );
-
-    const updatedDefender = applyDamage(defender, damage);
-    const healAmount = Math.round(damage * effect.healRatio);
-    updatedAttacker = { ...updatedAttacker, hp: Math.min(updatedAttacker.maxHp, updatedAttacker.hp + healAmount) };
-    const attackerName = attacker.isPlayer ? 'Player' : attacker.name;
-
-    logs.push({
-        type: 'damage', side: sideOf(attacker),
-        amount: damage, isCritical, damageType: effect.damageType,
-        element: effect.damageType === 'elemental' ? attacker.activeElement : undefined,
-    });
-    logs.push({
-        type: 'heal', side: sideOf(attacker),
-        targetName: attackerName, amount: healAmount, healType: 'hp',
-    });
-
-    return { updatedAttacker, updatedDefender, logs, totalDamage: damage, didHit: true };
 }

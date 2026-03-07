@@ -26,20 +26,10 @@ function resolveAbilities(abilityCycle: string[] | undefined): NonNullable<Retur
     }, []);
 }
 
-// ---------------------------------------------------------------------------
-// Gear passives → StatusEffects
-// ---------------------------------------------------------------------------
-
 /**
- * Collects all GearPassives from equipped weapons and relics and converts them
- * into permanent StatusEffects (duration: 999) seeded into statusEffects for
- * the entire fight.
- *
- * Keeping them in statusEffects means every immunity check in the engine
- * (isImmuneToStatus, immuneToReduction, etc.) finds them with no special-casing.
- *
- * Items declare passives via:
- *   gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'] }]
+ * Converts a player's equipped gear passives into permanent StatusEffects
+ * (inflictedBy: 'equipment', duration: 999) so every immunity check in the
+ * engine finds them automatically without special-casing.
  */
 function resolvePlayerGearPassives(player: Player): StatusEffect[] {
     const allEquipped = [
@@ -48,13 +38,9 @@ function resolvePlayerGearPassives(player: Player): StatusEffect[] {
     ].filter(Boolean);
 
     const passiveMap = new Map<string, GearPassive>();
-
     for (const item of allEquipped) {
         for (const passive of item?.gearPassives ?? []) {
-            // Deduplicate — two pieces granting the same passive is still one instance
-            if (!passiveMap.has(passive.id)) {
-                passiveMap.set(passive.id, passive);
-            }
+            if (!passiveMap.has(passive.id)) passiveMap.set(passive.id, passive);
         }
     }
 
@@ -63,7 +49,19 @@ function resolvePlayerGearPassives(player: Player): StatusEffect[] {
         name: passive.name,
         duration: 999,
         remainingTurns: 999,
-        inflictedBy: 'equipment',
+        inflictedBy: 'equipment' as const,
+        flags: passive.flags,
+    }));
+}
+
+/** Converts an NPC's declared gearPassives into innate permanent StatusEffects. */
+function resolveNpcGearPassives(gearPassives: GearPassive[] | undefined): StatusEffect[] {
+    return (gearPassives ?? []).map(passive => ({
+        id: passive.id,
+        name: passive.name,
+        duration: 999,
+        remainingTurns: 999,
+        inflictedBy: 'innate' as const,
         flags: passive.flags,
     }));
 }
@@ -75,14 +73,14 @@ function resolvePlayerGearPassives(player: Player): StatusEffect[] {
 export function startArenaCombat(opponentId: string): void {
     const opponentData = getArenaNpc(opponentId);
     if (!opponentData) {
-        console.error(`Arena opponent "${opponentId}" not found!`);
+        console.error(`[ArenaCombatService] Arena opponent "${opponentId}" not found!`);
         return;
     }
 
     const currentPlayer = get(playerStore);
     const currentPlayerStats = get(playerStats);
 
-    // Deep-copy to avoid mutating the real player store
+    // Deep-copy to avoid mutating the real player store during combat
     const playerCopy: Player = JSON.parse(JSON.stringify(currentPlayer));
 
     const sandboxedStats = {
@@ -91,6 +89,11 @@ export function startArenaCombat(opponentId: string): void {
         auraShield: currentPlayerStats.maxAuraShield,
         precision: currentPlayerStats.precision ?? 0,
     };
+
+    // Collect weapon elements, filtering out empty/None slots
+    const playerElements = playerCopy.equipment.weapon_slots
+        .map(w => w?.element)
+        .filter((e): e is string => !!e && e !== 'None');
 
     const playerCombatant: Combatant = {
         id: 'player',
@@ -101,11 +104,11 @@ export function startArenaCombat(opponentId: string): void {
         baseStats: sandboxedStats,
         ...sandboxedStats,
         equipment: playerCopy.equipment,
-        elements: (playerCopy.equipment.weapon_slots.map(w => w?.element).filter(Boolean) as string[]),
+        elements: playerElements,
         abilities: allAbilities,
-        // Gear passives (immunities etc.) seeded as permanent status effects
         statusEffects: resolvePlayerGearPassives(playerCopy),
-        activeElement: playerCopy.equipment.weapon_slots[0]?.element ?? 'None',
+        activeElement: playerElements[0] ?? 'None',
+        gearPassives: [],
     };
 
     // --- Build opponent combatant ---
@@ -116,17 +119,9 @@ export function startArenaCombat(opponentId: string): void {
         precision: opponentData.baseStats.precision ?? 0,
     };
 
-    const opponentAbilities = resolveAbilities(opponentData.abilityCycle);
-
-    // NPCs declare innate gearPassives for permanent traits (e.g. boss stun immunity)
-    const npcPassiveStatusEffects: StatusEffect[] = (opponentData.gearPassives ?? []).map(passive => ({
-        id: passive.id,
-        name: passive.name,
-        duration: 999,
-        remainingTurns: 999,
-        inflictedBy: 'innate',
-        flags: passive.flags,
-    }));
+    // Arena NPCs may use `elements` or `types` depending on the data source —
+    // fall back through both so either convention works.
+    const opponentElements: string[] = opponentData.elements ?? (opponentData as any).types ?? [];
 
     const opponentCombatant: Combatant = {
         id: opponentData.id,
@@ -136,12 +131,13 @@ export function startArenaCombat(opponentId: string): void {
         profileImage: opponentData.profileImage,
         baseStats: opponentStats,
         ...opponentStats,
-        elements: opponentData.elements ?? [],
-        abilities: opponentAbilities,
-        statusEffects: npcPassiveStatusEffects,
-        activeElement: opponentData.elements?.[0] ?? 'None',
+        elements: opponentElements,
+        abilities: resolveAbilities(opponentData.abilityCycle),
+        statusEffects: resolveNpcGearPassives(opponentData.gearPassives),
+        activeElement: opponentElements[0] ?? 'None',
         equipment: undefined,
         arenaBehavior: opponentData.arenaBehavior,
+        gearPassives: [],
     };
 
     combatStore.set({
@@ -155,7 +151,9 @@ export function startArenaCombat(opponentId: string): void {
         turnPhase: 'player_selecting',
         turnNumber: 1,
         playerWeaponIndex: 0,
-        drops: opponentData.drops || [], // Pass opponent's drops to the store
+        drops: opponentData.drops ?? [],
+        initialPlayerStats: { ...playerCombatant.baseStats },
+        initialOpponentStats: { ...opponentCombatant.baseStats },
     });
 
     openCombatModal();

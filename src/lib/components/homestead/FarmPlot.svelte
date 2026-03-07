@@ -142,7 +142,7 @@
 						>Harvest</button
 					>
 				{:else}
-					<button class="action-button crop" on:click={() => FarmingService.waterCrop(plot.id)}
+					<button class="action-button water" on:click={() => FarmingService.waterCrop(plot.id)}
 						>Water</button
 					>
 				{/if}
@@ -411,10 +411,9 @@
 		border: none;
 		color: #313131;
 	}
-	.techs {
-		/* background-color: #ffffff56; */
-		background-color: transparent;
-		border: 2px solid #313131;
+	.techs, .harvest, .water {
+		background-color: var(--color-accent);
+		border: 3px solid #313131;
 		color: var(--color-secondary);
 		cursor: pointer;
 		user-select: none;
@@ -423,15 +422,26 @@
 		box-sizing: border-box;
 		height: fit-content;
 		padding: 0.5rem;
+		padding-bottom: .75rem;
 		font-family: var(--font-family-pixel);
 		border-radius: 0.5rem;
 		box-shadow: #313131 0 -6px 0 0px inset;
 		width: fit-content;
 		transition: .1s all ease-in;
 		&:hover {
-			transform: translateY(2px);
+			padding-bottom: .5rem;
+			/* transform: translateY(2px); */
 			box-shadow: #313131 0 -6px 0px -4px inset;
 		}
+	}
+
+	.water {
+		background-color: var(--notification-equipped);
+		color: var(--text-white);
+	}
+	.harvest {
+		background-color: var(--orange);
+		color: var(--text-white);
 	}
 
 	.planting-ui,
