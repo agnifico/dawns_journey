@@ -103,60 +103,85 @@ export function checkForRandomEncounter() {
 
                 messageStore.addMessage(`A wild ${enemyData.name} appears!`, ['World']);
 
-                // Regular Enemy Encounter - Mastery Check
-                showEvent('enemy', enemyData.image, enemyData);
+                // --- Mastery Check ---
                 const currentMastery = get(playerMastery);
                 const activeElements = get(playerActiveElements);
-                let canDefeat = false;
-                for (const [element, requiredLevel] of Object.entries(enemyData.masteryRequirements || {})) {
+                const masteryRequirements = enemyData.masteryRequirements || {};
+
+                // 1. Check for elemental mastery match
+                let hasElementalMastery = false;
+                for (const [element, requiredLevel] of Object.entries(masteryRequirements)) {
                     if (activeElements.includes(element) && currentMastery >= requiredLevel) {
-                        canDefeat = true;
+                        hasElementalMastery = true;
                         break;
                     }
                 }
 
+                // 2. Check for summed mastery as an alternative
+                const sumOfRequirements = Object.values(masteryRequirements).reduce((sum, level) => sum + level, 0);
+                const hasSummedMastery = currentMastery >= sumOfRequirements;
+
+                const canDefeat = hasElementalMastery || hasSummedMastery;
+
+                // --- Prepare Encounter Result ---
+                const encounterResult = {
+                    outcome: canDefeat ? 'win' : 'loss',
+                    hpLost: enemyData.hpCost,
+                    xpGained: canDefeat ? enemyData.xp : 0,
+                    drops: [] as { item: Item; quantity: number }[],
+                    masteryMet: canDefeat,
+                    reason: ''
+                };
+
                 if (canDefeat) {
-                    const activeElements = get(playerActiveElements);
                     const winningElement = activeElements.find(el => {
-                        const req = enemyData.masteryRequirements?.[el];
-                        return req !== undefined && get(playerMastery) >= req;
+                        const req = masteryRequirements?.[el];
+                        return req !== undefined && currentMastery >= req;
                     }) ?? 'Normal';
 
                     const message = getEncounterFlavourLine(winningElement, enemyData.name);
                     messageStore.addMessage(message, ['World', 'Help', 'Combat']);
+
                     playerStore.update(p => {
                         let newPlayer = { ...p };
                         newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
 
                         // Grant XP
-                        newPlayer = gainExperience(newPlayer, enemyData.xp);
+                        newPlayer = gainExperience(newPlayer, encounterResult.xpGained);
 
                         // Grant drops
                         (enemyData.drops || []).forEach(drop => {
                             const roll = Math.random();
                             if (!drop.chance || roll < drop.chance) {
-                                newPlayer = addItems(newPlayer, drop.itemId, drop.quantity);
                                 const item = getItemById(drop.itemId);
+                                if (item) {
+                                    newPlayer = addItems(newPlayer, drop.itemId, drop.quantity);
+                                    encounterResult.drops.push({ item, quantity: drop.quantity });
+                                }
                             }
                         });
 
                         // Apply HP cost
-                        newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - enemyData.hpCost);
-                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['World', 'Combat']);
+                        newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - encounterResult.hpLost);
+                        messageStore.addMessage(`You lose ${encounterResult.hpLost} HP from the encounter.`, ['World', 'Combat']);
 
                         return newPlayer;
                     });
                 } else {
+                    encounterResult.reason = 'Weapon Mastery Requirements not met.';
                     messageStore.addMessage("You escape the stronger enemy...for now.", ['World', 'Combat']);
 
                     // Apply HP cost even on failure
                     playerStore.update(p => {
                         let newPlayer = { ...p };
-                        newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - enemyData.hpCost);
-                        messageStore.addMessage(`You lose ${enemyData.hpCost} HP from the encounter.`, ['World', 'Combat']);
+                        newPlayer.baseStats.hp = Math.max(0, newPlayer.baseStats.hp - encounterResult.hpLost);
+                        messageStore.addMessage(`You lose ${encounterResult.hpLost} HP from the encounter.`, ['World', 'Combat']);
                         return newPlayer;
                     });
                 }
+
+                // Show event with enemy data and the result
+                showEvent('enemy', enemyData.image, { ...enemyData, encounterResult });
 
 
                 break;

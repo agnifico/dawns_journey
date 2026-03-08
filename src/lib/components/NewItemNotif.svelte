@@ -38,14 +38,14 @@
         left: .5rem;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 4px;
         z-index: 1000;
     }
 
     .notification {
         display: flex;
         align-items: center;
-        /* background-color: var(--surface-3); */
+        background-color: var(--surface-3);
         /* border: 1px solid; */
         border-radius: 5px;
         padding: 0rem 0.5rem;

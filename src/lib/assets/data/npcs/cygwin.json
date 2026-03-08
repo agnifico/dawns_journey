@@ -2,12 +2,17 @@
     "id": "cygwin",
     "name": "Cygwin",
     "profileImage": "/images/characters/cygwin/cygwin_avatar.png",
-    "image": "/images/characters/cygwin/cygwin1.png",
+    "image": "/images/characters/cygwin/cygwin0.png",
     "galleryImages": [
         "/images/characters/cygwin/cygwin0.png",
         "/images/characters/cygwin/cygwin1.png",
         "/images/characters/cygwin/cygwin2.png",
-        "/images/characters/cygwin/cygwin3.png"
+        "/images/characters/cygwin/cygwin3.png",
+        "/images/characters/cygwin/cygwin4.png",
+        "/images/characters/cygwin/cygwin5.png",
+        "/images/characters/cygwin/cygwin6.png",
+        "/images/characters/cygwin/cygwin7.png",
+        "/images/characters/cygwin/cygwin8.png"
     ],
     "description": "A commander of the Solis Saints, known for her unwavering and sometimes brutal efficiency.",
     "faction": "solis_saints",

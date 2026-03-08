@@ -11,8 +11,7 @@ import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
 import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { gainExperience } from '$lib/services/SkillService';
 import { addItems } from '$lib/services/InventoryService';
-import { triggerEventEffect } from '$lib/services/LocationEventService';
-import { checkRequirement } from '$lib/services/QuestService';
+import { triggerLocationEvent } from '$lib/services/LocationEventService';
 import { game } from '$lib/game/game';
 
 /**
@@ -57,44 +56,26 @@ export async function checkForTileInteraction(): Promise<boolean> {
             case 'event':
                 const eventData = locationEventDefinitions[mapObject.eventId];
                 if (eventData) {
-                    const hasBeenCompleted = (player.locationEventHistory && player.locationEventHistory[eventData.id] || 0) > 0;
+                    const hasBeenCompleted = (player.locationEventHistory?.[eventData.id] || 0) > 0;
 
-                    // Handle one-time events that have already been completed
+                    // One-time event already completed — show panel with after-state only
                     if (hasBeenCompleted && !eventData.reusable) {
-                        const afterData = {
+                        showEvent('location_event', eventData.afterImage || eventData.image, {
                             ...eventData,
-                            image: eventData.afterImage || eventData.image,
                             shortDesc: eventData.afterDescription || 'You have already completed this event.',
-                            message: '',
                             actions: [],
                             effects: []
-                        };
-                        showEvent('location_event', afterData.image, afterData);
+                        });
                         return true;
                     }
 
-                    // Check requirements for the event
-                    if (eventData.requirement) {
-                        const { met } = checkRequirement(eventData.requirement, player, null, get(npcStore).npcs);
-                        if (!met) {
-                            const requirementNotMetData = {
-                                ...eventData,
-                                shortDesc: eventData.requirementNotMetMessage || "You can't do this right now.",
-                                message: '',
-                                actions: [],
-                                effects: []
-                            };
-                            showEvent('location_event', requirementNotMetData.image, requirementNotMetData);
-                            return true;
-                        }
-                    }
-
-                    // Default behavior for events that are not completed or are repeatable
+                    // Always open the event panel — shows shortDesc, image, ChoiceMenu
                     showEvent('location_event', eventData.image, eventData);
-                    // Only trigger effects immediately if there are no actions to display
-                    if (!eventData.actions || eventData.actions.length === 0) {
-                        triggerEventEffect(eventData.id, eventData.effects, eventData.message);
-                    }
+
+                    // triggerLocationEvent handles: requirement check, stepOnMessage as
+                    // dialogue, and effects (fired after dialogue if no actions, or after
+                    // player picks an action via ChoiceMenu).
+                    triggerLocationEvent(eventData);
                     return true;
                 }
             case 'teleport':

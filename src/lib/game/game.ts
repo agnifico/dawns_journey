@@ -6,6 +6,7 @@ import { movePlayer as movePlayerService } from '../services/PlayerMovementServi
 import { gatherResource as gatherResourceService } from '../services/InteractionService';
 import * as InventoryService from '../services/InventoryService';
 import type { Position } from '$lib/types';
+import { messageStore } from '$lib/stores/messageStore';
 
 export const game = {
     /**
@@ -33,6 +34,7 @@ export const game = {
      * Moves the player by delegating to the PlayerMovementService.
      */
     movePlayer: async (dx: number, dy: number) => {
+        messageStore.newSession();
         await movePlayerService(dx, dy);
     },
 

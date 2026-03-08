@@ -62,6 +62,32 @@ const resourceNodeData = derived(eventScreen, ($es) => {
 							{/each}
 						</div>
 					{/if}
+					<div class="encounter-result">
+						<div class="outcome">
+							<span class="outcome-label">Outcome:</span>
+							<span class="outcome-value" class:win={$eventScreen.data.encounterResult.outcome === 'win'} class:loss={$eventScreen.data.encounterResult.outcome === 'loss'}>
+								{$eventScreen.data.encounterResult.outcome}
+							</span>
+						</div>
+						<div class="result-details">
+							<p>HP Lost: {$eventScreen.data.encounterResult.hpLost}</p>
+							{#if $eventScreen.data.encounterResult.outcome === 'win'}
+								<p>XP Gained: {$eventScreen.data.encounterResult.xpGained}</p>
+								{#if $eventScreen.data.encounterResult.drops.length > 0}
+									<div class="drops">
+										<p>Drops:</p>
+										<ul>
+											{#each $eventScreen.data.encounterResult.drops as drop}
+												<li>{drop.item.name} x{drop.quantity}</li>
+											{/each}
+										</ul>
+									</div>
+								{/if}
+							{:else}
+								<p class="reason">{$eventScreen.data.encounterResult.reason}</p>
+							{/if}
+						</div>
+					</div>
 				{:else if isResource && $resourceNodeData}
 					<p class="card-label">RESOURCE</p>
 					<p class="card-name">{$resourceNodeData.name}</p>

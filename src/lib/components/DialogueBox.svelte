@@ -2,18 +2,26 @@
 	import { dialogueStore } from '$lib/stores/dialogueStore';
     import { fly } from 'svelte/transition';
 
+    let lastAdvanceTime = 0;
+
+    // Single advance handler used by both keyboard and click.
+    // 80ms debounce prevents keydown + click firing together
+    // and skipping two slides (the "second-to-last slide" bug).
     function handleAdvance() {
+        const now = Date.now();
+        if (now - lastAdvanceTime < 80) return;
+        lastAdvanceTime = now;
         dialogueStore.advanceDialogue();
     }
 </script>
 
-<svelte:window 
-    on:keypress={(e) => {
-        if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Enter')) {
+<svelte:window
+    on:keydown={(e) => {
+        if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Z' || e.key === 'Enter')) {
             e.preventDefault();
             handleAdvance();
         }
-    }} 
+    }}
 />
 
 {#if $dialogueStore.isOpen}
@@ -34,11 +42,11 @@
 
 <style>
     .dialogue-overlay {
-        position: absolute;
+        position: fixed;
         bottom: 2%;
         left: 2%;
         right: 2%;
-        z-index: 50;
+        z-index: 500;
         height: max-content;
         -webkit-font-smoothing: none;
         font-smooth: never;

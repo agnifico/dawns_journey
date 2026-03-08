@@ -22,3 +22,30 @@ body {
         url('/game_icons/cursor.png') 1 1,
         auto;
 }
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('/fonts/Lexend-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('/fonts/Silkscreen-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Jersey10';
+    src: url('/fonts/Jersey10-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DePixel';
+    src: url('/fonts/DePixelKlein.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'DePixel';
+    src: url('/fonts/DePixelHalbfett.ttf') format('truetype');
+    font-weight: bold;
+}
+

@@ -1,3 +1,14 @@
+/**
+ * dialogueStore.ts — patched
+ *
+ * ONE CHANGE from original:
+ *   startDialogue() now accepts an optional third argument: onComplete callback.
+ *   It fires when the player dismisses the final line.
+ *   Everything else is identical.
+ *
+ * This is what LocationEventService uses to fire effects after story text.
+ */
+
 import { writable } from 'svelte/store';
 
 export interface DialogueChoice {
@@ -13,6 +24,7 @@ interface DialogueStore {
     justClosed: boolean;
     choices: DialogueChoice[];
     selectedChoice: number;
+    onComplete?: () => void;   // ← NEW: fires after last line dismissed
 }
 
 function createDialogueStore() {
@@ -24,9 +36,16 @@ function createDialogueStore() {
         justClosed: false,
         choices: [],
         selectedChoice: 0,
+        onComplete: undefined,
     });
 
-    function startDialogue(lines: string[], speaker: string) {
+    /**
+     * @param lines    Lines of dialogue to show, one at a time.
+     * @param speaker  Label shown above the text box.
+     * @param onComplete  Optional callback fired after the last line is dismissed.
+     *                    LocationEventService passes effects-runner here.
+     */
+    function startDialogue(lines: string[], speaker: string, onComplete?: () => void) {
         update(s => ({
             ...s,
             isOpen: true,
@@ -36,6 +55,7 @@ function createDialogueStore() {
             justClosed: false,
             choices: [],
             selectedChoice: 0,
+            onComplete,
         }));
     }
 
@@ -43,7 +63,7 @@ function createDialogueStore() {
         update(s => ({
             ...s,
             isOpen: true,
-            choices: choices,
+            choices,
             selectedChoice: 0,
         }));
     }
@@ -51,17 +71,35 @@ function createDialogueStore() {
     function advanceDialogue() {
         update(s => {
             if (!s.isOpen) return s;
-            // If there are choices, don't advance text, let action handle it
-            if (s.choices.length > 0) return s;
 
             const nextIndex = s.currentIndex + 1;
+
+            // If we've shown all lines, choices (if any) take over — stop advancing text
+            if (nextIndex >= s.lines.length && s.choices.length > 0) return s;
+
             if (nextIndex >= s.lines.length) {
-                // End of dialogue
+                // Last line dismissed — fire onComplete before closing
+                const cb = s.onComplete;
                 setTimeout(() => {
-                    update(s => ({ ...s, justClosed: false }));
+                    update(inner => ({ ...inner, justClosed: false }));
+                    // Fire after the store closes so effects don't fight the
+                    // closing animation
+                    if (cb) cb();
                 }, 200);
-                return { ...s, isOpen: false, lines: [], currentIndex: 0, speaker: null, justClosed: true, choices: [], selectedChoice: 0 };
+
+                return {
+                    ...s,
+                    isOpen: false,
+                    lines: [],
+                    currentIndex: 0,
+                    speaker: null,
+                    justClosed: true,
+                    choices: [],
+                    selectedChoice: 0,
+                    onComplete: undefined,
+                };
             }
+
             return { ...s, currentIndex: nextIndex };
         });
     }
@@ -76,6 +114,7 @@ function createDialogueStore() {
             justClosed: false,
             choices: [],
             selectedChoice: 0,
+            onComplete: undefined,
         }));
     }
 

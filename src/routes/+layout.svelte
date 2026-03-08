@@ -4,6 +4,7 @@
 	import GiftModal from '$lib/components/ui/GiftModal.svelte';
 	import GenericModal from '$lib/components/ui/GenericModal.svelte';
 	import AchievementNotification from '$lib/components/AchievementNotification.svelte';
+	import GeneralMessage from '$lib/components/ui/GeneralMessage.svelte';
 	// import RainOverlay from '$lib/components/ui/RainOverlay.svelte';
 	import './app.css';
 	import '$lib/styles/theme.css';
@@ -18,6 +19,7 @@
 	// in _layout.svelte onMount, alongside skillTreeStore.initialize():
 	import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
 	import { playerStore } from '$lib/stores/playerStore';
+	import DialogueBox from '$lib/components/DialogueBox.svelte';
 
 	let { children } = $props();
 
@@ -60,6 +62,8 @@
 <GiftModal />
 <GenericModal />
 <AchievementNotification />
+<DialogueBox />
+<GeneralMessage />
 
 <!-- <RainOverlay /> -->
 

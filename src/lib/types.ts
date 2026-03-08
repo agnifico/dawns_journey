@@ -429,6 +429,7 @@ export interface EventAction {
     responseMessage?: string;
     requirement?: Requirement;                                                   // NEW: hide/disable action if not met
 }
+export {};
 
 export interface LocationEvent {
     id: string;
@@ -436,8 +437,8 @@ export interface LocationEvent {
     image: string;
     coords?: Position;
     shortDesc: string;
-    stepOnMessage: string;
-    message: string;
+    stepOnMessage?: string | string[];
+    message?: string | string[];
     effects?: GameEffect[];
     actions?: EventAction[];
     afterImage?: string;

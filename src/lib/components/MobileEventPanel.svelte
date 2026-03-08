@@ -6,7 +6,6 @@
 	import ElementTag from './ui/ElementTag.svelte';
 	import StatBar from './ui/StatBar.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
-	import DialogueBox from '$lib/components/DialogueBox.svelte';
 
 	$: isNpc = $eventScreen.type === 'npc';
 	$: isLocation = $eventScreen.type === 'location_event';
@@ -65,10 +64,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- Dialogue box inline -->
-					<div class="dialogue-wrapper">
-						<DialogueBox />
-					</div>
+
 				{:else if isLocation && $eventScreen.data}
 					<div class="location-content">
 						{#if $eventScreen.image}
@@ -220,15 +216,7 @@
 	.rank-meter { display: flex; align-items: center; gap: 4px; }
 	.rank-icon { width: 14px; height: 14px; image-rendering: pixelated; }
 
-	.dialogue-wrapper {
-		flex: 1;
-	}
 
-	/* Strip DialogueBox of its own positioning since we're containing it */
-	.dialogue-wrapper :global(.dialogue-box) {
-		position: static !important;
-		border-radius: 8px;
-	}
 
 	/* Location event */
 	.location-content {

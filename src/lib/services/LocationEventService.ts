@@ -1,5 +1,33 @@
+/**
+ * LocationEventService.ts — patched triggerLocationEvent
+ *
+ * KEY CHANGE: stepOnMessage now fires as progressive dialogue (same as NPCs).
+ * Effects only run after the player dismisses the last line.
+ *
+ * If the event has no stepOnMessage, effects fire immediately as before.
+ * If the event has player-choice actions, those still show via ChoiceMenu
+ * after the dialogue — unchanged.
+ *
+ * stepOnMessage can now be string | string[] — single string becomes one
+ * dialogue page, array becomes multiple pages the player steps through.
+ *
+ * HOW IT WORKS:
+ *   1. triggerLocationEvent checks requirement as before.
+ *   2. If stepOnMessage exists → start dialogue via dialogueStore.
+ *   3. dialogueStore exposes an onComplete callback (new field).
+ *      When the player dismisses the last line, the callback fires
+ *      triggerEventEffect(...) exactly as before.
+ *   4. If no stepOnMessage → triggerEventEffect fires immediately (old behaviour).
+ *
+ * DIALOGUESTORE CHANGE NEEDED:
+ *   Add `onComplete?: () => void` to DialogueStore state.
+ *   Call it in advanceDialogue() when the last line is dismissed.
+ *   See dialogueStore.patch.ts for the minimal change.
+ */
+
 import { playerStore, playerStats } from '$lib/stores/playerStore';
 import { messageStore } from '$lib/stores/messageStore';
+import { dialogueStore } from '$lib/stores/dialogueStore';
 import type { GameEffect, LocationEvent, Player } from '$lib/types';
 import { get } from 'svelte/store';
 import { checkQuestTriggers, checkRequirement } from './QuestService';
@@ -8,44 +36,51 @@ import { questStore } from '$lib/stores/questStore';
 import { npcStore } from '$lib/stores/npcStore';
 
 // ---------------------------------------------------------------------------
-// Main entry point — called when player steps on / interacts with an event tile
+// Main entry point
 // ---------------------------------------------------------------------------
 
-/**
- * Attempt to trigger a location event.
- *
- * NEW BEHAVIOUR:
- * 1. If the event has a `requirement`, evaluate it against current player state.
- *    - If not met: show `requirementNotMetMessage` (or a fallback) and return early.
- *    - The event tile stays on the map — the player can try again later.
- * 2. If met (or no requirement): run effects as before.
- *
- * This fixes the bug where events like the Altar of Fates were triggerable
- * from day one regardless of quest state.
- */
 export function triggerLocationEvent(event: LocationEvent) {
     const player = get(playerStore);
     const globalNpcs = get(npcStore).globalNpcs;
 
-    // --- Requirement gate ---
+    // Requirement gate — unchanged
     if (event.requirement) {
         const { met } = checkRequirement(event.requirement, player, null, globalNpcs, true);
         if (!met) {
             const msg = event.requirementNotMetMessage ?? `You cannot interact with this yet.`;
             messageStore.addMessage(msg, ['System']);
-            return; // bail — do not fire effects, do not record in locationEventHistory
+            return;
         }
     }
 
-    // --- Fire effects ---
-    triggerEventEffect(event.id, event.effects ?? [], event.stepOnMessage ?? '');
+    const lines = normaliseLines(event.stepOnMessage);
+    const afterLines = normaliseLines(event.message);
+    const hasDialogue = lines.length > 0;
+    const hasEffects  = (event.effects ?? []).length > 0;
+    const hasActions  = (event.actions ?? []).length > 0;
+
+    // After effects fire, show the aftermath message as dialogue (if any)
+    const afterEffects = afterLines.length > 0
+        ? () => dialogueStore.startDialogue(afterLines, event.name ?? 'EVENT')
+        : undefined;
+
+    if (hasDialogue) {
+        dialogueStore.startDialogue(
+            lines,
+            event.name ?? 'EVENT',
+            hasEffects && !hasActions
+                ? () => triggerEventEffect(event.id, event.effects ?? [], '', afterEffects)
+                : undefined
+        );
+    } else if (hasEffects && !hasActions) {
+        triggerEventEffect(event.id, event.effects ?? [], '', afterEffects);
+    }
 }
 
-/**
- * Trigger a specific named action from a location event's `actions` array.
- * Actions can have their own `requirement` — hidden/disabled in the UI,
- * but also double-checked here for safety.
- */
+// ---------------------------------------------------------------------------
+// Action trigger (player chose an option)
+// ---------------------------------------------------------------------------
+
 export function triggerEventAction(event: LocationEvent, actionIndex: number) {
     const action = event.actions?.[actionIndex];
     if (!action) return;
@@ -61,14 +96,32 @@ export function triggerEventAction(event: LocationEvent, actionIndex: number) {
         }
     }
 
-    triggerEventEffect(event.id, action.effects ?? [], action.responseMessage ?? '');
+    const responseLines = normaliseLines(action.responseMessage);
+    const afterLines = normaliseLines(event.message);
+
+    // After action effects fire, show the event's aftermath message as dialogue
+    const afterEffects = afterLines.length > 0
+        ? () => dialogueStore.startDialogue(afterLines, event.name ?? 'EVENT')
+        : undefined;
+
+    if (responseLines.length > 0) {
+        dialogueStore.startDialogue(
+            responseLines,
+            event.name ?? 'EVENT',
+            (action.effects ?? []).length > 0
+                ? () => triggerEventEffect(event.id, action.effects ?? [], '', afterEffects)
+                : undefined
+        );
+    } else {
+        triggerEventEffect(event.id, action.effects ?? [], '', afterEffects);
+    }
 }
 
 // ---------------------------------------------------------------------------
-// Effect runner (internal — also still exported for any direct callers)
+// Effect runner — internal, unchanged logic
 // ---------------------------------------------------------------------------
 
-export function triggerEventEffect(eventId: string, effects: GameEffect[], message: string) {
+export function triggerEventEffect(eventId: string, effects: GameEffect[], message: string, onComplete?: () => void) {
     if (!effects || effects.length === 0) return;
 
     playerStore.update(player => {
@@ -78,39 +131,29 @@ export function triggerEventEffect(eventId: string, effects: GameEffect[], messa
         let allEffectsApplied = true;
 
         for (const effect of effects) {
-            // Handle the new effect types that don't fit in LocationEventEffectHandlers
-            // because they touch stores beyond playerStore.
             if (effect.type === 'set_quest_state') {
                 questStore.setQuestState(effect.questId, effect.state);
                 continue;
             }
-
             if (effect.type === 'fail_quest') {
                 questStore.setQuestState(effect.questId, 'FAILED');
                 continue;
             }
-
             if (effect.type === 'add_tag') {
                 if (!newPlayer.worldTags.includes(effect.tag)) {
                     newPlayer = { ...newPlayer, worldTags: [...newPlayer.worldTags, effect.tag] };
                 }
                 continue;
             }
-
             if (effect.type === 'remove_tag') {
                 newPlayer = { ...newPlayer, worldTags: newPlayer.worldTags.filter(t => t !== effect.tag) };
                 continue;
             }
-
-            // CHOOSE_FACTION: record the player's faction choice as a world tag,
-            // then let checkQuestTriggers propagate the consequences (failing opposing quests).
             if (effect.type === 'CHOOSE_FACTION') {
                 const choiceTag = `sided_with_${effect.faction.toLowerCase().replace(/\s+/g, '_')}`;
                 const opposingTag = effect.faction === 'Solis Saints'
                     ? 'sided_with_shadowhand'
                     : 'sided_with_solis_saints';
-
-                // Record choice, remove opposing tag if somehow present
                 newPlayer = {
                     ...newPlayer,
                     worldTags: [
@@ -125,7 +168,6 @@ export function triggerEventEffect(eventId: string, effects: GameEffect[], messa
                 continue;
             }
 
-            // All other effects go through the existing handler map
             const handler = effectHandlers[effect.type];
             if (handler) {
                 const result = handler(newPlayer, effect, currentStats);
@@ -134,25 +176,32 @@ export function triggerEventEffect(eventId: string, effects: GameEffect[], messa
                     messageStore.addMessage(message, ['System']);
                     messageSent = true;
                 }
-                if (!result.allEffectsApplied) {
-                    allEffectsApplied = false;
-                }
+                if (!result.allEffectsApplied) allEffectsApplied = false;
             } else {
                 console.warn(`[LocationEventService] No handler for effect type: ${(effect as any).type}`);
             }
         }
 
-        // Only record the event as completed if all effects applied successfully
         if (allEffectsApplied) {
-            if (!newPlayer.locationEventHistory) {
-                newPlayer.locationEventHistory = {};
-            }
+            if (!newPlayer.locationEventHistory) newPlayer.locationEventHistory = {};
             const currentCount = newPlayer.locationEventHistory[eventId] || 0;
             newPlayer.locationEventHistory[eventId] = currentCount + 1;
         }
 
         newPlayer = checkQuestTriggers(newPlayer);
-
         return newPlayer;
     });
+
+    // Fire aftermath dialogue (or any post-effect callback) after store update settles
+    if (onComplete) setTimeout(onComplete, 50);
+}
+
+// ---------------------------------------------------------------------------
+// Helper — normalise string | string[] | undefined → string[]
+// ---------------------------------------------------------------------------
+
+function normaliseLines(msg: string | string[] | undefined): string[] {
+    if (!msg) return [];
+    if (Array.isArray(msg)) return msg.filter(Boolean);
+    return msg.trim() ? [msg] : [];
 }

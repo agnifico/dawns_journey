@@ -11,7 +11,6 @@
 	import Tooltip from './ui/Tooltip.svelte';
 	import { derived } from 'svelte/store';
 	import { goto } from '$app/navigation';
-	import DialogueBox from '$lib/components/DialogueBox.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
 
@@ -173,6 +172,36 @@
 								<MasteryTag {element} {level} />
 							{/each}
 						</div>
+
+						<!-- Encounter Result -->
+						{#if $eventScreen.data.encounterResult}
+							<div class="encounter-result">
+								<div class="outcome">
+									<span class="outcome-label">Outcome:</span>
+									<span class="outcome-value" class:win={$eventScreen.data.encounterResult.outcome === 'win'} class:loss={$eventScreen.data.encounterResult.outcome === 'loss'}>
+										{$eventScreen.data.encounterResult.outcome}
+									</span>
+								</div>
+								<div class="result-details">
+									<p>HP Lost: {$eventScreen.data.encounterResult.hpLost}</p>
+									{#if $eventScreen.data.encounterResult.outcome === 'win'}
+										<p>XP Gained: {$eventScreen.data.encounterResult.xpGained}</p>
+										{#if $eventScreen.data.encounterResult.drops.length > 0}
+											<div class="drops">
+												<p>Drops:</p>
+												<ul>
+													{#each $eventScreen.data.encounterResult.drops as drop}
+														<li>{drop.item.name} x{drop.quantity}</li>
+													{/each}
+												</ul>
+											</div>
+										{/if}
+									{:else}
+										<p class="reason">{$eventScreen.data.encounterResult.reason}</p>
+									{/if}
+								</div>
+							</div>
+						{/if}
 					{:else if $eventScreen.type === 'item_found' && $eventScreen.data}
 						<h3>{$eventScreen.data.item.name}</h3>
 						<p>You found x{$eventScreen.data.quantity}</p>
@@ -217,13 +246,44 @@
 			{/if}
 		</div>
 	{/if}
-	<DialogueBox />
 	<!-- {#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource' || ($eventScreen.type === 'enemy' && $eventScreen.data.isLegendary) }
 		<ChoiceMenu />
 	{/if} -->
 </div>
 
 <style>
+	.encounter-result {
+		border-top: 1px solid #ccc;
+		padding-top: 0.5rem;
+		margin-top: 0.5rem;
+		width: 100%;
+	}
+	.outcome {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		font-weight: bold;
+	}
+	.outcome-value.win {
+		color: #4caf50; /* Green */
+	}
+	.outcome-value.loss {
+		color: #f44336; /* Red */
+	}
+	.result-details {
+		font-size: 0.9rem;
+	}
+	.result-details p {
+		margin: 0.25rem 0;
+	}
+	.drops ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.reason {
+		color: #ffc107; /* Amber */
+	}
 	.npc-header {
 		display: flex;
 		align-items: center;

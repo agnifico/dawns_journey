@@ -44,8 +44,8 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
     TAKE_ITEM: (player, effect) => {
         let newPlayer = { ...player };
         let allEffectsApplied = true;
-        const inventoryItem = newPlayer.inventory.find(i => i.itemId === effect.itemId);
-        if (inventoryItem && inventoryItem.amount >= effect.quantity) {
+        const matchingItems = newPlayer.inventory.filter(i => i.id === effect.itemId);
+        if (matchingItems.length >= effect.quantity) {
             newPlayer = removeItemsByItemId(newPlayer, effect.itemId, effect.quantity);
             return { newPlayer, effectApplied: true, allEffectsApplied };
         } else {
@@ -58,8 +58,8 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
     SWAP_ITEM: (player, effect) => {
         let newPlayer = { ...player };
         let allEffectsApplied = true;
-        const itemToTake = newPlayer.inventory.find(i => i.itemId === effect.takeItemId);
-        if (itemToTake && itemToTake.amount >= effect.takeQuantity) {
+        const matchingItems = newPlayer.inventory.filter(i => i.id === effect.takeItemId);
+        if (matchingItems.length >= effect.takeQuantity) {
             newPlayer = removeItemsByItemId(newPlayer, effect.takeItemId, effect.takeQuantity);
             newPlayer = addItems(newPlayer, effect.giveItemId, effect.giveQuantity);
             return { newPlayer, effectApplied: true, allEffectsApplied };

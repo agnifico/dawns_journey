@@ -133,6 +133,10 @@ export function removeItemsByItemId(player: Player, itemId: string, amount: numb
  * Removes a single item instance by its unique instanceId.
  */
 export function removeItemByInstanceId(player: Player, instanceId: string): Player {
+    let inventoryItemIndex = player.inventory.findIndex(i => i.instanceId === instanceId);
+    const itemToUse = player.inventory[inventoryItemIndex];
+    notificationStore.add('item_unequipped', itemToUse, 1);
+    notificationStore.addBuff('lolcats', 50, 'applied');
     return { ...player, inventory: player.inventory.filter(i => i.instanceId !== instanceId) };
 }
 
