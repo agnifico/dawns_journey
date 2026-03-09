@@ -17,3 +17,4 @@ export function getXpForLevelFromData(skillId: string, currentLevel: number): nu
 
     return null;
 }
+

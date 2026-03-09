@@ -294,6 +294,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
+		padding: 1rem;
 		backdrop-filter: blur(2px);
 		display: flex;
 		flex-direction: column;
@@ -365,11 +366,11 @@
 		justify-content: center;
 		align-items: center;
 		color: white;
-		height: 400px;
+		height: 300px;
 		box-sizing: border-box;
 		gap: 1rem;
 		border: 3px solid var(--surface-2);
-		border-radius: 12px;
+		/* border-radius: 12px; */
 		overflow: hidden;
 	}
 	.placeholder {

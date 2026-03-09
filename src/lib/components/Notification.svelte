@@ -2,96 +2,225 @@
     import { notificationStore, type Notification } from '$lib/stores/notificationStore';
     import { fly } from 'svelte/transition';
 
-    const typeIcons = {
-        item_received: 'item_received.svg',
-        item_used: 'item_removed.svg',
-        item_equipped: 'equipped.svg',
+    // ── Icon map for item action types ───────────────────────────────────────
+    const itemActionIcons: Record<string, string> = {
+        item_received:   'item_received.svg',
+        item_used:       'item_removed.svg',
+        item_equipped:   'equipped.svg',
         item_unequipped: 'unequipped.svg',
+        item_removed:    'item_removed.svg',
     };
+
+    // ── Border accent colours per type ───────────────────────────────────────
+    const borderColors: Record<string, string> = {
+        item_received:   'var(--notification-received, #6a994e)',
+        item_used:       'var(--notification-used,     #a98467)',
+        item_equipped:   'var(--notification-equipped, #48cae4)',
+        item_unequipped: 'var(--notification-unequipped, #888)',
+        item_removed:    'var(--notification-used,     #a98467)',
+        xp_gained:       '#90a955',
+        level_up:        '#facc15',
+        buff_applied:    '#48cae4',
+        buff_expired:    '#888',
+    };
+
+    function getBorder(n: Notification) {
+        return borderColors[n.type] ?? '#555';
+    }
+
+    // ── Type guards ───────────────────────────────────────────────────────────
+    function isItem(n: Notification): n is typeof n & { item: any; quantity: number } {
+        return n.type.startsWith('item_');
+    }
+    function isXp(n: Notification): n is typeof n & { amount: number; skill?: string } {
+        return n.type === 'xp_gained';
+    }
+    function isLevelUp(n: Notification): n is typeof n & { level: number; skill?: string } {
+        return n.type === 'level_up';
+    }
+    function isBuff(n: Notification): n is typeof n & { buffName: string; duration_steps?: number } {
+        return n.type === 'buff_applied' || n.type === 'buff_expired';
+    }
+
+    // ── Icon path helpers ─────────────────────────────────────────────────────
+    function getXpIcon(skill?: string): string {
+        if (!skill) return '/game_icons/player_level.png';
+        const map: Record<string, string> = {
+            woodcutting: 'woodcutting.png',
+            mining:      'mining.png',
+            smithing:    'smithing.png',
+            farming:     'farming.png',
+            cooking:     'cooking.png',
+            alchemy:     'alchemy.png',
+        };
+        return `/game_icons/${map[skill.toLowerCase()] ?? 'player_level.png'}`;
+    }
 </script>
 
 <div class="notification-container">
-    {#each $notificationStore as notification (notification.id)}
+    {#each $notificationStore as n (n.id)}
         <div
-            class="notification type-{notification.type}"
-            in:fly={{ y: 20, duration: 300 }}
-            out:fly={{ y: 20, duration: 300 }}
+            class="notification"
+            class:is-level-up={n.type === 'level_up'}
+            style="border-color: {getBorder(n)}"
+            in:fly={{ x: -24, duration: 260 }}
+            out:fly={{ x: -24, duration: 200 }}
         >
-            <div class="icon">
-                <img src="/game_icons/{typeIcons[notification.type]}" alt={notification.type} />
-            </div>
-            <div class="item-info">
-                <img src={notification.item.image} alt="" srcset="" class="item-img">
-                <span class="item-name">{notification.item.name}</span>
-                {#if notification.quantity > 1}
-                    <span class="item-quantity">x{notification.quantity}</span>
-                {/if}
-            </div>
+
+            <!-- ── ITEM NOTIFICATIONS ── -->
+            {#if isItem(n)}
+                <div class="notif-icon">
+                    <img src="/game_icons/{itemActionIcons[n.type]}" alt="" />
+                </div>
+                <div class="notif-body">
+                    <img src={n.item.image} alt="" class="item-img" />
+                    <span class="notif-name">{n.item.name}</span>
+                    {#if n.quantity > 1}
+                        <span class="notif-qty">x{n.quantity}</span>
+                    {/if}
+                </div>
+
+            <!-- ── XP GAINED ── -->
+            {:else if isXp(n)}
+                <div class="notif-icon">
+                    <img src={getXpIcon(n.skill)} alt="" />
+                </div>
+                <div class="notif-body">
+                    <span class="notif-name">
+                        {#if n.skill}{n.skill}{:else}XP{/if}
+                    </span>
+                    <span class="notif-qty xp-amount">+{n.amount}</span>
+                </div>
+
+            <!-- ── LEVEL UP ── -->
+            {:else if isLevelUp(n)}
+                <div class="notif-icon level-up-icon">
+                    <img src={getXpIcon(n.skill)} alt="" />
+                </div>
+                <div class="notif-body">
+                    <span class="notif-label">LEVEL UP</span>
+                    <span class="notif-name">
+                        {n.skill ? n.skill : 'Player'} {n.level}
+                    </span>
+                </div>
+
+            <!-- ── BUFF APPLIED / EXPIRED ── -->
+            {:else if isBuff(n)}
+                <div class="notif-icon">
+                    <img
+                        src="/game_icons/{n.type === 'buff_applied' ? 'buff_applied.png' : 'buff_expired.png'}"
+                        alt=""
+                    />
+                </div>
+                <div class="notif-body">
+                    <span class="notif-name">{n.buffName}</span>
+                    {#if n.type === 'buff_applied' && n.duration_steps}
+                        <span class="notif-qty">{n.duration_steps} steps</span>
+                    {:else if n.type === 'buff_expired'}
+                        <span class="notif-qty expired">worn off</span>
+                    {/if}
+                </div>
+            {/if}
+
         </div>
     {/each}
 </div>
 
 <style>
     .notification-container {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
+        position: fixed;
+        bottom: 5rem;   /* above bottom-nav on mobile */
+        left: 1rem;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 6px;
         z-index: 1000;
+        pointer-events: none;
     }
 
     .notification {
         display: flex;
         align-items: center;
-        background-color: var(--surface-3);
-        border: 1px solid;
-        border-radius: 5px;
-        padding: 0rem 0.5rem;
-        width: 200px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        color: var(--color-text);
+        gap: 0.4rem;
+        background-color: var(--surface-3, #1e1e1e);
+        border: 1.5px solid #555;
+        border-left-width: 3px;     /* accent on left edge */
+        border-radius: 6px;
+        padding: 0.3rem 0.6rem 0.3rem 0.4rem;
+        min-width: 160px;
+        max-width: 220px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
     }
 
-    .notification.type-item_received {
-        border-color: var(--notification-received);
-    }
-    .notification.type-item_used {
-        border-color: var(--notification-used);
-    }
-    .notification.type-item_equipped {
-        border-color: var(--notification-equipped);
-    }
-    .notification.type-item_unequipped {
-        border-color: var(--notification-unequipped);
+    /* Level up gets slightly more presence */
+    .notification.is-level-up {
+        min-width: 180px;
+        padding: 0.4rem 0.7rem 0.4rem 0.5rem;
+        background: color-mix(in srgb, var(--surface-3, #1e1e1e) 85%, #facc1520);
     }
 
-    .icon {
-        margin-right: 0.5rem;
+    /* ── Icon ── */
+    .notif-icon img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        image-rendering: pixelated;
+        flex-shrink: 0;
     }
 
-    .icon img {
-        width: 10px;
-        height: 10px;
+    .level-up-icon img {
+        width: 20px;
+        height: 20px;
+        filter: drop-shadow(0 0 4px #facc15aa);
     }
 
-    .item-info {
+    /* ── Body ── */
+    .notif-body {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.35rem;
+        min-width: 0;
     }
 
-    .item-name {
-        font-weight: bold;
-        font-family: var(--font-family-pixel);
-        font-size: .5rem;
+    .notif-label {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.42rem;
+        letter-spacing: 0.12em;
+        color: #facc15;
+        flex-shrink: 0;
+    }
+
+    .notif-name {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.5rem;
+        color: #eee;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
     }
 
-    .item-quantity {
-        font-size: 0.6em;
-        color: var(--color-text-muted);
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    .notif-qty {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.48rem;
+        color: var(--text-muted, #888);
+        flex-shrink: 0;
+    }
+
+    .xp-amount {
+        color: #90a955;
+    }
+
+    .expired {
+        color: #888;
+        font-style: italic;
+    }
+
+    .item-img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        flex-shrink: 0;
+        image-rendering: pixelated;
     }
 </style>

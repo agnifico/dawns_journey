@@ -2,6 +2,7 @@
     "alchemy": {
         "name": "Alchemy",
         "description": "The art of brewing potions and transmuting materials.",
+        "icon" : "/game_icons/alchemy.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -14,6 +15,7 @@
     "farming": {
         "name": "Farming",
         "description": "The art of growing your own food.",
+        "icon" : "/game_icons/farming.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -26,6 +28,7 @@
     "mining": {
         "name": "Mining",
         "description": "The art of extracting valuable ores and minerals from the earth.",
+        "icon" : "/game_icons/mining.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -38,6 +41,7 @@
     "woodcutting": {
         "name": "Woodcutting",
         "description": "The art of chopping down trees and gathering wood.",
+        "icon" : "/game_icons/woodcutting.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -50,6 +54,7 @@
     "smithing": {
         "name": "Smithing",
         "description": "The art of forging weapons, and outfits.",
+        "icon" : "/game_icons/smithing.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
@@ -62,6 +67,7 @@
     "cooking": {
         "name": "Cooking",
         "description": "The art of turning ingredients into delicious nourishment.",
+        "icon" : "/game_icons/cooking.png",
         "levels": {
             "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },

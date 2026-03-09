@@ -49,6 +49,7 @@
 		loadMapData(get(mapStore).currentMapId);
 	});
 
+
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
 			applyProfile(selectedProfileId);
@@ -81,30 +82,10 @@
 	<div class="overlay desktop-only">
 		<div class="grid-container">
 			<div class="grid-box div1">
-				<h1>Dawn's <br />Adventure</h1>
+				<h1>Dawn's <br />Journey</h1>
 				<p>A serverless, no database browser based game.</p>
 			</div>
 			<div class="grid-box div2">
-				<h3>Starting Profile</h3>
-				<div class="profile-selector">
-					{#each profiles as profile (profile.id)}
-						<label class="radio-label" class:selected={selectedProfileId === profile.id}>
-							<img class="avatar" src={profile.avatar} alt="" />
-							<input
-								type="radio"
-								name="profile-select"
-								value={profile.id}
-								bind:group={selectedProfileId}
-							/>
-							<p>{profile.name}</p>
-						</label>
-					{/each}
-				</div>
-			</div>
-			<div class="grid-box div5">
-				<ImageSlideshow images={slideshowImages} />
-			</div>
-			<div class="grid-box div4">
 				<h3>Game Actions</h3>
 				<div class="game-actions">
 					{#if $playerStore.isInitialized}
@@ -113,7 +94,8 @@
 						<button on:click={() => goto('/homestead/farming')}>Farming</button>
 						<button on:click={() => goto('/journal')}>Journal</button>
 						<button on:click={() => goto('/shop')}>Shop</button>
-						<br />
+						<button on:click={() => goto('/inventory')}>Inventory</button>
+						<!-- <br /> -->
 						<button on:click={SaveLoadService.saveGame} class="save">Save Game</button>
 						<button on:click={SaveLoadService.loadGame}>Load Game</button>
 						<button on:click={SaveLoadService.clearSave} class="danger">Delete Save</button>
@@ -123,6 +105,12 @@
 						<button on:click={SaveLoadService.loadGame}>Load Game</button>
 					{/if}
 				</div>
+			</div>
+			<div class="grid-box div5">
+				<ImageSlideshow images={slideshowImages} />
+			</div>
+			<div class="grid-box div4">
+				<img class="banner" src="/banner.png" alt="" srcset="">
 			</div>
 			<div class="grid-box div6">
 				{#if $playerStore.isInitialized}
@@ -381,7 +369,7 @@
 
 	.game-actions {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
 		gap: 0.5rem;
 	}
 	.game-actions button {
@@ -457,6 +445,19 @@
 		}
 	}
 
+	.banner {
+		width: 100%;
+		object-fit: contain;
+		image-rendering: auto;
+	}
+	
+	.banner-m {
+		/* width: 100%; */
+		height: 50%;
+		object-fit: contain;
+		image-rendering: auto;
+	}
+
 	.div1 {
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
@@ -469,14 +470,14 @@
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
 		grid-column-start: 3;
-		background-color: #cd804d;
 		color: #222;
 		/* overflow: scroll; */
+		background-color: #cd804d;
 	}
 	.div4 {
 		grid-row: span 3 / span 3;
 		grid-column-start: 5;
-		background-color: #e9d9ca;
+		/* background-color: #e9d9ca; */
 		color: #cd804d;
 	}
 	.div5 {

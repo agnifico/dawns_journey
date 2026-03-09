@@ -4,8 +4,8 @@
 
 	let { children } = $props();
 
-	// onMount(() => hideNavbar.set(true));
-	// onDestroy(() => hideNavbar.set(false));
+	onMount(() => hideNavbar.set(true));
+	onDestroy(() => hideNavbar.set(false));
 </script>
 
 {@render children?.()}

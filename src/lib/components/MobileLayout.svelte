@@ -14,8 +14,9 @@
 	import MobileEventCard from '$lib/components/MobileEventCard.svelte';
 	import MobileEventPanel from '$lib/components/MobileEventPanel.svelte';
 	import NewItemNotif from './NewItemNotif.svelte';
-	import TileMessagePanel from '$lib/components/TileMessagePanel.svelte';
+	import Notification from './Notification.svelte';
 	import DialogueBox from './DialogueBox.svelte';
+	import MapEventNotif from './MapEventNotif.svelte';
 
 	let hasUnread = false;
 
@@ -75,8 +76,10 @@
 	<div class="map-area">
 		{#if $currentMapData && $playerStore.position}
 			<!-- <MapHUD /> -->
-			<NewItemNotif />
+			<!-- <Notification/> -->
 			<MapDisplay mapData={$currentMapData} player={$playerStore} />
+			<NewItemNotif/>
+			<MapEventNotif/>
 			<!-- <DialogueBox /> -->
 		{:else}
 			<div class="loading">Loading map...</div>
@@ -110,7 +113,7 @@
 
 		<!-- Floating card events (enemy, resource) — sits above map, below DPad -->
 		<MobileEventCard />
-		<TileMessagePanel mapMode={true} bind:hasUnread />
+
 		<!-- Panel events (npc, location) — bottom sheet -->
 		<MobileEventPanel />
 

@@ -26,10 +26,10 @@
 
 <style>
 	.region-notification-container {
-		position: absolute;
+		/* position: absolute;
 		bottom: 1rem;
 		left: 50%;
-		transform: translateX(-50%);
+		transform: translateX(-50%); */
 		background-color: rgba(0, 0, 0, 0);
 		color: white;
 		padding: 1rem 2rem;

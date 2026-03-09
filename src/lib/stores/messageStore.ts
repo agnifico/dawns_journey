@@ -11,7 +11,6 @@
 
 import { writable, get } from 'svelte/store';
 import { time } from './timeStore';
-import { generalMessageStore } from './generalMessageStore';
 import type { Item, NpcInteraction } from '$lib/types';
 
 export type MessageType = 'System' | 'World' | 'NPC' | 'Help' | 'Combat' | 'Player';
@@ -70,8 +69,6 @@ function createMessageStore() {
                 const newMessages = [...state.messages, newMessage].slice(-100);
                 return { ...state, messages: newMessages };
             });
-            // Also show in the general message overlay
-            // generalMessageStore.show(text);
         },
 
         /**

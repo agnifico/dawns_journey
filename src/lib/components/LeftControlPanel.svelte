@@ -33,6 +33,9 @@
 
 <div class="control-panel">
 	<div class="button-group">
+		<button class="icon-button logo" on:click={() => goto('/')}  title="Home">
+			<img src="/game_icons/medallion1.png" alt="Home" />
+		</button>
 		<button class="icon-button" on:click={() => goto('/map')}  title="Map">
 			<img src="/game_icons/map.png" alt="Map" />
 		</button>
@@ -180,6 +183,7 @@
 		width: 32px;
 		height: 32px;
 		display: block;
+		image-rendering: pixelated;
 	}
 	hr {
 		border: none;

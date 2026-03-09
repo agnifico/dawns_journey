@@ -5,7 +5,7 @@ export interface Settings {
 }
 
 const initialSettings: Settings = {
-    renderScale: 3,
+    renderScale: 4,
 };
 
 export const settingsStore = persistentStore<Settings>('settings', initialSettings);

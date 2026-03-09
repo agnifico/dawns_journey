@@ -38,6 +38,7 @@
 			playerStore.update((player) => claimAccumulatedTimePoints(player));
 		}, 60_000);
 	});
+	
 </script>
 
 <svelte:head>

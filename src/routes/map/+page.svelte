@@ -7,7 +7,6 @@
 	import { mapStore, currentMapData } from '$lib/stores/mapStore';
 	import { time } from '$lib/stores/timeStore';
 	import { combatStore } from '$lib/stores/combatStore';
-	// import { dialogueStore } from '$lib/stores/dialogueStore';
 	import { checkForTileInteraction } from '$lib/services/InteractionService';
 	import { checkForRandomEncounter } from '$lib/services/EncounterService';
 	import { processBuffs } from '$lib/services/BuffService';
@@ -17,28 +16,18 @@
 		mobileInfoPanelView,
 		switchToEventView,
 		switchToLogView,
-		// showQuestTracker,
-		// showHomesteadTracker,
 		showMessageBox,
-		eventScreen,
-		clearEvent,
+		clearEvent
 	} from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
-	import EventScreen from '$lib/components/EventScreen.svelte';
-	// import MobileInfoPanel from '$lib/components/MobileInfoPanel.svelte';
-	// import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
+	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
+	import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
 	import CombatModal from '$lib/components/CombatModal.svelte';
-	// import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
-	// import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
-	// import DialogueBox from '$lib/components/DialogueBox.svelte';
 	import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
 	import { validateAllData } from '$lib/services/ValidationService';
 	import { questStore } from '$lib/stores/questStore';
-	import ChoiceMenu from '$lib/components/ui/ChoiceMenu.svelte';
-	// import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
 	import MapHUD from '$lib/components/ui/MapHUD.svelte';
-	// import RegionNotification from '$lib/components/RegionNotification.svelte';
 	import MobileLayout from '$lib/components/MobileLayout.svelte';
 
 	let mainElement: HTMLElement;
@@ -68,28 +57,22 @@
 			const mapData = get(currentMapData);
 			if (!mapData) return;
 
-			// Process buffs
 			const nextTime = get(time) + 1;
 			const buffedPlayer = processBuffs(player, nextTime);
 			playerStore.update((p) => ({ ...p, ...buffedPlayer }));
 
-			// Update time and other stores
 			time.update((t) => t + 1);
 			AchievementService.checkMilestone('steps');
 			mapStore.setPlayerPosition(player.position.x, player.position.y);
 			clearEvent();
 
-			// Region-related logic
 			const regionInfo = getRegionForPosition(player.position, mapData);
 			if (regionInfo && get(mapStore).landscape?.id !== regionInfo.id) {
 				mapStore.showRegionNotification(regionInfo.name);
-				setTimeout(() => {
-					mapStore.hideRegionNotification();
-				}, 3000);
+				setTimeout(() => { mapStore.hideRegionNotification(); }, 3000);
 			}
 			mapStore.update((s) => ({ ...s, landscape: regionInfo }));
 
-			// Check for interactions and encounters
 			const interactionOccurred = await checkForTileInteraction();
 			if (!interactionOccurred) {
 				checkForRandomEncounter();
@@ -100,11 +83,9 @@
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
-
 		handleMovement(event.key);
-
 		switch (event.key) {
-			case ' ': // A button
+			case ' ':
 			case 'z':
 				handleActionButton();
 				break;
@@ -112,43 +93,18 @@
 	}
 
 	function handleMovement(key: string) {
-		let dx = 0;
-		let dy = 0;
-
+		let dx = 0, dy = 0;
 		switch (key) {
-			case 'ArrowUp':
-			case 'w':
-				dy = -1;
-				break;
-			case 'ArrowDown':
-			case 's':
-				dy = 1;
-				break;
-			case 'ArrowLeft':
-			case 'a':
-				dx = -1;
-				break;
-			case 'ArrowRight':
-			case 'd':
-				dx = 1;
-				break;
+			case 'ArrowUp':  case 'w': dy = -1; break;
+			case 'ArrowDown': case 's': dy = 1;  break;
+			case 'ArrowLeft': case 'a': dx = -1; break;
+			case 'ArrowRight':case 'd': dx = 1;  break;
 		}
-
-		if (dx !== 0 || dy !== 0) {
-			game.movePlayer(dx, dy);
-		}
+		if (dx !== 0 || dy !== 0) game.movePlayer(dx, dy);
 	}
 
 	function handleActionButton() {
 		checkForTileInteraction();
-	}
-
-	function toggleMobileView() {
-		if (get(mobileInfoPanelView) === 'log') {
-			switchToEventView();
-		} else {
-			switchToLogView();
-		}
 	}
 </script>
 
@@ -156,218 +112,118 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <main on:keydown={handleKeyDown} tabindex="0" bind:this={mainElement}>
 	<CombatModal />
-	<!-- <RegionNotification /> -->
-	<!-- {#if $showQuestTracker}
-		<QuestTracker />
-	{/if}
-	{#if $showHomesteadTracker}
-		<HomesteadStatus />
-	{/if} -->
 
 	{#if isMobile}
 		<MobileLayout />
 	{:else}
-		<div class="console-super">
-			<div class="console">
-				<!-- Desktop Layout -->
-				<div class="left-panel">
-					<LeftControlPanel />
+		<div class="console">
+			<LeftControlPanel />
+
+			<div class="center-col">
+				<!-- Map fills all available height above the tray -->
+				<div class="game-view-container">
+					{#if $currentMapData && $playerStore.position}
+						<MapHUD />
+						<MapDisplay mapData={$currentMapData} player={$playerStore} />
+					{:else}
+						<p>Loading map...</p>
+					{/if}
 				</div>
 
-				<div class="center-panel">
-					<div class="game-view-container">
-						<!-- <CoordinateDisplay /> -->
-						{#if $currentMapData && $playerStore.position}
-						<MapHUD/>
-							<MapDisplay mapData={$currentMapData} player={$playerStore} />
-						{:else}
-							<p>Loading map...</p>
-						{/if}
-					</div>
-					{#if $showMessageBox}
-						<div class="message-log-wrapper">
+				<!-- Tray: MessageLog + QuestTracker + HomesteadStatus, all toggled together -->
+				{#if $showMessageBox}
+					<div class="tray">
+						<div class="tray-message">
 							<MessageLog />
 						</div>
-					{/if}
-				</div>
-
-				<div class="right-panel">
-					<EventScreen />
-					<!-- <DialogueBox /> -->
-					{#if $eventScreen.type === 'npc' || ($eventScreen.type === 'location_event' && $eventScreen.data?.actions) || $eventScreen.type === 'resource' || ($eventScreen.type === 'enemy' && $eventScreen.data.isLegendary)}
-						<ChoiceMenu />
-					{/if}
-				</div>
+						<div class="tray-trackers">
+							<QuestTracker />
+							<HomesteadStatus />
+						</div>
+					</div>
+				{/if}
 			</div>
-			<!-- <p>Dawn's Journey (c)</p> -->
 		</div>
 	{/if}
 </main>
 
 <style>
+	/* Fill the full viewport — no scrolling, no overflow */
 	main {
-		position: relative;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
+		position: fixed;
+		inset: 0;
 		display: flex;
-		border: none;
 		outline: none;
-	}
-	.console-super {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding-block: 1rem 2rem;
-		padding-inline: 1rem;
-		background-color: #e27a7a;
-		border: 6px solid #00000056;
-		box-shadow: #00000056 0 -12px 0 0px inset;
-		box-sizing: border-box;
-		border-radius: 24px;
-		margin: auto;
-		/* flex-grow: 1; */
-		/* max-width: 100%; */
-
-		p {
-			position: absolute;
-			bottom: 2rem;
-			left: 50%;
-			font-family: var(--font-family-main);
-		}
+		overflow: hidden;
 	}
 
+	/* Outer console: left panel + center column, styled panel */
 	.console {
 		display: flex;
-		align-items: flex-start;
-		overflow: hidden;
-		gap: 1rem;
-		/* width: 100%; */
-	}
-
-	.left-panel {
-		width: fit-content;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	.logo-button {
-		border: none;
-		margin: auto;
-		width: 100%;
-		aspect-ratio: 1;
-		border-radius: 18px;
-		box-sizing: border-box;
-		background-color: var(--surface-2);
-		box-sizing: border-box;
-		border: 6px solid #00000056;
-		box-sizing: border-box;
-		color: var(--color-primary);
-		font-weight: 600;
-	}
-
-	.center-panel {
-		display: flex;
-		flex-direction: column;
 		gap: 1rem;
 		padding: 1rem;
+		padding-bottom: 2rem;
 		box-sizing: border-box;
 		background-color: var(--surface-1);
-		padding-bottom: 2rem;
 		border: 6px solid #00000056;
 		box-shadow: #00000056 0 -12px 0 0px inset;
-		box-sizing: border-box;
 		border-radius: 24px;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
 	}
 
+	/* Center column: map on top, tray on bottom */
+	.center-col {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	/* Map: grows to fill all space the tray doesn't take */
 	.game-view-container {
+		flex: 1;
+		min-height: 0;          /* critical for flex children to shrink */
 		border-radius: 12px;
 		overflow: hidden;
 		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 800px;
-		/* flex-grow: 1; */
-		height: 400px;
 		background-color: #222;
 		border: 3px solid var(--surface-2);
 		box-sizing: border-box;
 	}
 
-	.message-log-wrapper {
-		height: 150px;
-		flex-grow: 1;
+	/* Tray: fixed height, stretches full width, three items side by side */
+	.tray {
 		display: flex;
+		gap: 1rem;
+		height: 180px;
+		flex-shrink: 0;
+	}
+
+	/* MessageLog takes all remaining tray width */
+	.tray-message {
+		flex: 1;
+		min-width: 0;
+		min-height: 0;
 		border: 3px solid var(--surface-2);
 		border-radius: 12px;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
-	.right-panel {
+	/* Trackers sit to the right, side by side, fixed width */
+	.tray-trackers {
 		display: flex;
 		gap: 1rem;
-		flex-direction: column;
-		width: 400px;
 		flex-shrink: 0;
-		padding: 1rem;
-		background-color: var(--surface-1);
-		padding-bottom: 2rem;
-		border: 6px solid #00000056;
-		box-shadow: #00000056 0 -12px 0 0px inset;
-		border-radius: 24px;
-		/* box-sizing: border-box; */
 	}
 
-	/* --- MOBILE STYLES --- */
-	.mobile-bottom-bar {
-		display: none; /* Hide old/mobile panels on desktop */
-	}
-
+	/* Mobile: handled entirely by MobileLayout */
 	@media (max-width: 768px) {
-		main {
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: stretch;
-			gap: 0;
-		}
-		.left-panel,
-		.center-panel {
-			display: none; /* Hide new desktop layout on mobile */
-		}
-
-		.game-view-container {
-			width: 100%;
-			height: calc(100% - 280px);
-			border: none;
-		}
-
-		.mobile-bottom-bar {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			height: 280px;
-			background-color: #1a1a1a;
-			flex-shrink: 0;
-			position: absolute;
-			bottom: 0;
-		}
-		.mobile-info-wrapper {
-			height: 160px;
-			width: 100%;
-			border-bottom: 1px solid #444;
-		}
-		.mobile-controls {
-			height: 120px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 0 20px;
-			box-sizing: border-box;
-		}
-		/* ... other mobile styles can be added here ... */
+		.console { display: none; }
 	}
 </style>

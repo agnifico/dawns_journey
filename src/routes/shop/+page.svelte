@@ -5,7 +5,7 @@
 
 <main>
     <Shop />
-    <Notification />
+    <!-- <Notification /> -->
 </main>
 
 <style>

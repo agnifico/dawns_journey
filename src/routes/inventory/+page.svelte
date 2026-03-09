@@ -35,7 +35,7 @@
         </div>
     </div>
 </main>
-<Notification />
+<!-- <Notification /> -->
 
 <style>
     main {

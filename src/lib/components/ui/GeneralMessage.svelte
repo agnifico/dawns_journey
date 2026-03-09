@@ -9,10 +9,6 @@
 	 * USAGE: drop once in your root layout (_layout.svelte or MobileLayout).
 	 * No props needed.
 	 *
-	 * The old generalMessageStore behaviour (auto-show on addMessage) is
-	 * intentionally removed — that job now belongs to TileMessagePanel.
-	 * If you still need generalMessageStore elsewhere, keep it as a separate
-	 * store; this component no longer reads it.
 	 */
 
 	import { nudgeStore, type Nudge } from '$lib/stores/nudgeStore';

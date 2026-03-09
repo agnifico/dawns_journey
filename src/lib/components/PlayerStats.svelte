@@ -31,12 +31,17 @@
 			</div>
 		</div>
 	</div>
+	
 
 	{#if currentView === 'stats'}
 		<div class="stats-grid">
 			{#if $playerStats}
 				{@const xpInLevel = $playerStore.xp - getXpForLevel($playerStore.level)}
 				{@const xpNeeded = getXpForLevelUp($playerStore.level)}
+				<div class="skill-wrap">
+					<div class="skill-item-intra">
+
+						<img class="skill-icon" src='/game_icons/player_level.png' alt="" srcset="" />
 				<div class="skill-item" style="grid-column: 1 / -1;">
 					<div class="skill-info">
 						<span class="name">Level</span>
@@ -56,6 +61,10 @@
 							<div class="xp-text">Max Level</div>
 						</div>
 					{/if}
+					</div>
+
+				</div>
+
 				</div>
 				<div class="stats-column">
 					<Stat
@@ -89,11 +98,11 @@
 						baseValue={$playerStore.baseStats.precision}
 					/>
 					<Stat
-					view="full"
-					statId="speed"
-					value={$playerStats.speed}
-					baseValue={$playerStore.baseStats.speed}
-				/>
+						view="full"
+						statId="speed"
+						value={$playerStats.speed}
+						baseValue={$playerStore.baseStats.speed}
+					/>
 				</div>
 				<div class="stats-column">
 					<Stat
@@ -122,11 +131,11 @@
 						baseValue={$playerStore.baseStats.critDamage}
 					/>
 					<Stat
-					view="full"
-					statId="evasion"
-					value={$playerStats.evasion}
-					baseValue={$playerStore.baseStats.evasion}
-				/>
+						view="full"
+						statId="evasion"
+						value={$playerStats.evasion}
+						baseValue={$playerStore.baseStats.evasion}
+					/>
 				</div>
 			{:else}
 				<p>Loading stats...</p>
@@ -136,23 +145,30 @@
 		<div class="skills-grid">
 			{#if $playerStore.skills}
 				{#each $playerStore.skills as skill}
-					<div class="skill-item">
-						<div class="skill-info">
-							<span class="name">{skill.name}</span>
-							<span class="level">Lv. {skill.level}</span>
-						</div>
-						<div class="xp-bar">
-							<div
-								class="xp-fill"
-								style="width: {Math.min(
-									100,
-									(skill.experience / getXpForSkillLevel(skill.id, skill.level)) * 100
-								)}%;"
-							></div>
-							<div class="xp-text">
-								{skill.experience} / {getXpForSkillLevel(skill.id, skill.level)}
+					<div class="skill-wrap">
+						<div class="skill-item-intra">
+							<img class="skill-icon" src='/game_icons/{skill.name.toLowerCase()}.png' alt="" srcset="" />
+							<div class="skill-item">
+								<div class="skill-info">
+									<span class="name">{skill.name}</span>
+									<span class="level">Lv. {skill.level}</span>
+								</div>
+
+								<div class="xp-bar">
+									<div
+										class="xp-fill"
+										style="width: {Math.min(
+											100,
+											(skill.experience / getXpForSkillLevel(skill.id, skill.level)) * 100
+										)}%;"
+									></div>
+									<div class="xp-text">
+										{skill.experience} / {getXpForSkillLevel(skill.id, skill.level)}
+									</div>
+								</div>
 							</div>
 						</div>
+						<!-- <p class="skill-desc">{skill.description}</p> -->
 					</div>
 				{/each}
 			{:else}
@@ -229,26 +245,60 @@
 		gap: 0.5em;
 	}
 	.skills-grid {
-		display: grid;
-		grid-template-columns: 1fr;
+		display: flex;
+		/* grid-template-columns: 1fr; */
+		flex-direction: column;
 		gap: 0.75em;
 	}
+	.skill-wrap {
+		background-color: #3a3a3a;
+		display: flex;
+		flex-direction: column;
+		padding: .5rem;
+		gap: .5rem;
+		border-radius: 6px;
+	}
+
 	.skill-item {
 		font-family: var(--font-family-pixel);
-		font-size: 0.75rem;
+		font-size: 1rem;
 		display: flex;
 		flex-direction: column;
 		background-color: var(--color-surface-3);
 		padding: 0.5em;
 		border-radius: 5px;
 		color: var(--color-text-primary);
+		color: var(--orange);
 		gap: 0.25rem;
+
+		flex-grow: 1;
+	}
+	.skill-item-intra {
+		display: flex;
+		align-items: center;
+	}
+	.skill-icon {
+		width: 32px;
+		height: 32px;
+		background-color: #a28269;
+		padding: 4px 4px 7px;
+		border-radius: 6px;
+		box-shadow: #00000056 0 -3px 0 0 inset;
+		border: 3px solid #3a3a3a;
 	}
 	.skill-info {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
 	}
+
+	.skill-desc {
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		color: var(--orange);
+		margin-left: .5rem;
+	}
+
 	.xp-bar {
 		width: 100%;
 		height: 14px;

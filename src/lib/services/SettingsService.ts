@@ -8,6 +8,7 @@ import { playerDev, devNpcState, devQuestState } from '$lib/data/player.dev';
 import { checkQuestTriggers } from '../services/QuestService';
 import * as AchievementService from './AchievementService';
 import type { Item, ActiveEffect } from '$lib/types';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 /**
  * Replaces the player's inventory with a full set of all items in the game.
@@ -53,12 +54,17 @@ export function applyDevBuff() {
     const duration = 999;
 
     const devBuffs: ActiveEffect[] = [
-        { id: 'dev_phys_atk', name: 'Dev Buff', stat: 'physicalAttack', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
-        { id: 'dev_phys_def', name: 'Dev Buff', stat: 'physicalDefence', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
-        { id: 'dev_elem_atk', name: 'Dev Buff', stat: 'elementalAttack', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
-        { id: 'dev_elem_def', name: 'Dev Buff', stat: 'elementalDefence', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
-        { id: 'dev_crit', name: 'Dev Buff', stat: 'critChance', type: 'flat', value: 1, duration, source: 'Developer', expiryTime: currentTime + duration },
+        { id: 'dev_phys_atk', name: 'God Mode', stat: 'physicalAttack', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
+        { id: 'dev_phys_def', name: 'God Mode', stat: 'physicalDefence', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
+        { id: 'dev_elem_atk', name: 'God Mode', stat: 'elementalAttack', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
+        { id: 'dev_elem_def', name: 'God Mode', stat: 'elementalDefence', type: 'flat', value: 1000, duration, source: 'Developer', expiryTime: currentTime + duration },
+        { id: 'dev_crit', name: 'God Mode', stat: 'critChance', type: 'flat', value: 1, duration, source: 'Developer', expiryTime: currentTime + duration },
     ];
+    notificationStore.addBuff('GodMode : Phy. ATK +1000', duration, "applied");
+    notificationStore.addBuff('GodMode : Phy. DEF +1000', duration, "applied");
+    notificationStore.addBuff('GodMode : Ele. ATK +1000', duration, "applied");
+    notificationStore.addBuff('GodMode : Ele. DEF +1000', duration, "applied");
+    notificationStore.addBuff('GodMode : Crit Chance +100%', duration, "applied");
 
     playerStore.update(p => {
         // Remove any existing dev buffs before applying new ones

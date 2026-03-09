@@ -125,7 +125,7 @@ export function removeItemsByItemId(player: Player, itemId: string, amount: numb
             amountToRemove--;
         }
     }
-
+    notificationStore.add('item_removed', player.inventory.find(i => i.id === itemId), amount);
     return { ...player, inventory: newInventory };
 }
 
@@ -135,8 +135,8 @@ export function removeItemsByItemId(player: Player, itemId: string, amount: numb
 export function removeItemByInstanceId(player: Player, instanceId: string): Player {
     let inventoryItemIndex = player.inventory.findIndex(i => i.instanceId === instanceId);
     const itemToUse = player.inventory[inventoryItemIndex];
-    notificationStore.add('item_unequipped', itemToUse, 1);
-    notificationStore.addBuff('lolcats', 50, 'applied');
+    notificationStore.add('item_removed', itemToUse, 1);
+    // notificationStore.addBuff('lolcats', 50, 'applied');
     return { ...player, inventory: player.inventory.filter(i => i.instanceId !== instanceId) };
 }
 
@@ -179,6 +179,7 @@ export function useItem(instanceId: string) {
                 const newEffect: ActiveEffect = { ...effect, expiryTime: currentTime + effect.duration };
                 newPlayer.activeEffects.push(newEffect);
                 messageStore.addMessage(`${effect.name} applied.`, ['System']);
+                notificationStore.addBuff(effect.name,effect.duration,"applied");
             });
         }
 

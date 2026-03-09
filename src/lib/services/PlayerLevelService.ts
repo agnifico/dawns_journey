@@ -2,6 +2,7 @@ import type { Player } from '$lib/types';
 import { messageStore } from '$lib/stores/messageStore';
 import { addItems } from './InventoryService';
 import playerLevels from '$lib/data/playerLevels.json';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 function getLevelFromXp(xp: number): number {
     let level = 1;
@@ -22,12 +23,14 @@ export function gainExperience(player: Player, amount: number): Player {
     let newPlayer = { ...player };
     newPlayer.xp += amount;
     messageStore.addMessage(`You gain ${amount} XP.`, ['System']);
+    notificationStore.addXp(amount, '');
 
     const newLevel = getLevelFromXp(newPlayer.xp);
 
     if (newLevel > newPlayer.level) {
         for (let i = newPlayer.level + 1; i <= newLevel; i++) {
             messageStore.addMessage(`You are now level ${i}!`, ['System', 'LevelUp']);
+            notificationStore.addLevelUp(1);
             const levelData = (playerLevels.levels as any)[i];
             if (levelData?.rewards) {
                 for (const reward of levelData.rewards) {

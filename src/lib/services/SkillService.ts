@@ -5,9 +5,11 @@ import { getXpForLevelFromData } from './SkillDataService';
 import { addItems } from './InventoryService';
 import skills from '$lib/data/skills.json';
 import type { Player } from '$lib/types';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 const LEVEL_EXPONENT = 1.6;
 const BASE_XP = 100;
+
 
 export function getXpForLevel(skillId: string, level: number): number {
     const xp = getXpForLevelFromData(skillId, level);
@@ -30,6 +32,7 @@ export function gainExperience(player: Player, skillId: string, amount: number):
     const skill = { ...newPlayer.skills[skillIndex] };
     skill.experience += amount;
     messageStore.addMessage(`You gain ${amount} ${skill.name} experience.`, ['World']);
+    notificationStore.addXp(amount, skill.name);
 
     let xpForNextLevel = getXpForLevel(skillId, skill.level);
     while (skill.experience >= xpForNextLevel) {
@@ -37,6 +40,7 @@ export function gainExperience(player: Player, skillId: string, amount: number):
         skill.experience -= xpForNextLevel;
         newPlayer.techPoints += TECH_POINTS_PER_LEVEL;
         messageStore.addMessage(`${skill.name} level is now ${skill.level}!`, ['Player']);
+        notificationStore.addLevelUp(1, skill.name);
         messageStore.addMessage(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`, ['Player']);
 
         // Add rewards for the new level
@@ -93,6 +97,7 @@ export function setSkillLevel(skillId: string, level: number) {
         }
 
         messageStore.addMessage(`${skill.name} level set to ${level} for testing.`, ['System']);
+        notificationStore.addLevelUp(level, skill.name);
         return newPlayer;
     });
 }

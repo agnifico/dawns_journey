@@ -1,5 +1,6 @@
 import type { Player } from '$lib/types';
 import { messageStore } from '$lib/stores/messageStore';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 /**
  * Processes the player's active effects, removing any that have expired.
@@ -15,6 +16,7 @@ export function processBuffs(player: Player, currentTime: number): Player {
     const remainingEffects = activeEffects.filter(effect => {
         if (effect.expiryTime && currentTime >= effect.expiryTime) {
             effectsToRemove.push(effect.name);
+            notificationStore.addBuff(effect.name,effect.duration,"expired");
             return false;
         }
         return true;
