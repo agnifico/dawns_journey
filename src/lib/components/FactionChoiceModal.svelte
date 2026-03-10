@@ -2,7 +2,7 @@
     import { isFactionChoiceModalOpen, closeFactionChoiceModal } from '$lib/stores/uiStore';
     import { handleFactionChoice } from '$lib/services/LocationEventService';
 
-    function handleChoice(faction: 'Solis Saints' | 'Shadowhand') {
+    function handleChoice(faction: 'solis_saints' | 'shadowhand') {
         handleFactionChoice(faction);
         closeFactionChoiceModal();
     }
@@ -14,10 +14,10 @@
             <h2>Choose Your Allegiance</h2>
             <p>Your decision will shape the future of this island.</p>
             <div class="button-container">
-                <button class="solis-button" on:click={() => handleChoice('Solis Saints')}>
+                <button class="solis-button" on:click={() => handleChoice('solis_saints')}>
                     Destroy the Tower (Solis Saints)
                 </button>
-                <button class="shadowhand-button" on:click={() => handleChoice('Shadowhand')}>
+                <button class="shadowhand-button" on:click={() => handleChoice('shadowhand')}>
                     Fight Back (Shadowhand)
                 </button>
             </div>

@@ -8,6 +8,8 @@ export type HomesteadSubTab = 'farming' | 'workshop';
 export const inventoryTab = writable<InventoryTab>('general');
 export const homesteadSubTab = writable<HomesteadSubTab>('farming');
 
+
+
 export const hideNavbar = writable(false);
 
 
@@ -149,3 +151,4 @@ export function closeFactionChoiceModal() {
 export const showQuestTracker = persistentStore<boolean>('showQuestTracker', true);
 export const showHomesteadTracker = persistentStore<boolean>('showHomesteadTracker', false);
 export const showMessageBox = persistentStore<boolean>('showMessageBox', true);
+export const showEventScreen   = writable<boolean>(true);   // draggable event panel in map

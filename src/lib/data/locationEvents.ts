@@ -65,7 +65,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             {
                 text: 'Swap a Stone for the Gem',
                 effects: [
-                    { type: 'SWAP_ITEM', takeItemId: 'stone', takeQuantity: 1, giveItemId: 'amethyst', giveQuantity: 1 }
+                    { type: 'SWAP_ITEM', takeItemId: 'stone', takeQuantity: 1, giveItemId: 'saints_greatsword', giveQuantity: 1 }
                 ],
             },
         ],
@@ -134,8 +134,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             effects: [
               { type: "set_quest_state", questId: "guinevere_sword_4", state: "COMPLETED" },
               { type: "set_quest_state", questId: "akari_sword_2", state: "FAILED" },
-              { type: "add_reputation", faction: "Solis Saints", amount: 25 },
-              { type: "add_reputation", faction: "Shadowhand", amount: -15 },
+              { type: "add_reputation", faction: "solis_saints", amount: 25 },
+              { type: "add_reputation", faction: "shadowhand", amount: -15 },
               { type: "add_tag", tag: "chose_solis_saints" }
             ],
             responseMessage: "You have chosen to align with the Solis Saints. The path of light is now clearer, but shadows of resentment may follow."
@@ -146,8 +146,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             effects: [
               { type: "set_quest_state", questId: "akari_sword_2", state: "COMPLETED" },
               { type: "set_quest_state", questId: "guinevere_sword_4", state: "FAILED" },
-              { type: "add_reputation", faction: "Shadowhand", amount: 25 },
-              { type: "add_reputation", faction: "Solis Saints", amount: -15 },
+              { type: "add_reputation", faction: "shadowhand", amount: 25 },
+              { type: "add_reputation", faction: "solis_saints", amount: -15 },
               { type: "add_tag", tag: "chose_shadowhand" }
             ],
             responseMessage: "You have cast your lot with the Shadowhand. You gain favor in the underworld, but have made a powerful enemy in the light."

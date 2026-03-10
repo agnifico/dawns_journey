@@ -10,6 +10,7 @@ import { weapons } from '../data/weapons';
 import { relics } from '../data/relics';
 import { createItem, createItems } from './ItemFactory';
 import { activeItem } from '$lib/stores/uiStore'; // Import activeItem
+import { toastStore } from '$lib/stores/toastStore';
 
 // ---------------------------------------------------------------------------
 // Item data lookup (merged from ItemDataService)
@@ -214,7 +215,7 @@ export function equipItem(instanceId: string) {
 
         // Flag conflict check
         if (itemToEquip.flags && itemToEquip.flags.length > 0) {
-            const specialFlags = ['24px', 'shield1'];
+            const specialFlags = ['24px', 'legendary', 'special'];
             let equippedFlags = player.equipment.relic_slots
                 .filter(Boolean)
                 .flatMap(r => r.flags || [])
@@ -223,6 +224,7 @@ export function equipItem(instanceId: string) {
             const conflict = itemToEquip.flags.some(flag => equippedFlags.includes(flag));
             if (conflict) {
                 messageStore.addMessage(`You can only equip one ${itemToEquip.flags.join(', ')} at a time.`, ['System']);
+                toastStore.warning(`You can only equip one ${itemToEquip.flags.join(', ')} at a time.`);
                 return player;
             }
         }

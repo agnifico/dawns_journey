@@ -8,6 +8,7 @@
 	import AbilityTag from '$lib/components/ui/AbilityTag.svelte';
 	import Stat from '$lib/components/Stat.svelte';
 	import { abilityMode } from '$lib/stores/settingsStore';
+	import Notification from "$lib/components/Notification.svelte";
 
 	let opponents: Combatant[] = [];
 	let selectedNpc: Combatant | null = null;
@@ -167,6 +168,7 @@
 			{/if}
 		</div>
 	</div>
+	<Notification />
 </div>
 
 <CombatModal />

@@ -372,7 +372,7 @@ export const weapons: Item[] = [
         description: "A blessed greatsword; standard issue for the Saints Ten. Heavy faith, heavy armour.",
         image: "/weapons/saints_greatsword.png", type: "weapon",
         stats: [{ name: "physicalAttack", value: 120 }, { name: "physicalDefence", value: 60 }, { name: "elementalDefence", value: 55 }, { name: "maxHp", value: 150 }],
-        element: "Light", mastery: 45, flags: ['heavy'], instanceId: ''
+        element: "Light", mastery: 45, flags: ['heavy', 'legendary'], instanceId: ''
     },
     {
         id: "beloveds_eye", name: "Beloved's Eye",

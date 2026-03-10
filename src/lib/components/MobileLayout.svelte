@@ -14,8 +14,8 @@
 	import MobileEventCard from '$lib/components/MobileEventCard.svelte';
 	import MobileEventPanel from '$lib/components/MobileEventPanel.svelte';
 	import NewItemNotif from './NewItemNotif.svelte';
-	import Notification from './Notification.svelte';
-	import DialogueBox from './DialogueBox.svelte';
+	// import Notification from './Notification.svelte';
+	// import DialogueBox from './DialogueBox.svelte';
 	import MapEventNotif from './MapEventNotif.svelte';
 
 	let hasUnread = false;

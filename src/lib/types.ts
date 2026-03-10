@@ -321,7 +321,7 @@ export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
     | { type: 'remove_tag'; tagId: string; }                                    // NEW: explicitly remove a world tag
-    | { type: 'change_reputation'; faction: 'Solis Saints' | 'Shadowhand'; amount: number; }
+    | { type: 'change_reputation'; faction: 'solis_saints' | 'shadowhand'; amount: number; }
     | { type: 'faction_score'; factionId: string; amount: number; }            // NEW: direct faction score delta
     | { type: 'complete_quest_stage'; questId: string; }
     | { type: 'fail_quest'; questId: string; };                                 // already existed in type, now handled
@@ -334,7 +334,7 @@ export type GameEffect =
     | { type: 'TAKE_ITEM'; itemId: string; quantity: number }
     | { type: 'SWAP_ITEM'; takeItemId: string; takeQuantity: number; giveItemId: string; giveQuantity: number }
     | { type: 'trigger_faction_choice' }
-    | { type: 'CHOOSE_FACTION'; faction: 'Solis Saints' | 'Shadowhand' }
+    | { type: 'CHOOSE_FACTION'; faction: 'solis_saints' | 'shadowhand' }
     | { type: 'add_tag'; tag: string }
     | { type: 'remove_tag'; tag: string }                                       // NEW
     | { type: 'give_item'; itemId: string; quantity: number }

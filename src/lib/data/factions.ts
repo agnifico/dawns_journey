@@ -9,7 +9,7 @@ export const factions: Record<string, Faction> = {
         rank: 0,
         ranks: [
             {
-                scoreThreshold: 1,
+                scoreThreshold: 5,
                 rewards: [
                     {
                         type: "item",
@@ -19,7 +19,7 @@ export const factions: Record<string, Faction> = {
                 ]
             },
             {
-                scoreThreshold: 2,
+                scoreThreshold: 10,
                 rewards: [
                     {
                         type: "item",
@@ -29,7 +29,7 @@ export const factions: Record<string, Faction> = {
                 ]
             },
             {
-                scoreThreshold: 4,
+                scoreThreshold: 15,
                 rewards: [
                     {
                         type: "item",
@@ -59,6 +59,16 @@ export const factions: Record<string, Faction> = {
             },
             {
                 scoreThreshold: 10,
+                rewards: [
+                    {
+                        type: "item",
+                        itemId: "wood",
+                        quantity: 10
+                    }
+                ]
+            },
+            {
+                scoreThreshold: 15,
                 rewards: [
                     {
                         type: "item",

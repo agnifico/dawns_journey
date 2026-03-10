@@ -6,6 +6,8 @@ import { get } from 'svelte/store';
 import { addItems, removeItemsByItemId } from './InventoryService';
 import { getItemById } from '$lib/services/InventoryService';
 import { game } from '$lib/game/game';
+import { increaseFactionScore, decreaseFactionScore } from './FactionService';
+import { toastStore } from '$lib/stores/toastStore';
 
 type EffectHandler = (player: Player, effect: GameEffect, currentStats: any) => { newPlayer: Player, effectApplied: boolean, allEffectsApplied: boolean };
 
@@ -52,6 +54,7 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
             allEffectsApplied = false;
             const itemDetails = getItemById(effect.itemId);
             messageStore.addMessage(`You don't have ${effect.quantity} ${itemDetails?.name || 'item'}.`, ['System']);
+            toastStore.warning(`You don't have ${effect.quantity} ${itemDetails?.name || 'item'}.`);
             return { newPlayer, effectApplied: false, allEffectsApplied };
         }
     },
@@ -67,6 +70,7 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
             allEffectsApplied = false;
             const itemDetails = getItemById(effect.takeItemId);
             messageStore.addMessage(`You don't have ${effect.takeQuantity} ${itemDetails?.name || 'item'} to swap.`, ['System']);
+            toastStore.warning(`You don't have ${effect.quantity} ${itemDetails?.name || 'item'}.`);
             return { newPlayer, effectApplied: false, allEffectsApplied };
         }
     },
@@ -90,9 +94,14 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
         return { newPlayer: player, effectApplied: true, allEffectsApplied: true };
     },
     add_reputation: (player, effect) => {
-        let newPlayer = { ...player };
-        newPlayer.factionReputation[effect.faction] = (newPlayer.factionReputation[effect.faction] || 0) + effect.amount;
-        return { newPlayer, effectApplied: true, allEffectsApplied: true };
+        // Route through FactionService so rival penalties, rank-up checks,
+        // and notifications all fire correctly.
+        if (effect.amount > 0) {
+            increaseFactionScore(effect.faction, effect.amount);
+        } else if (effect.amount < 0) {
+            decreaseFactionScore(effect.faction, Math.abs(effect.amount));
+        }
+        return { newPlayer: player, effectApplied: true, allEffectsApplied: true };
     },
     switch_map: (player, effect) => {
         game.switchMap(effect.mapId, { x: effect.x, y: effect.y });

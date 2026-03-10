@@ -15,6 +15,7 @@ import { gainExperience } from './PlayerLevelService';
 import { allAbilities, getAbilityById } from '../data/abilities';
 import { checkRequirement, checkQuestTriggers } from './QuestService';
 import { addItems } from './InventoryService';
+import { toastStore } from '$lib/stores/toastStore';
 
 // ---------------------------------------------------------------------------
 // Gear passives → permanent StatusEffects
@@ -492,6 +493,7 @@ export function startCombat(opponentNpc: NPC): void {
 
     if (currentPlayerStats.hp <= 0) {
         messageStore.addMessage('You are too weak to engage in combat.', ['Combat']);
+        toastStore.warning('Cannot fight with ZERO HP. Heal up!');
         return;
     }
 

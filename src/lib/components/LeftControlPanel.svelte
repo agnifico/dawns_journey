@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { showQuestTracker, showHomesteadTracker, showMessageBox } from '$lib/stores/uiStore';
+	import { showQuestTracker, showMessageBox, showEventScreen } from '$lib/stores/uiStore';
 	import { settingsStore, setRenderScale } from '$lib/stores/settingsStore';
 	import { rainEnabled } from '$lib/stores/weatherStore';
 	import { goto } from '$app/navigation';
@@ -33,16 +33,16 @@
 
 <div class="control-panel">
 	<div class="button-group">
-		<button class="icon-button logo" on:click={() => goto('/')}  title="Home">
-			<img src="/game_icons/medallion1.png" alt="Home" />
+		<button class="icon-button" on:click={() => goto('/')} title="Home">
+			<img class="rotate" src="/game_icons/medallion1.png" alt="Home" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/map')}  title="Map">
+		<button class="icon-button" on:click={() => goto('/map')} title="Map">
 			<img src="/game_icons/map.png" alt="Map" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/inventory')}  title="Inventory">
+		<button class="icon-button" on:click={() => goto('/inventory')} title="Inventory">
 			<img src="/game_icons/inventory.png" alt="Inventory" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/homestead')}  title="Homestead">
+		<button class="icon-button" on:click={() => goto('/homestead')} title="Homestead">
 			<img src="/game_icons/homestead.png" alt="Homestead" />
 		</button>
 		<button class="icon-button" on:click={() => goto('/journal')} title="Journal">
@@ -77,14 +77,7 @@
 				>
 					<img src="/game_icons/quest.png" alt="Quest Tracker" />
 				</button>
-				<button
-					class="icon-button"
-					class:active={$showHomesteadTracker}
-					on:click={() => toggle(showHomesteadTracker)}
-					title="Homestead Tracker"
-				>
-					<img src="/game_icons/homestead.png" alt="Homestead Tracker" />
-				</button>
+
 				<button
 					class="icon-button"
 					class:active={$showMessageBox}
@@ -92,6 +85,14 @@
 					title="Messages"
 				>
 					<img src="/game_icons/message.png" alt="Messages" />
+				</button>
+				<button
+					class="icon-button"
+					class:active={$showEventScreen}
+					on:click={() => toggle(showEventScreen)}
+					title="Event Panel"
+				>
+					<img src="/game_icons/map.png" alt="Event Panel" />
 				</button>
 				<button
 					class="icon-button"
@@ -178,13 +179,17 @@
 	.icon-button:hover {
 		background-color: #444;
 		border-color: #777;
+		.rotate {
+			transform: rotate(-45deg);
+		}
 	}
 	.icon-button img {
 		width: 32px;
 		height: 32px;
 		display: block;
-		image-rendering: pixelated;
+		transition: 0.1s transform ease-in;
 	}
+
 	hr {
 		border: none;
 		border-top: 3px solid rgba(0, 0, 0, 0.2);

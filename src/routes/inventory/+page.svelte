@@ -34,8 +34,8 @@
             <Inventory />
         </div>
     </div>
+    <Notification />
 </main>
-<!-- <Notification /> -->
 
 <style>
     main {

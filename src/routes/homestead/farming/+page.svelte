@@ -11,6 +11,7 @@
 	import { tick } from 'svelte';
 	import FarmingCodex from '$lib/components/codex/FarmingCodex.svelte';
 	import CompostPage from '$lib/components/compost/CompostPage.svelte';
+	import Notification from "$lib/components/Notification.svelte";
 
 	let selectedSeason: Season;
 	$: selectedSeason = $seasonStore;
@@ -153,6 +154,7 @@
 	{#if showCompost}
 		<CompostPage on:close={() => (showCompost = false)} />
 	{/if}
+	<Notification />
 </div>
 
 <style>

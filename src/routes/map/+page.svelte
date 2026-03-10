@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, afterUpdate } from 'svelte';
+	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { game } from '$lib/game/game';
 	import { playerStore } from '$lib/stores/playerStore';
@@ -12,17 +12,10 @@
 	import { processBuffs } from '$lib/services/BuffService';
 	import * as AchievementService from '$lib/services/AchievementService';
 	import { getRegionForPosition } from '$lib/services/MapService';
-	import {
-		mobileInfoPanelView,
-		switchToEventView,
-		switchToLogView,
-		showMessageBox,
-		clearEvent
-	} from '$lib/stores/uiStore';
+	import { showMessageBox, showQuestTracker, clearEvent } from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
 	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
-	import HomesteadStatus from '$lib/components/ui/HomesteadStatus.svelte';
 	import CombatModal from '$lib/components/CombatModal.svelte';
 	import LeftControlPanel from '$lib/components/LeftControlPanel.svelte';
 	import { validateAllData } from '$lib/services/ValidationService';
@@ -47,7 +40,6 @@
 			playerStore.update((p) => ({ ...p, isInitialized: true }));
 		}
 		mainElement.focus();
-
 		return () => mediaQuery.removeEventListener('change', handler);
 	});
 
@@ -74,9 +66,7 @@
 			mapStore.update((s) => ({ ...s, landscape: regionInfo }));
 
 			const interactionOccurred = await checkForTileInteraction();
-			if (!interactionOccurred) {
-				checkForRandomEncounter();
-			}
+			if (!interactionOccurred) checkForRandomEncounter();
 		})();
 		lastSteps = $playerStore.stepsTaken;
 	}
@@ -84,28 +74,21 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
 		handleMovement(event.key);
-		switch (event.key) {
-			case ' ':
-			case 'z':
-				handleActionButton();
-				break;
-		}
 	}
 
 	function handleMovement(key: string) {
 		let dx = 0, dy = 0;
 		switch (key) {
-			case 'ArrowUp':  case 'w': dy = -1; break;
-			case 'ArrowDown': case 's': dy = 1;  break;
+			case 'ArrowUp':   case 'w': dy = -1; break;
+			case 'ArrowDown': case 's': dy =  1; break;
 			case 'ArrowLeft': case 'a': dx = -1; break;
-			case 'ArrowRight':case 'd': dx = 1;  break;
+			case 'ArrowRight':case 'd': dx =  1; break;
 		}
 		if (dx !== 0 || dy !== 0) game.movePlayer(dx, dy);
 	}
 
-	function handleActionButton() {
-		checkForTileInteraction();
-	}
+	// Tray is visible if either toggle is on
+	$: showTray = $showMessageBox || $showQuestTracker;
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -120,7 +103,6 @@
 			<LeftControlPanel />
 
 			<div class="center-col">
-				<!-- Map fills all available height above the tray -->
 				<div class="game-view-container">
 					{#if $currentMapData && $playerStore.position}
 						<MapHUD />
@@ -130,16 +112,19 @@
 					{/if}
 				</div>
 
-				<!-- Tray: MessageLog + QuestTracker + HomesteadStatus, all toggled together -->
-				{#if $showMessageBox}
+				<!-- Tray only renders if at least one panel is toggled on -->
+				{#if showTray}
 					<div class="tray">
-						<div class="tray-message">
-							<MessageLog />
-						</div>
-						<div class="tray-trackers">
-							<QuestTracker />
-							<HomesteadStatus />
-						</div>
+						{#if $showMessageBox}
+							<div class="tray-message">
+								<MessageLog />
+							</div>
+						{/if}
+						{#if $showQuestTracker}
+							<div class="tray-tracker">
+								<QuestTracker />
+							</div>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -148,7 +133,6 @@
 </main>
 
 <style>
-	/* Fill the full viewport — no scrolling, no overflow */
 	main {
 		position: fixed;
 		inset: 0;
@@ -157,7 +141,6 @@
 		overflow: hidden;
 	}
 
-	/* Outer console: left panel + center column, styled panel */
 	.console {
 		display: flex;
 		gap: 1rem;
@@ -173,7 +156,6 @@
 		overflow: hidden;
 	}
 
-	/* Center column: map on top, tray on bottom */
 	.center-col {
 		display: flex;
 		flex-direction: column;
@@ -183,10 +165,10 @@
 		overflow: hidden;
 	}
 
-	/* Map: grows to fill all space the tray doesn't take */
+	/* Map grows to fill everything the tray doesn't take */
 	.game-view-container {
 		flex: 1;
-		min-height: 0;          /* critical for flex children to shrink */
+		min-height: 0;
 		border-radius: 12px;
 		overflow: hidden;
 		position: relative;
@@ -195,7 +177,7 @@
 		box-sizing: border-box;
 	}
 
-	/* Tray: fixed height, stretches full width, three items side by side */
+	/* Tray: fixed height, items side by side */
 	.tray {
 		display: flex;
 		gap: 1rem;
@@ -203,7 +185,7 @@
 		flex-shrink: 0;
 	}
 
-	/* MessageLog takes all remaining tray width */
+	/* MessageLog stretches to fill remaining tray width */
 	.tray-message {
 		flex: 1;
 		min-width: 0;
@@ -215,14 +197,15 @@
 		flex-direction: column;
 	}
 
-	/* Trackers sit to the right, side by side, fixed width */
-	.tray-trackers {
-		display: flex;
-		gap: 1rem;
+	/* QuestTracker fixed width */
+	.tray-tracker {
 		flex-shrink: 0;
+		width: 240px;
+		border: 3px solid var(--surface-2);
+		border-radius: 12px;
+		overflow: hidden;
 	}
 
-	/* Mobile: handled entirely by MobileLayout */
 	@media (max-width: 768px) {
 		.console { display: none; }
 	}

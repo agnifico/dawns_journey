@@ -6,6 +6,7 @@ import { addItems } from './InventoryService';
 import skills from '$lib/data/skills.json';
 import type { Player } from '$lib/types';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 const LEVEL_EXPONENT = 1.6;
 const BASE_XP = 100;
@@ -42,6 +43,7 @@ export function gainExperience(player: Player, skillId: string, amount: number):
         messageStore.addMessage(`${skill.name} level is now ${skill.level}!`, ['Player']);
         notificationStore.addLevelUp(1, skill.name);
         messageStore.addMessage(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`, ['Player']);
+        toastStore.success(`You gained ${TECH_POINTS_PER_LEVEL} Tech Point!`);
 
         // Add rewards for the new level
         const skillData = (skills as any)[skillId];
@@ -98,6 +100,7 @@ export function setSkillLevel(skillId: string, level: number) {
 
         messageStore.addMessage(`${skill.name} level set to ${level} for testing.`, ['System']);
         notificationStore.addLevelUp(level, skill.name);
+        toastStore.info(`${skill.name} level set to ${level} for testing.`);
         return newPlayer;
     });
 }

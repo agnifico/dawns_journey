@@ -1,6 +1,7 @@
 import type { Player } from '$lib/types';
 import { messageStore } from '$lib/stores/messageStore';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 /**
  * Processes the player's active effects, removing any that have expired.

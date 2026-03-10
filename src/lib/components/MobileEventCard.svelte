@@ -62,31 +62,43 @@ const resourceNodeData = derived(eventScreen, ($es) => {
 							{/each}
 						</div>
 					{/if}
+					{@const r = $eventScreen.data.encounterResult}
 					<div class="encounter-result">
-						<div class="outcome">
-							<span class="outcome-label">Outcome:</span>
-							<span class="outcome-value" class:win={$eventScreen.data.encounterResult.outcome === 'win'} class:loss={$eventScreen.data.encounterResult.outcome === 'loss'}>
-								{$eventScreen.data.encounterResult.outcome}
-							</span>
+						<div class="outcome-badge" class:win={r.outcome === 'win'} class:loss={r.outcome === 'loss'}>
+							{#if r.outcome === 'win'}⚔ VICTORY{:else}✦ ESCAPED{/if}
 						</div>
-						<div class="result-details">
-							<p>HP Lost: {$eventScreen.data.encounterResult.hpLost}</p>
-							{#if $eventScreen.data.encounterResult.outcome === 'win'}
-								<p>XP Gained: {$eventScreen.data.encounterResult.xpGained}</p>
-								{#if $eventScreen.data.encounterResult.drops.length > 0}
-									<div class="drops">
-										<p>Drops:</p>
-										<ul>
-											{#each $eventScreen.data.encounterResult.drops as drop}
-												<li>{drop.item.name} x{drop.quantity}</li>
-											{/each}
-										</ul>
-									</div>
-								{/if}
-							{:else}
-								<p class="reason">{$eventScreen.data.encounterResult.reason}</p>
+						<div class="result-stats">
+							<div class="stat-pill hp">
+								<span class="stat-icon">♥</span>
+								<span class="stat-label">HP Lost</span>
+								<span class="stat-val">−{r.hpLost}</span>
+							</div>
+							{#if r.outcome === 'win'}
+								<div class="stat-pill xp">
+									<span class="stat-icon">★</span>
+									<span class="stat-label">XP</span>
+									<span class="stat-val">+{r.xpGained}</span>
+								</div>
+							{/if}
+							{#if r.outcome === 'loss' && r.reason}
+								<p class="escape-reason">{r.reason}</p>
 							{/if}
 						</div>
+						{#if r.outcome === 'win' && r.drops?.length > 0}
+							<div class="drops">
+								<span class="drops-label">DROPS</span>
+								<div class="drops-grid">
+									{#each r.drops as drop}
+										<div class="drop-item">
+											<img src={drop.item.image} alt={drop.item.name} class="drop-img" />
+											<span class="drop-name">{drop.item.name}</span>
+											{#if drop.quantity > 1}<span class="drop-qty">×{drop.quantity}</span>{/if}
+										</div>
+									{/each}
+								</div>
+							</div>
+						{/if}
+						<a href="/help/combat" class="combat-help">How does combat work? →</a>
 					</div>
 				{:else if isResource && $resourceNodeData}
 					<p class="card-label">RESOURCE</p>
@@ -184,4 +196,48 @@ const resourceNodeData = derived(eventScreen, ($es) => {
 	.card-actions { border-top: 1px solid rgba(255,255,255,0.06); }
 	.card-actions :global(.interaction-menu) { padding: 8px 10px 12px; border-radius: 0 0 9px 9px; }
 	.card-actions :global(button) { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-height: 40px; }
+
+	.encounter-result {
+		display: flex; flex-direction: column; gap: 0.4rem;
+		margin-top: 2px;
+	}
+	.outcome-badge {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.6rem; letter-spacing: 0.12em;
+		text-align: center; padding: 0.25rem 0.5rem;
+		border-radius: 4px; border: 1px solid;
+	}
+	.outcome-badge.win  { color: #4ade80; border-color: #4ade8044; background: rgba(74,222,128,0.08); }
+	.outcome-badge.loss { color: #fbbf24; border-color: #fbbf2444; background: rgba(251,191,36,0.08); }
+	.result-stats { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+	.stat-pill {
+		display: flex; align-items: center; gap: 0.2rem;
+		padding: 0.15rem 0.4rem; border-radius: 20px;
+		font-family: var(--font-family-pixel, monospace); font-size: 0.5rem;
+	}
+	.stat-pill.hp { background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); }
+	.stat-pill.xp { background: rgba(144,169,85,0.15);  border: 1px solid rgba(144,169,85,0.3); }
+	.stat-icon  { font-size: 0.45rem; opacity: 0.7; }
+	.stat-label { color: #888; }
+	.stat-val   { font-weight: bold; color: #eee; }
+	.stat-pill.hp .stat-val { color: #f87171; }
+	.stat-pill.xp .stat-val { color: #90a955; }
+	.escape-reason { font-family: var(--font-family-pixel, monospace); font-size: 0.5rem; color: #fbbf24; margin: 0; }
+	.drops { display: flex; flex-direction: column; gap: 0.25rem; }
+	.drops-label { font-family: var(--font-family-pixel, monospace); font-size: 0.42rem; letter-spacing: 0.12em; color: #666; }
+	.drops-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+	.drop-item {
+		display: flex; align-items: center; gap: 0.2rem;
+		background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+		border-radius: 4px; padding: 0.15rem 0.35rem 0.15rem 0.2rem;
+	}
+	.drop-img  { width: 14px; height: 14px; object-fit: contain; image-rendering: pixelated; }
+	.drop-name { font-family: var(--font-family-pixel, monospace); font-size: 0.45rem; color: #ddd; }
+	.drop-qty  { font-family: var(--font-family-pixel, monospace); font-size: 0.42rem; color: #888; }
+	.combat-help {
+		font-family: var(--font-family-pixel, monospace); font-size: 0.42rem;
+		color: #60a5fa; text-decoration: none; opacity: 0.7;
+		transition: opacity 0.15s; align-self: flex-end;
+	}
+	.combat-help:hover { opacity: 1; }
 </style>

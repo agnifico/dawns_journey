@@ -13,6 +13,7 @@ import { gainExperience } from '$lib/services/SkillService';
 import { addItems } from '$lib/services/InventoryService';
 import { triggerLocationEvent } from '$lib/services/LocationEventService';
 import { game } from '$lib/game/game';
+import { toastStore } from '$lib/stores/toastStore';
 
 /**
  * Checks for and handles interactions with fixed objects on the current tile.
@@ -99,7 +100,6 @@ export async function checkForTileInteraction(): Promise<boolean> {
  * Handles the logic for a player attempting to gather a resource.
  */
 export function gatherResource() {
-    console.log("gatherResource called at", new Date().getTime());
     const player = get(playerStore);
     const mapStoreState = get(mapStore);
     const mapData = mapStoreState.maps[mapStoreState.currentMapId];
@@ -134,6 +134,7 @@ export function gatherResource() {
     const skill = player.skills.find(s => s.id === node.skillId);
     if (!skill || skill.level < node.requiredLevel) {
         messageStore.addMessage(`You need level ${node.requiredLevel} ${node.skillId} to gather this.`, ['World', 'Help']);
+        toastStore.warning(`You need level ${node.requiredLevel} ${node.skillId} to gather this.`);
         return;
     }
 
@@ -148,16 +149,19 @@ export function gatherResource() {
             const newResourceNodeStates = { ...rs.resourceNodeStates };
             newResourceNodeStates[resourceNodeKey] = { currentGatherCount: 0, cooldownEndTime: 0 };
             messageStore.addMessage(`The ${node.name} has respawned.`, ['World']);
+            toastStore.info(`The ${node.name} has respawned.`);
             return { ...rs, resourceNodeStates: newResourceNodeStates };
         }
 
         // Check cooldown and gather count again inside the update to prevent race conditions
         if (currentState.cooldownEndTime > currentTime) {
             messageStore.addMessage(node.dialogue.failure, ['World', 'Help']);
+            toastStore.warning('Node depleted. Please come back later.');
             return rs; // Return original state
         }
         if (currentState.currentGatherCount >= node.maxGathers) {
             messageStore.addMessage(node.dialogue.failure, ['World', 'Help']);
+            toastStore.warning('Node depleted. Please come back later.');
             return rs; // Return original state
         }
 

@@ -12,6 +12,7 @@ import { gainExperience } from './SkillService';
 import type { Player, Crop, FarmPlot, CropDefinition } from '../types';
 import { seasonStore } from '../stores/seasonStore';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 const FARMING_SKILL_ID = 'farming';
 
@@ -90,10 +91,12 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
             }
             if (!hasItem(newPlayer.inventory, 'compost', 1)) {
                 messageStore.addMessage('You do not have any compost.', ['System']);
+                toastStore.warning('You do not have any compost.');
                 return player;
             }
             newPlayer = removeItemsByItemId(newPlayer, 'compost', 1);
             messageStore.addMessage('Used 1 Compost.', ['World']);
+            toastStore.info('Used 1 Compost.');
         }
 
         const seedItem = getItemById(plantDef.seedItemId);
@@ -124,6 +127,7 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
 
         plot.crop = newCrop;
         messageStore.addMessage(`You planted a ${plantDef.name}.`, ['World']);
+        toastStore.success(`You planted a ${plantDef.name}.`);
         newPlayer.skills = gainExperience(newPlayer, FARMING_SKILL_ID, 5).skills;
 
         return newPlayer;
@@ -159,6 +163,7 @@ export function waterCrop(plotId: string) {
         plot.crop.needsWater = false;
 
         messageStore.addMessage(`You watered the ${plantDef.name}.`, ['World']);
+        toastStore.info(`You watered the ${plantDef.name}.`);
 
         // Run a growth check immediately so a stage-based crop that was
         // time-ready but blocked on water advances without a page reload.
@@ -189,6 +194,7 @@ export function harvestCrop(plotId: string) {
         if (plantDef.idealSeason === currentSeason) {
             totalYieldMultiplier = plantDef.idealSeasonYieldMultiplier;
             messageStore.addMessage(`Bonus yield for harvesting in the ideal season!`, ['World']);
+            toastStore.success(`Bonus yield for harvesting in the ideal season!`);
         }
 
         const amount = Math.floor(plantDef.yieldsAmount * totalYieldMultiplier);
@@ -343,8 +349,10 @@ export function applyTechToPlot(plotId: string, techId: string) {
         if (newPlayer.unlockedTech.includes(techId) && !plot.appliedTech.includes(techId)) {
             plot.appliedTech.push(techId);
             messageStore.addMessage(`Applied ${techId} to plot ${plotId}.`, ['World']);
+            toastStore.info(`Applied ${techId} to plot ${plotId}.`);
         } else {
             messageStore.addMessage(`Could not apply ${techId} to plot ${plotId}.`, ['System']);
+            toastStore.warning(`Could not apply ${techId} to plot ${plotId}.`);
         }
 
         return newPlayer;

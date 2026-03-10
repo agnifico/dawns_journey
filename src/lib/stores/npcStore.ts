@@ -4,6 +4,7 @@ import { playerStore } from './playerStore';
 import { questStore } from './questStore';
 import { messageStore } from './messageStore';
 import * as NpcService from '../services/NpcService';
+import { toastStore } from './toastStore';
 
 const npcModules = {
     'hela': () => import('../assets/data/npcs/hela.json'),
@@ -103,6 +104,7 @@ function createNpcStore() {
             if (newAffinity >= 10 && npcToUpdate.heartState !== 'READY_FOR_RANK_UP') {
                 newHeartState = 'READY_FOR_RANK_UP';
                 messageStore.addMessage(`You feel your connection with ${npcToUpdate.name} has deepened. You should Talk to them.`, ['World', 'Update']);
+                toastStore.info(`You should Talk to ${npcToUpdate.name}.`);
             }
     
             const newNpc = { ...npcToUpdate, affinity: newAffinity, heartState: newHeartState };

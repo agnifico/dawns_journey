@@ -8,6 +8,7 @@
 	} from '$lib/services/InventoryService';
 	import { messageStore } from '$lib/stores/messageStore';
 	import type { Item } from '$lib/types';
+	import { toastStore } from '$lib/stores/toastStore';
 
 	let activeTab: 'cafe' | 'grocery' = 'cafe';
 	let shopItems: Item[] = [];
@@ -36,7 +37,8 @@
 
 		playerStore.update((player) => {
 			if (countInventoryItem(player.inventory, 'argentum') < item.price!) {
-				messageStore.addMessage(`Not enough Argentum to buy ${item.name}.`, ['System', 'World']);
+				messageStore.addMessage(`Not enough Argentum to buy ${item.name}.`, ['System', 'Player']);
+				toastStore.warning(`Not enough Argentum to buy ${item.name}.`);
 				return player;
 			}
 
@@ -48,6 +50,7 @@
 				'System',
 				'World'
 			]);
+			toastStore.success(`Bought: ${item.name} for ${item.price} Argentum!`);
 			return newPlayer;
 		});
 	}

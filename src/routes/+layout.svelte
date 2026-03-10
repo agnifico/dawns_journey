@@ -4,7 +4,6 @@
 	import GiftModal from '$lib/components/ui/GiftModal.svelte';
 	import GenericModal from '$lib/components/ui/GenericModal.svelte';
 	import AchievementNotification from '$lib/components/AchievementNotification.svelte';
-	import GeneralMessage from '$lib/components/ui/GeneralMessage.svelte';
 	// import RainOverlay from '$lib/components/ui/RainOverlay.svelte';
 	import './app.css';
 	import '$lib/styles/theme.css';
@@ -20,6 +19,8 @@
 	import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
 	import { playerStore } from '$lib/stores/playerStore';
 	import DialogueBox from '$lib/components/DialogueBox.svelte';
+	import ToastStack from '$lib/components/ui/ToastStack.svelte';
+	import { toastStore } from '$lib/stores/toastStore';
 
 	let { children } = $props();
 
@@ -28,6 +29,7 @@
 		const tod = $phase;
 		if (!initial) {
 			messageStore.addMessage(`It is now ${tod}.`, ['System']);
+			toastStore.info(`It is now ${tod}.`);
 		}
 		initial = false;
 	});
@@ -64,7 +66,7 @@
 <GenericModal />
 <AchievementNotification />
 <DialogueBox />
-<GeneralMessage />
+<ToastStack/>
 
 <!-- <RainOverlay /> -->
 

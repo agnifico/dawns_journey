@@ -3,6 +3,7 @@ import { messageStore } from '$lib/stores/messageStore';
 import { addItems } from './InventoryService';
 import playerLevels from '$lib/data/playerLevels.json';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 function getLevelFromXp(xp: number): number {
     let level = 1;
@@ -29,7 +30,8 @@ export function gainExperience(player: Player, amount: number): Player {
 
     if (newLevel > newPlayer.level) {
         for (let i = newPlayer.level + 1; i <= newLevel; i++) {
-            messageStore.addMessage(`You are now level ${i}!`, ['System', 'LevelUp']);
+            messageStore.addMessage(`You are now level ${i}!`, ['System', 'Player']);
+            toastStore.success(`Player Level UP! You are now  Lv.${i}!`)
             notificationStore.addLevelUp(1);
             const levelData = (playerLevels.levels as any)[i];
             if (levelData?.rewards) {
@@ -37,6 +39,7 @@ export function gainExperience(player: Player, amount: number): Player {
                     if (reward.type === 'item') {
                         newPlayer = addItems(newPlayer, reward.itemId, reward.amount);
                         messageStore.addMessage(`You received ${reward.amount} ${reward.name}!`, ['System', 'World']);
+                        toastStore.info(`Received: ${reward.amount} ${reward.name} for Leveling up!`)
                     }
                 }
             }

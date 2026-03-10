@@ -34,6 +34,7 @@ import { checkQuestTriggers, checkRequirement } from './QuestService';
 import { effectHandlers } from './LocationEventEffectHandlers';
 import { questStore } from '$lib/stores/questStore';
 import { npcStore } from '$lib/stores/npcStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 // ---------------------------------------------------------------------------
 // Main entry point
@@ -151,7 +152,7 @@ export function triggerEventEffect(eventId: string, effects: GameEffect[], messa
             }
             if (effect.type === 'CHOOSE_FACTION') {
                 const choiceTag = `sided_with_${effect.faction.toLowerCase().replace(/\s+/g, '_')}`;
-                const opposingTag = effect.faction === 'Solis Saints'
+                const opposingTag = effect.faction === 'solis_saints'
                     ? 'sided_with_shadowhand'
                     : 'sided_with_solis_saints';
                 newPlayer = {
@@ -163,8 +164,9 @@ export function triggerEventEffect(eventId: string, effects: GameEffect[], messa
                 };
                 messageStore.addMessage(
                     `You have aligned yourself with ${effect.faction}.`,
-                    ['World', 'Update']
+                    ['World', 'NPC']
                 );
+                toastStore.info(`You aligned yourself with ${effect.faction} in the ongoing quest.`);
                 continue;
             }
 

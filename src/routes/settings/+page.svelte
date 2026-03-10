@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
     import * as SettingsService from '$lib/services/SettingsService';
     import { modalStore } from '$lib/stores/modalStore';
+    import Notification from "$lib/components/Notification.svelte";
 
     function handleAddAllItems() {
         modalStore.showConfirm(
@@ -68,6 +69,7 @@
             </div>
         </div>
     </section>
+    <Notification />
 </div>
 
 <style>

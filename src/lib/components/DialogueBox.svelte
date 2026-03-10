@@ -19,6 +19,7 @@
     on:keydown={(e) => {
         if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Z' || e.key === 'Enter')) {
             e.preventDefault();
+            e.stopPropagation();
             handleAdvance();
         }
     }}

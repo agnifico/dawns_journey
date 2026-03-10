@@ -4,6 +4,7 @@ import { playerStore } from './playerStore';
 import { messageStore } from './messageStore';
 import homesteadPlots from '$lib/data/homesteadPlots.json';
 import { v4 as uuidv4 } from 'uuid';
+import { toastStore } from './toastStore';
 
 interface SkillTreeState {
     techNodes: Map<string, TechNode>;
@@ -66,16 +67,19 @@ function createSkillTreeStore() {
 
         if (player.farmingLevel < node.unlockLevel) {
             messageStore.addMessage(`Requires Farming Level ${node.unlockLevel}.`, ['System']);
+            toastStore.warning(`Requires Farming Level ${node.unlockLevel}.`)
             return;
         }
 
         if (player.techPoints < node.costTP) {
             messageStore.addMessage(`You need ${node.costTP} Tech Points.`, ['System']);
+            toastStore.warning(`You need ${node.costTP} Tech Points.`);
             return;
         }
 
         if (!checkPrerequisites(node.prerequisites, player.unlockedTech)) {
             messageStore.addMessage('You have not met the prerequisites.', ['System']);
+            toastStore.warning('You have not met the prerequisites.');
             return;
         }
 
@@ -172,6 +176,7 @@ function createSkillTreeStore() {
         });
 
         messageStore.addMessage(`Unlocked: ${node.name}!`, ['World', 'Update']);
+        toastStore.success(`Unlocked: ${node.name}!`);
     }
 
     return {

@@ -13,6 +13,7 @@ import { getItemById } from './InventoryService';
 import playerDefaults from '$lib/data/player';
 import type { Player, NPC } from '$lib/types';
 import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
+import { toastStore } from '$lib/stores/toastStore';
 
 const SAVE_KEY = 'dawn_journey_save_v3';
 const COMBAT_HISTORY_CAP = 100; // keep only last 100 fights
@@ -216,9 +217,11 @@ export function saveGame() {
         localStorage.removeItem('dawn_journey_save_v2');
 
         messageStore.addMessage('Game Saved!', ['System']);
+        toastStore.success('Game Saved!')
     } catch (error) {
         console.error('Error saving game:', error);
-        messageStore.addMessage('An error occurred while saving your game.', ['System']);
+        messageStore.addMessage('An error occurred while saving your game. Game has NOT been saved.', ['System']);
+        toastStore.warning('An error occurred while saving your game. Game has NOT been saved.')
     }
 }
 
@@ -230,6 +233,7 @@ export async function loadGame() {
 
     if (!savedDataString) {
         messageStore.addMessage('No save data found to load.', ['System']);
+        toastStore.warning('No save data found to load.')
         return;
     }
 
@@ -294,11 +298,13 @@ export async function loadGame() {
         validateAllData(get(questStore), get(npcStore));
 
         messageStore.addMessage('Game Loaded!', ['System']);
+        toastStore.success('Game Loaded!');
         goto('/map');
 
     } catch (error) {
         console.error('Error loading game:', error);
         messageStore.addMessage('Failed to load save data. The file may be corrupt.', ['System']);
+        toastStore.warning('Failed to load save data. The file may be corrupt.');
     }
 }
 

@@ -41,7 +41,9 @@ export type NotificationType =
     | 'xp_gained'
     | 'level_up'
     | 'buff_applied'
-    | 'buff_expired';
+    | 'buff_expired'
+    | 'faction_rank_up'
+    | 'faction_score';
 
 interface BaseNotification {
     id: number;
@@ -53,6 +55,7 @@ interface ItemNotification extends BaseNotification {
     type: 'item_received' | 'item_used' | 'item_equipped' | 'item_unequipped' | 'item_removed';
     item: Item;
     quantity: number;
+    isSpecial?: boolean;  // legendary or special weapon/relic — longer display, larger UI
 }
 
 interface XpNotification extends BaseNotification {
@@ -76,11 +79,19 @@ interface BuffNotification extends BaseNotification {
     duration_steps?: number;
 }
 
+interface FactionScoreNotification extends BaseNotification {
+    type: 'faction_score';
+    factionName: string;
+    amount: number;
+}
+
 export type Notification =
     | ItemNotification
     | XpNotification
     | LevelUpNotification
-    | BuffNotification;
+    | BuffNotification
+    | FactionRankUpNotification
+    | FactionScoreNotification;
 
 // ── Durations ─────────────────────────────────────────────────────────────
 
@@ -94,6 +105,8 @@ const DURATIONS: Record<NotificationType, number> = {
     level_up:        6000,
     buff_applied:    3000,
     buff_expired:    3000,
+    faction_rank_up: 6000,
+    faction_score:    2500,
 };
 
 // ── Store ─────────────────────────────────────────────────────────────────
@@ -120,12 +133,16 @@ function addItem(
     item: Item,
     quantity: number
 ) {
+    const isSpecial = type === 'item_received'
+        && (item.type === 'weapon' || item.type === 'relic')
+        && (item.flags?.includes('legendary') || item.flags?.includes('special'));
     schedule({
         id: nextId++,
         type,
         item,
         quantity,
-        duration: DURATIONS[type],
+        isSpecial,
+        duration: isSpecial ? 6000 : DURATIONS[type],
     } as ItemNotification);
 }
 
@@ -173,6 +190,26 @@ function addBuff(buffName: string, duration_steps: number, state: 'applied' | 'e
     } as BuffNotification);
 }
 
+function addFactionScore(factionName: string, amount: number) {
+    schedule({
+        id: nextId++,
+        type: 'faction_score',
+        factionName,
+        amount,
+        duration: DURATIONS.faction_score,
+    } as FactionScoreNotification);
+}
+
+function addFactionRankUp(factionName: string, rank: number) {
+    schedule({
+        id: nextId++,
+        type: 'faction_rank_up',
+        factionName,
+        rank,
+        duration: DURATIONS.faction_rank_up,
+    } as FactionRankUpNotification);
+}
+
 export const notificationStore = {
     subscribe,
     /** Existing item API — all current callers work unchanged */
@@ -180,4 +217,6 @@ export const notificationStore = {
     addXp,
     addLevelUp,
     addBuff,
+    addFactionScore,
+    addFactionRankUp,
 };

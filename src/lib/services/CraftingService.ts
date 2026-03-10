@@ -10,6 +10,7 @@ import { messageStore } from '$lib/stores/messageStore';
 import { notificationStore } from '$lib/stores/notificationStore';
 import type { Player } from '$lib/types';
 import { itemDictionary } from '$lib/data/items';
+import { toastStore } from '$lib/stores/toastStore';
 
 /**
  * Returns the player's level in a given skill, or 1 as a safe default.
@@ -83,6 +84,7 @@ export function craft(recipeId: string): void {
         // }
 
         messageStore.addMessage(`You crafted ${recipe.name}!`, ['World']);
+        toastStore.success(`You crafted ${recipe.name}!`);
 
         // 5. Award skill XP (routes to the correct skill via recipe.skillId)
         if (xpYield > 0) {
