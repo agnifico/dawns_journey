@@ -6,28 +6,22 @@
 	import ElementTag from './ui/ElementTag.svelte';
 	import StatBar from './ui/StatBar.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
+	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
 
 	$: isNpc = $eventScreen.type === 'npc';
 	$: isLocation = $eventScreen.type === 'location_event';
 	$: isVisible = isNpc || isLocation;
 
-	$: npc = isNpc && $eventScreen.data?.npcId
-		? $npcStore.globalNpcs[$eventScreen.data.npcId]
-		: null;
+	$: npc = isNpc && $eventScreen.data?.npcId ? $npcStore.globalNpcs[$eventScreen.data.npcId] : null;
 
-	$: showChoiceMenu =
-		isNpc ||
-		(isLocation && $eventScreen.data?.actions);
+	$: showChoiceMenu = isNpc || (isLocation && $eventScreen.data?.actions);
 </script>
 
 <!-- Sheet slides up from bottom -->
 <div class="panel-sheet" class:visible={isVisible}>
 	{#if isVisible}
 		<!-- Landscape bg bleed -->
-		<div
-			class="panel-bg"
-			style:background-image="url({$landscapeImage})"
-		></div>
+		<div class="panel-bg" style:background-image="url({$landscapeImage})"></div>
 
 		<div class="panel-layout">
 			<!-- LEFT: Choice menu docked away from DPad -->
@@ -40,16 +34,26 @@
 			<!-- RIGHT: Event content -->
 			<div class="panel-right">
 				{#if isNpc && npc}
-					<div class="npc-row">
+					<div
+						class="npc-row"
+						style:--npc-first-element-color={elementColors[npc.types[0].toLowerCase()]}
+						style:--npc-first-element-bg={elementBgs[npc.types[0].toLowerCase()]}
+						style:--npc-second-element-color={npc.types[1]
+							? elementColors[npc.types[1].toLowerCase()]
+							: elementColors[npc.types[0].toLowerCase()]}
+						style:--npc-second-element-bg={npc.types[1]
+							? elementBgs[npc.types[1].toLowerCase()]
+							: elementBgs[npc.types[0].toLowerCase()]}
+					>
 						<button class="avatar-btn" on:click={() => goto(`/journal/character/${npc.id}`)}>
 							<img src={$eventScreen.image} alt={npc.name} class="avatar" />
 						</button>
 						<div class="npc-details">
-							<p class="npc-label">CHARACTER</p>
+							<!-- <p class="npc-label">CHARACTER</p> -->
 							<p class="npc-name">{npc.name}</p>
 							<div class="elements">
 								{#each npc.types as type}
-									<ElementTag element={type} />
+									<ElementTag element={type} size="mini" />
 								{/each}
 							</div>
 							<div class="rank-meters">
@@ -64,7 +68,6 @@
 							</div>
 						</div>
 					</div>
-
 				{:else if isLocation && $eventScreen.data}
 					<div class="location-content">
 						{#if $eventScreen.image}
@@ -90,7 +93,9 @@
 <style>
 	.panel-sheet {
 		position: absolute;
-		left: 0; right: 0; bottom: 0%; 
+		left: 0;
+		right: 0;
+		bottom: 0%;
 		z-index: 55;
 		max-height: 65%;
 		background-color: var(--surface-2, #2a2a2a);
@@ -101,7 +106,7 @@
 		flex-direction: column;
 		transform: translateY(100%);
 		transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
-		box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
+		box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
 	}
 
 	.panel-sheet.visible {
@@ -131,7 +136,7 @@
 	.panel-left {
 		width: 140px;
 		flex-shrink: 0;
-		border-right: 1px solid rgba(255,255,255,0.06);
+		border-right: 1px solid rgba(255, 255, 255, 0.06);
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
@@ -160,27 +165,34 @@
 		padding: 0.75rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		/* gap: 0.5rem; */
+		height: 100%;
 	}
 
 	/* NPC */
 	.npc-row {
 		display: flex;
-		gap: 0.75rem;
+		/* gap: 0.75rem; */
 		align-items: flex-start;
 	}
 
 	.avatar-btn {
+		z-index: 2;
 		background: none;
 		border: none;
 		padding: 0;
 		flex-shrink: 0;
 		cursor: pointer;
+		border-radius: 12px;
+		border: 4px solid color-mix(in srgb, #ffffff 30%, var(--npc-first-element-bg));
+		box-shadow:
+			var(--npc-first-element-bg) 0 6px 0 3px,
+			var(--npc-first-element-bg) 0 -0px 0 3px;
 	}
 
 	.avatar {
-		width: 72px;
-		height: 72px;
+		width: 130px;
+		aspect-ratio: 1;
 		border-radius: 8px;
 		object-fit: cover;
 		border: 2px solid var(--color-secondary, #8b6f5e);
@@ -188,6 +200,7 @@
 	}
 
 	.npc-details {
+		position: relative;
 		flex: 1;
 		min-width: 0;
 		display: flex;
@@ -204,19 +217,60 @@
 	}
 
 	.npc-name {
+		z-index: 1;
+		position: relative;
+		top: 0.5rem;
+		left: -1rem;
+		padding-left: 1.75rem;
+		padding-right: 1.5rem;
+		padding-block: 0.5rem;
+		width: fit-content;
+		display: flex;
+		flex-direction: column;
 		font-family: var(--font-family-pixel);
-		font-size: 1rem;
-		color: white;
-		margin: 0;
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: var(--npc-first-element-color);
+		background-color: var(--npc-first-element-bg);
+		clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
 	}
 
-	.elements { display: flex; gap: 4px; flex-wrap: wrap; }
+	.elements {
+		display: flex;
+		gap: 4px;
+		flex-wrap: wrap;
+		margin-block: 0.25rem;
+		margin-top: .5rem;
+		margin-bottom: .25rem;
+		margin-left: 0.5rem;
+		padding-left: 0;
+		display: flex;
+		gap: 0.25rem;
+	}
 
-	.rank-meters { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
-	.rank-meter { display: flex; align-items: center; gap: 4px; }
-	.rank-icon { width: 14px; height: 14px; image-rendering: pixelated; }
-
-
+	.rank-meters {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		/* margin-top: 2px; */
+	}
+	.rank-meter {
+		display: flex;
+			align-items: center;
+			gap: 0.25rem;
+			color: var(--npc-second-element-color);
+			background-color: var(--npc-second-element-bg);
+			box-shadow: #00000056 0 3px 0 2px;
+			border-radius: 0 6px 6px 0;
+			width: fit-content;
+			padding: 0.25rem;
+			padding-right: 1rem;
+	}
+	.rank-icon {
+		width: 14px;
+		height: 14px;
+		image-rendering: pixelated;
+	}
 
 	/* Location event */
 	.location-content {
@@ -233,7 +287,10 @@
 		flex-shrink: 0;
 	}
 
-	.location-text { flex: 1; min-width: 0; }
+	.location-text {
+		flex: 1;
+		min-width: 0;
+	}
 
 	.location-desc {
 		font-family: monospace;
@@ -247,9 +304,9 @@
 	.panel-dismiss {
 		flex-shrink: 0;
 		width: 100%;
-		background: rgba(0,0,0,0.3);
+		background: rgba(0, 0, 0, 0.3);
 		border: none;
-		border-top: 1px solid rgba(255,255,255,0.05);
+		border-top: 1px solid rgba(255, 255, 255, 0.05);
 		color: #666;
 		font-family: var(--font-family-pixel);
 		font-size: 0.6rem;
@@ -259,5 +316,7 @@
 		position: relative;
 		z-index: 1;
 	}
-	.panel-dismiss:hover { color: #aaa; }
+	.panel-dismiss:hover {
+		color: #aaa;
+	}
 </style>
