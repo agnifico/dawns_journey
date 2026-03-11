@@ -9,6 +9,7 @@ import { questStore } from '$lib/stores/questStore';
 import { checkRequirement, checkQuestTriggers } from './QuestService';
 import { increaseFactionScore } from './FactionService';
 import { toastStore } from '$lib/stores/toastStore';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 
 function createRequirementSnapshot(player: Player, requirement: Requirement): any {
@@ -43,6 +44,11 @@ function handleRewards(player: Player, rewards: Reward[]): Player {
     for (const reward of rewards) {
         if (reward.type === 'item') {
             newPlayer = addItems(newPlayer, reward.itemId, reward.quantity);
+        } else if (reward.type === 'world_resonance') {
+            newPlayer.worldResonance = (newPlayer.worldResonance ?? 0) + reward.amount;
+            // notificationStore.addWorldResonance(reward.amount);
+            toastStore.success(`World Resonance +${reward.amount}`);
+            messageStore.addMessage(`+${reward.amount} World Resonance.`, ['World']);
         } else if (reward.type === 'tag') {
             if (!newPlayer.worldTags.includes(reward.tagId)) {
                 newPlayer.worldTags.push(reward.tagId);

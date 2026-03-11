@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { playerStore, playerStats, playerExplorationAbilities, playerMastery, playerActiveElements } from '$lib/stores/playerStore';
+import { playerStore, playerStats, playerExplorationAbilities, playerWorldResonance, playerActiveElements } from '$lib/stores/playerStore';
 import { mapStore } from '$lib/stores/mapStore';
 import { showEvent, clearEvent } from '$lib/stores/uiStore';
 import { messageStore } from '$lib/stores/messageStore';
@@ -10,6 +10,8 @@ import { addItems } from './InventoryService';
 import { gainExperience } from './PlayerLevelService';
 import { startCombat } from './CombatService';
 import type { MapData, NPC, Enemy, Item } from '$lib/types';
+import { toastStore } from '$lib/stores/toastStore';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 // ---------------------------------------------------------------------------
 // Wild encounter flavour lines — keyed by weapon element
@@ -86,6 +88,7 @@ export function checkForRandomEncounter() {
         // Enemy Encounter
         if (get(playerStats).hp <= 0) {
             messageStore.addMessage('You are too weak to engage in combat.', ['Combat']);
+            // toastStore.warning('Cannot fight with ZERO HP. Heal up!');
             return;
         }
 
@@ -103,25 +106,9 @@ export function checkForRandomEncounter() {
 
                 messageStore.addMessage(`A wild ${enemyData.name} appears!`, ['World']);
 
-                // --- Mastery Check ---
-                const currentMastery = get(playerMastery);
-                const activeElements = get(playerActiveElements);
-                const masteryRequirements = enemyData.masteryRequirements || {};
-
-                // 1. Check for elemental mastery match
-                let hasElementalMastery = false;
-                for (const [element, requiredLevel] of Object.entries(masteryRequirements)) {
-                    if (activeElements.includes(element) && currentMastery >= requiredLevel) {
-                        hasElementalMastery = true;
-                        break;
-                    }
-                }
-
-                // 2. Check for summed mastery as an alternative
-                const sumOfRequirements = Object.values(masteryRequirements).reduce((sum, level) => sum + level, 0);
-                const hasSummedMastery = currentMastery >= sumOfRequirements;
-
-                const canDefeat = hasElementalMastery || hasSummedMastery;
+                const currentResonance = get(playerWorldResonance);
+                const resonanceRequirement = enemyData.resonanceRequirement ?? 0;
+                const canDefeat = currentResonance >= resonanceRequirement;
 
                 // --- Prepare Encounter Result ---
                 const encounterResult = {
@@ -129,22 +116,31 @@ export function checkForRandomEncounter() {
                     hpLost: enemyData.hpCost,
                     xpGained: canDefeat ? enemyData.xp : 0,
                     drops: [] as { item: Item; quantity: number }[],
-                    masteryMet: canDefeat,
                     reason: ''
                 };
 
                 if (canDefeat) {
-                    const winningElement = activeElements.find(el => {
-                        const req = masteryRequirements?.[el];
-                        return req !== undefined && currentMastery >= req;
-                    }) ?? 'Normal';
-
+                    const winningElement = get(playerActiveElements)[0] ?? 'Normal';
                     const message = getEncounterFlavourLine(winningElement, enemyData.name);
                     messageStore.addMessage(message, ['World', 'Help', 'Combat']);
 
                     playerStore.update(p => {
                         let newPlayer = { ...p };
-                        newPlayer.killCounts[enemyData.id] = (newPlayer.killCounts[enemyData.id] || 0) + 1;
+
+                        const previousKills = newPlayer.killCounts[enemyData.id] ?? 0;
+                        newPlayer.killCounts[enemyData.id] = previousKills + 1;
+
+                        // First kill bonus — +5 World Resonance, one time only
+                        if (previousKills === 0) {
+                            const FIRST_KILL_RESONANCE = 5;
+                            newPlayer.worldResonance = (newPlayer.worldResonance ?? 0) + FIRST_KILL_RESONANCE;
+                            // notificationStore.addWorldResonance(FIRST_KILL_RESONANCE, true); // true = isFirstKill
+                            toastStore.success(`World Resonance +${FIRST_KILL_RESONANCE}`); // true = isFirstKill
+                            messageStore.addMessage(
+                                `First encounter with ${enemyData.name}! +${FIRST_KILL_RESONANCE} World Resonance.`,
+                                ['World']
+                            );
+                        }
 
                         // Grant XP
                         newPlayer = gainExperience(newPlayer, encounterResult.xpGained);
@@ -168,8 +164,8 @@ export function checkForRandomEncounter() {
                         return newPlayer;
                     });
                 } else {
-                    encounterResult.reason = 'Weapon Mastery Requirements not met.';
-                    messageStore.addMessage("You escape the stronger enemy...for now.", ['World', 'Combat']);
+                    encounterResult.reason = 'You World Resonance too low.';
+                    messageStore.addMessage("You escaped the enemy for now.", ['World', 'Combat']);
 
                     // Apply HP cost even on failure
                     playerStore.update(p => {

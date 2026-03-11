@@ -14,6 +14,7 @@ import playerDefaults from '$lib/data/player';
 import type { Player, NPC } from '$lib/types';
 import { claimAccumulatedTimePoints } from '$lib/stores/timePointStore';
 import { toastStore } from '$lib/stores/toastStore';
+import { claimAccumulatedWorldResonance } from '$lib/stores/worldResonanceStore';
 
 const SAVE_KEY = 'dawn_journey_save_v3';
 const COMBAT_HISTORY_CAP = 100; // keep only last 100 fights
@@ -267,9 +268,10 @@ export async function loadGame() {
             if (loadedPlayer.level === undefined) loadedPlayer.level = 1;
             if (loadedPlayer.xp === undefined) loadedPlayer.xp = 0;
 
-            const updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer);
-            const updatedPlayer2 = claimAccumulatedTimePoints(updatedPlayer);
-            playerStore.set({ ...updatedPlayer2, isInitialized: true });
+            let updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer);
+            updatedPlayer = claimAccumulatedTimePoints(updatedPlayer);
+            updatedPlayer = claimAccumulatedWorldResonance(updatedPlayer);
+            playerStore.set({ ...updatedPlayer, isInitialized: true });
         }
 
         // ── Map ─────────────────────────────────────────────────────────────

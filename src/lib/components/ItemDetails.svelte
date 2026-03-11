@@ -4,7 +4,6 @@
 	import Stat from './Stat.svelte';
 	import InstantEffectDisplay from './ui/InstantEffectDisplay.svelte';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
-	import MasteryDisplay from './ui/MasteryDisplay.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
 
 	export let item: Item | null;
@@ -29,11 +28,6 @@
 						<Stat statId={stat.name} value={stat.value} />
 					</div>
 				{/each}
-				<div class="stat-line">
-					{#if item.type === 'weapon' && item.mastery}
-						<Stat statId="mastery" value={item.mastery} />
-					{/if}
-				</div>
 			</div>
 		{/if}
 		{#if item.effects && item.effects.length > 0}

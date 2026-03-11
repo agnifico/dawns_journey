@@ -30,7 +30,6 @@ export interface Item {
     activeEffects?: ActiveEffect[];
     element?: string;
     flags?: string[];
-    mastery?: number;
     exploration?: { name: string, level: number }[];
     plantId?: string;
     gearPassives?: GearPassive[];
@@ -277,6 +276,8 @@ export interface Player {
         }
     };
     stepsTaken: number;
+    worldResonance: number;
+    levelPoints: number;
     cropsHarvested: number;
     factions: Record<string, { score: number; rank: number; }>;
 }
@@ -320,11 +321,12 @@ export type Requirement =
 export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
-    | { type: 'remove_tag'; tagId: string; }                                    // NEW: explicitly remove a world tag
+    | { type: 'remove_tag'; tagId: string; }                                    
     | { type: 'change_reputation'; faction: 'solis_saints' | 'shadowhand'; amount: number; }
-    | { type: 'faction_score'; factionId: string; amount: number; }            // NEW: direct faction score delta
+    | { type: 'faction_score'; factionId: string; amount: number; }
     | { type: 'complete_quest_stage'; questId: string; }
-    | { type: 'fail_quest'; questId: string; };                                 // already existed in type, now handled
+    | { type: 'world_resonance'; amount: number }
+    | { type: 'fail_quest'; questId: string; };
 
 export type GameEffect =
     | { type: 'RESTORE_HP'; value: number }
@@ -336,13 +338,14 @@ export type GameEffect =
     | { type: 'trigger_faction_choice' }
     | { type: 'CHOOSE_FACTION'; faction: 'solis_saints' | 'shadowhand' }
     | { type: 'add_tag'; tag: string }
-    | { type: 'remove_tag'; tag: string }                                       // NEW
+    | { type: 'remove_tag'; tag: string }
     | { type: 'give_item'; itemId: string; quantity: number }
     | { type: 'complete_quest_stage' }
     | { type: 'set_quest_state'; questId: string; state: QuestState }
-    | { type: 'fail_quest'; questId: string }                                   // NEW explicit effect
+    | { type: 'fail_quest'; questId: string; }
+    | { type: 'switch_map'; mapId: string; x: number; y: number }
     | { type: 'add_reputation'; faction: string; amount: number }
-    | { type: 'switch_map'; mapId: string; x: number; y: number };
+    | { type: 'add_world_resonance'; amount: number };
 
 export interface GiftingOption {
     itemId: string;
@@ -486,7 +489,7 @@ export interface Enemy {
     image: string;
     thumbnailImage: string | null;
     types?: string[];
-    masteryRequirements: string;
+    resonanceRequirement: number;
     isLegendary: boolean;
     baseStats: PlayerBaseStats;
     drops: any[];

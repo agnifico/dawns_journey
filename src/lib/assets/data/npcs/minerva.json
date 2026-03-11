@@ -4,11 +4,13 @@
     "profileImage": "/images/characters/minerva/minerva_avatar.png",
     "image": "/images/characters/minerva/minerva0.png",
     "galleryImages": [
-        "/images/characters/minerva/minerva0.png",
         "/images/characters/minerva/minerva1.png",
         "/images/characters/minerva/minerva2.png",
         "/images/characters/minerva/minerva3.png",
-         "/images/characters/minerva/minerva4.png"
+         "/images/characters/minerva/minerva4.png",
+         "/images/characters/minerva/minerva5.png",
+         "/images/characters/minerva/minerva6.png",
+         "/images/characters/minerva/minerva7.png"
     ],
     "isCombatant": true,
     "types": [

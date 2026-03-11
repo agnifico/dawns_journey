@@ -1,14 +1,12 @@
 <script lang="ts">
 	import {
 		playerStore,
-		playerMastery,
 		playerActiveElements,
 		playerActiveSetBonuses,
 		playerExplorationAbilities
 	} from '../stores/playerStore';
 	import { game } from '$lib/game/game';
 	import ItemBox from './ItemBox.svelte';
-	import MasteryDisplay from './ui/MasteryDisplay.svelte';
 	import { activeItem } from '$lib/stores/uiStore';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import SetBonusDisplay from './ui/SetBonusDisplay.svelte';
@@ -84,14 +82,6 @@
 		</div>
 	</div>
 
-	<div class="mastery-container">
-		<MasteryDisplay mastery={$playerMastery} elements={$playerActiveElements} />
-		<div class="exploration-bubbles">
-			{#each Object.entries($playerExplorationAbilities) as [name, level]}
-				<ExploBubble {name} {level} />
-			{/each}
-		</div>
-	</div>
 
 	<div class="bonuses-container">
 		{#if $playerActiveSetBonuses.length > 0}
@@ -141,15 +131,6 @@
 		padding-bottom: 2rem;
 		display: flex;
 		flex-direction: column;
-	}
-	.mastery-container {
-		margin-top: 1em;
-		padding-top: 1em;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1em;
 	}
 	.exploration-bubbles {
 		display: flex;

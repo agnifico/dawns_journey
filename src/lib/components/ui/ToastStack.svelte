@@ -53,7 +53,7 @@
         box-shadow: 0 4px 16px rgba(0,0,0,0.5);
         white-space: nowrap;
         font-family: var(--font-family-pixel, monospace);
-        font-size: 0.5rem;
+        font-size: 0.75rem;
         letter-spacing: 0.04em;
     }
 

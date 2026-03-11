@@ -91,13 +91,6 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         description: 'The damage multiplier applied on a critical hit.',
         color: '#FFD700' // Gold
     },
-    mastery: {
-        id: 'mastery',
-        name: 'Weapon Mastery',
-        abbr: 'Mastery',
-        description: 'Your overall proficiency, used for exploration and overcoming wild creatures.',
-        color: '#9370DB' // MediumPurple
-    },
     precision: {
         id: 'precision',
         name: 'Precision',

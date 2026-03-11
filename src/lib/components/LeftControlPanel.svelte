@@ -42,11 +42,17 @@
 		<button class="icon-button" on:click={() => goto('/inventory')} title="Inventory">
 			<img src="/game_icons/inventory.png" alt="Inventory" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/homestead')} title="Homestead">
+		<button class="icon-button" on:click={() => goto('/homestead/farming')} title="Farming">
 			<img src="/game_icons/homestead.png" alt="Homestead" />
+		</button>
+		<button class="icon-button" on:click={() => goto('/homestead/workshop')} title="Workshop">
+			<img src="/game_icons/crafting_gloves.png" alt="Workshop" />
 		</button>
 		<button class="icon-button" on:click={() => goto('/journal')} title="Journal">
 			<img src="/game_icons/journal.png" alt="Journal" />
+		</button>
+		<button class="icon-button" on:click={() => goto('/arena')} title="Arena">
+			<img src="/game_icons/arena_helmet.png" alt="Arena" />
 		</button>
 	</div>
 

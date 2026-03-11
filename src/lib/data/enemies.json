@@ -6,7 +6,7 @@
         "image": "/images/enemies/aquamech_shark.png",
         "thumbnailImage": "/images/enemies/aquamech_shark.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 40 },
+        "resonanceRequirement": 0,
         "xp": 50,
         "hpCost": 5,
         "drops": [
@@ -21,7 +21,7 @@
         "image": "/images/enemies/greenhorn.png",
         "thumbnailImage": "/images/enemies/greenhorn.png",
         "types": ["Earth"],
-        "masteryRequirements": { "Earth": 15, "Fire": 25 },
+        "resonanceRequirement": 0,
         "xp": 10,
         "hpCost": 1,
         "drops": [
@@ -36,7 +36,7 @@
         "image": "/images/enemies/white_wyvern.png",
         "thumbnailImage": "/images/enemies/white_wyvern.png",
         "types": ["Wind"],
-        "masteryRequirements": { "Wind": 75 },
+        "resonanceRequirement": 10,
         "xp": 100,
         "hpCost": 8,
         "drops": [
@@ -52,7 +52,7 @@
         "image": "/images/enemies/woodmech_bear.png",
         "thumbnailImage": "/images/enemies/woodmech_bear.png",
         "types": ["Earth"],
-        "masteryRequirements": { "Fire": 50, "Earth": 25 },
+        "resonanceRequirement": 15,
         "xp": 60,
         "hpCost": 6,
         "drops": [
@@ -69,7 +69,7 @@
         "image": "/images/enemies/vanguard_siren.png",
         "thumbnailImage": "/images/enemies/vanguard_siren.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 70 },
+        "resonanceRequirement": 20,
         "xp": 90,
         "hpCost": 7,
         "drops": [
@@ -85,7 +85,7 @@
         "image": "/images/enemies/biceon.png",
         "thumbnailImage": "/images/enemies/biceon.png",
         "types": ["Water", "Earth"],
-        "masteryRequirements": { "Water": 35, "Earth": 20 },
+        "resonanceRequirement": 25,
         "xp": 40,
         "hpCost": 4,
         "drops": [
@@ -100,7 +100,7 @@
         "image": "/images/enemies/coral-eyes.png",
         "thumbnailImage": "/images/enemies/coral-eyes.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 30 },
+        "resonanceRequirement": 30,
         "xp": 30,
         "hpCost": 3,
         "drops": [
@@ -115,7 +115,7 @@
         "image": "/images/enemies/forest_prowler.png",
         "thumbnailImage": "/images/enemies/forest_prowler.png",
         "types": ["Earth", "Wind"],
-        "masteryRequirements": { "Earth": 45, "Wind": 15 },
+        "resonanceRequirement": 40,
         "xp": 55,
         "hpCost": 5,
         "drops": [
@@ -131,7 +131,7 @@
         "image": "/images/enemies/inkjet_ray.png",
         "thumbnailImage": "/images/enemies/inkjet_ray.png",
         "types": ["Earth", "Wind"],
-        "masteryRequirements": { "Water": 45, "Wind": 15 },
+        "resonanceRequirement": 50,
         "xp": 55,
         "hpCost": 5,
         "drops": [
@@ -147,7 +147,7 @@
         "image": "/images/enemies/mountain_basilisk.png",
         "thumbnailImage": "/images/enemies/mountain_basilisk.png",
         "types": ["Earth"],
-        "masteryRequirements": { "Earth": 60 },
+        "resonanceRequirement": 60,
         "xp": 70,
         "hpCost": 7,
         "drops": [
@@ -163,7 +163,7 @@
         "image": "/images/enemies/punching_tortoise.png",
         "thumbnailImage": "/images/enemies/punching_tortoise.png",
         "types": ["Water", "Earth"],
-        "masteryRequirements": { "Water": 20, "Earth": 20 },
+        "resonanceRequirement": 65,
         "xp": 25,
         "hpCost": 2,
         "drops": [
@@ -179,7 +179,7 @@
         "image": "/images/enemies/rock_lion.png",
         "thumbnailImage": "/images/enemies/rock_lion.png",
         "types": ["Earth"],
-        "masteryRequirements": { "Earth": 50 },
+        "resonanceRequirement": 70,
         "xp": 60,
         "hpCost": 6,
         "drops": [
@@ -194,7 +194,7 @@
         "image": "/images/enemies/shark_soldier.png",
         "thumbnailImage": "/images/enemies/shark_soldier.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 55 },
+        "resonanceRequirement": 80,
         "xp": 65,
         "hpCost": 6,
         "drops": [
@@ -212,7 +212,7 @@
         "image": "/images/enemies/solis_sentinel.png",
         "thumbnailImage": "/images/enemies/solis_sentinel.png",
         "types": ["Light"],
-        "masteryRequirements": { "Light": 50, "Fire": 30 },
+        "resonanceRequirement": 85,
         "xp": 80,
         "hpCost": 8,
         "drops": [
@@ -229,7 +229,7 @@
         "image": "/images/enemies/toxolotl.png",
         "thumbnailImage": "/images/enemies/toxolotl.png",
         "types": ["Water", "Dark"],
-        "masteryRequirements": { "Water": 25, "Dark": 10 },
+        "resonanceRequirement": 90,
         "xp": 30,
         "hpCost": 3,
         "drops": [
@@ -244,7 +244,7 @@
         "image": "/images/enemies/water_spirit_beast.png",
         "thumbnailImage": "/images/enemies/water_spirit_beast.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 80 },
+        "resonanceRequirement": 100,
         "xp": 120,
         "hpCost": 9,
         "drops": [
@@ -260,7 +260,7 @@
         "image": "/images/enemies/archangel_one.png",
         "thumbnailImage": "/images/enemies/archangel_one.png",
         "types": ["Light", "Wind"],
-        "masteryRequirements": { "Light": 90, "Wind": 60 },
+        "resonanceRequirement": 150,
         "isLegendary": true,
         "baseStats": {
             "hp": 800, "maxHp": 800, "auraShield": 0, "maxAuraShield": 0,
@@ -284,7 +284,7 @@
         "image": "/images/enemies/bob.png",
         "thumbnailImage": "/images/enemies/bob.png",
         "types": ["Water", "Wind"],
-        "masteryRequirements": { "Water": 100, "Wind": 100 },
+        "resonanceRequirement": 160,
         "isLegendary": true,
         "baseStats": {
             "hp": 2500, "maxHp": 2500, "auraShield": 0, "maxAuraShield": 0,
@@ -306,7 +306,7 @@
         "image": "/images/enemies/wilhemina.png",
         "thumbnailImage": "/images/enemies/wilhemina.png",
         "types": ["Water"],
-        "masteryRequirements": { "Water": 85 },
+        "resonanceRequirement": 200,
         "isLegendary": true,
         "baseStats": {
             "hp": 1200, "maxHp": 1200, "auraShield": 500, "maxAuraShield": 500,

@@ -46,7 +46,7 @@
 </script>
 
 <div class="stat-line" title={statDef.description}>
-    <img src={`./game_icons/${statId}.png`} alt={statDef.name} class="stat-icon" />
+    <img src={`/game_icons/${statId}.png`} alt={statDef.name} class="stat-icon" />
     <span class="stat-name" style="color: {statDef.color};">{view === 'full' ? statDef.name : statDef.abbr}</span>
     <span class="stat-value">
         {#if bonus !== undefined && bonus !== 0}

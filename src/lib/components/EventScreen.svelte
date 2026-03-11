@@ -13,6 +13,7 @@
 	import { goto } from '$app/navigation';
 	import ElementTag from './ui/ElementTag.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
+	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
 
 	let npc;
 	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
@@ -113,30 +114,36 @@
 	{:else}
 		<div class="container">
 			{#if $eventScreen.type === 'npc' && npc}
-				<div class="npc-card">
+				<div
+					class="npc-card"
+					style:--npc-first-element-color={elementColors[npc.types[0].toLowerCase()]}
+					style:--npc-first-element-bg={elementBgs[npc.types[0].toLowerCase()]}
+					style:--npc-second-element-color={npc.types[1] ? elementColors[npc.types[1].toLowerCase()] : elementBgs[npc.types[0].toLowerCase()]}
+					style:--npc-second-element-bg={npc.types[1] ? elementBgs[npc.types[1].toLowerCase()] : elementColors[npc.types[0].toLowerCase()]}
+				>
+						<button
+							class="info-button"
+							on:click={() => goto(`/journal/character/${npc.id}`)}
+							title="View Character Info"
+						>
+							<img src="/game_icons/info.png" alt="Info" />
+						</button>
 					<button class="avatar-button" on:click={() => openLightbox(npc.image)}>
 						<img src={$eventScreen.image} alt="NPC Avatar" class="npc-image" />
 					</button>
 					<div class="details">
 						<div class="top">
 							<div class="npc-name">{npc.name}</div>
-							<div class="npc-title">{npc.title}</div>
+							<!-- <div class="npc-title">{npc.title}</div> -->
 						</div>
 						<div class="mid">
 							<div class="elements">
 								{#if npc && npc.types}
 									{#each npc.types as type}
-										<ElementTag element={type} />
+										<ElementTag element={type} size="mini" />
 									{/each}
 								{/if}
 							</div>
-							<button
-								class="info-button"
-								on:click={() => goto(`/journal/character/${npc.id}`)}
-								title="View Character Info"
-							>
-								<img src="/game_icons/info.png" alt="Info" />
-							</button>
 						</div>
 						<div class="bot">
 							<div class="rank-meters">
@@ -160,26 +167,32 @@
 						<img
 							src={$eventScreen.image}
 							alt="Event"
-							class:npc-image={false || $eventScreen.type === 'enemy'}
+							class:npc-image={$eventScreen.type === 'npc' || false}
+							class:enemy-image={$eventScreen.type === 'enemy' || false}
+							class:location-icon={$eventScreen.type === 'resource' ||
+								$eventScreen.type === 'location_event'}
 						/>
 					{/if}
 				</div>
 				<div class="info-box">
 					{#if $eventScreen.type === 'enemy' && $eventScreen.data}
 						<h3 class:legendary={$eventScreen.data.isLegendary}>{$eventScreen.data.name}</h3>
-						<div class="mastery-requirements">
-							{#each Object.entries($eventScreen.data.masteryRequirements || {}) as [element, level]}
-								<MasteryTag {element} {level} />
-							{/each}
+						<div class="wr-details">
+							<p>
+								World Resonance: <span>{$eventScreen.data.resonanceRequirement}</span>
+							</p>
 						</div>
 
 						<!-- Encounter Result -->
 						{#if $eventScreen.data.encounterResult}
 							{@const r = $eventScreen.data.encounterResult}
 							<div class="encounter-result">
-
 								<!-- Outcome badge -->
-								<div class="outcome-badge" class:win={r.outcome === 'win'} class:loss={r.outcome === 'loss'}>
+								<div
+									class="outcome-badge"
+									class:win={r.outcome === 'win'}
+									class:loss={r.outcome === 'loss'}
+								>
 									{#if r.outcome === 'win'}⚔ VICTORY{:else}✦ ESCAPED{/if}
 								</div>
 
@@ -222,7 +235,6 @@
 
 								<!-- Help link -->
 								<a href="/help/combat" class="combat-help">How does combat work? →</a>
-
 							</div>
 						{/if}
 					{:else if $eventScreen.type === 'item_found' && $eventScreen.data}
@@ -275,6 +287,24 @@
 </div>
 
 <style>
+	.event-screen {
+		position: relative;
+		background-color: #75594b;
+		/* padding: 1rem; */
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color: white;
+		min-height: 300px;
+		box-sizing: border-box;
+		overflow: hidden;
+		gap: 1rem;
+		border: 3px solid var(--surface-2);
+		/* border-radius: 12px; */
+		/* overflow: hidden; */
+		/* border-radius: 12px; */
+	}
 	.encounter-result {
 		margin-top: 0.6rem;
 		width: 100%;
@@ -296,19 +326,22 @@
 	.outcome-badge.win {
 		color: #4ade80;
 		border-color: #4ade8044;
-		background: rgba(74,222,128,0.08);
+		background: rgba(74, 222, 128, 0.08);
 	}
 	.outcome-badge.loss {
 		color: #fbbf24;
 		border-color: #fbbf2444;
-		background: rgba(251,191,36,0.08);
+		background: rgba(251, 191, 36, 0.08);
 	}
 
 	/* Stats row */
 	.result-stats {
 		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		/* flex-direction: column; */
 		gap: 0.4rem;
-		flex-wrap: wrap;
+		padding-right: 0.5rem;
 	}
 	.stat-pill {
 		display: flex;
@@ -320,18 +353,30 @@
 		font-size: 0.48rem;
 	}
 	.stat-pill.hp {
-		background: rgba(248,113,113,0.15);
-		border: 1px solid rgba(248,113,113,0.3);
+		background: rgba(248, 113, 113, 0.15);
+		border: 1px solid rgba(248, 113, 113, 0.3);
 	}
 	.stat-pill.xp {
-		background: rgba(144,169,85,0.15);
-		border: 1px solid rgba(144,169,85,0.3);
+		background: rgba(144, 169, 85, 0.15);
+		border: 1px solid rgba(144, 169, 85, 0.3);
 	}
-	.stat-icon { font-size: 0.5rem; opacity: 0.7; }
-	.stat-label { color: #888; }
-	.stat-val { font-weight: bold; color: #eee; }
-	.stat-pill.hp .stat-val { color: #f87171; }
-	.stat-pill.xp .stat-val { color: #90a955; }
+	.stat-icon {
+		font-size: 0.5rem;
+		opacity: 0.7;
+	}
+	.stat-label {
+		color: #eee;
+	}
+	.stat-val {
+		font-weight: bold;
+		color: #eee;
+	}
+	.stat-pill.hp .stat-val {
+		color: #f87171;
+	}
+	.stat-pill.xp .stat-val {
+		color: #90a955;
+	}
 
 	.escape-reason {
 		font-size: 0.48rem;
@@ -350,7 +395,7 @@
 		font-family: var(--font-family-pixel, monospace);
 		font-size: 0.4rem;
 		letter-spacing: 0.12em;
-		color: #666;
+		color: #aaaaaa;
 	}
 	.drops-grid {
 		display: flex;
@@ -361,8 +406,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
-		background: rgba(255,255,255,0.05);
-		border: 1px solid rgba(255,255,255,0.08);
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 4px;
 		padding: 0.2rem 0.4rem 0.2rem 0.25rem;
 	}
@@ -380,7 +425,7 @@
 	.drop-qty {
 		font-family: var(--font-family-pixel, monospace);
 		font-size: 0.42rem;
-		color: #888;
+		color: #eee;
 	}
 
 	/* Help link */
@@ -393,7 +438,9 @@
 		transition: opacity 0.15s;
 		align-self: flex-end;
 	}
-	.combat-help:hover { opacity: 1; }
+	.combat-help:hover {
+		opacity: 1;
+	}
 	.npc-header {
 		display: flex;
 		align-items: center;
@@ -403,9 +450,9 @@
 	.container {
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: rgba(0, 0, 0, 0.7);
 		padding: 1rem;
-		backdrop-filter: blur(2px);
+		/* backdrop-filter: blur(2px); */
 		display: flex;
 		flex-direction: column;
 		padding-top: 2rem;
@@ -417,9 +464,15 @@
 	}
 
 	.info-button {
+		position: absolute;
+		top: 148px;
+		left: 148px;
+		z-index: 3;
 		background: none;
+		background-color: color-mix(in srgb, #ffffff 30%, var(--npc-first-element-bg));
 		border: none;
-		padding: 0;
+		padding: 2px;
+		border-radius: 6px 0 6px 0;
 		cursor: pointer;
 		display: flex;
 		align-items: center;
@@ -465,26 +518,9 @@
 		border: none;
 		padding: 0;
 		cursor: pointer;
+		z-index: 2;
 	}
 
-	.event-screen {
-		position: relative;
-		background-color: #75594b;
-		/* padding: 1rem; */
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		color: white;
-		min-height: 300px;
-		box-sizing: border-box;
-		gap: 1rem;
-		border: 3px solid var(--surface-2);
-		/* border-radius: 12px; */
-		/* overflow: hidden; */
-		/* border-radius: 12px; */
-
-	}
 	.placeholder {
 		min-height: 150px;
 	}
@@ -494,20 +530,24 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-	img {
-		max-width: 200px;
-		max-height: 200px;
-		object-fit: contain;
-		image-rendering: pixelated;
+		img {
+			max-width: 200px;
+			max-height: 200px;
+			object-fit: contain;
+			image-rendering: pixelated;
+		}
 	}
 	.npc-image,
 	.enemy-image {
-		width: 150px;
-		height: 150px;
+		width: 160px;
+		height: 160px;
 		border-radius: 8px;
 		image-rendering: auto;
-		border: 3px solid var(--color-primary);
+		border: 4px solid color-mix(in srgb, #ffffff 30%, var(--npc-first-element-bg));
+		box-shadow: var(--npc-first-element-bg) 0 6px 0 3px, var(--npc-first-element-bg) 0 -0px 0 3px ;
+	}
+	.location-icon {
+		height: 96px;
 	}
 	.info-box {
 		display: flex;
@@ -522,12 +562,23 @@
 		font-family: var(--font-family-main);
 		font-family: 'Silkscreen';
 		font-weight: normal;
+		text-shadow: black 1px 2px;
 	}
-	.mastery-requirements {
+	.wr-details {
 		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-		justify-content: center;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0;
+		span {
+			color: rgb(245, 208, 117);
+		}
+		p {
+			padding: 0;
+			margin: 0;
+			font-family: var(--font-family-pixel);
+			font-size: 0.75rem;
+			color: #e8e8e8;
+		}
 	}
 	.resource-info {
 		display: flex;
@@ -568,26 +619,48 @@
 	.npc-card {
 		display: flex;
 		margin: 2rem auto;
-		gap: 2rem;
+		/* gap: 2rem; */
+		position: relative;
 
 		.details {
 			display: flex;
 			flex-direction: column;
-			gap: 1rem;
+			/* gap: 1rem; */
+			justify-content: flex-start;
+			position: relative;
 		}
 
 		.top {
+			z-index: 1;
+			position: relative;
+			top: 1rem;
+			left: -1rem;
+			padding-left: 1.5rem;
+			padding-right: 1.5rem;
+			padding-block: 0.5rem;
+			width: fit-content;
 			display: flex;
+			flex-direction: column;
 			font-family: var(--font-family-pixel);
 			font-size: 1.3rem;
 			font-weight: 600;
+			color: var(--npc-first-element-color);
+			background-color: var(--npc-first-element-bg);
+			clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+		}
+		.npc-title {
+			font-size: 0.75rem;
+			font-family: var(--font-family-pixel);
+			font-weight: 400;
 		}
 
 		.mid {
+			margin-top: 1rem;
+			/* border: 1px solid white; */
 			display: flex;
 			gap: 8px;
-			align-items: flex-start;
-			justify-content: space-between;
+			/* align-items: flex-start; */
+			/* justify-content: space-evenly; */
 		}
 
 		.bot {
@@ -597,15 +670,17 @@
 		}
 
 		.elements {
+			margin-block: 0.25rem;
+			margin-left: 0.25rem;
 			display: flex;
-			gap: 0.5rem;
+			gap: 0.25rem;
 		}
 
 		.rank-meters {
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
-			gap: 0.5rem;
+			gap: 0.25rem;
 			/* background-color: #555;
 			width: fit-content;
 			padding-right: .5rem;
@@ -615,7 +690,13 @@
 			display: flex;
 			align-items: center;
 			gap: 0.25rem;
-			/* background-color: #555; */
+			color: var(--npc-second-element-color);
+			background-color: var(--npc-second-element-bg);
+			box-shadow: #00000056 0 3px 0 2px;
+			border-radius: 0 6px 6px 0;
+			width: fit-content;
+			padding: 0.25rem;
+			padding-right: 1rem;
 		}
 		.rank-icon {
 			width: 20px;

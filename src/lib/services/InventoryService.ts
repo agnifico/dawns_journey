@@ -186,7 +186,6 @@ export function useItem(instanceId: string) {
 
         // In the instanced system every item is a single instance — always remove by instanceId.
         newPlayer = removeItemByInstanceId(newPlayer, instanceId);
-
         messageStore.addMessage(`Used ${itemToUse.name}.`, ['System']);
         
         // Update activeItem in uiStore after using an item

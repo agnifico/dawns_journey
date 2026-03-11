@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { playerStore } from '$lib/stores/playerStore';
-	import { game } from '$lib/game/game';
 	import type { Item, Set } from '$lib/types';
 	import ItemBox from './ItemBox.svelte';
-	import { getItemById } from '$lib/services/InventoryService';
+	import { equipItem, getItemById, useItem } from '$lib/services/InventoryService';
 	import { getSetForRelic } from '$lib/services/SetDataService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
 	import Stat from './Stat.svelte';
 	import { afterUpdate } from 'svelte';
 	import { derived } from 'svelte/store';
 	import ExploBubble from './ExploBubble.svelte';
-	import MasteryDisplay from './ui/MasteryDisplay.svelte';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import InstantEffectDisplay from './ui/InstantEffectDisplay.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
@@ -219,12 +217,6 @@
 					</div>
 				{/if}
 
-				<!-- Mastery -->
-				{#if $activeItem.type === 'weapon' && $activeItem.mastery}
-				<Stat statId="mastery" value={$activeItem.mastery} />
-					<!-- <MasteryDisplay mastery={$activeItem.mastery} elements={[$activeItem.element]} size="mini"/> -->
-				{/if}
-
 				<!-- Set Info -->
 				{#if relicSet}
 					<div class="set-info">
@@ -269,10 +261,10 @@
 			</div>
 			<div class="buttons">
 				{#if isConsumable($activeItem)}
-					<button class="action-button" on:click={() => game.useItem($activeItem.instanceId)}>Use</button>
+					<button class="action-button" on:click={() => useItem($activeItem.instanceId)}>Use</button>
 				{/if}
 				{#if isEquippable($activeItem)}
-					<button class="action-button" on:click={() => game.equipItem($activeItem.instanceId)}
+					<button class="action-button" on:click={() => equipItem($activeItem.instanceId)}
 						>Equip</button
 					>
 				{/if}

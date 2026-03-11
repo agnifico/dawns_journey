@@ -171,15 +171,12 @@ export const playerExplorationAbilities = derived(playerStore, ($player) => {
     return abilities;
 });
 
-export const playerMastery = derived(playerStore, ($player) => {
-    if (!$player || !$player.equipment) return 0;
-    let totalMastery = 0;
-    $player.equipment.weapon_slots.forEach(weapon => {
-        if (weapon && weapon.mastery) {
-            totalMastery += weapon.mastery;
-        }
-    });
-    return totalMastery;
+export const playerWorldResonance = derived(playerStore, ($player) => {
+    return $player?.worldResonance ?? 0;
+});
+
+export const playerLevelPoints = derived(playerStore, ($player) => {
+    return $player?.levelPoints ?? 0;
 });
 
 export const setAvatar = (avatar: string) => {

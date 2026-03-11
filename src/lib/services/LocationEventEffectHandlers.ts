@@ -8,6 +8,7 @@ import { getItemById } from '$lib/services/InventoryService';
 import { game } from '$lib/game/game';
 import { increaseFactionScore, decreaseFactionScore } from './FactionService';
 import { toastStore } from '$lib/stores/toastStore';
+import { notificationStore } from '$lib/stores/notificationStore';
 
 type EffectHandler = (player: Player, effect: GameEffect, currentStats: any) => { newPlayer: Player, effectApplied: boolean, allEffectsApplied: boolean };
 
@@ -106,5 +107,15 @@ export const effectHandlers: { [key: string]: EffectHandler } = {
     switch_map: (player, effect) => {
         game.switchMap(effect.mapId, { x: effect.x, y: effect.y });
         return { newPlayer: player, effectApplied: true, allEffectsApplied: true };
-    }
+    },
+    add_world_resonance: (player, effect) => {
+        const newPlayer = {
+            ...player,
+            worldResonance: (player.worldResonance ?? 0) + effect.amount,
+        };
+        // notificationStore.addWorldResonance(effect.amount);
+        toastStore.success(`World Resonance +${effect.amount}`);
+        messageStore.addMessage(`+${effect.amount} World Resonance.`, ['World']);
+        return { newPlayer, effectApplied: true, allEffectsApplied: true };
+    },
 };

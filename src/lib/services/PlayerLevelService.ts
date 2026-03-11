@@ -37,7 +37,7 @@ export function gainExperience(player: Player, amount: number): Player {
             if (levelData?.rewards) {
                 for (const reward of levelData.rewards) {
                     if (reward.type === 'item') {
-                        newPlayer = addItems(newPlayer, reward.itemId, reward.amount);
+                        newPlayer = addItems(newPlayer, reward.itemId, reward.amount); 
                         messageStore.addMessage(`You received ${reward.amount} ${reward.name}!`, ['System', 'World']);
                         toastStore.info(`Received: ${reward.amount} ${reward.name} for Leveling up!`)
                     }

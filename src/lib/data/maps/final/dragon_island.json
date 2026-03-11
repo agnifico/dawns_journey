@@ -153,6 +153,12 @@
     },
     {
       "type": "npc",
+      "x": 13,
+      "y": 15,
+      "npcId": "nemesis"
+    },
+    {
+      "type": "npc",
       "x": 26,
       "y": 9,
       "npcId": "akari"

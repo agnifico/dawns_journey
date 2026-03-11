@@ -23,11 +23,13 @@
 		{ id: 'elementalAttack', name: 'Elemental Attack' },
 		{ id: 'physicalDefence', name: 'Physical Defence' },
 		{ id: 'elementalDefence', name: 'Elemental Defence' },
-		{ id: 'speed', name: 'Speed' },
 		{ id: 'critChance', name: 'Crit Chance' },
 		{ id: 'critDamage', name: 'Crit Damage' },
 		{ id: 'maxHp', name: 'Max HP' },
-		{ id: 'maxAuraShield', name: 'Max Aura Shield' }
+		{ id: 'maxAuraShield', name: 'Max Aura Shield' },
+		{ id: 'precision', name: 'Precision' },
+		{ id: 'evasion', name: 'Evasion' },
+		{ id: 'speed', name: 'Speed' }
 	];
 
 	let selectedElement: string | null;
@@ -84,6 +86,19 @@
 				<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
 			</button>
 		</div>
+
+		<div class="filter-group types">
+			<div class="row">
+				{#each weaponTags as tag}
+					<button class:active={activeTags.includes(tag)} on:click={() => handleTagToggle(tag)}>
+						{tag.toUpperCase()}
+					</button>
+				{/each}
+			</div>
+			<button class="cancel-btn" on:click={() => clearTagFilter()}>
+				<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
+			</button>
+		</div>
 	{/if}
 
 	<div class="filter-group stats">
@@ -106,19 +121,6 @@
 			{/each}
 		</div>
 		<button class:active={selectedStat === null} on:click={() => clearStatSort()}>
-			<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
-		</button>
-	</div>
-
-	<div class="filter-group types">
-		<div class="row">
-			{#each weaponTags as tag}
-				<button class:active={activeTags.includes(tag)} on:click={() => handleTagToggle(tag)}>
-					{tag.toUpperCase()}
-				</button>
-			{/each}
-		</div>
-		<button class="cancel-btn" on:click={() => clearTagFilter()}>
 			<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
 		</button>
 	</div>

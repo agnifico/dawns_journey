@@ -79,7 +79,7 @@
 		border-bottom: 1px solid white;
 	}
 	.notification.type-item_received  { border-color: var(--notification-received); }
-	.notification.type-item_used      { border-color: var(--notification-used); }
+	.notification.type-item_used, .notification.type-item_removed      { border-color: var(--notification-used); }
 	.notification.type-item_equipped  { border-color: var(--notification-equipped); }
 	.notification.type-item_unequipped { border-color: var(--notification-unequipped); }
 

@@ -52,17 +52,17 @@ export const player: Player = {
     baseStats: {
         hp: 100,
         maxHp: 100,
-        auraShield: 0,
+        auraShield: 100,
         maxAuraShield: 100,
         physicalAttack: 10,
         physicalDefence: 10,
         elementalAttack: 10,
         elementalDefence: 10,
-        speed: 50,
-        evasion: 30,
-        critChance: 0.05, // 5% default
-        critDamage: 1.5, // 1.5x default
-        precision: 30, // 100% default
+        speed: 20,
+        evasion: 20,
+        critChance: 0.1, 
+        critDamage: 1.25,
+        precision: 10,
     },
     equipment: {
         weapon_slots: [null, null],
@@ -90,6 +90,7 @@ export const player: Player = {
     // Achievements and milestones
     achievements: {},
     stepsTaken: 0,
+    worldResonance: 0,
     cropsHarvested: 0,
     factions: {},
 };

@@ -123,6 +123,10 @@
                             "type": "item",
                             "itemId": "potato_seed",
                             "quantity": 10
+                        },
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
                         }
                     ]
                 },

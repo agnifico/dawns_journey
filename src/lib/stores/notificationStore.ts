@@ -79,10 +79,16 @@ interface BuffNotification extends BaseNotification {
     duration_steps?: number;
 }
 
+
 interface FactionScoreNotification extends BaseNotification {
     type: 'faction_score';
     factionName: string;
     amount: number;
+}
+interface FactionRankUpNotification extends BaseNotification {
+    type: 'faction_rank_up';
+    factionName: string;
+    rank: number;
 }
 
 export type Notification =
@@ -200,6 +206,7 @@ function addFactionScore(factionName: string, amount: number) {
     } as FactionScoreNotification);
 }
 
+
 function addFactionRankUp(factionName: string, rank: number) {
     schedule({
         id: nextId++,
@@ -220,3 +227,4 @@ export const notificationStore = {
     addFactionScore,
     addFactionRankUp,
 };
+

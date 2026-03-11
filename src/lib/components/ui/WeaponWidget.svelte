@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { playerStore } from '$lib/stores/playerStore';
-	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
+
+	import { playerStore} from '$lib/stores/playerStore';
 	import ItemBox from '../ItemBox.svelte';
 
-	let showDetails = false;
 </script>
+
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
@@ -17,6 +17,9 @@
 			<ItemBox {item} viewSize="small" hoverEnabled={true}/>
 		{/if}
 	{/each}
+
+	
+
 </div>
 
 <style>
@@ -30,14 +33,15 @@
 		height: 32px;
 		padding: 6px;
 		border-radius: 0px;
-		&:last-of-type {
+		/* &:last-of-type {
 			border-radius: 0 9px 9px 0;
 		}
 		&:first-of-type {
 			border-radius: 9px 0 0 9px;
-		}
+		} */
 	}
 	img:hover {
 		background-color: #222;
 	}
+
 </style>

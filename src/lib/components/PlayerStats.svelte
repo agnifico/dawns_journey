@@ -29,6 +29,8 @@
 					color="#a98467"
 				/>
 			</div>
+			{$playerStore.worldResonance}
+			{$playerStore.worldTags}
 		</div>
 	</div>
 	

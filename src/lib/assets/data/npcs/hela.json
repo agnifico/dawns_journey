@@ -3,6 +3,7 @@
     "name": "Hela",
     "profileImage": "/images/characters/hela/hela_avatar.png",
     "image": "/images/characters/hela/hela1.png",
+    "title": "The Dawn in the Night - Queen of Hell",
     "galleryImages": [
         "/images/characters/hela/hela0.png",
         "/images/characters/hela/hela1.png",
@@ -20,6 +21,8 @@
         "/images/characters/hela/hela14.png",
         "/images/characters/hela/hela15.png"
     ],
+    "description": "The Queen of Hell. Wielder of limitless power, and a subject to a lifetime of boredom, from her menial duties in the underworld. Now, lost in the new world, she has found a new avenue for fun and adventure - you.",
+    "faction": "",
     "isCombatant": true,
     "types": [
         "Dark",
@@ -45,6 +48,12 @@
     "affinity": 0,
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
+    "abilityCycle": [
+        "basic_slash",
+        "abyssal_toxin",
+        "hellfire",
+        "reaping_blow"
+    ],
     "statGrowth": [
         {
             "level": 1,
@@ -244,6 +253,24 @@
                     "type": "tag",
                     "tagId": "hela_heart_rank_1_unlocked"
                 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "magma_fossil",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "Another one? You're quite resourceful."
+                    ]
+                },
+                {
+                    "itemId": "hellward_lance",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "You would give me a weapon of such power? I'm impressed."
+                    ]
+                }
             ]
         },
         {
@@ -266,6 +293,12 @@
                     "dialogue": [
                         "You would give me a weapon of such power? I'm impressed."
                     ]
+                }
+            ],
+            "rank_up_rewards": [
+                {
+                    "type": "tag",
+                    "tagId": "hela_heart_rank_1_unlocked"
                 }
             ]
         }
