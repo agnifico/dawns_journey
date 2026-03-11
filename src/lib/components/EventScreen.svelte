@@ -234,7 +234,7 @@
 								{/if}
 
 								<!-- Help link -->
-								<a href="/help/combat" class="combat-help">How does combat work? →</a>
+								<!-- <a href="/help/combat" class="combat-help">How does combat work? →</a> -->
 							</div>
 						{/if}
 					{:else if $eventScreen.type === 'item_found' && $eventScreen.data}

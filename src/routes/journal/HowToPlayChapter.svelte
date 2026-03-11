@@ -55,10 +55,10 @@
 			id: 'characters',
 			title: 'Characters',
 			topics: [
-				{ icon: '👤', name: 'Main Characters', desc: "Who you'll meet, their elements, and why they matter.", href: '/help/characters/main', keywords: 'main characters npc companions hela sylvie veres' },
-				{ icon: '💬', name: 'Talking & Quests', desc: 'How conversations work and how they connect to quests.', href: '/help/characters/talking', keywords: 'talk quests dialogue sword rank npc conversation', sub: true },
-				{ icon: '🎁', name: 'Gifting & Heart Rank', desc: 'Building relationships through gifts and what it unlocks.', href: '/help/characters/gifting', keywords: 'gifting heart rank affinity npc relationship items give', sub: true },
-				{ icon: '⚔️', name: 'Character Combat', desc: 'Challenging characters to duels and building Sword Rank.', href: '/help/characters/combat', keywords: 'character combat challenge sword rank duel npc fight', sub: true }
+				{ icon: '👤', name: 'Main Characters', desc: "Who you'll meet, their elements, and why they matter.", href: '/help/characters_main', keywords: 'main characters npc companions hela sylvie veres' },
+				{ icon: '💬', name: 'Talking & Quests', desc: 'How conversations work and how they connect to quests.', href: '/help/characters_talking', keywords: 'talk quests dialogue sword rank npc conversation', sub: true },
+				{ icon: '🎁', name: 'Gifting & Heart Rank', desc: 'Building relationships through gifts and what it unlocks.', href: '/help/characters_gifting', keywords: 'gifting heart rank affinity npc relationship items give', sub: true },
+				{ icon: '⚔️', name: 'Character Combat', desc: 'Challenging characters to duels and building Sword Rank.', href: '/help/characters_combat', keywords: 'character combat challenge sword rank duel npc fight', sub: true }
 			]
 		},
 		{
@@ -73,12 +73,12 @@
 			id: 'skilling',
 			title: 'Skilling',
 			topics: [
-				{ icon: '🌱', name: 'Farming', desc: 'Seeds, watering, growth types, environments, and ideal seasons.', href: '/help/skilling/farming', keywords: 'farming seeds crops grow harvest homestead farm watering growth seasons' },
-				{ icon: '🪓', name: 'Woodcutting', desc: "Gathering wood from the island's forests.", href: '/help/skilling/woodcutting', keywords: 'woodcutting wood lumber trees skill chop' },
-				{ icon: '⛏️', name: 'Mining', desc: 'Extracting ore, stone, and gems from the mountain regions.', href: '/help/skilling/mining', keywords: 'mining ore stone gems resources rock mineral' },
-				{ icon: '⚗️', name: 'Alchemy', desc: 'Brewing potions and elixirs from gathered ingredients.', href: '/help/skilling/alchemy', keywords: 'alchemy potions craft brew ingredients chemistry' },
-				{ icon: '🍳', name: 'Cooking', desc: 'Preparing food for buffs, healing, and stat boosts.', href: '/help/skilling/cooking', keywords: 'cooking food recipes ingredients craft eat buff heal' },
-				{ icon: '🔨', name: 'Smithing', desc: 'Forging weapons and equipment from raw materials.', href: '/help/skilling/smithing', keywords: 'smithing forge weapons craft metal equipment' }
+				{ icon: '🌱', name: 'Farming', desc: 'Seeds, watering, growth types, environments, and ideal seasons.', href: '/help/skilling_farming', keywords: 'farming seeds crops grow harvest homestead farm watering growth seasons' },
+				{ icon: '🪓', name: 'Woodcutting', desc: "Gathering wood from the island's forests.", href: '/help/skilling_woodcutting', keywords: 'woodcutting wood lumber trees skill chop' },
+				{ icon: '⛏️', name: 'Mining', desc: 'Extracting ore, stone, and gems from the mountain regions.', href: '/help/skilling_mining', keywords: 'mining ore stone gems resources rock mineral' },
+				{ icon: '⚗️', name: 'Alchemy', desc: 'Brewing potions and elixirs from gathered ingredients.', href: '/help/skilling_alchemy', keywords: 'alchemy potions craft brew ingredients chemistry' },
+				{ icon: '🍳', name: 'Cooking', desc: 'Preparing food for buffs, healing, and stat boosts.', href: '/help/skilling_cooking', keywords: 'cooking food recipes ingredients craft eat buff heal' },
+				{ icon: '🔨', name: 'Smithing', desc: 'Forging weapons and equipment from raw materials.', href: '/help/skilling_smithing', keywords: 'smithing forge weapons craft metal equipment' }
 			]
 		},
 		{
