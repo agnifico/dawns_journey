@@ -230,6 +230,22 @@ export const generalItems: Item[] = [
         flags: ['stackable',],
     },
     {
+        id: 'egg',
+        name: 'Egg',
+        description: 'A fresh egg from a chicken.',
+        image: '/crops/egg.png',
+        type: 'general',
+        flags: ['animal_product', 'stackable']
+    },
+    {
+        id: 'milk',
+        name: 'Milk',
+        description: 'A bottle of fresh milk from a cow.',
+        image: '/crops/milk.png',
+        type: 'general',
+        flags: ['animal_product', 'stackable']
+    },
+    {
         id: "omelette",
         name: "Omelette",
         description: "A fluffy omelette, a good source of protein.",

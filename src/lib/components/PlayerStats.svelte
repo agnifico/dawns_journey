@@ -30,7 +30,7 @@
 				/>
 			</div>
 			{$playerStore.worldResonance}
-			{$playerStore.worldTags}
+			<!-- {$playerStore.worldTags} -->
 		</div>
 	</div>
 	

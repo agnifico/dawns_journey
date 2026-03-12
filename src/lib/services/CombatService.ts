@@ -9,11 +9,11 @@ import { openCombatModal, closeCombatModal } from '$lib/stores/uiStore';
 import * as CombatEngine from './CombatEngine';
 import * as AchievementService from './AchievementService';
 import { calculateDamage } from './combatCalculations';
-import { getNpcCombatStats } from './NpcService';
+import { getNpcCombatStats, selectBattleAftermath } from './NpcService';
 import { getEnemyById } from './EnemyDataService';
 import { gainExperience } from './PlayerLevelService';
 import { allAbilities, getAbilityById } from '../data/abilities';
-import { checkRequirement, checkQuestTriggers } from './QuestService';
+import { checkQuestTriggers } from './QuestService';
 import { addItems } from './InventoryService';
 import { toastStore } from '$lib/stores/toastStore';
 
@@ -309,19 +309,10 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
 
     const npc = get(npcStore).globalNpcs[opponent.id];
     if (npc) {
-        const aftermathsByRank = npc.battleAftermathsBySwordRank.find(a => a.rank === npc.swordRank);
-        if (aftermathsByRank) {
-            const potentials = aftermathsByRank.aftermaths.filter(a => a.outcome === outcome);
-            const playerForCheck = get(playerStore);
-            const allNpcs = get(npcStore).globalNpcs;
-            for (const potential of potentials) {
-                const { met } = checkRequirement(potential.requirement, playerForCheck, npc, allNpcs, true);
-                if (met) {
-                    if (potential.dialogue) dialogueStore.startDialogue(potential.dialogue, npc.name);
-                    if (potential.value !== undefined) npcStore.applyCombatAftermath(npc.id, potential);
-                    break;
-                }
-            }
+        const aftermath = selectBattleAftermath(npc, get(playerStore), get(npcStore).globalNpcs, outcome);
+        if (aftermath) {
+            if (aftermath.dialogue?.length) dialogueStore.startDialogue(aftermath.dialogue, npc.name);
+            if (aftermath.value !== undefined) npcStore.applyCombatAftermath(npc.id, outcome);
         }
     }
 
@@ -378,10 +369,10 @@ function resolveTurn(playerAbilityId: string): void {
     const state = get(combatStore);
     if (!state.player || !state.opponent || state.combatEnded) return;
 
-    let player   = state.player;
+    let player = state.player;
     let opponent = state.opponent;
     const turnNumber = state.turnNumber;
-    const isArena    = state.isArenaCombat;
+    const isArena = state.isArenaCombat;
     const roundLogs: CombatLogMessage[] = [{ type: 'turn_banner', turn: turnNumber }];
 
     const playerGoesFirst = (player.speed ?? 0) >= (opponent.speed ?? 0);
@@ -520,7 +511,7 @@ export function startCombat(opponentNpc: NPC): void {
         gearPassives: [],
     };
 
-    const opponentStats     = getNpcCombatStats(opponentNpc);
+    const opponentStats = getNpcCombatStats(opponentNpc);
     const opponentBaseStats = { ...opponentStats, precision: opponentStats.precision ?? 0 };
     const opponentAbilities = resolveAbilities(opponentNpc.abilityCycle);
 

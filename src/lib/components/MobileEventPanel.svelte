@@ -27,7 +27,7 @@
 			<!-- LEFT: Choice menu docked away from DPad -->
 			{#if showChoiceMenu}
 				<div class="panel-left">
-					<ChoiceMenu />
+					<ChoiceMenu flex="row" />
 				</div>
 			{/if}
 
@@ -45,12 +45,15 @@
 							? elementBgs[npc.types[1].toLowerCase()]
 							: elementBgs[npc.types[0].toLowerCase()]}
 					>
-						<button class="avatar-btn" on:click={() => goto(`/journal/character/${npc.id}`)}>
-							<img src={$eventScreen.image} alt={npc.name} class="avatar" />
-						</button>
+						<div class="avatar-side">
+							<button class="avatar-btn" on:click={() => goto(`/journal/character/${npc.id}`)}>
+								<img src={$eventScreen.image} alt={npc.name} class="avatar" />
+							</button>
+						</div>
 						<div class="npc-details">
-							<!-- <p class="npc-label">CHARACTER</p> -->
 							<p class="npc-name">{npc.name}</p>
+							<!-- <p class="npc-label">CHARACTER</p> -->
+
 							<div class="elements">
 								{#each npc.types as type}
 									<ElementTag element={type} size="mini" />
@@ -94,13 +97,14 @@
 	.panel-sheet {
 		position: absolute;
 		left: 0;
-		right: 0;
-		bottom: 0%;
+		/* right: 25%; */
+		top: 60%;
 		z-index: 55;
 		max-height: 65%;
 		background-color: var(--surface-2, #2a2a2a);
 		border-top: 3px solid var(--color-secondary, #8b6f5e);
-		border-radius: 16px 16px 0 0;
+		border-radius: 0px 16px 16px 0;
+		max-width: 80%;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
@@ -126,6 +130,7 @@
 
 	.panel-layout {
 		display: flex;
+		flex-direction: column-reverse;
 		flex: 1;
 		min-height: 0;
 		position: relative;
@@ -134,7 +139,7 @@
 
 	/* Left column: ChoiceMenu, docked left, away from right-side DPad */
 	.panel-left {
-		width: 140px;
+		/* width: 140px; */
 		flex-shrink: 0;
 		border-right: 1px solid rgba(255, 255, 255, 0.06);
 		display: flex;
@@ -162,7 +167,7 @@
 		flex: 1;
 		min-width: 0;
 		overflow-y: auto;
-		padding: 0.75rem;
+		/* padding: 0.75rem; */
 		display: flex;
 		flex-direction: column;
 		/* gap: 0.5rem; */
@@ -172,8 +177,15 @@
 	/* NPC */
 	.npc-row {
 		display: flex;
+		/* flex-direction: column; */
+		/* height: 100%; */
 		/* gap: 0.75rem; */
 		align-items: flex-start;
+		/* border: 1px solid white; */
+		padding: .75rem;
+	}
+	.avatar-side {
+		display: flex;
 	}
 
 	.avatar-btn {
@@ -183,20 +195,22 @@
 		padding: 0;
 		flex-shrink: 0;
 		cursor: pointer;
-		border-radius: 12px;
-		border: 4px solid color-mix(in srgb, #ffffff 30%, var(--npc-first-element-bg));
-		box-shadow:
-			var(--npc-first-element-bg) 0 6px 0 3px,
-			var(--npc-first-element-bg) 0 -0px 0 3px;
+		border-radius: 8px;
+		height: fit-content;
 	}
 
 	.avatar {
 		width: 130px;
-		aspect-ratio: 1;
+		height: 130px;
+		/* aspect-ratio: 1; */
 		border-radius: 8px;
 		object-fit: cover;
 		border: 2px solid var(--color-secondary, #8b6f5e);
 		image-rendering: auto;
+		border: 4px solid color-mix(in srgb, #ffffff 30%, var(--npc-first-element-bg));
+		box-shadow:
+			var(--npc-first-element-bg) 0 6px 0 3px,
+			var(--npc-first-element-bg) 0 0px 0 3px;
 	}
 
 	.npc-details {
@@ -230,6 +244,7 @@
 		font-family: var(--font-family-pixel);
 		font-size: 1.3rem;
 		font-weight: 600;
+		height: fit-content;
 		color: var(--npc-first-element-color);
 		background-color: var(--npc-first-element-bg);
 		clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
@@ -240,8 +255,8 @@
 		gap: 4px;
 		flex-wrap: wrap;
 		margin-block: 0.25rem;
-		margin-top: .5rem;
-		margin-bottom: .25rem;
+		margin-top: 0.5rem;
+		margin-bottom: 0.25rem;
 		margin-left: 0.5rem;
 		padding-left: 0;
 		display: flex;
@@ -256,15 +271,15 @@
 	}
 	.rank-meter {
 		display: flex;
-			align-items: center;
-			gap: 0.25rem;
-			color: var(--npc-second-element-color);
-			background-color: var(--npc-second-element-bg);
-			box-shadow: #00000056 0 3px 0 2px;
-			border-radius: 0 6px 6px 0;
-			width: fit-content;
-			padding: 0.25rem;
-			padding-right: 1rem;
+		align-items: center;
+		gap: 0.25rem;
+		color: var(--npc-second-element-color);
+		background-color: var(--npc-second-element-bg);
+		box-shadow: #00000056 0 3px 0 2px;
+		border-radius: 0 6px 6px 0;
+		width: fit-content;
+		padding: 0.25rem;
+		padding-right: 1rem;
 	}
 	.rank-icon {
 		width: 14px;

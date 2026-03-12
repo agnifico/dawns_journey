@@ -1,5 +1,5 @@
 <script lang="ts">
-	import GameDesignChapter from './GameDesignChapter.svelte';
+	import DevsNote from './DevsNote.svelte';
 	import HowToPlayChapter from './HowToPlayChapter.svelte';
 	import AchievementsChapter from './AchievementsChapter.svelte';
 	import CharactersChapter from './CharactersChapter.svelte';
@@ -44,7 +44,7 @@
 		<!-- Chapter content -->
 		<main class="chapter-area">
 			{#if activeChapter === 'dev_notes'}
-				<GameDesignChapter />
+				<DevsNote />
 			{:else if activeChapter === 'how_to_play'}
 				<HowToPlayChapter />
 			{:else if activeChapter === 'characters'}

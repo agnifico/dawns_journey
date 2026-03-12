@@ -14,6 +14,7 @@
 
 	let actions = [];
 	let npc = null;
+	export let flex: 'row' | 'column' = 'column';
 
 	const keymap = ['z', 'x', 'c', 'v', 'b'];
 
@@ -167,7 +168,7 @@
 	});
 </script>
 
-<div class="interaction-menu">
+<div class="interaction-menu" style:--flex={flex}>
 	<ul>
 		{#each actions as action}
 			<li>
@@ -202,7 +203,7 @@
 		margin: 0;
 		padding: 0;
 		display: flex;
-		flex-direction: column;
+		flex-direction: var(--flex);
 		gap: 0.5rem;
 	}
 	button {

@@ -74,7 +74,7 @@
 
 <style>
     .settings-page {
-        width: 100%;
+        /* width: 100%; */
         max-width: 800px;
         margin: 2rem auto;
         padding: 1rem;

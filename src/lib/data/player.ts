@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createItems } from '../services/ItemFactory';
 
 const initialInventory: Item[] = [
-    ...createItems('bread', 20),
+    ...createItems('bread', 10),
 ];
 
 const initialSkills = Object.keys(skills).map(skillId => ({

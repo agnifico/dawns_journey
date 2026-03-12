@@ -19,23 +19,26 @@ function createQuestStore() {
         };
 
         update(s => {
-            // Do not overwrite state of existing quests, only update definition
+            // Do not overwrite runtime state of existing quests — only refresh the definition
             const existingQuest = s.quests[newQuest.id];
             if (existingQuest) {
                 return {
                     ...s,
                     quests: {
                         ...s.quests,
-                        [newQuest.id]: { ...newQuest, state: existingQuest.state, currentStage: existingQuest.currentStage },
+                        [newQuest.id]: {
+                            ...newQuest,
+                            state: existingQuest.state,
+                            currentStage: existingQuest.currentStage,
+                            finalState: existingQuest.finalState,
+                            stageCooldownSnapshot: existingQuest.stageCooldownSnapshot,
+                        },
                     },
                 };
             }
             return {
                 ...s,
-                quests: {
-                    ...s.quests,
-                    [newQuest.id]: newQuest,
-                },
+                quests: { ...s.quests, [newQuest.id]: newQuest },
             };
         });
     }
@@ -73,14 +76,14 @@ function createQuestStore() {
             return s;
         });
     }
-    
+
     function loadQuests(loadedQuests: Record<string, Quest>) {
         update(s => ({ ...s, quests: loadedQuests }));
     }
 
-
     return {
         subscribe,
+        update,   // exposed so NpcService can write stageCooldownSnapshot directly
         registerQuest,
         setQuestState,
         advanceQuestStage,

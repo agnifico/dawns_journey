@@ -174,7 +174,10 @@
 	}
 
 	.note-body strong {
+		/* font-weight: normal; */
+		/* font-family: "Silkscreen"; */
 		color: #e8b96a;
+		font-size: .75rem;
 	}
 
 	/* ── Blockquote ── */

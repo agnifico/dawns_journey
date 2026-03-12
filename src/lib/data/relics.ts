@@ -30,7 +30,8 @@ export const relics: Item[] = [
         type: "relic",
         stats: [{ name: "evasion", value: 10 }, { name: "maxHp", value: 50 }, { name: "critChance", value: .2 }],
         element: "Earth",
-        flags: [],
+        exploration: [{ name: 'Earth', level: 1 }],
+        flags: ["special"],
     },
     {
         id: "cygwins_love",

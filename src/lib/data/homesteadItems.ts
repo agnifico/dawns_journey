@@ -45,21 +45,21 @@ for (const plantId in cropDefinitions) {
 }
 
 // Add Animal Products
-homesteadItems.push(
-    {
-        id: 'egg',
-        name: 'Egg',
-        description: 'A fresh egg from a chicken.',
-        image: '/crops/egg.png',
-        type: 'general',
-        flags: ['animal_product', 'stackable']
-    },
-    {
-        id: 'milk',
-        name: 'Milk',
-        description: 'A bottle of fresh milk from a cow.',
-        image: '/crops/milk.png',
-        type: 'general',
-        flags: ['animal_product', 'stackable']
-    }
-);
+// homesteadItems.push(
+//     {
+//         id: 'egg',
+//         name: 'Egg',
+//         description: 'A fresh egg from a chicken.',
+//         image: '/crops/egg.png',
+//         type: 'general',
+//         flags: ['animal_product', 'stackable']
+//     },
+//     {
+//         id: 'milk',
+//         name: 'Milk',
+//         description: 'A bottle of fresh milk from a cow.',
+//         image: '/crops/milk.png',
+//         type: 'general',
+//         flags: ['animal_product', 'stackable']
+//     }
+// );

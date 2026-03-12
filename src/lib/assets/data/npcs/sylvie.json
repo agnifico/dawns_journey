@@ -1,7 +1,7 @@
 {
     "id": "sylvie",
     "name": "Sylvie",
-    "description": "A ranger in the forest. She is sharp with her bow, and handy with a rope - both in the field and at night.",
+    "description": "A ranger in the forest. She is sharp with her bow, and handy with a rope — both in the field and at night.",
     "profileImage": "/images/characters/sylvie/sylvie_avatar.png",
     "image": "/images/characters/sylvie/sylvie0.png",
     "galleryImages": [
@@ -16,9 +16,7 @@
         "/images/characters/sylvie/sylvie9.png"
     ],
     "isCombatant": true,
-    "types": [
-        "Earth"
-    ],
+    "types": ["Earth"],
     "abilityCycle": [
         "basic_slash",
         "elemental_smite",
@@ -49,34 +47,22 @@
         "Congratulations, you have finished the basic tutorial!",
         "Before you go, let me explain to you how time works.",
         "Time exists in Revoluts, with each comprising of Dawnrise, followed by Duskfall.",
-        "Each step you take is one unit of time. 50 steps/units change the half of Revolut - Dawnrise/Duskfall.",
-        "Resources on the map respawn (replenish to full) after certain amount of time."
+        "Each step you take is one unit of time. 50 steps/units change the half of Revolut — Dawnrise/Duskfall.",
+        "Resources on the map respawn (replenish to full) after certain amounts of time."
     ],
     "allRanksMaxedDialogue": [
-        "Long ago, an ancient dragon, the size of a small village used to roam over these waters - The Southern Sea.",
-        "The dragon - Ymir - was benevolent, guarding these waters from foul creatures of the Abyss and intrusions from land alike.",
+        "Long ago, an ancient dragon, the size of a small village used to roam over these waters — The Southern Sea.",
+        "The dragon — Ymir — was benevolent, guarding these waters from foul creatures of the Abyss and intrusions from land alike.",
         "In a war two centuries back, one of the belligerent factions tried to imprison Ymir, trying to tame him.",
         "In a clash that saw the end of the war, the imprudent faction, and Ymir himself, he fell from the skies.",
         "The Ocean Goddess wept, for she was rather fond of Ymir. Goddess Earth took it upon herself to ensure he got a proper burial.",
         "Over 3 days, with her own hands, no magic, she raised mountains, planted forest, and covered Ymir with a landform,",
-        "one that is blessed of life. That is the story of Dragon Island. "
+        "one that is blessed of life. That is the story of Dragon Island."
     ],
     "drops": [
-        {
-            "itemId": "bread",
-            "chance": 1,
-            "quantity": 20
-        },
-        {
-            "itemId": "wheat_seed",
-            "chance": 1,
-            "quantity": 6
-        },
-        {
-            "itemId": "potato_seed",
-            "chance": 1,
-            "quantity": 6
-        }
+        { "itemId": "bread", "chance": 1, "quantity": 20 },
+        { "itemId": "wheat_seed", "chance": 1, "quantity": 6 },
+        { "itemId": "potato_seed", "chance": 1, "quantity": 6 }
     ],
     "battleAftermathsBySwordRank": [
         {
@@ -94,7 +80,7 @@
                     "value": 1,
                     "dialogue": [
                         "You fought well, but the forest is stronger.",
-                        "(Hint: You should equip the weapon - Basic Bow/Sword. Check out your Inventory, 'treasure chest' icon on top.)"
+                        "(Hint: You should equip the weapon — Basic Bow/Sword. Check out your Inventory, 'treasure chest' icon on top.)"
                     ]
                 }
             ]
@@ -109,9 +95,7 @@
             "stages": [
                 {
                     "objective": "Talk to Sylvie (X:13, Y:2)",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "success_dialogue": [
                         "Welcome Traveler, this is Dawn's Journey",
                         "Move around, you'll find random loot you can pick up.",
@@ -119,15 +103,8 @@
                         "For now, can you go into the water and get me a Fish?"
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "potato_seed",
-                            "quantity": 10
-                        },
-                        {
-                            "type": "world_resonance",
-                            "amount": 10
-                        }
+                        { "type": "item", "itemId": "potato_seed", "quantity": 10 },
+                        { "type": "world_resonance", "amount": 10 }
                     ]
                 },
                 {
@@ -149,15 +126,8 @@
                         "Watch the magic! (Just code, you know)"
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "bread",
-                            "quantity": 5
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "sylvie_sword_1_complete"
-                        }
+                        { "type": "item", "itemId": "bread", "quantity": 5 },
+                        { "type": "tag", "tagId": "sylvie_sword_1_complete" }
                     ]
                 }
             ]
@@ -181,13 +151,13 @@
                     "unavailable_dialogue": [
                         "The forest is quiet today."
                     ],
+                    "intro_dialogue": [
+                        "There are several locations that could be of interest to you — sometimes marked, and sometimes not.",
+                        "For example, certain TREE icons indicate a Resource — in this case, one you can gather Wood from.",
+                        "Can you gather 10 Wood first?"
+                    ],
                     "reminder_dialogue": [
                         "The trees of the island are bountiful. You can gather some wood from them."
-                    ],
-                    "intro_dialogue": [
-                        "There are several locations that could be of interest to you - sometimes marked, and sometimes not.",
-                        "For example, certain TREE icons indicate a Resource - in this case, one you can gather Wood from.",
-                        "Can you gather 10 Wood first?"
                     ],
                     "success_dialogue": [
                         "Perfect, you now have enough Wood for a rainy day."
@@ -207,7 +177,7 @@
                     ],
                     "reminder_dialogue": [
                         "I need some Wood. Would you care to GIFT me some?",
-                        "Characters (like me) will often have list of Items you can Gift them.",
+                        "Characters (like me) will often have a list of Items you can Gift them.",
                         "When you Gift an Item, your rapport with them increases.",
                         "Once the rapport is adequate, the Character's Heart Rank levels up.",
                         "Meaning now you are closer to them <3"
@@ -217,15 +187,8 @@
                         "Here's a gift for you too. My favourite whip..."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "vine_whip",
-                            "quantity": 1
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "sylvie_sword_2_complete"
-                        }
+                        { "type": "item", "itemId": "vine_whip", "quantity": 1 },
+                        { "type": "tag", "tagId": "sylvie_sword_2_complete" }
                     ]
                 }
             ]
@@ -233,7 +196,7 @@
         {
             "questId": "sylvie_sword_3",
             "title": "Dragon Taming",
-            "description": "Sylvie wants to see you grow stronger! She will teach you about Overworld monsters (Toxolotl, Woodmech Bears, Greenhorns etc.)",
+            "description": "Sylvie wants to see you grow stronger! She will teach you about Overworld monsters.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_2_complete"
@@ -259,9 +222,9 @@
                         "You need help? Start by Equip-ing the Vine Whip I gave you last quest.",
                         "Go to the Inventory, and Equip it.",
                         "You'll see yourself having some 'Weapon Mastery'",
-                        "Combat against these monsters is simple: if you have an element and a number higher the ones listed in this screen area, you win. No fuss.",
+                        "Combat against these monsters is simple: if you have an element and a number higher than the ones listed, you win.",
                         "So Greenhorns can be handled with 15 Earth Mastery or 25 Fire Mastery.",
-                        "Remember: OR, not AND. Either will do. And the game prioritizes flow, and progress, so there's no 'real combat' against these enemies.",
+                        "Remember: OR, not AND. Either will do.",
                         "However, Characters (with a capital 'C') like me, are a different story entirely.",
                         "Well, maybe not me, because I'm a tutorial character and I'm designed and coded for you, *bites lips* ... to have an easy time with me."
                     ],
@@ -269,19 +232,9 @@
                         "Ooh I see you're good with that whip, mommy."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "citrine",
-                            "quantity": 2
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "sylvie_sword_3_complete"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "can_fight_hela"
-                        }
+                        { "type": "item", "itemId": "citrine", "quantity": 2 },
+                        { "type": "tag", "tagId": "sylvie_sword_3_complete" },
+                        { "type": "tag", "tagId": "can_fight_hela" }
                     ]
                 }
             ]
@@ -296,7 +249,7 @@
             },
             "stages": [
                 {
-                    "objective": "Defeat Sylvie in combat.",
+                    "objective": "Defeat Sylvie in combat",
                     "requirement": {
                         "type": "win_against_npc",
                         "npcId": "sylvie",
@@ -322,7 +275,7 @@
                     ]
                 },
                 {
-                    "objective": "Face Hela in combat.",
+                    "objective": "Face Hela in combat",
                     "requirement": {
                         "type": "fight_npc",
                         "npcId": "hela",
@@ -343,15 +296,8 @@
                         "Thank you, we should rest up for the night."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "sylvies_shorts",
-                            "quantity": 1
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "sylvie_sword_4_complete"
-                        }
+                        { "type": "item", "itemId": "sylvies_shorts", "quantity": 1 },
+                        { "type": "tag", "tagId": "sylvie_sword_4_complete" }
                     ]
                 }
             ]
@@ -366,7 +312,7 @@
             },
             "stages": [
                 {
-                    "objective": "Farming begins!",
+                    "objective": "Grow 5 Potatoes",
                     "requirement": {
                         "type": "have_item",
                         "itemId": "potato",
@@ -385,7 +331,7 @@
                         "Go to the Homestead area (you can find it as the 'House' icon on top).",
                         "There, you can find your Homestead, and your Farming area.",
                         "Plant one potato seed per plot, water them, and wait.",
-                        "For now, ignore Actions - these are technical upgrades to your Plot that allow you to plant more crops.",
+                        "For now, ignore Actions — these are technical upgrades to your Plot that allow you to plant more crops.",
                         "You'll figure out in due time, promise."
                     ],
                     "success_dialogue": [
@@ -396,15 +342,77 @@
                         "I know, I did, with you <3"
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "freedom_cry",
-                            "quantity": 1
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "sylvie_sword_5_complete"
-                        }
+                        { "type": "item", "itemId": "freedom_cry", "quantity": 1 },
+                        { "type": "tag", "tagId": "sylvie_sword_5_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "sylvie_sword_6",
+            "title": "Something Warm",
+            "description": "Sylvie has been thinking about the strange woman on Pleasure Island. She wants to do something about it.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_5_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Speak with Sylvie",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": [
+                        "Come back in a bit. I'm thinking."
+                    ],
+                    "intro_dialogue": [
+                        "Hey. That woman — Hela — she's been on my mind.",
+                        "She's clearly not from here. She's not trying to take anything, she's not fighting anyone.",
+                        "She's just... there. On that island. Alone.",
+                        "I don't know her. But I know what it looks like when someone is finding their footing in a new place.",
+                        "I've been there.",
+                        "I'm going to cook her something. Bring it to her, will you?",
+                        "She needs something warm. Not a weapon, not a message. Just food.",
+                        "Tell her it's from the forest."
+                    ],
+                    "success_dialogue": [
+                        "Here. Spaghetti. Don't ask why — it's what I had.",
+                        "Just bring it to her before it gets cold.",
+                        "And — be kind? I have a feeling she doesn't get that very often."
+                    ],
+                    "success_rewards": [
+                        { "type": "item", "itemId": "spaghetti", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 5 }
+                    ]
+                },
+                {
+                    "objective": "Deliver the spaghetti to Hela (Heart Rank 2)",
+                    "requirement": {
+                        "type": "npc_rank",
+                        "npcId": "hela",
+                        "rankType": "heart",
+                        "value": 2
+                    },
+                    "intro_dialogue": [
+                        "Go. Bring her the food.",
+                        "She's on the island to the west."
+                    ],
+                    "reminder_dialogue": [
+                        "She needs to actually trust you a little before she'll take food from a stranger.",
+                        "Spend some time with her. Let her warm up to you.",
+                        "Pun intended."
+                    ],
+                    "success_dialogue": [
+                        "She took it?",
+                        "Good.",
+                        "You know, I had this image of her as some terrifying force of nature. And she probably is.",
+                        "But she's also just... someone a long way from home.",
+                        "That's something I understand.",
+                        "Thank you for going. I'm glad she's not alone over there.",
+                        "Neither are we, I suppose."
+                    ],
+                    "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "tag", "tagId": "sylvie_sword_6_complete" },
+                        { "type": "tag", "tagId": "sylvie_sent_food_to_hela" }
                     ]
                 }
             ]

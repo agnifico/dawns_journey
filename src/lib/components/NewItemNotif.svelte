@@ -71,19 +71,20 @@
 	.notification {
 		display: flex;
 		align-items: center;
-		background-color: var(--surface-3);
+		/* background-color: var(--surface-3); */
 		border-radius: 5px;
 		padding: 0rem 0.5rem;
 		width: 100px;
-		color: var(--color-text);
-		border-bottom: 1px solid white;
+        width: fit-content;
+		color: rgba(255, 255, 255, 0.7);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 	}
 	.notification.type-item_received  { border-color: var(--notification-received); }
 	.notification.type-item_used, .notification.type-item_removed      { border-color: var(--notification-used); }
 	.notification.type-item_equipped  { border-color: var(--notification-equipped); }
 	.notification.type-item_unequipped { border-color: var(--notification-unequipped); }
 
-	.icon { margin-right: 0.5rem; }
+	.icon { margin-right: 0.5rem; opacity: .5;}
 	.icon img { width: 10px; height: 10px; }
 
 	.item-info {
