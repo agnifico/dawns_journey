@@ -59,12 +59,14 @@
 <style>
 	.notification-container {
 		position: absolute;
-		bottom: 3.5rem;
+		bottom: 1rem;
 		left: 0.5rem;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
 		z-index: 1000;
+        /* background-color: #1a1200a2; */
+        /* padding-inline: 2rem; */
 	}
 
     /* ── Standard notif ── */
@@ -75,7 +77,7 @@
 		border-radius: 5px;
 		padding: 0rem 0.5rem;
 		width: 100px;
-        width: fit-content;
+        /* width: fit-content; */
 		color: rgba(255, 255, 255, 0.7);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 	}

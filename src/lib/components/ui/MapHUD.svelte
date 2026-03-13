@@ -16,7 +16,7 @@
 	import { toastStore } from '$lib/stores/toastStore';
 
 	$: bread = getFirstInventoryItem($playerStore.inventory, 'bread');
-    $: breadCount = $playerStore.inventory.filter(i => i.id === 'bread').length;
+	$: breadCount = $playerStore.inventory.filter((i) => i.id === 'bread').length;
 
 	// ── Draggable EventScreen ────────────────────────────────────────────────
 	// Constrained to the parent .map-hud-container bounds.
@@ -70,34 +70,41 @@
 	</div>
 
 	<div class="top-right">
-		<TimeDisplay />
+		<div class="row-flex">
+			<TimeDisplay />
+			<div class="stat-bars">
+				<StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
+				<StatBar
+					current={$playerStats.auraShield}
+					max={$playerStats.maxAuraShield}
+					color="#a98467"
+				/>
+			</div>
+		</div>
 		<MapEventNotif />
 	</div>
 
 	<div class="bottom-left">
 		<NewItemNotif />
-		<div class="stat-bars">
-			<StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
-			<StatBar current={$playerStats.auraShield} max={$playerStats.maxAuraShield} color="#a98467" />
-		</div>
-		<WeaponWidget />
+	</div>
 
+	<div class="top-center">
+		<RegionNotification />
+	</div>
+	<div class="bottom-center">
+		<WeaponWidget />
 		<button
 			class="bread"
 			on:click={() => {
 				const bread = getFirstInventoryItem($playerStore.inventory, 'bread');
 				if (bread?.instanceId) {
 					useItem(bread.instanceId);
-					toastStore.success("Ate some Bread. Helth maxx!!");
+					toastStore.success('Ate some Bread. Helth maxx!!');
 				} else toastStore.warning("OH FUCK WE'RE OUT OF BREAD!! GET SOME BREAD!");
 			}}
 		>
 			<img src="/general/bread.png" alt="" srcset="" /></button
 		>
-	</div>
-
-	<div class="bottom-center">
-		<RegionNotification />
 	</div>
 
 	<div class="bottom-right">
@@ -192,6 +199,11 @@
 	}
 
 	/* ── Fixed HUD zones ── */
+	.row-flex {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
 	.top-left {
 		top: 1rem;
 		left: 1rem;
@@ -205,8 +217,15 @@
 		align-items: flex-end;
 		gap: 1rem;
 	}
-	.bottom-center {
+	.top-center {
 		top: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.bottom-center {
+		display: flex;
+		gap: 1rem;
+		bottom: 1rem;
 		left: 50%;
 		transform: translateX(-50%);
 	}

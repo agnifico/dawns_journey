@@ -449,8 +449,9 @@ export function fulfillGiftingOption(npc: NPC, player: Player, option: GiftingOp
     }
 
     updatedNpc.affinity += option.value;
-    messageStore.addMessage(`[${updatedNpc.name}]: ${option.dialogue[0]}`, ['NPC']);
-
+    // messageStore.addMessage(`[${updatedNpc.name}]: ${option.dialogue[0]}`, ['NPC']);
+    dialogueStore.startDialogue(option.dialogue, npc.name);
+    
     if (updatedNpc.affinity >= 10 && updatedNpc.heartState !== 'READY_FOR_RANK_UP') {
         updatedNpc.heartState = 'READY_FOR_RANK_UP';
         toastStore.info(`You should talk to ${updatedNpc.name}.`);

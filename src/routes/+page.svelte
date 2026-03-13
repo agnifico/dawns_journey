@@ -49,7 +49,6 @@
 		loadMapData(get(mapStore).currentMapId);
 	});
 
-
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
 			applyProfile(selectedProfileId);
@@ -82,10 +81,17 @@
 	<div class="overlay desktop-only">
 		<div class="grid-container">
 			<div class="grid-box div1">
-				<h1>Dawn's <br />Journey</h1>
+				<!-- <h1>Dawn's <br />Journey</h1> -->
+				<img class="logo" src="/dj_logo.svg" alt="" srcset="">
 				<p>A serverless, no database browser based game.</p>
 			</div>
 			<div class="grid-box div2">
+				<NpcViewer />
+			</div>
+			<div class="grid-box div5">
+				<ImageSlideshow images={slideshowImages} />
+			</div>
+			<div class="grid-box div4">
 				<h3>Game Actions</h3>
 				<div class="game-actions">
 					{#if $playerStore.isInitialized}
@@ -105,12 +111,6 @@
 						<button on:click={SaveLoadService.loadGame}>Load Game</button>
 					{/if}
 				</div>
-			</div>
-			<div class="grid-box div5">
-				<ImageSlideshow images={slideshowImages} />
-			</div>
-			<div class="grid-box div4">
-				<img class="banner" src="/banner.png" alt="" srcset="">
 			</div>
 			<div class="grid-box div6">
 				{#if $playerStore.isInitialized}
@@ -133,9 +133,15 @@
 				{/if}
 			</div>
 			<div class="grid-box div7">
-				<NpcViewer />
+				<p>
+					Fully unlockable. Fully completable. A game with a start and an end — because there's
+					genuine peace in that, and we've forgotten what it feels like.
+				</p>
 			</div>
-			<div class="grid-box div8"></div>
+			<div class="grid-box div8">
+				<img class="banner" src="/Logo_Main.svg" alt="" srcset="" />
+				<a href="https://www.junesforge.com/" target="_blank"> jxnesforge studio </a>
+			</div>
 		</div>
 	</div>
 
@@ -154,7 +160,8 @@
 
 			<div class="m-hero-content">
 				<div class="m-title-block">
-					<h1>Dawn's<br />Adventure</h1>
+					<!-- <h1>Dawn's<br />Journey</h1> -->
+					<img class="logo" src="/dj_logo.svg" alt="" srcset="">
 					<p>A serverless browser RPG.</p>
 				</div>
 
@@ -245,6 +252,10 @@
 		overflow: hidden;
 		background-color: #141414;
 	}
+	a {
+		text-decoration: 0;
+		color: unset;
+	}
 
 	/* ============================================================
 	   DESKTOP (unchanged)
@@ -296,7 +307,8 @@
 	}
 
 	.grid-box h1 {
-		font-family: 'Lexend', monospace;
+		font-family: 'DePixel', monospace;
+		letter-spacing: -0.5rem;
 		text-transform: uppercase;
 		font-weight: 600;
 		color: #e9d9ca;
@@ -304,8 +316,8 @@
 		padding: 0;
 		margin-bottom: 2rem;
 		font-size: 4rem;
-		text-align: left;
-		line-height: 3.5rem;
+		text-align: right;
+		line-height: 4.5rem;
 	}
 
 	.grid-box p {
@@ -369,7 +381,7 @@
 
 	.game-actions {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr;
 		gap: 0.5rem;
 	}
 	.game-actions button {
@@ -436,8 +448,8 @@
 			background-color: #2e2e2e;
 			color: #e9d9ca;
 			box-shadow:
-			#00000056 0 -6px 0px -4px inset,
-			color-mix(in srgb, #00000056 50%, #2e2e2e 50%) 0px -2px 0 0px;
+				#00000056 0 -6px 0px -4px inset,
+				color-mix(in srgb, #00000056 50%, #2e2e2e 50%) 0px -2px 0 0px;
 			P {
 				visibility: visible;
 				opacity: 1;
@@ -446,11 +458,12 @@
 	}
 
 	.banner {
-		width: 100%;
+		height: 80%;
 		object-fit: contain;
 		image-rendering: auto;
+		/* filter: saturate(0) contrast(0) brightness(0); */
 	}
-	
+
 	.banner-m {
 		/* width: 100%; */
 		height: 50%;
@@ -458,25 +471,32 @@
 		image-rendering: auto;
 	}
 
+	.logo {
+		height: 80%;
+		margin-bottom: auto;
+		filter: brightness(.8) contrast(1.3);
+	}
+
 	.div1 {
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
-		background-color: #435e52;
+		/* background-color: #435e52; */
+		border: none;
+		box-shadow: none;
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: flex-end;
 	}
 	.div2 {
 		grid-column: span 2 / span 2;
 		grid-row: span 2 / span 2;
 		grid-column-start: 3;
-		color: #222;
-		/* overflow: scroll; */
-		background-color: #cd804d;
+		background-color: #2e2e2e;
 	}
 	.div4 {
 		grid-row: span 3 / span 3;
 		grid-column-start: 5;
+		background-color: #e9d9ca;
 		/* background-color: #e9d9ca; */
 		color: #cd804d;
 	}
@@ -510,13 +530,26 @@
 		grid-row: span 2 / span 2;
 		grid-column-start: 3;
 		grid-row-start: 4;
-		background-color: #2e2e2e;
+
+		color: #222;
+		/* overflow: scroll; */
+		background-color: #cd804d;
+		display: flex;
+		/* justify-content: center; */
+		align-items: center;
+		p {
+			font-family: 'Lexend';
+			text-align: left;
+			font-size: 1.1rem;
+		}
 	}
 	.div8 {
 		grid-row: span 2 / span 2;
 		grid-column-start: 5;
 		grid-row-start: 4;
-		background-color: #cd804d;
+		/* background-color: #2e2e2e; */
+		border: none;
+		box-shadow: none;
 	}
 
 	/* ============================================================
@@ -620,6 +653,7 @@
 			color: rgba(255, 255, 255, 0.5);
 			margin: 0;
 			letter-spacing: 0.05em;
+			text-align: center;
 		}
 
 		/* Profile selector — horizontal scroll */
