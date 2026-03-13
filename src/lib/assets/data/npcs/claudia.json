@@ -3,6 +3,7 @@
     "name": "Claudia",
     "profileImage": "/images/characters/claudia/claudia_avatar.png",
     "image": "/images/characters/claudia/claudia1.png",
+    "title": "Commander of the Eastern Front",
     "galleryImages": [
         "/images/characters/claudia/claudia1.png",
         "/images/characters/claudia/claudia2.png",
@@ -13,7 +14,7 @@
         "/images/characters/claudia/claudia3.png",
         "/images/characters/claudia/claudia4.png"
     ],
-    "description": "A commander of the Solis Saints, fiercely loyal to Guinevere.",
+    "description": "Commander of the Solis Saints' eastern operations. Aristocrat by birth, soldier by choice, and the person most likely to have already planned your birthday party.",
     "faction": "solis_saints",
     "isCombatant": true,
     "types": ["Water", "Wind"],
@@ -38,12 +39,36 @@
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
     "statGrowth": [],
-    "battleAftermathsBySwordRank": [],
+    "battleAftermathsBySwordRank": [
+        {
+            "rank": 0,
+            "aftermaths": [
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "Oh, don't look so miserable about it.",
+                        "I've been doing this since I was seventeen. You'll get there.",
+                        "Come back when the bruises fade. I'll buy you something."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": 2,
+                    "dialogue": [
+                        "Okay THAT was impressive.",
+                        "Don't tell Guinevere-onii-chan I said that, she'll get smug about sending you.",
+                        "...she was right though. Ugh."
+                    ]
+                }
+            ]
+        }
+    ],
     "swordRanks": [
         {
             "questId": "claudia_sword_1",
             "title": "The Forgotten Shrine",
-            "description": "Assist Commander Claudia in her task.",
+            "description": "Commander Claudia needs someone to activate a shrine to the south. She has opinions about doing it herself.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "can_assist_claudia"
@@ -52,30 +77,265 @@
                 {
                     "objective": "Speak with Claudia",
                     "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": ["I have no time for you now."],
-                    "intro_dialogue": [
-                        "Lady Guinevere sent you? Good. I need to activate a shrine to the south. It's a delicate matter. Go and handle it."
+                    "unavailable_dialogue": [
+                        "Not now, I'm in the middle of something.",
+                        "Come back when I look less like I'm doing three things at once.",
+                        "...I'm always doing three things at once. Fine. Give me a moment."
                     ],
-                    "reminder_dialogue": ["The shrine is waiting."],
-                    "success_dialogue": ["See that it is done."],
+                    "intro_dialogue": [
+                        "Oh GOOD, Guinevere-onii-chan actually sent someone.",
+                        "Okay so — there's a shrine, southern edge of my territory, needs activating as part of the platform stabilisation work.",
+                        "I would go myself but I am, and I cannot stress this enough, absolutely buried right now.",
+                        "Platform seven had a resonance spike this morning, I have three junior Saints arguing about whose fault it was, AND I promised Cygwin I'd have the eastern supply reports done by Duskfall.",
+                        "Which I will. Obviously. I always do.",
+                        "The shrine is at the southern marker. You'll feel it when you're close — the ground hums.",
+                        "Oh also! What's your birthday? I'm doing a calendar."
+                    ],
+                    "reminder_dialogue": [
+                        "The shrine! Southern marker! Humming ground!",
+                        "Also you never told me your birthday, which is fine, I'll find out eventually."
+                    ],
                     "success_rewards": [
                         { "type": "tag", "tagId": "claudia_ready_for_f1" }
                     ]
                 },
                 {
-                    "objective": "Activate the Forgotten Shrine at (26, 13)",
+                    "objective": "Activate the Forgotten Shrine",
                     "requirement": {
                         "type": "finish_location_event",
                         "eventId": "F1",
                         "timing": "future"
                     },
-                    "unavailable_dialogue": ["The shrine is not yet active."],
-                    "intro_dialogue": ["You are at the Forgotten Shrine."],
                     "reminder_dialogue": [
-                        "The shrine at (26, 13) is still waiting. Do not keep the Saints waiting."
+                        "Southern marker. Humming ground. You've got this.",
+                        "I believe in you! Unironically!"
                     ],
                     "success_dialogue": [
-                        "It is done. You have served the light well."
+                        "You did it! Platform resonance is already stabilising, look at these readings—",
+                        "Sorry, sorry, I get excited about data.",
+                        "You're good at this. I'm telling Guinevere-onii-chan.",
+                        "She already knows, she always knows, but I'm telling her anyway."
+                    ],
+                    "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "tag", "tagId": "claudia_sword_1_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "claudia_sword_2",
+            "title": "Platform Seven",
+            "description": "Platform Seven has been causing problems. Claudia wants the player to go take a look — and she'll come with them.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "claudia_sword_1_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Meet Claudia at Platform Seven",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "platform_seven_inspection"
+                    },
+                    "unavailable_dialogue": [
+                        "Platform Seven! Eastern coast, you can't miss it.",
+                        "It's the one making the horrible noise.",
+                        "I'll meet you there."
+                    ],
+                    "intro_dialogue": [
+                        "Okay so, Platform Seven.",
+                        "I've been watching the resonance data and something is off.",
+                        "Not dangerous-off. Just — wrong-off. The kind of wrong that gets worse slowly.",
+                        "I want another set of eyes on it. Smart eyes.",
+                        "You have smart eyes. I can tell.",
+                        "Meet me there?"
+                    ],
+                    "success_dialogue": [
+                        "Yeah. Yeah, I see it too.",
+                        "The drill angle is wrong. Just by a few degrees, but at this depth that means the extraction is pulling from a different layer than intended.",
+                        "Which means the energy leakage is going somewhere else.",
+                        "The animals in the eastern forest have been behaving strangely for two weeks.",
+                        "I wrote it off as seasonal. I don't think it's seasonal.",
+                        "I need to think about this.",
+                        "Come back tomorrow? I work better after I've slept on something.",
+                        "Also Cygwin is making dinner and she always makes too much and you should absolutely come.",
+                        "Don't tell her I invited you, let's make it a surprise.",
+                        "She loves surprises. She pretends she doesn't. She loves them."
+                    ],
+                    "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "tag", "tagId": "claudia_sword_2_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "claudia_sword_3",
+            "title": "Something Worth Celebrating",
+            "description": "Claudia has organised something. She does this. It is not optional.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "claudia_sword_2_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Attend Claudia's gathering",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": [
+                        "Tonight! I said tonight!",
+                        "The fire pit, eastern camp, after Duskfall.",
+                        "There will be food. And mead. And I will be very disappointed if you don't come."
+                    ],
+                    "intro_dialogue": [
+                        "Okay so I organised a thing.",
+                        "It's not a big thing. It's a medium thing.",
+                        "Fire pit, eastern camp, everyone's coming, Cygwin already said yes even though she acted like she needed convincing.",
+                        "She never needs convincing. She just likes being asked.",
+                        "You're coming. I've already added you to the headcount.",
+                        "Come on."
+                    ],
+                    "success_dialogue": [
+                        "See! This! This is what I mean!",
+                        "My family had parties. Big ones. Correct ones. With the right people and the right food and absolutely no one saying anything real to anyone.",
+                        "This is — we're tired and the eastern platform is misbehaving and someone spilled mead on the survey reports —",
+                        "That was me, I spilled the mead —",
+                        "And it's still better than anything I had at home.",
+                        "Guinevere-onii-chan gave this to me.",
+                        "Not the party. The — the having people.",
+                        "You know what I mean.",
+                        "Anyway. Eat something. I made too much. On purpose.",
+                        "Oh! I found out your birthday from the Saints registry.",
+                        "Don't worry about it. I will handle it."
+                    ],
+                    "success_rewards": [
+                        { "type": "item", "itemId": "forza_mead", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 8 },
+                        { "type": "tag", "tagId": "claudia_sword_3_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "claudia_sword_4",
+            "title": "The Wrong Degrees",
+            "description": "Claudia has been thinking about Platform Seven. She's reached a conclusion she doesn't entirely like.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "claudia_sword_3_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Speak with Claudia",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": [
+                        "I'm still working through something. Give me a little more time.",
+                        "It's the Platform Seven thing. I can't leave it alone."
+                    ],
+                    "intro_dialogue": [
+                        "Okay. I've been doing the numbers.",
+                        "Can I show you something?"
+                    ],
+                    "success_dialogue": [
+                        "So. Platform Seven.",
+                        "The drill angle being wrong means the leakage is hitting the eastern aquifer.",
+                        "Which feeds the river.",
+                        "Which is where three villages downstream get their water.",
+                        "I've been watching the health reports from the eastern settlements.",
+                        "There's a pattern. It started eight weeks ago. Right when Platform Seven came online.",
+                        "I reported it up the chain.",
+                        "I was told the data was within acceptable variance.",
+                        "And I — I filed it. I noted my concern and I filed it and I moved on.",
+                        "I'm telling you because I need to say it out loud to someone who isn't a Saint.",
+                        "Guinevere-onii-chan believes in what we're building. I know she does.",
+                        "And she's right that the long-term outcome is worth the short-term cost.",
+                        "She's almost certainly right.",
+                        "I just keep thinking about the villages.",
+                        "Don't — don't say anything yet. I'm not done thinking.",
+                        "Come back in a few days. I might have a better shape for it by then."
+                    ],
+                    "success_rewards": [
+                        { "type": "world_resonance", "amount": 10 },
+                        { "type": "tag", "tagId": "claudia_sword_4_complete" }
+                    ]
+                }
+            ]
+        },
+        {
+            "variants": [
+                {
+                    "questId": "claudia_sword_5_saints",
+                    "title": "Acceptable Variance",
+                    "description": "You sided with the Saints. Claudia has made her peace with Platform Seven — mostly.",
+                    "startRequirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "have_tag", "tag": "claudia_sword_4_complete" },
+                            { "type": "have_tag", "tag": "sided_with_solis_saints" }
+                        ]
+                    },
+                    "stages": [
+                        {
+                            "objective": "Speak with Claudia",
+                            "requirement": { "type": "dialogue" },
+                            "success_dialogue": [
+                                "So. The Altar.",
+                                "Guinevere-onii-chan's plan worked. Of course it did.",
+                                "I've been thinking about the villages.",
+                                "I went there. After the Altar. On my own, didn't tell anyone.",
+                                "Brought supplies. Helped where I could.",
+                                "It doesn't fix the data. But it's something.",
+                                "Cygwin says I'm trying to personally compensate for a systemic problem.",
+                                "She's right. She's almost always right about things like that.",
+                                "But also I'm going back next week.",
+                                "I believe in what we're building.",
+                                "I just also believe in the villages.",
+                                "I think Guinevere-onii-chan would say those aren't in conflict.",
+                                "I'm trying to agree with her.",
+                                "Getting there."
+                            ],
+                            "success_rewards": [
+                                { "type": "world_resonance", "amount": 10 },
+                                { "type": "tag", "tagId": "claudia_sword_5_complete" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "questId": "claudia_sword_5_shadowhand",
+                    "title": "Going Back",
+                    "description": "You sided against the Saints. Claudia is doing her own accounting.",
+                    "startRequirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "have_tag", "tag": "claudia_sword_4_complete" },
+                            { "type": "have_tag", "tag": "sided_with_shadowhand" }
+                        ]
+                    },
+                    "stages": [
+                        {
+                            "objective": "Speak with Claudia",
+                            "requirement": { "type": "dialogue" },
+                            "success_dialogue": [
+                                "You chose the other side.",
+                                "I'm not — I'm not angry at you.",
+                                "I've been going to the villages.",
+                                "Every few days. Just to check.",
+                                "The health data is still bad.",
+                                "I think you were looking at the same numbers I was.",
+                                "I think you made a different call than I did.",
+                                "I'm not sure you were wrong.",
+                                "I'm still a Saint. That's not changing.",
+                                "But I went to the villages.",
+                                "I think that's the most honest thing I can tell you right now.",
+                                "Don't be a stranger, okay?",
+                                "I already have you in the birthday calendar. It's too late to remove you."
+                            ],
+                            "success_rewards": [
+                                { "type": "world_resonance", "amount": 8 },
+                                { "type": "tag", "tagId": "claudia_sword_5_complete" }
+                            ]
+                        }
                     ]
                 }
             ]
@@ -84,15 +344,448 @@
     "heartRanks": [
         {
             "rank_up_dialogue": [
-                "You wish to... fraternize? A strange sentiment, but your dedication is noted. Very well."
+                "Oh we're doing this? We're doing this!",
+                "Okay I have to tell you, I already knew we were going to get along.",
+                "Cygwin said 'don't make assumptions about people' and I said 'Cyg, I have excellent instincts' and I was RIGHT.",
+                "Don't tell her I said that.",
+                "Actually do tell her. I want her to know I was right.",
+                "Welcome to the inner circle. There are perks. I organise things."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "claudia_heart_rank_1_unlocked" },
+                { "type": "world_resonance", "amount": 5 },
+                { "type": "item", "itemId": "heart_shaped_chocolates", "quantity": 1 }
             ],
             "giftingOptions": [
+                {
+                    "itemId": "heart_shaped_chocolates",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "CHOCOLATES!",
+                        "You absolute sweetheart.",
+                        "These are going on my desk where everyone can see them.",
+                        "So they know someone brought me chocolates.",
+                        "Because someone did.",
+                        "That someone is you."
+                    ]
+                },
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "Ooh, red.",
+                        "My family only ever served white at functions.",
+                        "Red is better. Red is for people who actually want to drink, not people who want to be seen drinking.",
+                        "I've grown as a person."
+                    ]
+                },
+                {
+                    "itemId": "forza_mead",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Oh no.",
+                        "Last time someone brought me Forza Mead I reorganised the entire eastern supply chain at two in the morning.",
+                        "It was actually a great decision.",
+                        "Let's find out what I do this time."
+                    ]
+                },
+                {
+                    "itemId": "island_herb",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Oh, these are the good ones.",
+                        "Cygwin would give me a look right now.",
+                        "She gives me a look and then she sits down and joins me.",
+                        "Every time.",
+                        "You want to sit?"
+                    ]
+                },
+                {
+                    "itemId": "handwritten_note",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "You wrote me a note.",
+                        "An actual handwritten note.",
+                        "I collect these.",
+                        "Don't judge me, it's a completely normal thing to do.",
+                        "This is going in the box with the others."
+                    ]
+                },
                 {
                     "itemId": "fish",
                     "quantity": 1,
                     "value": 2,
                     "dialogue": [
-                        "A practical gift. I will accept it."
+                        "A fish.",
+                        "You brought me a fish.",
+                        "I respect the chaos of this choice.",
+                        "I will find a use for this fish."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "Okay so Cygwin asked me why I talk about you so much.",
+                "And I said 'I don't talk about them that much'.",
+                "And she showed me a tally she'd been keeping.",
+                "It was a lot.",
+                "ANYWAY.",
+                "The point is you're clearly important and I'm choosing to own that.",
+                "Also Cygwin thinks you're interesting, which from her is extremely high praise.",
+                "She told Guinevere-onii-chan.",
+                "Guinevere-onii-chan already knew. She always already knows."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "claudia_heart_rank_2_unlocked" },
+                { "type": "world_resonance", "amount": 8 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "heart_shaped_chocolates",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "Again with the chocolates!",
+                        "You know me.",
+                        "You actually know me.",
+                        "This is going next to the last ones."
+                    ]
+                },
+                {
+                    "itemId": "aether_myst",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "Oh.",
+                        "Oh this is the fancy one.",
+                        "I've smelled this on people at Saints functions and spent the whole evening trying to figure out where they got it.",
+                        "You got it.",
+                        "You got it for me.",
+                        "I need to sit down.",
+                        "Actually I need to put this on immediately.",
+                        "Don't look."
+                    ]
+                },
+                {
+                    "itemId": "island_herb",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "You're enabling me.",
+                        "I love it.",
+                        "Come sit. Tell me something interesting.",
+                        "I'll tell you something interesting back.",
+                        "We'll see whose is better."
+                    ]
+                },
+                {
+                    "itemId": "red_scarf",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "Oh this is SOFT.",
+                        "Where did you find this.",
+                        "This is going on immediately.",
+                        "I look incredible.",
+                        "Don't argue with me about whether I look incredible."
+                    ]
+                },
+                {
+                    "itemId": "spiked_choker",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "Excuse me.",
+                        "EXCUSE me.",
+                        "This is not what commanders of the Solis Saints wear.",
+                        "...",
+                        "It goes with everything though.",
+                        "How does it go with everything.",
+                        "Fine. FINE."
+                    ]
+                },
+                {
+                    "itemId": "cigareds",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "Oh, from the bad habit collection.",
+                        "My tutors would be horrified.",
+                        "That's a point in its favour honestly.",
+                        "Let a 'good girl' be bad, for a moment."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "Can I tell you something embarrassing?",
+                "When I was small, my family's estate had a whole wing just for guests.",
+                "It was always empty.",
+                "Not because we didn't have guests. Because guests weren't — they weren't the point.",
+                "The point was having the wing.",
+                "I've been thinking about that a lot lately.",
+                "You keep showing up.",
+                "You keep being the point.",
+                "I think that's the best thing anyone's done for me in a while.",
+                "Don't make it weird.",
+                "I'm making it weird.",
+                "Okay moving on!"
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "claudia_heart_rank_3_unlocked" },
+                { "type": "world_resonance", "amount": 10 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "black_rock",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "...",
+                        "What.",
+                        "WHAT.",
+                        "Where did you even—",
+                        "You know what, I'm not asking.",
+                        "I'm not asking and you're not explaining and we're both going to be fine.",
+                        "...",
+                        "Thank you.",
+                        "Don't."
+                    ]
+                },
+                {
+                    "itemId": "aether_myst",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "Again.",
+                        "You just keep knowing exactly what to bring.",
+                        "It's almost annoying.",
+                        "Almost."
+                    ]
+                },
+                {
+                    "itemId": "spiked_choker",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "I've been wearing the last one.",
+                        "Under my cape.",
+                        "No one knows.",
+                        "Cygwin knows.",
+                        "Cygwin always knows.",
+                        "She said 'it suits you' and then walked away and I've been thinking about it for three days."
+                    ]
+                },
+                {
+                    "itemId": "blue_undies",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "Oh you are BOLD.",
+                        "My family raised me to receive gifts graciously.",
+                        "So.",
+                        "Thank you.",
+                        "Graciously.",
+                        "I'm going to think about this later and it's completely your fault."
+                    ]
+                },
+                {
+                    "itemId": "green_bra",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "Green.",
+                        "You picked green.",
+                        "That's my actual favourite colour.",
+                        "How did you know that.",
+                        "I've never told anyone that.",
+                        "You're very alarming."
+                    ]
+                },
+                {
+                    "itemId": "handwritten_note",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "Another one.",
+                        "Do you know how many of these I have now.",
+                        "They're all in the box.",
+                        "I read them.",
+                        "Sometimes when things are bad.",
+                        "Don't tell anyone I said that."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "Cygwin said I look different lately.",
+                "I said 'different how'.",
+                "She said 'lighter'.",
+                "And then she gave me this look — you know the look, the Cygwin look —",
+                "And said 'it's them, isn't it'.",
+                "And I said nothing because anything I said was going to make her right.",
+                "She's right.",
+                "You make me lighter.",
+                "I didn't know I was carrying that much until I wasn't.",
+                "Also Cygwin and Guinevere-onii-chan are disgustingly cute together and I wanted you to know I take full credit.",
+                "I was the one who told Guinevere-onii-chan that Cygwin would say yes.",
+                "She already knew.",
+                "Obviously.",
+                "But I was still right."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "claudia_heart_rank_4_unlocked" },
+                { "type": "world_resonance", "amount": 12 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "black_rock",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "Not even surprised anymore.",
+                        "You've calibrated me.",
+                        "That's impressive and also slightly concerning.",
+                        "Come here."
+                    ]
+                },
+                {
+                    "itemId": "green_bikini",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "GREEN BIKINI!",
+                        "You remembered the green thing!",
+                        "You absolute menace.",
+                        "I'm going to wear this somewhere completely inappropriate.",
+                        "No one can stop me.",
+                        "Not even Guinevere-onii-chan.",
+                        "She would try. She would fail."
+                    ]
+                },
+                {
+                    "itemId": "aether_myst",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "You know, I've started associating this smell with you.",
+                        "Which is your fault.",
+                        "I'm delighted about it."
+                    ]
+                },
+                {
+                    "itemId": "pink_sarong",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "Oh this is PRETTY.",
+                        "This is for after work hours.",
+                        "Which start now.",
+                        "The work is over now."
+                    ]
+                },
+                {
+                    "itemId": "cigareds",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "You know, there's something about smoking with someone that feels very honest.",
+                        "Like a shortcut to real conversation.",
+                        "Come on then.",
+                        "Tell me something true."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "My family is going to hear about you eventually.",
+                "They'll have opinions.",
+                "My family always has opinions.",
+                "Their opinions stopped mattering to me around the time Guinevere-onii-chan handed me an actual command and said 'I trust you with this'.",
+                "You know what my parents said when I joined the Saints?",
+                "'Don't embarrass us'.",
+                "You know what Guinevere-onii-chan said on my first day?",
+                "'You're going to be extraordinary. I can see it already.'",
+                "She was right.",
+                "I am extraordinary.",
+                "And you are the best thing that's wandered into my territory in a long time.",
+                "So.",
+                "Stay in my territory."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "claudia_heart_rank_5_unlocked" },
+                { "type": "world_resonance", "amount": 15 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "black_rock",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "Every single time.",
+                        "You are consistent.",
+                        "I respect consistency.",
+                        "I also respect this specific gift.",
+                        "Extensively."
+                    ]
+                },
+                {
+                    "itemId": "heart_shaped_chocolates",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "You've brought me these so many times.",
+                        "I still get excited every time.",
+                        "That's the mark of a good gift.",
+                        "Or a good person.",
+                        "You're both."
+                    ]
+                },
+                {
+                    "itemId": "handwritten_note",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "I have a whole box of these.",
+                        "I read them when it's bad.",
+                        "Lately it's been less bad.",
+                        "Because of you.",
+                        "So technically you're competing with yourself.",
+                        "You're winning."
+                    ]
+                },
+                {
+                    "itemId": "spiked_choker",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "I have three of these now.",
+                        "I rotate them.",
+                        "Cygwin has stopped commenting.",
+                        "That means she approves.",
+                        "Everything is going extremely well."
+                    ]
+                },
+                {
+                    "itemId": "aether_myst",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "You.",
+                        "Always you.",
+                        "Stay for a while.",
+                        "I'll put it on and we can pretend we don't have responsibilities.",
+                        "For an hour.",
+                        "Maybe two."
                     ]
                 }
             ]

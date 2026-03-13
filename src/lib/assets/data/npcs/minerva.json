@@ -2,8 +2,9 @@
     "id": "minerva",
     "name": "Benedetta",
     "profileImage": "/images/characters/minerva/minerva_avatar.png",
-    "image": "/images/characters/minerva/minerva0.png",
+    "image": "/images/characters/minerva/minerva00.png",
     "galleryImages": [
+        "/images/characters/minerva/minerva0.png",
         "/images/characters/minerva/minerva1.png",
         "/images/characters/minerva/minerva2.png",
         "/images/characters/minerva/minerva3.png",

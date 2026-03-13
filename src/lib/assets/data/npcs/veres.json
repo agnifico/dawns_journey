@@ -2,15 +2,18 @@
     "id": "veres",
     "name": "Veres",
     "profileImage": "/images/characters/veres/veres_avatar.png",
-    "image": "/images/characters/veres/veres1.png",
+    "image": "/images/characters/veres/veres00.png",
     "title": "The Watching Wing",
     "galleryImages": [
+        "/images/characters/veres/veres0.png",
         "/images/characters/veres/veres1.png",
         "/images/characters/veres/veres2.png",
         "/images/characters/veres/veres3.png",
         "/images/characters/veres/veres4.png",
         "/images/characters/veres/veres5.png",
-        "/images/characters/veres/veres6.png"
+        "/images/characters/veres/veres6.png",
+        "/images/characters/veres/veres7.png",
+        "/images/characters/veres/veres8.png"
     ],
     "description": "A dark-winged angel who has watched this island longer than the Saints have been building on it. She chose the mountain. She does not regret this.",
     "faction": "",
@@ -211,7 +214,7 @@
                     "objective": "Investigate the Biceon grazing grounds",
                     "requirement": {
                         "type": "finish_location_event",
-                        "eventId": "biceon_grazing_grounds"
+                        "eventId": "small_cave_1"
                     },
                     "reminder_dialogue": [
                         "Southern edge of the mountain range. Look for the flat expanse below the snowline.",

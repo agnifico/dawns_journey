@@ -194,7 +194,7 @@ export const weapons: Item[] = [
         image: "/weapons/xochi.png", type: "weapon",
         stats: [{ name: "elementalAttack", value: 190 }, { name: "physicalDefence", value: 55 }, { name: "maxHp", value: 120 }],
         element: "Earth",  flags: ['special', 'sword'], instanceId: '',
-        gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'] }]
+        gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'], description: "Gain complete immunity to [Poison]" }]
     },
     {
         id: "queens_trident", name: "Queen's Trident",

@@ -541,8 +541,8 @@
 
 	.item-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, 40px);
-		gap: 8px;
+		grid-template-columns: repeat(auto-fill, 45px);
+		gap: 4px;
 		justify-content: flex-start;
 		padding: 16px 0px 16px 8px;
 	}
@@ -555,12 +555,12 @@
 		flex-direction: column;
 		align-items: center;
 		cursor: pointer;
-		background-color: rgba(0, 0, 0, 0.208);
-		background-color: rgb(68, 65, 78);
+		/* background-color: rgba(0, 0, 0, 0.208); */
+		background-color: rgb(47, 47, 47);
 		/* border: 1px solid var(--color-border); */
-		box-shadow: #00000056 0 -2px 0 2px inset;
-		border-top: 2px solid #00000056;
-		border-radius: 5px;
+		/* box-shadow: #00000056 0 -2px 0 2px inset; */
+		/* border-top: 2px solid #00000056; */
+		/* border-radius: 5px; */
 		/* display: inline-block; */
         padding: 2px;
 

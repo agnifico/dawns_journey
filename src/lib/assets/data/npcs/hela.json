@@ -2,7 +2,7 @@
     "id": "hela",
     "name": "Hela",
     "profileImage": "/images/characters/hela/hela_avatar.png",
-    "image": "/images/characters/hela/hela1.png",
+    "image": "/images/characters/hela/hela0.png",
     "title": "The Dawn in the Night — Queen of Hell",
     "galleryImages": [
         "/images/characters/hela/hela0.png",
@@ -17,9 +17,7 @@
         "/images/characters/hela/hela10.png",
         "/images/characters/hela/hela11.png",
         "/images/characters/hela/hela12.png",
-        "/images/characters/hela/hela13.png",
-        "/images/characters/hela/hela14.png",
-        "/images/characters/hela/hela15.png"
+        "/images/characters/hela/hela13.png"
     ],
     "description": "The Queen of Hell. Wielder of limitless power, subject to a lifetime of boredom from her menial duties in the underworld. Now, lost in the new world, she has found a new avenue for fun — you.",
     "faction": "",

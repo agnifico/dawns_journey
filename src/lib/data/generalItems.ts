@@ -130,6 +130,15 @@ export const generalItems: Item[] = [
         instanceId: ''
     },
     {
+        id: "seven_star",
+        name: "Seven Star",
+        description: "A sign of providence. The blessings of the sun.",
+        image: "/general/seven_star.png",
+        type: "general",
+        flags: ['stackable',],
+        instanceId: ''
+    },
+    {
         id: "corn",
         name: "Corn",
         description: "A cob of sweet corn.",
@@ -143,15 +152,6 @@ export const generalItems: Item[] = [
         name: "Cotton",
         description: "Soft cotton fibers, useful for crafting.",
         image: "/general/cotton.png",
-        type: "general",
-        flags: ['stackable',],
-        instanceId: ''
-    },
-    {
-        id: "cuprum",
-        name: "Cuprum",
-        description: "A reddish-brown ore, commonly used in crafting and known for its conductivity.",
-        image: "/general/cuprum.png",
         type: "general",
         flags: ['stackable',],
         instanceId: ''
@@ -465,6 +465,54 @@ export const generalItems: Item[] = [
         flags: ['stackable', "crop"],
         instanceId: ''
     },
+
+
+    {
+        id: "cigarettes",
+        name: "Cigareds",
+        description: "Marley bro, kal ko phirse hike ho jaye.",
+        image: "/general/cigareds.png",
+        type: "general",
+        price: 4800,
+        flags: ["special", "stackable"],
+    },
+    {
+        id: "ball_pen",
+        name: "Ball Pen",
+        description: "Blue ball pen. If I had to place a product here: Uni-ball, ftw.",
+        image: "/general/ball_pen.png",
+        type: "general",
+        flags: ["stackable", "grocery"],
+        price: 100,
+    },
+
+    {
+        id: "heart_shaped_chocolates",
+        name: "Cortococo",
+        description: "Heart shaped chocolate.",
+        image: "/general/heart_shaped_chocolates.png",
+        type: "general",
+        flags: ["stackable", "grocery"],
+        price: 2000,
+    },
+    {
+        id: "aether_myst",
+        name: "Aether Myst",
+        description: "Part perfume, part intoxicant. Rare concoction, made for the elite.",
+        image: "/general/aether_myst.png",
+        type: "general",
+        flags: ["stackable", "grocery"],
+        price: 12000,
+    },
+    {
+        id: "handwritten_note",
+        name: "A Handwritten Note",
+        description: "A handwritten note for someone special.",
+        image: "/general/handwritten_note.png",
+        type: "general",
+        flags: ['stackable',],
+    },
+
     {
         id: "level_up_point",
         name: "Level-Up Point",
@@ -600,6 +648,9 @@ export const generalItems: Item[] = [
         flags: ['stackable', 'material'],
         instanceId: ''
     },
+
+
+
     // ─────────────────────────────────────────────────────────────────────────────
     // ADD THESE ENTRIES TO generalItems.ts
     // ─────────────────────────────────────────────────────────────────────────────

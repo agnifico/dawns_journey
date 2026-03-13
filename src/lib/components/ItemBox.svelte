@@ -70,7 +70,7 @@
         position: absolute;
         bottom: -2px;
         right: -2px;
-        background-color: hsla(0, 0%, 0%, 0.4);
+        /* background-color: hsla(0, 0%, 0%, 0.4); */
         color: white;
         font-size: 0.5rem;
         padding: 4px;

@@ -82,7 +82,6 @@
 		</div>
 	</div>
 
-
 	<div class="bonuses-container">
 		{#if $playerActiveSetBonuses.length > 0}
 			<div class="set-bonuses-list">
@@ -104,11 +103,15 @@
 	{#if $playerStore.equipment.weapon_slots[0]}
 		{#each $playerStore.equipment.weapon_slots[0].gearPassives as effect}
 			<p>{effect.name}</p>
+			<p>{effect.description}</p>
 		{/each}
+		<!-- example -->
+		<!-- gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'], description: "Gain complete immunity to [Poison]" }] -->
 	{/if}
 	{#if $playerStore.equipment.weapon_slots[1]}
 		{#each $playerStore.equipment.weapon_slots[1].gearPassives as effect}
 			<p>{effect.name}</p>
+			<p>{effect.description}</p>
 		{/each}
 	{/if}
 </div>

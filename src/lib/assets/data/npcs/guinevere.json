@@ -3,6 +3,7 @@
     "name": "Guinevere",
     "profileImage": "/images/characters/guinevere/guinevere_avatar.png",
     "image": "/images/characters/guinevere/guinevere1.png",
+    "title": "Commander of the Solis Saints",
     "galleryImages": [
         "/images/characters/guinevere/guinevere0.png",
         "/images/characters/guinevere/guinevere1.png",
@@ -12,10 +13,10 @@
         "/images/characters/guinevere/guinevere5.png",
         "/images/characters/guinevere/guinevere6.png"
     ],
-    "description": "The local branch head of the Solis Saints, dedicated to bringing stability to the island through 'purification'.",
+    "description": "Commander of the Solis Saints on Ashenfall. She feeds people, houses people, protects people, and is building Towers that are tearing the island apart. She sees no contradiction in this.",
     "faction": "solis_saints",
     "isCombatant": true,
-    "types": ["Dark", "Light"],
+    "types": ["Light", "Dark"],
     "baseStats": {
         "hp": 700,
         "maxHp": 700,
@@ -36,17 +37,13 @@
     "affinity": 0,
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
+    "abilityCycle": [
+        "holy_strike",
+        "judgment_blade",
+        "radiant_guard",
+        "divine_reckoning"
+    ],
     "statGrowth": [
-        {
-            "level": 0,
-            "stats": {
-                "hp": 500,
-                "physicalAttack": 50,
-                "elementalAttack": 70,
-                "physicalDefence": 40,
-                "elementalDefence": 40
-            }
-        },
         {
             "level": 1,
             "stats": {
@@ -62,8 +59,23 @@
         {
             "rank": 0,
             "aftermaths": [
-                { "outcome": "lose", "value": 2, "dialogue": ["You are strong, but the light is stronger."] },
-                { "outcome": "win", "value": -5, "dialogue": ["This... this is not possible!"] }
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "You fought well. There is something in you worth cultivating.",
+                        "Come. I do not waste potential."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": -3,
+                    "dialogue": [
+                        "...",
+                        "That was not supposed to happen.",
+                        "I will need to think about what that means."
+                    ]
+                }
             ]
         }
     ],
@@ -71,31 +83,47 @@
         {
             "questId": "guinevere_sword_1",
             "title": "A Simple Offering",
-            "description": "Guinevere requires a small tribute to prove your devotion.",
+            "description": "Guinevere has asked for a small thing. With her, small things are never only small things.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "veres_sword_2_complete"
             },
             "stages": [
                 {
-                    "objective": "Give Guinevere 2 Potatoes",
+                    "objective": "Bring Guinevere 2 Potatoes",
                     "requirement": {
                         "type": "give_item",
                         "itemId": "potato",
                         "quantity": 2
                     },
-                    "unavailable_dialogue": ["I have nothing for you at this time."],
+                    "unavailable_dialogue": [
+                        "I have nothing for you today. Come back when you have something to offer."
+                    ],
                     "intro_dialogue": [
-                        "So, Veres sent you to spy on me. I can see her shadow in your eyes.",
-                        "If you wish to walk in the light, you must prove your worth. Even a small offering can show great faith. Bring me two potatoes from your farm."
+                        "You've been spending time on the mountain.",
+                        "Veres is... well. She has always been well, in her way.",
+                        "I'm glad she has company. She makes a virtue of solitude that I'm not sure she entirely believes.",
+                        "But that's not why you're here.",
+                        "I ask this of everyone who comes to me seeking to understand what we're building.",
+                        "Bring me something from what you've grown. Two potatoes from your farm will do.",
+                        "It's not a test of generosity. It's a question.",
+                        "What are you willing to give when there's nothing in it for you?"
                     ],
                     "reminder_dialogue": [
-                        "I am waiting for the offering. Do not dally."
+                        "The offer still stands. Two potatoes, from your farm.",
+                        "Take your time. I'm patient."
                     ],
                     "success_dialogue": [
-                        "A humble gift, but it shows you are willing. Good."
+                        "Thank you.",
+                        "You didn't ask why. Most people ask why.",
+                        "That tells me something.",
+                        "The Saints are not a religion of blind faith — whatever you may have heard.",
+                        "We are a faith of chosen action. Of showing up and doing the work, whether or not anyone is watching.",
+                        "You've shown me you can do that.",
+                        "Come back. I have more to show you."
                     ],
                     "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
                         { "type": "tag", "tagId": "guinevere_sword_1_complete" }
                     ]
                 }
@@ -103,31 +131,52 @@
         },
         {
             "questId": "guinevere_sword_2",
-            "title": "Cleansing the Woods",
-            "description": "Guinevere wants you to clear a nuisance from the forest.",
+            "title": "The Cost of Order",
+            "description": "Guinevere has a problem with one of her own. She wants you to solve it — and then she will tell you something true.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "guinevere_sword_1_complete"
             },
             "stages": [
                 {
-                    "objective": "Defeat 1 Woodmech Bear",
+                    "objective": "Defeat a rogue Solis Sentinel",
                     "requirement": {
                         "type": "kill",
-                        "enemyId": "woodmech_bear",
+                        "enemyId": "solis_sentinel",
                         "quantity": 1
                     },
-                    "unavailable_dialogue": ["The forest is not yet clean."],
+                    "unavailable_dialogue": [
+                        "The Sentinel is still out there.",
+                        "I don't send people twice. Handle it."
+                    ],
                     "intro_dialogue": [
-                        "There is a discordant presence in the woods. A 'Woodmech Bear', a creation of chaotic energies. It must be cleansed. Remove it."
+                        "One of our Sentinels has gone rogue.",
+                        "It's not the first time. The drilling platforms generate interference — it corrupts the Sentinels' guidance systems over time.",
+                        "The irony is not lost on me.",
+                        "We build machines to protect the people of this island, and the machines that power those machines break the first ones.",
+                        "Take care of it. The Sentinel, not the irony — the irony will have to wait.",
+                        "And when you come back, I'll tell you something I don't tell many people."
                     ],
                     "reminder_dialogue": [
-                        "The abomination still roams the forest. My patience wears thin."
+                        "The rogue Sentinel. It won't stop on its own.",
+                        "I'll be here."
                     ],
                     "success_dialogue": [
-                        "You have done well. The forest breathes easier now. You are proving to be a useful instrument of the light."
+                        "Good.",
+                        "Sit down.",
+                        "What we are doing on this island — the drilling, the Towers — it has costs.",
+                        "I know this. I have always known this.",
+                        "The energy leakage from Claudia and Cygwin's platforms disturbs the island's natural flow.",
+                        "It frightens animals. It corrupts our own systems. It causes friction with the people who live here.",
+                        "And I have decided that these are acceptable costs.",
+                        "Not because I don't feel them. Because what comes after justifies them.",
+                        "When the Towers are complete, the Saints will have full stewardship of Ashenfall.",
+                        "Not occupation. Stewardship. There is a difference.",
+                        "I want you to understand that difference before you go any further with me.",
+                        "Can you?"
                     ],
                     "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
                         { "type": "tag", "tagId": "guinevere_sword_2_complete" }
                     ]
                 }
@@ -136,7 +185,7 @@
         {
             "questId": "guinevere_sword_3",
             "title": "The Commanders' Tasks",
-            "description": "Guinevere has tasked you with assisting her commanders, Claudia and Cygwin.",
+            "description": "Guinevere's commanders are doing vital work. She wants you to understand what that work costs — from the inside.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "guinevere_sword_2_complete"
@@ -145,19 +194,31 @@
                 {
                     "objective": "Speak with Guinevere",
                     "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": ["My commanders are busy. Do not bother them."],
-                    "intro_dialogue": [
-                        "My commanders, Claudia and Cygwin, are undertaking vital work to stabilize this island. They require an able hand. Find them, assist them in their tasks, and earn their trust."
+                    "unavailable_dialogue": [
+                        "My commanders are in the field. They don't need an audience right now.",
+                        "Come back when the time is right."
                     ],
-                    "reminder_dialogue": ["My commanders await your aid."],
-                    "success_dialogue": ["Go now. They are waiting."],
+                    "intro_dialogue": [
+                        "You came back.",
+                        "Good."
+                    ],
+                    "success_dialogue": [
+                        "Claudia and Cygwin are overseeing the platform work in the east and south.",
+                        "They are both exceptional. Different in almost every way, but exceptional.",
+                        "Claudia was born into this. She believes because she has never had reason not to.",
+                        "Cygwin earned her belief the harder way. She chose us when she had nothing, and she has been loyal in a way that costs her something every day.",
+                        "I want you to spend time with both of them.",
+                        "Not to report back to me. I'm not asking you to spy.",
+                        "I want you to understand what it looks like when people do this work because they mean it.",
+                        "And then come back. There's something I want to show you."
+                    ],
                     "success_rewards": [
                         { "type": "tag", "tagId": "can_assist_claudia" },
                         { "type": "tag", "tagId": "can_assist_cygwin" }
                     ]
                 },
                 {
-                    "objective": "Assist Commander Claudia",
+                    "objective": "Earn Claudia's trust (Sword Rank 1 + Heart Rank 1)",
                     "requirement": {
                         "operator": "AND",
                         "conditions": [
@@ -165,13 +226,14 @@
                             { "type": "npc_rank", "npcId": "claudia", "rankType": "heart", "value": 1 }
                         ]
                     },
-                    "unavailable_dialogue": ["Commander Claudia is otherwise occupied."],
-                    "intro_dialogue": ["Report to Commander Claudia."],
-                    "reminder_dialogue": [ "Commander Claudia still requires your assistance." ],
-                    "success_dialogue": [ "Excellent. One pillar of stability is secured." ]
+                    "reminder_dialogue": [
+                        "Claudia is in the eastern territory.",
+                        "She's warm. She'll meet you more than halfway.",
+                        "Let her."
+                    ]
                 },
                 {
-                    "objective": "Assist Commander Cygwin",
+                    "objective": "Earn Cygwin's trust (Sword Rank 1 + Heart Rank 1)",
                     "requirement": {
                         "operator": "AND",
                         "conditions": [
@@ -179,19 +241,30 @@
                             { "type": "npc_rank", "npcId": "cygwin", "rankType": "heart", "value": 1 }
                         ]
                     },
-                    "unavailable_dialogue": ["Commander Cygwin has no time for you."],
-                    "intro_dialogue": ["Report to Commander Cygwin."],
-                    "reminder_dialogue": [ "Commander Cygwin is still waiting for you." ],
-                    "success_dialogue": [ "The second pillar is in place. Well done." ]
+                    "reminder_dialogue": [
+                        "Cygwin is in the southern forest.",
+                        "She won't be difficult. She never is.",
+                        "But she'll notice everything. Keep that in mind."
+                    ]
                 },
                 {
-                    "objective": "Report back to Guinevere",
+                    "objective": "Return to Guinevere",
                     "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": ["I am waiting for you to complete your tasks."],
-                    "intro_dialogue": ["You have returned. Report."],
-                    "reminder_dialogue": [ "You have done what I asked. Return to me and report your success." ],
+                    "intro_dialogue": [
+                        "You're back.",
+                        "I can tell from your face that you understand something now that you didn't before.",
+                        "Good. Tell me nothing. I don't need the report.",
+                        "What I need is for you to come with me."
+                    ],
                     "success_dialogue": [
-                        "You have served the Saints well. The commanders speak highly of you. There is but one final task to secure this island's future."
+                        "There is a place on this island I want you to see.",
+                        "The Dragon's Fang — an old formation, north of here. The ground there is different.",
+                        "Something happened there, long before the Saints arrived. The earth remembers it.",
+                        "I went there alone, years ago, before I was Commander.",
+                        "I stood at the Fang and I made a promise to myself.",
+                        "I want you to go there. Find the shrine at the base.",
+                        "You'll understand when you see it.",
+                        "Go alone. This isn't something that works with company."
                     ],
                     "success_rewards": [
                         { "type": "tag", "tagId": "guinevere_sword_3_complete" },
@@ -203,26 +276,49 @@
         },
         {
             "questId": "guinevere_sword_4",
-            "title": "The Final Purification",
-            "description": "Guinevere has revealed the final tower that needs to be 'purified'.",
+            "title": "The Fang and the Promise",
+            "description": "Guinevere sent you to the Dragon's Fang alone. What you find there will change what you understand about her.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "guinevere_sword_3_complete"
             },
-            "post_failure_dialogue": [
-                "You chose to side with the Shadowhand. You have made a grave mistake."
-            ],
             "stages": [
                 {
-                    "objective": "Speak with Guinevere about the Altar of Fates",
-                    "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": ["The time is not right."],
-                    "intro_dialogue": [
-                        "The final tower, the Altar of Fates, is now revealed to you. Go there and activate it. Its purification will bring lasting peace to this land."
+                    "objective": "Visit the Ancient Dragon's Fang Shrine",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "ancient_dragons_fang_shrine"
+                    },
+                    "unavailable_dialogue": [
+                        "The Fang is north of the Cathedral.",
+                        "You'll know the shrine when you find it.",
+                        "Go alone."
                     ],
-                    "reminder_dialogue": ["The Altar of Fates awaits. Do not fail."],
-                    "success_dialogue": ["Go now. The Altar awaits."],
+                    "reminder_dialogue": [
+                        "The shrine is still waiting.",
+                        "Take your time. But go."
+                    ],
+                    "success_dialogue": [
+                        "You found it.",
+                        "And you kept the sword.",
+                        "I left it there deliberately.",
+                        "Not as a relic. As a question.",
+                        "Every person who finds that shrine — and very few do — has to decide what to do with what they find.",
+                        "Most leave it. You kept it.",
+                        "I made a promise at that Fang, the year I became Commander.",
+                        "That this island would be protected. That the people here would be fed, housed, safe.",
+                        "That no sovereign power — not the Shadowhand, not any sea-empress, not anything that moves in the dark —",
+                        "would have dominion over what I was building here.",
+                        "The Towers are that promise, made physical.",
+                        "I know what they cost. I carry that.",
+                        "I am asking you — not as a soldier, not as an asset — to decide whether you believe the cost is worth it.",
+                        "Take your time.",
+                        "The Altar will still be there."
+                    ],
                     "success_rewards": [
+                        { "type": "item", "itemId": "saints_greatsword", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 10 },
+                        { "type": "tag", "tagId": "guinevere_sword_4_complete" },
                         { "type": "tag", "tagId": "guinevere_ready_for_f3" }
                     ]
                 },
@@ -233,18 +329,526 @@
                         "eventId": "F3",
                         "timing": "future"
                     },
-                    "unavailable_dialogue": ["The Altar of Fates is not yet ready."],
-                    "intro_dialogue": ["The Altar of Fates is before you."],
-                    "reminder_dialogue": ["The Altar of Fates awaits. Do not fail."],
-                    "success_dialogue": [ "It is done. The light has prevailed." ]
+                    "unavailable_dialogue": [
+                        "The Altar of Fates is at the centre of the island.",
+                        "When you're ready.",
+                        "I mean that. When you are ready."
+                    ],
+                    "reminder_dialogue": [
+                        "The Altar is waiting.",
+                        "So am I."
+                    ],
+                    "success_dialogue": [
+                        "It is done.",
+                        "Whatever you chose at the Altar — I want you to know I respect it.",
+                        "Come back to me. We're not finished."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "guinevere_sword_4_complete_f3" }
+                    ]
+                }
+            ],
+            "post_failure_dialogue": [
+                "You chose the Shadowhand.",
+                "I'm not angry.",
+                "I'm genuinely not.",
+                "You had a choice, and you made it. That's all I ever ask of anyone.",
+                "Come back, when you're ready to talk.",
+                "I mean that too."
+            ]
+        },
+        {
+            "variants": [
+                {
+                    "questId": "guinevere_sword_5_saints",
+                    "title": "The Shape of It",
+                    "description": "You sided with Guinevere. Now she tells you what she was actually doing.",
+                    "startRequirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "have_tag", "tag": "guinevere_sword_4_complete_f3" },
+                            { "type": "have_tag", "tag": "sided_with_solis_saints" }
+                        ]
+                    },
+                    "stages": [
+                        {
+                            "objective": "Speak with Guinevere",
+                            "requirement": { "type": "dialogue" },
+                            "unavailable_dialogue": [
+                                "Come inside. I have things to say that aren't for open air."
+                            ],
+                            "success_dialogue": [
+                                "Sit down.",
+                                "I'm going to tell you something I have not told my commanders.",
+                                "The Altar of Fates was never only about the Towers.",
+                                "I knew the Shadowhand had operatives on this island.",
+                                "I've known for eight months.",
+                                "The Altar was the mechanism by which their network would be forced into the open.",
+                                "Any operative monitoring the island's energy signature would have to respond to an activation event that large.",
+                                "And they did.",
+                                "We have names now. Positions. The full shape of what they were running here.",
+                                "You were part of that.",
+                                "Not as a tool — I want to be precise about that distinction.",
+                                "As someone I trusted to make the right choice when it mattered.",
+                                "You did.",
+                                "I'm glad it was you.",
+                                "I don't say that easily."
+                            ],
+                            "success_rewards": [
+                                { "type": "world_resonance", "amount": 15 },
+                                { "type": "tag", "tagId": "guinevere_sword_5_complete" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "questId": "guinevere_sword_5_shadowhand",
+                    "title": "Still Here",
+                    "description": "You sided against Guinevere. She still wants to talk.",
+                    "startRequirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            { "type": "have_tag", "tag": "guinevere_sword_4_complete_f3" },
+                            { "type": "have_tag", "tag": "sided_with_shadowhand" }
+                        ]
+                    },
+                    "stages": [
+                        {
+                            "objective": "Speak with Guinevere",
+                            "requirement": { "type": "dialogue" },
+                            "unavailable_dialogue": [
+                                "I'm here.",
+                                "When you're ready."
+                            ],
+                            "success_dialogue": [
+                                "You came back.",
+                                "I wondered if you would.",
+                                "I want you to know — the work continues.",
+                                "What you chose at the Altar slowed certain things. Not stopped them.",
+                                "I'm not saying this to threaten you. I'm saying it so you understand the shape of what you're in.",
+                                "You made a principled choice. I can respect that even when it costs me.",
+                                "What I can't do is pretend the disagreement isn't real.",
+                                "We want different things for this island.",
+                                "That doesn't mean I want you gone from my sight.",
+                                "In fact — I'd rather keep you close.",
+                                "People who oppose me well are rarer than people who agree with me poorly.",
+                                "Stay. Be difficult. Make me earn it.",
+                                "That's more useful to me than another soldier who nods."
+                            ],
+                            "success_rewards": [
+                                { "type": "world_resonance", "amount": 10 },
+                                { "type": "tag", "tagId": "guinevere_sword_5_complete" }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
     ],
     "heartRanks": [
         {
-            "rank_up_dialogue": [],
-            "giftingOptions": []
+            "rank_up_dialogue": [
+                "I don't allow many people this close.",
+                "It's not distrust. It's — discipline.",
+                "There are things I carry that are easier to carry alone.",
+                "You've made that harder to believe.",
+                "I find I don't mind.",
+                "Don't make me regret the admission."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "guinevere_heart_rank_1_unlocked" },
+                { "type": "world_resonance", "amount": 8 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "I don't drink often.",
+                        "But thank you.",
+                        "Sit with me for a moment."
+                    ]
+                },
+                {
+                    "itemId": "bread",
+                    "quantity": 1,
+                    "value": 2,
+                    "dialogue": [
+                        "Simple. Honest.",
+                        "There's something I like about people who bring bread.",
+                        "It means they thought about what I actually needed, not what would impress me."
+                    ]
+                },
+                {
+                    "itemId": "steak",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Oh.",
+                        "You didn't have to do this.",
+                        "...I'm very glad you did."
+                    ]
+                },
+                {
+                    "itemId": "magma_fossil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "This is from deep in the earth.",
+                        "The Saints have doctrine about what lives down there.",
+                        "I've always found the reality more interesting than the doctrine.",
+                        "Thank you. This goes on my desk."
+                    ]
+                },
+                {
+                    "itemId": "body_oil",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "...",
+                        "You are extraordinarily bold.",
+                        "I'm not — I don't —",
+                        "Thank you.",
+                        "I don't know what else to say.",
+                        "I'll think of something."
+                    ]
+                },
+                {
+                    "itemId": "lube",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "Excuse me.",
+                        "...",
+                        "How dare you.",
+                        "...",
+                        "Keep it. Leave it here.",
+                        "Come back tonight.",
+                        "We are not discussing this further."
+                    ]
+                },
+                {
+                    "itemId": "saints_greatsword",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "You're giving this back.",
+                        "I left it at the Fang for a reason.",
+                        "...",
+                        "And you're giving it back.",
+                        "I don't know what to do with that.",
+                        "Keep it. Please.",
+                        "I think it was always meant to be yours."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "I stood at the Fang for two hours before I made that promise.",
+                "Not because I was uncertain.",
+                "Because I wanted to be sure I understood what I was asking of myself.",
+                "I think about that version of me sometimes.",
+                "She was right about everything and had no idea what it would cost.",
+                "You remind me of her, occasionally.",
+                "That is the most personal thing I have ever said to anyone.",
+                "Don't repeat it."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "guinevere_heart_rank_2_unlocked" },
+                { "type": "world_resonance", "amount": 12 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 3,
+                    "dialogue": [
+                        "You remembered.",
+                        "Good."
+                    ]
+                },
+                {
+                    "itemId": "steak",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Sit down.",
+                        "Eat with me.",
+                        "That's not a request."
+                    ]
+                },
+                {
+                    "itemId": "body_oil",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "Again.",
+                        "You are entirely without shame.",
+                        "I have been told that is a virtue.",
+                        "I'm starting to believe it."
+                    ]
+                },
+                {
+                    "itemId": "lube",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "You.",
+                        "You absolute —",
+                        "Fine.",
+                        "The Cathedral has private quarters.",
+                        "I will pretend this conversation did not happen.",
+                        "Come back after dark."
+                    ]
+                },
+                {
+                    "itemId": "body_safe_wax",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "I know what this is for.",
+                        "I was not born in the Cathedral.",
+                        "...",
+                        "After dark.",
+                        "Tell no one."
+                    ]
+                },
+                {
+                    "itemId": "magma_fossil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "Another one.",
+                        "You remember what I said about the doctrine.",
+                        "You listen.",
+                        "I appreciate that more than you know."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "There is a version of my life where I didn't make that promise at the Fang.",
+                "Where I stayed a soldier. Followed orders. Let someone else carry the weight.",
+                "I think about her sometimes.",
+                "She would have been happier.",
+                "I don't think I envy her.",
+                "You make the weight feel different.",
+                "Not lighter. Differently distributed.",
+                "I don't know what to call that.",
+                "Something good, I think."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "guinevere_heart_rank_3_unlocked" },
+                { "type": "world_resonance", "amount": 15 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "lube",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "You never stop.",
+                        "I have stopped being surprised.",
+                        "I have not stopped being —",
+                        "Come here."
+                    ]
+                },
+                {
+                    "itemId": "body_safe_wax",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "You planned ahead.",
+                        "Of course you did.",
+                        "Lock the door."
+                    ]
+                },
+                {
+                    "itemId": "body_oil",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "I have a meeting in an hour.",
+                        "...",
+                        "Cancel the meeting.",
+                        "Actually — don't. I'll be on time.",
+                        "You have fifty-nine minutes."
+                    ]
+                },
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Pull up a chair.",
+                        "Tell me something that has nothing to do with the Saints.",
+                        "I need to remember there are other things."
+                    ]
+                },
+                {
+                    "itemId": "saints_greatsword",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "You keep bringing this back.",
+                        "Every time.",
+                        "...",
+                        "I made that promise alone.",
+                        "I think — I think I would like to make the next one with someone standing there.",
+                        "Don't say anything.",
+                        "Just — stay."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "I don't do this.",
+                "I have never done this.",
+                "The Saints have opinions about Commanders and attachment.",
+                "I have, historically, agreed with those opinions.",
+                "I appear to no longer agree with those opinions.",
+                "This is your fault.",
+                "I'm choosing to be fine with that.",
+                "Don't make me regret it.",
+                "Actually — I've said that before, haven't I.",
+                "I don't think I mean it anymore."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "guinevere_heart_rank_4_unlocked" },
+                { "type": "world_resonance", "amount": 15 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "body_safe_wax",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "You brought this again.",
+                        "You have absolutely no intention of stopping.",
+                        "Good.",
+                        "Neither do I."
+                    ]
+                },
+                {
+                    "itemId": "lube",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "Close the door.",
+                        "I have things to say that aren't for open air.",
+                        "None of them are about the Saints."
+                    ]
+                },
+                {
+                    "itemId": "saints_greatsword",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "Again.",
+                        "You and this sword.",
+                        "...",
+                        "I think you understand something about it that I'm still figuring out.",
+                        "Keep it close.",
+                        "Keep me closer."
+                    ]
+                },
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "You know, I used to drink alone.",
+                        "I preferred it.",
+                        "I don't anymore.",
+                        "That's significant, I think."
+                    ]
+                },
+                {
+                    "itemId": "steak",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "You feed me.",
+                        "I feed everyone else.",
+                        "Nobody ever thought to return the gesture.",
+                        "Sit down.",
+                        "I'm going to be embarrassingly grateful about this and I need you not to mention it later."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "I stood at the Fang again last night.",
+                "First time since I made the promise.",
+                "I didn't make a new one.",
+                "I just stood there and thought about what I actually want.",
+                "Not what the Saints need. Not what Ashenfall needs.",
+                "What I want.",
+                "I'm still figuring that out.",
+                "But you're in it.",
+                "That much I know."
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "guinevere_heart_rank_5_unlocked" },
+                { "type": "world_resonance", "amount": 20 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "saints_greatsword",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "One day you're going to stop bringing this back and I'm going to have to figure out what that means.",
+                        "Not today.",
+                        "Today I'm just glad you're here."
+                    ]
+                },
+                {
+                    "itemId": "body_safe_wax",
+                    "quantity": 1,
+                    "value": 9,
+                    "dialogue": [
+                        "I have two hours.",
+                        "Don't waste them."
+                    ]
+                },
+                {
+                    "itemId": "lube",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "You.",
+                        "Always you.",
+                        "Come here."
+                    ]
+                },
+                {
+                    "itemId": "wine_red",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "Stay tonight.",
+                        "There's enough for two.",
+                        "There always has been."
+                    ]
+                },
+                {
+                    "itemId": "steak",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "Every time.",
+                        "You never forget.",
+                        "I don't know how you got to know me this well.",
+                        "I'm glad you did."
+                    ]
+                }
+            ]
         }
     ]
 }

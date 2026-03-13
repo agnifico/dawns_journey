@@ -474,7 +474,7 @@
 	.logo {
 		height: 80%;
 		margin-bottom: auto;
-		filter: brightness(.8) contrast(1.3);
+		filter: brightness(1) contrast(1.2);
 	}
 
 	.div1 {
