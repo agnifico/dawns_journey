@@ -33,6 +33,6 @@
     }
     .tab-content {
         /* padding: 1em; */
-        background-color: var(--color-background);
+        /* background-color: var(--color-background); */
     }
 </style>

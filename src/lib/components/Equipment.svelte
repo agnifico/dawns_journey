@@ -5,16 +5,18 @@
 		playerActiveSetBonuses,
 		playerExplorationAbilities
 	} from '../stores/playerStore';
-	import { game } from '$lib/game/game';
 	import ItemBox from './ItemBox.svelte';
 	import { activeItem } from '$lib/stores/uiStore';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import SetBonusDisplay from './ui/SetBonusDisplay.svelte';
 	import ExploBubble from './ExploBubble.svelte';
+	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
+	import { unequipItem } from '$lib/services/InventoryService';
+	import GearPassive from './GearPassive.svelte';
 </script>
 
 <div class="equipment-and-skills">
-	<h2>Equipment</h2>
+	<!-- <h2>Equipment</h2> -->
 	<div class="equipment">
 		<div class="weapon-slots">
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -27,7 +29,7 @@
 					<ItemBox item={$playerStore.equipment.weapon_slots[0]} viewSize="large" />
 					<button
 						class="unequip-button"
-						on:click|stopPropagation={() => game.unequipItem('weapon_slots', 0)}>-</button
+						on:click|stopPropagation={() => unequipItem('weapon_slots', 0)}>-</button
 					>
 				{:else}
 					<!-- <div class="empty-slot large-empty-slot" style="background-image: url('/game_icons/bgsq1.png');"> -->
@@ -47,7 +49,7 @@
 						<ItemBox {item} viewSize="medium" />
 						<button
 							class="unequip-button"
-							on:click|stopPropagation={() => game.unequipItem('relic_slots', i)}>-</button
+							on:click|stopPropagation={() => unequipItem('relic_slots', i)}>-</button
 						>
 					{:else}
 						<div class="empty-slot medium-empty-slot">
@@ -70,7 +72,7 @@
 					<ItemBox item={$playerStore.equipment.weapon_slots[1]} viewSize="large" />
 					<button
 						class="unequip-button"
-						on:click|stopPropagation={() => game.unequipItem('weapon_slots', 1)}>-</button
+						on:click|stopPropagation={() => unequipItem('weapon_slots', 1)}>-</button
 					>
 				{:else}
 					<!-- <div class="empty-slot large-empty-slot" style="background-image: url('/game_icons/bgsq1.png');"> -->
@@ -82,38 +84,58 @@
 		</div>
 	</div>
 
-	<div class="bonuses-container">
-		{#if $playerActiveSetBonuses.length > 0}
-			<div class="set-bonuses-list">
-				{#each $playerActiveSetBonuses as activeBonus}
-					<SetBonusDisplay {activeBonus} />
+	<!-- <div class="mastery-container">
+		<MasteryDisplay mastery={$playerMastery} elements={$playerActiveElements} />
+	</div> -->
+
+	<div class="beb">
+		{#if $playerStore.activeEffects.length > 0}
+			<div class="active-effects-container">
+			Active Stat Bonuses
+			<div class="buffs-list">
+				{#each $playerStore.activeEffects as effect (effect.id)}
+					<BuffDisplay {effect} />
 				{/each}
 			</div>
+			</div>
 		{/if}
-	</div>
 
-	{#if $playerStore.activeEffects.length > 0}
-		<div class="active-effects-container">
-			{#each $playerStore.activeEffects as effect (effect.id)}
-				<BuffDisplay {effect} />
+		<!-- //buffs, effects, bonuses -->
+		<div class="bonuses-container">
+			{#if $playerActiveSetBonuses.length > 0}
+				<div class="set-bonuses-list">
+					{#each $playerActiveSetBonuses as activeBonus}
+						<SetBonusDisplay {activeBonus} />
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+		<div class="gear-passive-box">
+			{#if $playerStore.equipment.weapon_slots[0]}
+				{#each $playerStore.equipment.weapon_slots[0].gearPassives as effect}
+					<GearPassive
+						weaponName={$playerStore.equipment.weapon_slots[0].name}
+						passiveName={effect.name}
+						description={effect.description}
+						icon={$playerStore.equipment.weapon_slots[0].image}
+					/>
+					<!-- <p>{effect.name}</p> -->
+				{/each}
+			{/if}
+			{#if $playerStore.equipment.weapon_slots[1]}
+				{#each $playerStore.equipment.weapon_slots[1].gearPassives as effect}
+					<p>{effect.name}</p>
+				{/each}
+			{/if}
+		</div>
+
+		<div class="exploration-bubbles">
+			{#each Object.entries($playerExplorationAbilities) as [name, level]}
+				<ExploBubble_OLD {name} {level} />
 			{/each}
 		</div>
-	{/if}
-
-	{#if $playerStore.equipment.weapon_slots[0]}
-		{#each $playerStore.equipment.weapon_slots[0].gearPassives as effect}
-			<p>{effect.name}</p>
-			<p>{effect.description}</p>
-		{/each}
-		<!-- example -->
-		<!-- gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'], description: "Gain complete immunity to [Poison]" }] -->
-	{/if}
-	{#if $playerStore.equipment.weapon_slots[1]}
-		{#each $playerStore.equipment.weapon_slots[1].gearPassives as effect}
-			<p>{effect.name}</p>
-			<p>{effect.description}</p>
-		{/each}
-	{/if}
+	</div>
 </div>
 
 <style>
@@ -126,52 +148,92 @@
 	}
 	.equipment-and-skills {
 		padding: 1em;
-		background-color: var(--surface-1);
+		/* background-color: var(--surface-3); */
+		/* background-color: #2d2d2d; */
 		/* height: 100%; */
 		border-radius: 12px;
-		box-shadow: #00000056 0 -6px 0 6px inset;
-		border-top: 3px solid #00000056;
+		/* box-shadow: #00000056 0 -6px 0 6px inset; */
+		/* border-top: 3px solid #00000056; */
 		padding-bottom: 2rem;
 		display: flex;
 		flex-direction: column;
 	}
+	.mastery-container {
+		margin-top: 1em;
+		padding-top: 1em;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1em;
+	}
 	.exploration-bubbles {
 		display: flex;
+		align-items: flex-start;
 		flex-wrap: wrap;
-		/* flex-direction: column; */
-		gap: 0.5em;
-		justify-content: center;
+		gap: 4px;
+		padding: 11px 13px 17px;
+		border-radius: 8px;
+		background: rgba(75, 142, 159, 0.301);
+		/* border: 1px solid rgba(200, 169, 110, 0.28); */
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		background: rgba(68, 68, 68, 0.12);
+		border: 1px solid rgba(96, 96, 200, 0.7);
+	}
+	.beb {
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 	.bonuses-container {
 		display: flex;
-		flex-direction: column;
-		gap: 0.5em;
+		/* flex-direction: column; */
+		gap: 0.5rem;
 		/* margin-top: 1em; */
-		padding-top: 1em;
+		/* padding-top: 1em; */
 		/* border: 1px solid var(--color-border); */
 	}
 	.set-bonuses-list {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5em;
+		gap: 0.5rem;
+		width: 100%;
 	}
 	.active-effects-container {
 		display: flex;
-		flex-direction: row;
-		/* flex-wrap: wrap; */
-		/* gap: 0.5em; */
-		/* margin-top: 1em; */
-		padding-top: 1em;
-		/* border: 1px solid var(--color-border); */
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 4px;
+		padding: 11px 13px 17px;
+		border-radius: 8px;
+		background: rgba(110, 186, 200, 0.3);
+		background: rgba(68, 68, 68, 0.12);
+		border: 1px solid rgba(225, 84, 84, 0.393);
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		font-family: var(--font-family-pixel);
+		font-size: .75rem;
+	}
+	.buffs-list {
+		display: flex;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		gap: 4px;
 	}
 	.equipment {
-		margin-top: 1em;
+		/* margin-top: 1em; */
+		box-sizing: border-box;
+		border-radius: 9px;
 		display: flex;
 		flex-direction: row;
-		/* gap: 0.5rem; */
-		/* border: 1px solid white; */
+		gap: 0.5rem;
+		/* border: 5px solid rgba(0, 0, 0, 0.2); */
+		/* padding: 1rem; */
 		justify-content: center;
 		align-items: center;
+		background-color: rgba(0, 0, 0, 0.15);
+
+
 	}
 
 	.weapon-slots {
@@ -186,7 +248,7 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 1fr 1fr;
-		/* gap: 0.5rem; */
+		gap: 0.5rem;
 		margin-bottom: auto;
 		position: relative;
 	}
@@ -199,19 +261,21 @@
 		align-items: center;
 		cursor: pointer;
 		box-sizing: border-box;
+		padding: 4px;
 	}
 
 	.weapon-slot {
 		width: 128px;
-		height: 128px;
+		height: 152px;
 		box-sizing: border-box;
-		background-color: rgba(0, 0, 0, 0.5);
-		/* border: 3px dashed #00000056; */
-		/* border-radius: 5px; */
-		/* box-shadow: #00000056 0 -6px 0 3px inset; */
-		/* border-top: 3px solid #00000056; */
-		/* padding-bottom: 6px; */
-		background-color: var(--surface-3);
+		background-color: rgba(0, 0, 0, 0.1);
+		border: 3px solid #00000056;
+		border-radius: 5px;
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		border-top: 3px solid #00000056;
+		border: 2px solid rgba(209, 155, 62, 0.4);
+		padding-bottom: 6px;
+		/* background-color: var(--surface-3); */
 		&:hover {
 			.unequip-button {
 				visibility: visible;
@@ -220,16 +284,20 @@
 	}
 
 	.relic-slot {
-		width: 64px;
-		height: 64px;
-		background-color: rgba(0, 0, 0, 0.5);
-		border: 1px solid black;
+		box-sizing: border-box;
+		width: 72px;
+		height: 72px;
+		background-color: rgba(255, 255, 255, 0.1);
+		/* background-color: rgba(0, 0, 0, 0.5); */
+		/* border: 1px solid black; */
 		/* border: 3px dashed #00000056; */
-		/* border-radius: 5px; */
-		/* box-shadow: #00000056 0 -6px 0 3px inset; */
-		/* border-top: 3px solid #00000056; */
-		/* padding-bottom: 6px; */
-		background-color: var(--surface-3);
+		border-radius: 5px;
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		background-color: rgba(0, 0, 0, 0.1);
+		border-top: 3px solid #00000056;
+		border: 2px solid rgba(209, 155, 62, 0.4);
+		padding-bottom: 6px;
+		/* background-color: var(--surface-3); */
 
 		&:hover {
 			.unequip-button {

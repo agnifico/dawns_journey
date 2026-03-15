@@ -178,7 +178,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
     },
     legendary_1: {
         id: 'legendary_1',
-        name: 'hidden',
+        name: 'hidden area',
         gates: [{ element: 'Earth', level: 2 }],
         enemyChance: 1,
         itemChance: 0,
@@ -187,7 +187,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
     },
     legendary_2: {
         id: 'legendary_2',
-        name: 'hidden',
+        name: 'hidden area',
         gates: [{ element: 'Water', level: 2 }],
         enemyChance: 1,
         itemChance: 0,
@@ -196,7 +196,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
     },
     legendary_3: {
         id: 'legendary_3',
-        name: 'hidden',
+        name: 'hidden area',
         gates: [{ element: 'Water', level: 3 }],
         enemyChance: 1,
         itemChance: 0,

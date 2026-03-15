@@ -8,6 +8,8 @@
 	import MasteryTag from './ui/MasteryTag.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
 	import type { ResourceNode, Enemy } from '$lib/types';
+	import { playerStore } from '$lib/stores/playerStore';
+	import WRBadge from './WRBadge.svelte';
 
 	// Replace the derived stores with explicit casts:
 	const resourceNodeKey = derived([eventScreen, mapStore], ([$es, $ms]) => {
@@ -57,9 +59,10 @@
 					<p class="card-name" class:legendary-name={isLegendary}>{$eventScreen.data.name}</p>
 					<!-- {#if $eventScreen.data.resonanceRequirement} -->
 						<div class="wr-details">
-							<p>
+							<!-- <p>
 								World Resonance: <span>{$eventScreen.data.resonanceRequirement}</span>
-							</p>
+							</p> -->
+							<WRBadge required={$eventScreen.data.resonanceRequirement} playerValue={$playerStore.worldResonance}/>
 						</div>
 					<!-- {/if} -->
 					{@const r = $eventScreen.data.encounterResult}

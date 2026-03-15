@@ -39,10 +39,11 @@
 
 <style>
     main {
-        height: 100%;
+        min-height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
+        background-color: #1c1e21;
     }
 
     .desktop-layout {
@@ -67,6 +68,7 @@
 
     .mobile-layout {
         display: none;
+        align-items: center;
     }
 
     @media (max-width: 768px) {
@@ -75,6 +77,7 @@
         }
         .mobile-layout {
             display: block;
+            background-color: #1c1e21;
         }
     }
 </style>

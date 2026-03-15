@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mapStore } from '$lib/stores/mapStore';
 	import { fade } from 'svelte/transition';
-	import ExploBubble from './ExploBubble.svelte';
+	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
 
 	$: notification = $mapStore.regionNotification;
 </script>
@@ -14,7 +14,7 @@
 				<span>Requires:</span>
 				<div class="explo-bubbles">
 					{#each notification.requirements as req}
-						<ExploBubble name={req.name} level={req.level} />
+						<ExploBubble_OLD name={req.name} level={req.level} />
 					{/each}
 				</div>
 			</div>

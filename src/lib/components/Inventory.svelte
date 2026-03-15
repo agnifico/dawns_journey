@@ -283,11 +283,11 @@
 		flex-direction: column;
 		padding: 1em;
 		box-sizing: border-box;
-		background-color: var(--surface-1);
+		/* background-color: var(--surface-1); */
 		height: 100%;
 		border-radius: 12px;
-		box-shadow: #00000056 0 -6px 0 6px inset;
-		border-top: 3px solid #00000056;
+		/* box-shadow: #00000056 0 -6px 0 6px inset; */
+		/* border-top: 3px solid #00000056; */
 	}
 
 	/* ====== TOP BOX ====== */

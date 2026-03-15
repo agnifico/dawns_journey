@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { playerStore, playerStats } from '../stores/playerStore';
+	import { playerStore, playerStats, playerActiveElements } from '../stores/playerStore';
 	import Stat from './Stat.svelte';
 	import StatBar from './ui/StatBar.svelte';
 	import AvatarSelector from './AvatarSelector.svelte';
 	import Switch from '$lib/components/ui/Switch.svelte';
 	import { getXpForLevel as getXpForSkillLevel } from '$lib/services/SkillService';
 	import { getXpForLevel, getXpForLevelUp } from '$lib/services/PlayerLevelService';
+	import WRHeader from './WRHeader.svelte';
+	import { get } from 'svelte/store';
+	import HPBar from './HPBar.svelte';
+	import Level from './Level.svelte';
 
 	let currentView: 'stats' | 'skills' = 'stats';
 
@@ -20,125 +24,130 @@
 			<AvatarSelector />
 		</div>
 		<div class="header-right">
-			<Switch text1="Combat Stats" text2="Trade Skills" fn={toggleView} />
+			<Switch text1="Stats" text2="Skills" fn={toggleView} />
 			<div class="stat-bars">
-				<StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
+				<!-- <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
 				<StatBar
 					current={$playerStats.auraShield}
 					max={$playerStats.maxAuraShield}
 					color="#a98467"
-				/>
+				/> -->
+				<HPBar type="hp" current={$playerStats.hp} max={$playerStats.maxHp} />
+				<HPBar type="aura" current={$playerStats.auraShield} max={$playerStats.maxAuraShield} />
 			</div>
-			{$playerStore.worldResonance}
+			{#if true}
+				{@const xpInLevel = $playerStore.xp - getXpForLevel($playerStore.level)}
+				{@const xpNeeded = getXpForLevelUp($playerStore.level)}
+				<Level level={$playerStore.level} currentXp={xpInLevel} maxXp={xpNeeded} />
+			{/if}
+			<!-- {$playerStore.worldResonance} -->
 			<!-- {$playerStore.worldTags} -->
 		</div>
 	</div>
-	
+	<WRHeader value={$playerStore.worldResonance} elements={$playerActiveElements} />
 
 	{#if currentView === 'stats'}
 		<div class="stats-grid">
 			{#if $playerStats}
-				{@const xpInLevel = $playerStore.xp - getXpForLevel($playerStore.level)}
-				{@const xpNeeded = getXpForLevelUp($playerStore.level)}
-				<div class="skill-wrap">
+				<!-- <div class="skill-wrap">
 					<div class="skill-item-intra">
-
-						<img class="skill-icon" src='/game_icons/player_level.png' alt="" srcset="" />
-				<div class="skill-item" style="grid-column: 1 / -1;">
-					<div class="skill-info">
-						<span class="name">Level</span>
-						<span class="level">Lv. {$playerStore.level}</span>
-					</div>
-					{#if xpNeeded !== null}
-						<div class="xp-bar">
-							<div
-								class="xp-fill"
-								style="width: {Math.min(100, (xpInLevel / xpNeeded) * 100)}%;"
-							></div>
-							<div class="xp-text">{xpInLevel} / {xpNeeded}</div>
+						<img class="skill-icon" src="/game_icons/player_level.png" alt="" srcset="" />
+						<div class="skill-item" style="grid-column: 1 / -1;">
+							<div class="skill-info">
+								<span class="name">Level</span>
+								<span class="level">Lv. {$playerStore.level}</span>
+							</div>
+							{#if xpNeeded !== null}
+								<div class="xp-bar">
+									<div
+										class="xp-fill"
+										style="width: {Math.min(100, (xpInLevel / xpNeeded) * 100)}%;"
+									></div>
+									<div class="xp-text">{xpInLevel} / {xpNeeded}</div>
+								</div>
+							{:else}
+								<div class="xp-bar">
+									<div class="xp-fill" style="width: 100%;"></div>
+									<div class="xp-text">Max Level</div>
+								</div>
+							{/if}
 						</div>
-					{:else}
-						<div class="xp-bar">
-							<div class="xp-fill" style="width: 100%;"></div>
-							<div class="xp-text">Max Level</div>
-						</div>
-					{/if}
 					</div>
+				</div> -->
+				<!-- <div class="stats-column"> -->
+				<!-- <Stat
+					view="short"
+					statId="hp"
+					value={`${$playerStats.hp} / ${$playerStats.maxHp}`}
+					baseValue={$playerStore.baseStats.maxHp}
+				/> -->
+				<Stat
+					view="short"
+					statId="physicalAttack"
+					value={$playerStats.physicalAttack}
+					baseValue={$playerStore.baseStats.physicalAttack}
+				/>
+				<Stat
+					view="short"
+					statId="elementalAttack"
+					value={$playerStats.elementalAttack}
+					baseValue={$playerStore.baseStats.elementalAttack}
+				/>
+				<Stat
+					view="short"
+					statId="physicalDefence"
+					value={$playerStats.physicalDefence}
+					baseValue={$playerStore.baseStats.physicalDefence}
+				/>
+				<Stat
+					view="short"
+					statId="elementalDefence"
+					value={$playerStats.elementalDefence}
+					baseValue={$playerStore.baseStats.elementalDefence}
+				/>
 
-				</div>
+				<!-- </div> -->
+				<!-- <div class="stats-column"> -->
 
-				</div>
-				<div class="stats-column">
-					<Stat
-						view="full"
-						statId="hp"
-						value={`${$playerStats.hp} / ${$playerStats.maxHp}`}
-						baseValue={$playerStore.baseStats.maxHp}
-					/>
-					<Stat
-						view="full"
-						statId="physicalAttack"
-						value={$playerStats.physicalAttack}
-						baseValue={$playerStore.baseStats.physicalAttack}
-					/>
-					<Stat
-						view="full"
-						statId="elementalAttack"
-						value={$playerStats.elementalAttack}
-						baseValue={$playerStore.baseStats.elementalAttack}
-					/>
-					<Stat
-						view="full"
-						statId="critChance"
-						value={$playerStats.critChance}
-						baseValue={$playerStore.baseStats.critChance}
-					/>
-					<Stat
-						view="full"
-						statId="precision"
-						value={$playerStats.precision}
-						baseValue={$playerStore.baseStats.precision}
-					/>
-					<Stat
-						view="full"
-						statId="speed"
-						value={$playerStats.speed}
-						baseValue={$playerStore.baseStats.speed}
-					/>
-				</div>
-				<div class="stats-column">
-					<Stat
-						view="full"
-						statId="maxAuraShield"
-						value={$playerStats.maxAuraShield}
-						baseValue={$playerStore.baseStats.maxAuraShield}
-					/>
+				<!-- <Stat
+					view="short"
+					statId="maxAuraShield"
+					value={$playerStats.maxAuraShield}
+					baseValue={$playerStore.baseStats.maxAuraShield}
+				/> -->
 
-					<Stat
-						view="full"
-						statId="physicalDefence"
-						value={$playerStats.physicalDefence}
-						baseValue={$playerStore.baseStats.physicalDefence}
-					/>
-					<Stat
-						view="full"
-						statId="elementalDefence"
-						value={$playerStats.elementalDefence}
-						baseValue={$playerStore.baseStats.elementalDefence}
-					/>
-					<Stat
-						view="full"
-						statId="critDamage"
-						value={$playerStats.critDamage}
-						baseValue={$playerStore.baseStats.critDamage}
-					/>
-					<Stat
-						view="full"
-						statId="evasion"
-						value={$playerStats.evasion}
-						baseValue={$playerStore.baseStats.evasion}
-					/>
-				</div>
+				<Stat
+					view="short"
+					statId="critChance"
+					value={$playerStats.critChance}
+					baseValue={$playerStore.baseStats.critChance}
+				/>
+				<Stat
+					view="short"
+					statId="critDamage"
+					value={$playerStats.critDamage}
+					baseValue={$playerStore.baseStats.critDamage}
+				/>
+				<Stat
+					view="short"
+					statId="precision"
+					value={$playerStats.precision}
+					baseValue={$playerStore.baseStats.precision}
+				/>
+				<Stat
+					view="short"
+					statId="speed"
+					value={$playerStats.speed}
+					baseValue={$playerStore.baseStats.speed}
+				/>
+
+				<Stat
+					view="short"
+					statId="evasion"
+					value={$playerStats.evasion}
+					baseValue={$playerStore.baseStats.evasion}
+				/>
+				<!-- </div> -->
 			{:else}
 				<p>Loading stats...</p>
 			{/if}
@@ -149,7 +158,12 @@
 				{#each $playerStore.skills as skill}
 					<div class="skill-wrap">
 						<div class="skill-item-intra">
-							<img class="skill-icon" src='/game_icons/{skill.name.toLowerCase()}.png' alt="" srcset="" />
+							<img
+								class="skill-icon"
+								src="/game_icons/{skill.name.toLowerCase()}.png"
+								alt=""
+								srcset=""
+							/>
 							<div class="skill-item">
 								<div class="skill-info">
 									<span class="name">{skill.name}</span>
@@ -192,11 +206,11 @@
 	.player-stats {
 		padding: 1rem;
 		padding-bottom: 2rem;
-		background-color: var(--surface-2);
+		/* background-color: var(--surface-3); */
 		position: relative;
 		border-radius: 12px;
-		box-shadow: #00000056 0 -6px 0 6px inset;
-		border-top: 3px solid #00000056;
+		/* box-shadow: #00000056 0 -6px 0 6px inset; */
+		/* border-top: 3px solid #00000056; */
 		/* height: 100%; */
 		width: 400px;
 	}
@@ -205,10 +219,14 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 1em;
+		margin-bottom: 1rem;
 		height: fit-content;
+		gap: 1rem;
 	}
 	.header-left {
+		flex-shrink: 0;
+		width: fit-content;
+		max-width: 180px;
 	}
 	.header-right {
 		flex-grow: 1;
@@ -217,7 +235,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: flex-end;
-		gap: 1rem;
+		gap: 0.5rem;
 	}
 	.toggle-button {
 		background: none;
@@ -233,13 +251,15 @@
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-		margin-bottom: 1em;
+		/* margin-bottom: 1em; */
 		max-width: 200px;
+		width: 100%;
 	}
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 1em;
+		margin-top: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 0.5rem;
 	}
 	.stats-column {
 		display: flex;
@@ -256,8 +276,8 @@
 		background-color: #3a3a3a;
 		display: flex;
 		flex-direction: column;
-		padding: .5rem;
-		gap: .5rem;
+		padding: 0.5rem;
+		gap: 0.5rem;
 		border-radius: 6px;
 	}
 
@@ -298,7 +318,7 @@
 		font-family: var(--font-family-pixel);
 		font-size: 0.75rem;
 		color: var(--orange);
-		margin-left: .5rem;
+		margin-left: 0.5rem;
 	}
 
 	.xp-bar {

@@ -110,7 +110,12 @@
                     "reminder_dialogue": ["The Altar of Fates awaits. What will you do?"],
                     "success_dialogue": [ "You have chosen the path of true balance." ]
                 }
-            ]
+            ],
+            "success_rewards": [
+                        { "type": "item", "itemId": "orange_bandana", "quantity": 1 },
+                        { "type": "item", "itemId": "green_bra", "quantity": 1 }
+
+                    ]
         }
     ],
     "heartRanks": [

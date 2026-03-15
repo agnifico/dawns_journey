@@ -87,25 +87,27 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-height: 120px;
-        width: 150px;
+        min-height: 180px;
+        min-width: 180px;
+        box-sizing: border-box;
         &:hover .edit-button {
             visibility: visible;
         }
     }
     .avatar-container {
         position: relative;
-        width: 128px;
-        height: 128px;
+        /* max-width: 200px; */
+        flex-grow: 1;
         border-radius: 12px;
         overflow: hidden;
-        border: 4px solid var(--color-primary);
-        box-shadow: 0 0 10px var(--color-primary);
+        border: 3px solid rgba(196, 154, 54, 0.602);
+        box-shadow: #00000056 0 6px 10px 0px;
     }
     .avatar-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: top center;
     }
     .edit-button {
         visibility: hidden;
@@ -127,7 +129,8 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        margin-top: 0.5em;
+        margin-bottom: 3px;
+        border-radius: 0 0 8px 8px;
         position: absolute;
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.7);

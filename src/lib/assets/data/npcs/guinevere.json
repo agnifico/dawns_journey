@@ -269,7 +269,9 @@
                     "success_rewards": [
                         { "type": "tag", "tagId": "guinevere_sword_3_complete" },
                         { "type": "tag", "tagId": "reported_to_guinevere_f1_f2" },
-                        { "type": "tag", "tagId": "can_start_akari_quest" }
+                        { "type": "tag", "tagId": "can_start_akari_quest" },
+                        { "type": "item", "itemId": "searouser", "quantity": 1 }
+
                     ]
                 }
             ]

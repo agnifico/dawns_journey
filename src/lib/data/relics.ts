@@ -9,7 +9,7 @@ export const relics: Item[] = [
         type: "relic",
         stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }],
         element: "Dark",
-        flags: [],
+        flags: ["special"],
     },
     {
         id: "spiked_choker",
@@ -18,7 +18,7 @@ export const relics: Item[] = [
         image: "/relics/spiked_choker.png",
         type: "relic",
         stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }],
-        flags: ["grocery"],
+        flags: ["grocery", "special"],
         price: 7000,
     },
     {
@@ -44,14 +44,14 @@ export const relics: Item[] = [
     },
     {
         
-        id: "bite_mark",
-        name: "Bite Mark",
-        description: "Leaves a faint mark on your neck, a reminder of a passionate night with Hilda.",
+        id: "dragon_tooth_amulet",
+        name: "Dragon Tooth Amulet",
+        description: "A rustic necklace made of smaller dragon teeth, imbued with magic.",
         image: "/relics/bite_mark.png",
         type: "relic",
         stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }],
         element: "Dark",
-        flags: [],
+        flags: ["special"],
     },
     {
         id: "sylvies_shorts",
@@ -90,9 +90,9 @@ export const relics: Item[] = [
         description: "Hela's formidable whip, crafted from darkness. Strikes anywhere there's a shadow, it leaves a lingering sense of delicious submission.",
         image: "/relics/helas_whip.png",
         type: "relic",
-        stats: [{ name: "maxAuraShield", value: 18 }, { name: "elementalAttack", value: 12 }],
+        stats: [{ name: "maxAuraShield", value: 100 }, { name: "elementalAttack", value: 35 }],
         element: "Dark",
-        flags: [],
+        flags: ["special"],
     },
     {
         id: "lament",
@@ -153,6 +153,7 @@ export const relics: Item[] = [
         type: "relic",
         stats: [{ name: "precision", value: 15 }, { name: "evasion", value: 15 }],
         element: "Light",
+        exploration: [{ name: 'Wind', level: 1 }],
         flags: [],
     },
     {
@@ -163,6 +164,7 @@ export const relics: Item[] = [
         type: "relic",
         stats: [{ name: "precision", value: 15 }, { name: "evasion", value: 15 }],
         element: "Light",
+        exploration: [{ name: 'Wind', level: 1 }],
         flags: [],
     },
     {
@@ -193,9 +195,10 @@ export const relics: Item[] = [
         description: "A good fit for a beachy summer day!",
         image: "/relics/pink_sarong.png",
         type: "relic",
-        stats: [{ name: "elementalDefence", value: 150 }],
+        stats: [{ name: "elementalDefence", value: 100 }],
         element: "Water",
-        flags: [],
+        exploration: [{ name: 'Water', level: 1 }],
+        flags: ["special"],
     },
     {
         id: "green_bikini",
@@ -203,9 +206,10 @@ export const relics: Item[] = [
         description: "A good fit for a beachy summer day!",
         image: "/relics/green_bikini.png",
         type: "relic",
-        stats: [{ name: "elementalDefence", value: 150 }],
+        stats: [{ name: "physicalDefence", value: 100 }],
+        exploration: [{ name: 'Water', level: 1 }],
         element: "Water",
-        flags: [],
+        flags: ["special"],
     },
     {
         id: "blue_undies",

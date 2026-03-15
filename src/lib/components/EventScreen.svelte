@@ -14,6 +14,8 @@
 	import ElementTag from './ui/ElementTag.svelte';
 	import ChoiceMenu from './ui/ChoiceMenu.svelte';
 	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
+	import WRBadge from './WRBadge.svelte';
+	import { playerStore } from '$lib/stores/playerStore';
 
 	let npc;
 	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
@@ -178,9 +180,10 @@
 					{#if $eventScreen.type === 'enemy' && $eventScreen.data}
 						<h3 class:legendary={$eventScreen.data.isLegendary}>{$eventScreen.data.name}</h3>
 						<div class="wr-details">
-							<p>
+							<!-- <p>
 								World Resonance: <span>{$eventScreen.data.resonanceRequirement}</span>
-							</p>
+							</p> -->
+							<WRBadge required={$eventScreen.data.resonanceRequirement} playerValue={$playerStore.worldResonance}/>
 						</div>
 
 						<!-- Encounter Result -->

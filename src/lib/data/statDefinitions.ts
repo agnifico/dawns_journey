@@ -80,14 +80,14 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
     critChance: {
         id: 'critChance',
         name: 'Critical Chance',
-        abbr: 'Crit. %',
+        abbr: 'Crit %',
         description: 'The probability of landing a critical hit for extra damage.',
         color: '#FFD700' // Gold
     },
     critDamage: {
         id: 'critDamage',
         name: 'Critical Damage',
-        abbr: 'Crit. Dmg',
+        abbr: 'Crit DMG',
         description: 'The damage multiplier applied on a critical hit.',
         color: '#FFD700' // Gold
     },

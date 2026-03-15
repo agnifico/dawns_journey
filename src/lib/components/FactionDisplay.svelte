@@ -13,7 +13,7 @@
 </script>
 
 <div class="faction-display">
-	<p>Factions</p>
+	<!-- <p>Factions</p> -->
 	{#each factions as faction}
 		<div class="faction">
 			<img src={faction.icon} alt={faction.name} />
@@ -34,7 +34,7 @@
 
 <style>
 	.faction-display {
-		background-color: var(--surface-1);
+		/* background-color: var(--surface-1); */
 		padding: 1rem;
 		border-radius: 12px;
 		border: 6px solid var(--color-border);

@@ -240,6 +240,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+		color: var(--text-muted);
 	}
 	.icon {
 		width: 16px;
@@ -249,6 +250,6 @@
 	}
 	.hotkey {
 		color: #ffe8d6;
-		color: var(--text-muted);
+		color: #ffffff56;
 	}
 </style>

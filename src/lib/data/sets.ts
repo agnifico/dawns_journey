@@ -19,7 +19,7 @@ export const sets: Set[] = [
     {
         id: 'toys',
         name: 'Hela\'s Toys',
-        relicIds: ['helas_whip', 'sylvies_shorts', 'nualas_hood', 'wicked_jewel'],
+        relicIds: ['helas_whip', 'nualas_hood', 'wicked_jewel', 'spiked_choker'],
         bonuses: [
             {
                 pieces: 2,
@@ -63,7 +63,7 @@ export const sets: Set[] = [
     },
     {
         id: 'sky_jewels',
-        name: 'Trinkets of the Sky Goddes',
+        name: 'Trinkets of the Sky',
         relicIds: ['ring_of_the_sky', 'brooch_of_the_sky'],
         bonuses: [
             {
@@ -75,7 +75,7 @@ export const sets: Set[] = [
     {
         id: 'dragon_rider',
         name: 'Dragon Rider',
-        relicIds: ['dragon_rider_helmet', 'bite_mark'],
+        relicIds: ['dragon_rider_helmet', 'dragon_tooth_amulet'],
         bonuses: [
             {
                 pieces: 2,

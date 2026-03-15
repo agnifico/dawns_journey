@@ -173,7 +173,8 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "veres_sword_2_complete" }
+                        { "type": "tag", "tagId": "veres_sword_2_complete" },
+                        { "type": "item", "itemId": "bite_mark",  "quantity": 1}
                     ]
                 }
             ]
@@ -233,7 +234,8 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 8 },
-                        { "type": "tag", "tagId": "veres_sword_3_complete" }
+                        { "type": "tag", "tagId": "veres_sword_3_complete" },
+                        { "type": "item", "itemId": "dragon_rider_helmet",  "quantity": 1}
                     ]
                 }
             ]
@@ -278,7 +280,9 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "veres_sword_4_complete" }
+                        { "type": "tag", "tagId": "veres_sword_4_complete" },
+                        { "type": "item", "itemId": "seabed_fossil",  "quantity": 1}
+                        
                     ]
                 }
             ]
@@ -320,7 +324,7 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
-                        { "type": "item", "itemId": "wind_crystal", "quantity": 1 },
+                        { "type": "item", "itemId": "turquoise", "quantity": 10 },
                         { "type": "tag", "tagId": "veres_sword_5_complete" }
                     ]
                 }
@@ -386,7 +390,8 @@
             "rank_up_rewards": [
                 { "type": "tag", "tagId": "veres_heart_rank_2_unlocked" },
                 { "type": "world_resonance", "amount": 12 },
-                { "type": "item", "itemId": "wind_crystal", "quantity": 2 }
+                { "type": "item", "itemId": "turquoise", "quantity": 15 },
+                { "type": "item", "itemId": "brooch_of_the_sky", "quantity": 1 }
             ],
             "giftingOptions": [
                 {
@@ -456,7 +461,8 @@
             "rank_up_rewards": [
                 { "type": "tag", "tagId": "veres_heart_rank_3_unlocked" },
                 { "type": "world_resonance", "amount": 15 },
-                { "type": "item", "itemId": "tempest_feather", "quantity": 1 }
+                { "type": "item", "itemId": "turquoise", "quantity": 20 },
+                { "type": "item", "itemId": "ring_of_the_sky", "quantity": 1 }
             ],
             "giftingOptions": [
                 {

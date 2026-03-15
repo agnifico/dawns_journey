@@ -1,5 +1,9 @@
 <script lang="ts">
-	const total = 30;
+	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
+	import ExploBubble from '$lib/components/ExploBubble.svelte';
+
+	const total = 3;
+	const elements = ['Fire', 'Water', 'Wind', 'Earth', 'Dark', 'Light'];
 </script>
 
 <main>
@@ -11,6 +15,13 @@
 			<div class="separator"></div>
 		{/if}
 	{/each}
+	{#each elements as element}
+		<ExploBubble_OLD name={element} level="13" />
+	{/each}
+	<div class="separator"></div>
+	{#each elements as element}
+		<ExploBubble name={element} level="13" />
+	{/each}
 </main>
 
 <style>
@@ -19,7 +30,7 @@
 		height: 100%;
 		width: 100%;
 		display: flex;
-        flex-wrap: wrap;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
 		gap: 2rem;
@@ -29,13 +40,13 @@
 		font-family: var(--font-family-pixel);
 		font-size: 1.8rem;
 	}
-    .separator {
-        display: block;
-        min-width: 50%;
-        height: 1px;
-        margin: 0;
-        background-color: #313131;
-    }
+	.separator {
+		display: block;
+		min-width: 50%;
+		height: 1px;
+		margin: 0;
+		background-color: #313131;
+	}
 
 	.style1 {
 		background-color: var(--color-accent);
@@ -58,7 +69,7 @@
 			padding-bottom: 0.5rem;
 			transform: translateY(0.25rem);
 			box-shadow: #313131 0 -6px 0px -4px inset;
-            filter: brightness(1.3) contrast(1.2);
+			filter: brightness(1.3) contrast(1.2);
 		}
 	}
 
@@ -80,7 +91,7 @@
 		width: fit-content;
 		transition: 0.1s all ease-in;
 		&:hover {
-            filter: brightness(1.3) contrast(1.2);
+			filter: brightness(1.3) contrast(1.2);
 			/* padding-bottom: 0.5rem; */
 			/* transform: translateY(0.25rem); */
 			box-shadow: #00000056 0 -8px 0px -4px inset;
@@ -99,9 +110,8 @@
 		transition: 0.1s all ease-in;
 		&:hover {
 			transform: translateY(2px);
-			 filter: brightness(1.3) contrast(1.2);
-			box-shadow:
-				#00000056 0 -6px 0px -4px inset;
+			filter: brightness(1.3) contrast(1.2);
+			box-shadow: #00000056 0 -6px 0px -4px inset;
 			/* background-color: var(--color-accent); */
 		}
 	}

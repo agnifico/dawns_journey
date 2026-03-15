@@ -384,7 +384,7 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 5 },
-                        { "type": "item", "itemId": "water_whip", "quantity": 1 },
+                        { "type": "item", "itemId": "spiked_choker", "quantity": 1 },
                         { "type": "tag", "tagId": "hela_sword_5_complete" },
                         { "type": "item", "itemId": "argentum" , "amount": 10000 }
                     ]
@@ -432,7 +432,9 @@
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
                         { "type": "tag", "tagId": "hela_sword_6_complete" },
-                        { "type": "item", "itemId": "argentum" , "amount": 15000 }
+                        { "type": "item", "itemId": "argentum" , "amount": 15000 },
+                        { "type": "item", "itemId": "pink_sarong" , "amount": 1 },
+                        { "type": "item", "itemId": "green_bikini" , "amount": 1 }
                     ]
                 }
             ]

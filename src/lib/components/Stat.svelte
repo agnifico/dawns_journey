@@ -1,112 +1,148 @@
 <script lang="ts">
-    import { statDefinitions } from '$lib/data/statDefinitions';
-    import type { StatDefinition } from '$lib/data/statDefinitions';
+	import { statDefinitions } from '$lib/data/statDefinitions';
+	import type { StatDefinition } from '$lib/data/statDefinitions';
 
-    export let statId: string;
-    export let value: number | string;
-    export let baseValue: number | undefined = undefined;
-    export let view: 'short' | 'full' = 'short';
+	export let statId: string;
+	export let value: number | string;
+	export let baseValue: number | undefined = undefined;
+	export let view: 'short' | 'full' | 'mini' = 'short';
 
-    let statDef: StatDefinition = statDefinitions[statId] || {
-        id: statId,
-        name: statId,
-        abbr: statId.substring(0, 3).toUpperCase(),
-        description: 'No description available.',
-        color: '#fff'
-    };
+	let statDef: StatDefinition = statDefinitions[statId] || {
+		id: statId,
+		name: statId,
+		abbr: statId.substring(0, 3).toUpperCase(),
+		description: 'No description available.',
+		color: '#fff'
+	};
 
-    let bonus: number | undefined = undefined;
-    let displayValue: string;
+	let bonus: number | undefined = undefined;
+	let displayValue: string;
 
-    $: {
-        // Handle display value formatting
-        if (statId === 'critChance' || statId === 'critDamage') {
-            displayValue = `${(Number(value) * 100).toFixed(0)}%`;
-        } else {
-            displayValue = String(value);
-        }
+	$: {
+		// Handle display value formatting
+		if (statId === 'critChance' || statId === 'critDamage') {
+			displayValue = `${(Number(value) * 100).toFixed(0)}%`;
+		} else {
+			displayValue = String(value);
+		}
 
-        // Handle bonus calculation
-        if (baseValue !== undefined && typeof value === 'number') {
-            const calculatedBonus = value - baseValue;
-            if (calculatedBonus !== 0) {
-                // For percentages, show the percentage point difference
-                if (statId === 'critChance' || statId === 'critDamage') {
-                    bonus = Math.round(calculatedBonus * 100);
-                } else {
-                    bonus = Math.round(calculatedBonus);
-                }
-            } else {
-                bonus = undefined;
-            }
-        } else {
-            bonus = undefined;
-        }
-    }
+		// Handle bonus calculation
+		if (baseValue !== undefined && typeof value === 'number') {
+			const calculatedBonus = value - baseValue;
+			if (calculatedBonus !== 0) {
+				// For percentages, show the percentage point difference
+				if (statId === 'critChance' || statId === 'critDamage') {
+					bonus = Math.round(calculatedBonus * 100);
+				} else {
+					bonus = Math.round(calculatedBonus);
+				}
+			} else {
+				bonus = undefined;
+			}
+		} else {
+			bonus = undefined;
+		}
+	}
 </script>
 
-<div class="stat-line" title={statDef.description}>
-    <img src={`/game_icons/${statId}.png`} alt={statDef.name} class="stat-icon" />
-    <span class="stat-name" style="color: {statDef.color};">{view === 'full' ? statDef.name : statDef.abbr}</span>
-    <span class="stat-value">
-        {#if bonus !== undefined && bonus !== 0}
-        <span class="bonus" class:buff={bonus > 0} class:debuff={bonus < 0}>
-            ({bonus > 0 ? '+' : ''}{bonus}{statId === 'critChance' || statId === 'critDamage' ? '%' : ''})
-        </span>
-        {/if}
-        {displayValue}
-    </span>
+<div class="stat-line" class:mini={view === 'mini'} title={statDef.description}>
+	<img src={`/game_icons/${statId}.png`} alt={statDef.name} class="stat-icon" />
+	<span class="stat-name" style="color: {statDef.color};"
+		>{view === 'full' ? statDef.name : statDef.abbr}</span
+	>
+	<span class="stat-value">
+		{#if bonus !== undefined && bonus !== 0}
+			<span class="bonus" class:buff={bonus > 0} class:debuff={bonus < 0}>
+				({bonus > 0 ? '+' : ''}{bonus}{statId === 'critChance' || statId === 'critDamage'
+					? '%'
+					: ''})
+			</span>
+		{/if}
+		{displayValue}
+	</span>
 </div>
 
 <style>
-    .stat-line {
-        display: flex;
-        align-items: center;
-        font-family: var(--font-family-pixel);
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        /* cursor: help; */
-        border-radius: 4px;
-        background-color: #313131;
-        /* border: 2px solid #208048; */
-    }
+	.stat-line {
+		display: flex;
+		align-items: center;
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		padding: 4px 8px;
+		/* cursor: help; */
+		border-radius: 4px;
+		background-color: #00000060;
+		/* border: 1px solid #bb8e34b8; */
+	}
 
-    .stat-icon {
-        width: 32px;
-        height: 32px;
-        margin-right: 6px;
-        image-rendering: pixelated;
-    }
 
-    .stat-name {
-        flex: 1;
-        text-align: left;
-        margin-right: auto;
-        color: var(--color-text-muted);
-        text-wrap: nowrap;
-        color: #7678ed;
-    }
 
-    .stat-value {
-        color: var(--color-primary);
-        /* font-weight: bold; */
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: flex-end;
-        /* gap: 0.5em; */
-        font-size: 1rem;
-    }
+	.stat-icon {
+		width: 32px;
+		height: 32px;
+		margin-right: 6px;
+		image-rendering: pixelated;
+	}
 
-    .bonus {
-        font-size: 0.75rem;
-        font-weight: 400;
-    }
+	.stat-name {
+		flex: 1;
+		text-align: left;
+		margin-right: auto;
+		color: var(--color-text-muted);
+		text-wrap: nowrap;
+		color: #7678ed;
+	}
 
-    .bonus.buff {
-        color: var(--color-buff);
-    }
+	.stat-value {
+		color: var(--color-primary);
+		/* font-weight: bold; */
+		display: flex;
+		flex-direction: column-reverse;
+		align-items: flex-end;
+		/* gap: 0.5em; */
+		font-size: 1rem;
+	}
 
-    .bonus.debuff {
-        color: var(--color-debuff);
-    }
+	.bonus {
+		font-size: 0.75rem;
+		font-weight: 400;
+	}
+
+	.bonus.buff {
+		color: var(--color-buff);
+	}
+
+	.bonus.debuff {
+		color: var(--color-debuff);
+	}
+    .mini {
+		display: flex;
+		align-items: center;
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+        padding: 0;
+		padding: 2px 4px;
+		/* cursor: help; */
+		border-radius: 4px;
+		background-color: #0000006b;
+		/* border: 2px solid #208048; */
+
+        .stat-icon {
+            width: 16px;
+            height: 16px;
+        }
+        .stat-name {
+            margin-right: 8px;
+        }
+
+        .stat-value {
+            font-size: .75rem;
+            display: flex;
+            flex-direction: row;
+            gap: 4px;
+        }
+        .bonus {
+            color: var(--text-header);
+        }
+	}
 </style>

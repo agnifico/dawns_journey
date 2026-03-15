@@ -126,7 +126,7 @@
 					>
 						Exhibition Mode
 						<p>
-							Start with everything unlocked, allowing you to freely look around the all parts of
+							Start with everything unlocked, allowing you to freely look around all parts of
 							this game.
 						</p>
 					</button>
