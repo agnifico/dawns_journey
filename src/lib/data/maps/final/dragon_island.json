@@ -203,7 +203,7 @@
       "type": "event",
       "x": 16,
       "y": 11,
-      "eventId": "small_cave_1"
+      "eventId": "malefic_cave"
     },
     {
       "type": "event",
@@ -2282,6 +2282,6 @@
     "x": 4,
     "y": 2
   },
-  "enemyEncounterChance": 0.3,
+  "enemyEncounterChance": 0.5,
   "itemFindingChance": 0.3
 }

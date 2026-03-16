@@ -33,6 +33,17 @@ export function getItemById(id: string): Item | undefined {
     return itemMap.get(id);
 }
 
+/**
+ * Returns the rarity CSS class for an item.
+ * Single source of truth — used by ItemBox, Equipment, and any other slot UI.
+ */
+export function rarityClass(item: Item | null | undefined): string {
+    if (!item) return '';
+    if (item.flags?.includes('legendary')) return 'legendary';
+    if (item.flags?.includes('special'))   return 'special';
+    return '';
+}
+
 // ---------------------------------------------------------------------------
 // Inventory read helpers
 // ---------------------------------------------------------------------------

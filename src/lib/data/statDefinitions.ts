@@ -12,14 +12,14 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         name: 'Health Points',
         abbr: 'HP',
         description: 'Determines how much damage you can take before being defeated.',
-        color: '#6a994e' // Green
+        color: '#48db80' // Green
     },
     maxHp: {
         id: 'maxHp',
         name: 'Max Health Points',
         abbr: 'Max HP',
         description: 'Your maximum Health Points.',
-        color: '#BDAA89' // Green
+        color: '#48db80' // Green
     },
     auraShield: {
         id: 'auraShield',
@@ -40,28 +40,28 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         name: 'Physical Attack',
         abbr: 'Phy ATK',
         description: 'Increases the damage dealt by your physical attacks.',
-        color: '#4895EF' // SteelBlue
+        color: '#7297b7' // SteelBlue
     },
     physicalDefence: {
         id: 'physicalDefence',
         name: 'Physical Defence',
         abbr: 'Phy DEF',
         description: 'Reduces the damage taken from physical attacks.',
-        color: '#4895EF' // SteelBlue
+        color: '#7297b7' // SteelBlue
     },
     elementalAttack: {
         id: 'elementalAttack',
         name: 'Elemental Attack',
         abbr: 'Elm ATK',
         description: 'Increases the damage dealt by your elemental attacks.',
-        color: '#FF6347' // Tomato
+        color: '#ca8a8a' // Tomato
     },
     elementalDefence: {
         id: 'elementalDefence',
         name: 'Elemental Defence',
         abbr: 'Elm DEF',
         description: 'Reduces the damage taken from elemental attacks.',
-        color: '#FF6347' // Tomato
+        color: '#ca8a8a' // Tomato
     },
     speed: {
         id: 'speed',
@@ -82,14 +82,14 @@ export const statDefinitions: { [key: string]: StatDefinition } = {
         name: 'Critical Chance',
         abbr: 'Crit %',
         description: 'The probability of landing a critical hit for extra damage.',
-        color: '#FFD700' // Gold
+        color: '#92b78b' // Gold
     },
     critDamage: {
         id: 'critDamage',
         name: 'Critical Damage',
         abbr: 'Crit DMG',
         description: 'The damage multiplier applied on a critical hit.',
-        color: '#FFD700' // Gold
+        color: '#92b78b' // Gold
     },
     precision: {
         id: 'precision',

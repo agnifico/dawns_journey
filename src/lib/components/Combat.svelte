@@ -1186,6 +1186,7 @@
 		display: flex;
 		flex: 1;
 		min-width: 0;
+		padding-bottom: 3rem;
 	}
 	.resolving {
 		flex: 1;

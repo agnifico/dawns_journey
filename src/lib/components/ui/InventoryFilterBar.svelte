@@ -8,43 +8,29 @@
 		clearTagFilter
 	} from '$lib/stores/inventoryFilterStore';
 	import { createEventDispatcher } from 'svelte';
-	import Stat from '../Stat.svelte';
-	// import ElementTag from './ElementTag.svelte';
 
-	export let isWeaponTab: boolean; // To differentiate between weapon and relic tabs
+	export let isWeaponTab: boolean;
 
 	const dispatch = createEventDispatcher();
 
-	// Hardcoded for now, ideally these would come from a central game data service
 	const elements = ['Fire', 'Water', 'Earth', 'Wind', 'Light', 'Dark', 'Normal'];
 	const weaponTags = ['sword', 'fan', 'heavy', 'ranged', 'staff', 'polearm'];
 	const commonStats = [
-		{ id: 'physicalAttack', name: 'Physical Attack' },
-		{ id: 'elementalAttack', name: 'Elemental Attack' },
-		{ id: 'physicalDefence', name: 'Physical Defence' },
-		{ id: 'elementalDefence', name: 'Elemental Defence' },
-		{ id: 'critChance', name: 'Crit Chance' },
-		{ id: 'critDamage', name: 'Crit Damage' },
-		{ id: 'maxHp', name: 'Max HP' },
-		{ id: 'maxAuraShield', name: 'Max Aura Shield' },
-		{ id: 'precision', name: 'Precision' },
-		{ id: 'evasion', name: 'Evasion' },
-		{ id: 'speed', name: 'Speed' }
+		{ id: 'physicalAttack' }, { id: 'elementalAttack' },
+		{ id: 'physicalDefence' }, { id: 'elementalDefence' },
+		{ id: 'critChance' }, { id: 'critDamage' },
+		{ id: 'maxHp' }, { id: 'maxAuraShield' },
+		{ id: 'precision' }, { id: 'evasion' }, { id: 'speed' }
 	];
-
-	let selectedElement: string | null;
-	let activeTags: string[];
-	let selectedStat: string | null;
-	let sortDirection: 'desc' | 'asc';
 
 	$: ({ elementFilter, tagFilters, statSort } = $inventoryFilterStore);
 	$: selectedElement = elementFilter;
 	$: activeTags = tagFilters;
 	$: selectedStat = statSort?.statId || null;
-	$: sortDirection = statSort?.direction || 'asc';
+	$: sortDirection = statSort?.direction || 'desc';
 
 	function handleElementChange(element: string | null) {
-		setElementFilter(element);
+		setElementFilter(element === selectedElement ? null : element);
 		dispatch('filterChange');
 	}
 
@@ -55,14 +41,8 @@
 
 	function handleStatSortChange(statId: string) {
 		if (selectedStat === statId) {
-			// Toggle direction or clear if already descending
-			if (sortDirection === 'desc') {
-				setStatSort(statId as any, 'asc');
-			} else {
-				clearStatSort();
-			}
+			sortDirection === 'desc' ? setStatSort(statId as any, 'asc') : clearStatSort();
 		} else {
-			// New stat selected, default to ascending
 			setStatSort(statId as any, 'desc');
 		}
 		dispatch('filterChange');
@@ -70,151 +50,172 @@
 </script>
 
 <div class="filter-bar">
+	<!-- Element filters (weapons only) -->
 	{#if isWeaponTab}
-		<div class="filter-group element">
-			<div class="row">
-				{#each elements as element}
-					<button
-						class:active={selectedElement === element}
-						on:click={() => handleElementChange(element)}
-					>
-						<img class="stat-icon" src="/images/{element.toLowerCase()}.png" alt="" srcset="" />
-					</button>
-				{/each}
-			</div>
-			<button class:active={selectedElement === null} on:click={() => handleElementChange(null)}>
-				<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
-			</button>
-		</div>
-
-		<div class="filter-group types">
-			<div class="row">
-				{#each weaponTags as tag}
-					<button class:active={activeTags.includes(tag)} on:click={() => handleTagToggle(tag)}>
-						{tag.toUpperCase()}
-					</button>
-				{/each}
-			</div>
-			<button class="cancel-btn" on:click={() => clearTagFilter()}>
-				<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
-			</button>
-		</div>
-	{/if}
-
-	<div class="filter-group stats">
-		<div class="row">
-			{#each commonStats as stat}
+		<div class="filter-group">
+			{#each elements as element}
 				<button
-					class:active={selectedStat === stat.id}
-					on:click={() => handleStatSortChange(stat.id)}
+					class="icon-btn"
+					class:active={selectedElement === element}
+					title={element}
+					on:click={() => handleElementChange(element)}
 				>
-					<!-- {stat.name} -->
-					<img src={`./game_icons/${stat.id}.png`} alt={stat.name} class="stat-icon" />
-					{#if selectedStat === stat.id}
-						{#if sortDirection === 'asc'}
-							&uarr;
-						{:else}
-							&darr;
-						{/if}
-					{/if}
+					<img src="/images/{element.toLowerCase()}.png" alt={element} />
 				</button>
 			{/each}
+			<button class="icon-btn clear-btn" title="Clear element" on:click={() => handleElementChange(null)}>
+				<img src="/game_icons/cancel.png" alt="Clear" />
+			</button>
 		</div>
-		<button class:active={selectedStat === null} on:click={() => clearStatSort()}>
-			<img class="cancel" src="/game_icons/cancel.png" alt="" srcset="" />
+
+		<div class="sep"></div>
+
+		<!-- Weapon type tags -->
+		<div class="filter-group">
+			{#each weaponTags as tag}
+				<button
+					class="tag-btn"
+					class:active={activeTags.includes(tag)}
+					on:click={() => handleTagToggle(tag)}
+				>
+					{tag.toUpperCase()}
+				</button>
+			{/each}
+			<button class="icon-btn clear-btn" title="Clear type" on:click={() => clearTagFilter()}>
+				<img src="/game_icons/cancel.png" alt="Clear" />
+			</button>
+		</div>
+
+		<div class="sep"></div>
+	{/if}
+
+	<!-- Stat sort -->
+	<div class="filter-group">
+		{#each commonStats as stat}
+			<button
+				class="icon-btn"
+				class:active={selectedStat === stat.id}
+				title={stat.id}
+				on:click={() => handleStatSortChange(stat.id)}
+			>
+				<img src="./game_icons/{stat.id}.png" alt={stat.id} />
+				{#if selectedStat === stat.id}
+					<span class="sort-arrow">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+				{/if}
+			</button>
+		{/each}
+		<button class="icon-btn clear-btn" title="Clear sort" on:click={() => clearStatSort()}>
+			<img src="/game_icons/cancel.png" alt="Clear" />
 		</button>
 	</div>
 </div>
 
 <style>
-	button {
-		height: 32px;
-	}
 	.filter-bar {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		padding: 0.5rem;
-		background-color: #333;
-		/* border-radius: 5px; */
-		/* margin-bottom: 10px; */
+		align-items: center;
+		gap: 2px;
+		padding: 4px 6px;
+		background-color: rgba(0, 0, 0, 0.25);
 		image-rendering: pixelated;
-		/* border: 1px solid white; */
+		border-inline: 3px solid rgba(0, 0, 0, 0.3);
 	}
 
 	.filter-group {
 		display: flex;
 		align-items: center;
-		/* gap: 5px; */
-		/* padding: 5px; */
+		flex-wrap: nowrap;
+	}
+
+	.sep {
+		width: 1px;
+		height: 20px;
+		background: rgba(200, 169, 110, 0.2);
+		margin: 0 4px;
+		flex-shrink: 0;
+	}
+
+	.icon-btn {
+		position: relative;
+		background: transparent;
+		border: 1px solid transparent;
 		border-radius: 3px;
-		justify-content: space-between;
-		width: 100%;
-		/* border: 1px solid white; */
-	}
-
-	.row {
-		display: flex;
-		/* border: 1px solid white; */
-	}
-
-	.filter-bar button {
-		background-color: transparent;
-		color: #fff;
-		border: 1px solid #777;
-		/* padding: 5px 10px; */
+		padding: 3px;
 		cursor: pointer;
-		transition: background-color 0.2s;
-		font-size: 0.8em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 28px;
+		width: 28px;
+		transition: background 0.1s, border-color 0.1s;
 	}
 
-	.filter-bar button:hover {
-		background-color: #777;
+	.icon-btn img {
+		width: 20px;
+		height: 20px;
+		image-rendering: pixelated;
 	}
 
-	.filter-bar button.active {
-		background-color: var(--color-accent);
-		background-color: #be8c68;
+	.icon-btn:hover {
+		background: rgba(200, 169, 110, 0.1);
+		border-color: rgba(200, 169, 110, 0.25);
 	}
 
-	.element button {
-		background-color: transparent;
+	.icon-btn.active {
+		background: rgba(190, 140, 104, 0.25);
+		border-color: rgba(190, 140, 104, 0.6);
+	}
+
+	.sort-arrow {
+		position: absolute;
+		bottom: 1px;
+		right: 2px;
+		font-size: 0.45rem;
+		color: #c8a96e;
+		line-height: 1;
+	}
+
+	.tag-btn {
+		background: transparent;
 		border: none;
-		border-radius: 0;
-		height: 32px;
-		width: fit-content;
-		padding: 4px;
-	}
-	.stats {
-		border: none;
-		button {
-			border-radius: 0;
-			border: none;
-			padding: 4px;
-			height: 32px;
-			width: fit-content;
-			background-color: transparent;
-		}
-	}
-	.stat-icon {
-		height: 24px;
-		width: 24px;
-	}
-
-	.types button {
-		border-radius: 0;
-		border: none;
-		padding: 4px;
+		border-radius: 3px;
+		padding: 3px 5px;
+		cursor: pointer;
 		font-family: var(--font-family-pixel);
-		/* width: 10ch; */
-		font-size: 0.75rem;
+		font-size: 0.55rem;
+		color: rgba(200, 169, 110, 0.5);
+		height: 28px;
+		transition: background 0.1s, color 0.1s;
+		white-space: nowrap;
 	}
 
-	.cancel {
-		height: 16px;
-		width: 16px;
+	.tag-btn:hover {
+		background: rgba(200, 169, 110, 0.1);
+		color: rgba(200, 169, 110, 0.9);
 	}
-	.cancel-btn {
-		background-color: transparent;
+
+	.tag-btn.active {
+		background: rgba(190, 140, 104, 0.2);
+		color: #c8a96e;
+		border: 1px solid rgba(190, 140, 104, 0.5);
+	}
+
+	.clear-btn {
+		opacity: 0.4;
+		width: 22px;
+		height: 22px;
+		margin-left: 2px;
+	}
+
+	.clear-btn img {
+		width: 14px;
+		height: 14px;
+	}
+
+	.clear-btn:hover {
+		opacity: 0.8;
+		background: rgba(200, 60, 60, 0.15);
+		border-color: rgba(200, 60, 60, 0.3);
 	}
 </style>

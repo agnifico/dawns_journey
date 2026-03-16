@@ -6,15 +6,14 @@
 	import { getSetForRelic } from '$lib/services/SetDataService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
 	import Stat from './Stat.svelte';
-	import { afterUpdate } from 'svelte';
 	import { derived } from 'svelte/store';
 	import ExploBubble from './ExploBubble.svelte';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import InstantEffectDisplay from './ui/InstantEffectDisplay.svelte';
 	import ElementTag from './ui/ElementTag.svelte';
 	import { activeItem, inventoryTab, homesteadSubTab } from '$lib/stores/uiStore';
-    import InventoryFilterBar from './ui/InventoryFilterBar.svelte';
-    import { inventoryFilterStore } from '$lib/stores/inventoryFilterStore';
+	import InventoryFilterBar from './ui/InventoryFilterBar.svelte';
+	import { inventoryFilterStore } from '$lib/stores/inventoryFilterStore';
 
 	const isConsumable = (item: Item) =>
 		item.type === 'general' &&
@@ -22,7 +21,22 @@
 			(item.activeEffects && item.activeEffects.length > 0));
 	const isEquippable = (item: Item) => item.type === 'weapon' || item.type === 'relic';
 
-    $: ({ elementFilter, tagFilters, statSort } = $inventoryFilterStore);
+	function isEquipped(item: Item): boolean {
+		const eq = $playerStore.equipment;
+		return [...eq.weapon_slots, ...eq.relic_slots].some(s => s?.instanceId === item.instanceId);
+	}
+
+	/** Stack-aware use: always consumes the next live instance by template id. */
+	function handleUse(item: Item) {
+		const instance = $playerStore.inventory.find(i => i.id === item.id);
+		if (!instance?.instanceId) return;
+		useItem(instance.instanceId);
+		// If no more instances remain, close the drawer too
+		const remaining = $playerStore.inventory.filter(i => i.id === item.id);
+		if (remaining.length <= 1) closeDrawer(); // the one we just used is still in store during this tick
+	}
+
+	$: ({ elementFilter, tagFilters, statSort } = $inventoryFilterStore);
 
 	const filteredInventory = derived(
 		[playerStore, inventoryTab, homesteadSubTab, inventoryFilterStore],
@@ -30,10 +44,8 @@
 			let itemsToFilter = $playerStore.inventory.filter((item) => {
 				if (!item) return false;
 				switch ($inventoryTab) {
-					case 'weapons':
-						return item.type === 'weapon';
-					case 'relics':
-						return item.type === 'relic';
+					case 'weapons': return item.type === 'weapon';
+					case 'relics':  return item.type === 'relic';
 					case 'homestead':
 						if ($homesteadSubTab === 'farming') {
 							return item.flags?.includes('crop') || item.flags?.includes('seed');
@@ -49,65 +61,52 @@
 				}
 			});
 
-            // Apply element filter (only for weapons tab)
-            if ($inventoryFilterStore.elementFilter && $inventoryTab === 'weapons') {
-                itemsToFilter = itemsToFilter.filter(item =>
-                    item.type === 'weapon' && item.element === $inventoryFilterStore.elementFilter
-                );
-            }
-
-            // Apply tag filters
-            if ($inventoryFilterStore.tagFilters.length > 0) {
-                itemsToFilter = itemsToFilter.filter(item =>
-                    item.flags?.some(flag => $inventoryFilterStore.tagFilters.includes(flag))
-                );
-            }
-
-            // Apply stat sorting
-            if ($inventoryFilterStore.statSort) {
-                const { statId, direction } = $inventoryFilterStore.statSort;
-                itemsToFilter.sort((a, b) => {
-                    const getStatValue = (item: Item, id: string) => {
-                        const stat = item.stats?.find(s => s.name === id);
-                        return stat ? stat.value : 0;
-                    };
-
-                    const aStat = getStatValue(a, statId);
-                    const bStat = getStatValue(b, statId);
-
-                    if (direction === 'asc') {
-                        return aStat - bStat;
-                    } else {
-                        return bStat - aStat;
-                    }
-                });
-            }
-
+			if ($inventoryFilterStore.elementFilter && $inventoryTab === 'weapons') {
+				itemsToFilter = itemsToFilter.filter(item =>
+					item.type === 'weapon' && item.element === $inventoryFilterStore.elementFilter
+				);
+			}
+			if ($inventoryFilterStore.tagFilters.length > 0) {
+				itemsToFilter = itemsToFilter.filter(item =>
+					item.flags?.some(flag => $inventoryFilterStore.tagFilters.includes(flag))
+				);
+			}
+			if ($inventoryFilterStore.statSort) {
+				const { statId, direction } = $inventoryFilterStore.statSort;
+				itemsToFilter.sort((a, b) => {
+					const getStatValue = (item: Item, id: string) => {
+						const stat = item.stats?.find(s => s.name === id);
+						return stat ? stat.value : 0;
+					};
+					const aStat = getStatValue(a, statId);
+					const bStat = getStatValue(b, statId);
+					return direction === 'asc' ? aStat - bStat : bStat - aStat;
+				});
+			}
 			return itemsToFilter;
 		}
 	);
 
 	const groupedInventory = derived(filteredInventory, ($filteredInventory) => {
-		const grouped = new Map<string, Item>();
-		const nonStackable: Item[] = [];
+		const result: Item[] = [];
+		const stackIndex = new Map<string, number>(); // templateId → index in result
 
 		for (const item of $filteredInventory) {
 			if (item.flags?.includes('stackable')) {
-				if (grouped.has(item.id)) {
-					const existingItem = grouped.get(item.id)!;
-					existingItem.amount = (existingItem.amount || 0) + 1;
+				const existing = stackIndex.get(item.id);
+				if (existing !== undefined) {
+					// Spread to avoid mutating — increment amount on the representative
+					result[existing] = { ...result[existing], amount: (result[existing].amount || 1) + 1 };
 				} else {
-					// Create a new representative item for the stack
-					const stackableItem = { ...item, amount: 1 };
-					grouped.set(item.id, stackableItem);
+					// Use template id as the stable instanceId for keying in the grid
+					stackIndex.set(item.id, result.length);
+					result.push({ ...item, instanceId: item.id, amount: 1 });
 				}
 			} else {
-				// Non-stackable items are just added to a separate list
-				nonStackable.push(item);
+				result.push(item);
 			}
 		}
-		// Combine the grouped stackable items with the non-stackable items
-		return [...Array.from(grouped.values()), ...nonStackable];
+		return result;
 	});
 
 	let relicSet: Set | undefined;
@@ -119,498 +118,473 @@
 		}
 	}
 
-	let scrollContent: HTMLDivElement;
-	let isScrollable = false;
-	afterUpdate(() => {
-		if (scrollContent) {
-			isScrollable = scrollContent.scrollHeight > scrollContent.clientHeight;
-		}
-	});
+	let actionSheetItem: Item | null = null;
 
-	function getStatName(statId: string): string {
+	// Drawer is driven by $activeItem — shared with Equipment so clicking
+	// an equipped item updates the details panel here automatically.
+	$: drawerItem = $activeItem;
+
+	function selectItem(item: Item) {
+		$activeItem = item;
+		actionSheetItem = null;
+	}
+
+	function closeDrawer() {
+		$activeItem = null;
+	}
+
+	function openActionSheet(item: Item, e: MouseEvent) {
+		e.stopPropagation();
+		actionSheetItem = actionSheetItem?.instanceId === item.instanceId ? null : item;
+		$activeItem = item;
+	}
+
+	function closeActionSheet() { actionSheetItem = null; }
+
+function getStatName(statId: string): string {
 		return statDefinitions[statId]?.name || statId;
+	}
+
+	function formatValue(value: number, statId: string): string {
+		if (Math.abs(value) < 1 && value !== 0) {
+			return `${value > 0 ? '+' : ''}${Math.round(value * 100)}%`;
+		}
+		return `${value > 0 ? '+' : ''}${value}`;
 	}
 </script>
 
-<div class="inventory">
-	<!-- ====== TOP BOX: INFO & DESCRIPTION ====== -->
-	<div class="item-info-box">
-		<div class="item-image">
-			{#if $activeItem}
-				<ItemBox item={$activeItem} viewSize="large" />
-			{:else}
-				<div class="empty-active-item"></div>
-			{/if}
-		</div>
-		<div class="item-description">
-			{#if $activeItem}
-				<div class="item-header">
-					<h3>{$activeItem.name}</h3>
-					{#if $activeItem.type === 'weapon'}
-						<ElementTag element={$activeItem.element} />
-					{/if}
-				</div>
-				<p class="description-text">{$activeItem.description}</p>
-			{:else}
-				<p>Select an item to see details.</p>
-			{/if}
-		</div>
-	</div>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 
+{#if actionSheetItem}
+	<div class="sheet-backdrop" on:click={closeActionSheet}></div>
+{/if}
+
+<div class="inventory">
 	<div class="tabs">
-		<button on:click={() => ($inventoryTab = 'general')} class:active={$inventoryTab === 'general'}
-			>General</button
-		>
-		<button on:click={() => ($inventoryTab = 'weapons')} class:active={$inventoryTab === 'weapons'}
-			>Weapons</button
-		>
-		<button on:click={() => ($inventoryTab = 'relics')} class:active={$inventoryTab === 'relics'}
-			>Relics</button
-		>
-		<button on:click={() => ($inventoryTab = 'homestead')} class:active={$inventoryTab === 'homestead'}
-			>Homestead</button
-		>
+		<button on:click={() => ($inventoryTab = 'general')} class:active={$inventoryTab === 'general'}>General</button>
+		<button on:click={() => ($inventoryTab = 'weapons')} class:active={$inventoryTab === 'weapons'}>Weapons</button>
+		<button on:click={() => ($inventoryTab = 'relics')}  class:active={$inventoryTab === 'relics'}>Relics</button>
+		<button on:click={() => ($inventoryTab = 'homestead')} class:active={$inventoryTab === 'homestead'}>Homestead</button>
 	</div>
 
 	{#if $inventoryTab === 'homestead'}
 		<div class="sub-tabs">
-			<button
-				on:click={() => ($homesteadSubTab = 'farming')}
-				class:active={$homesteadSubTab === 'farming'}>Farming</button
-			>
-			<button
-				on:click={() => ($homesteadSubTab = 'crafting')}
-				class:active={$homesteadSubTab === 'crafting'}>Crafting</button
-			>
+			<button on:click={() => ($homesteadSubTab = 'farming')}  class:active={$homesteadSubTab === 'farming'}>Farming</button>
+			<button on:click={() => ($homesteadSubTab = 'crafting')} class:active={$homesteadSubTab === 'crafting'}>Crafting</button>
 		</div>
 	{/if}
 
-    {#if $inventoryTab === 'weapons'}
-        <InventoryFilterBar isWeaponTab={true} />
-    {/if}
-    {#if $inventoryTab === 'relics'}
-        <InventoryFilterBar isWeaponTab={false} />
-    {/if}
+	{#if $inventoryTab === 'weapons'}
+		<InventoryFilterBar isWeaponTab={true} />
+	{/if}
+	{#if $inventoryTab === 'relics'}
+		<InventoryFilterBar isWeaponTab={false} />
+	{/if}
 
-	<div class="grid-wrapper">
-		<div class="item-grid">
-			{#each $groupedInventory as item (item.instanceId || item.id)}
-				<div class="grid-item" on:click={() => ($activeItem = item)}>
-					<ItemBox {item} viewSize="small" base="" />
-				</div>
-			{/each}
+	<!-- Grid + Drawer side by side -->
+	<div class="grid-and-drawer">
+		<div class="grid-wrapper">
+			<div class="item-grid">
+				{#each $groupedInventory as item (item.instanceId || item.id)}
+					<div
+						class="grid-item"
+						class:selected={$activeItem?.id === item.id}
+						on:click={() => selectItem(item)}
+						on:contextmenu|preventDefault={(e) => openActionSheet(item, e)}
+					>
+						<ItemBox {item} viewSize="small" base="" />
+
+						<!-- Action sheet above slot on right-click / long-press -->
+						{#if actionSheetItem?.id === item.id}
+							<div class="item-action-sheet">
+								{#if isConsumable(item)}
+									<button class="ias-btn ias-use" on:click|stopPropagation={() => { handleUse(item); closeActionSheet(); }}>Use</button>
+								{/if}
+								{#if isEquippable(item)}
+									<button class="ias-btn ias-equip" on:click|stopPropagation={() => { equipItem(item.instanceId); closeActionSheet(); }}>Equip</button>
+								{/if}
+							</div>
+						{/if}
+					</div>
+				{/each}
+			</div>
 		</div>
-	</div>
 
-	<!-- ====== BOTTOM BOX: STATS & EFFECTS ====== -->
-	<div class="item-stats-box">
-		{#if $activeItem}
-			<div class="scroll-content" bind:this={scrollContent}>
+		<!-- Right drawer — slides in when item selected -->
+		{#if drawerItem}
+			<div class="item-drawer">
+				<button class="drawer-close" on:click={closeDrawer}>✕</button>
+
+				<div class="drawer-img">
+					<ItemBox item={drawerItem} viewSize="large" />
+				</div>
+
+				<div class="drawer-header">
+					<h3 class="drawer-name">{drawerItem.name}</h3>
+					{#if drawerItem.type === 'weapon'}
+						<ElementTag element={drawerItem.element} size="mini" />
+					{/if}
+				</div>
+
+				
+
 				<!-- Stats -->
-				{#if $activeItem.stats && $activeItem.stats.length > 0}
-					<div class="stats-grid">
-						{#each $activeItem.stats as stat (stat.name)}
-							<div class="stat-line">
-								<Stat statId={stat.name} value={stat.value} />
+				{#if drawerItem.stats && drawerItem.stats.length > 0}
+					<!-- <div class="drawer-section-label">Stats</div> -->
+					<div class="drawer-stats">
+						{#each drawerItem.stats as stat}
+							<Stat statId={stat.name} value={stat.value} view="mini" />
+						{/each}
+					</div>
+				{/if}
+
+				<!-- Set info -->
+				{#if relicSet}
+					<div class="drawer-section-label">Set: {relicSet.name}</div>
+					<div class="drawer-set">
+						{#each relicSet.bonuses as bonus}
+							<div class="set-bonus-line">
+								<span class="set-pieces">({bonus.pieces}-pc)</span>
+								{#each bonus.stats as stat, i}
+									{getStatName(stat.name)} {formatValue(stat.value, stat.name)}{i < bonus.stats.length - 1 ? ', ' : ''}
+								{/each}
 							</div>
 						{/each}
 					</div>
 				{/if}
 
-				<!-- Set Info -->
-				{#if relicSet}
-					<div class="set-info">
-						<p>{relicSet.name} <i>(Relic Set)</i></p>
-						<ul>
-							{#each relicSet.bonuses as bonus}
-								<li>
-									<p>
-										({bonus.pieces}-Piece Bonus):
-									</p>
-									{#each bonus.stats as stat, i}
-										{getStatName(stat.name)} +{stat.value}{i < bonus.stats.length - 1 ? ', ' : ''}
-									{/each}
-								</li>
-							{/each}
-						</ul>
+				<!-- Instant effects -->
+				{#if drawerItem.effects && drawerItem.effects.length > 0}
+					<div class="drawer-section-label">Instant Effects</div>
+					<div class="drawer-effects">
+						{#each drawerItem.effects as effect (Object.keys(effect)[0])}
+							<InstantEffectDisplay {effect} />
+						{/each}
 					</div>
 				{/if}
 
-				<!-- Instant & Active Effects -->
-				<div class="effects-list">
-					{#if $activeItem.effects && $activeItem.effects.length > 0}
-						{#each $activeItem.effects as effect (Object.keys(effect)[0])}
-							<InstantEffectDisplay {effect} />
-						{/each}
-					{/if}
-					{#if $activeItem.activeEffects && $activeItem.activeEffects.length > 0}
-						{#each $activeItem.activeEffects as effect (effect.id)}
+				<!-- Active effects -->
+				{#if drawerItem.activeEffects && drawerItem.activeEffects.length > 0}
+					<div class="drawer-section-label">Buffs</div>
+					<div class="drawer-effects">
+						{#each drawerItem.activeEffects as effect (effect.id)}
 							<BuffDisplay {effect} />
 						{/each}
-					{/if}
-				</div>
+					</div>
+				{/if}
 
 				<!-- Exploration -->
-				{#if $activeItem.exploration}
-					<div class="exploration">
-						{#each $activeItem.exploration as effect}
+				{#if drawerItem.exploration}
+					<div class="drawer-section-label">Exploration</div>
+					<div class="drawer-effects">
+						{#each drawerItem.exploration as effect}
 							<ExploBubble name={effect.name} level={effect.level} />
 						{/each}
 					</div>
 				{/if}
-			</div>
-			<div class="buttons">
-				{#if isConsumable($activeItem)}
-					<button class="action-button" on:click={() => useItem($activeItem.instanceId)}>Use</button>
-				{/if}
-				{#if isEquippable($activeItem)}
-					<button class="action-button" on:click={() => equipItem($activeItem.instanceId)}
-						>Equip</button
-					>
-				{/if}
-			</div>
-			{#if isScrollable}
-				<div class="scroll-indicator">
-					<img src="/game_icons/down.png" alt="Scroll down" />
+
+				<p class="drawer-desc">{drawerItem.description}</p>
+
+				<!-- Actions -->
+				<div class="drawer-actions">
+					{#if isConsumable(drawerItem)}
+						<button class="drawer-btn drawer-use" on:click={() => handleUse(drawerItem)}>Use</button>
+					{/if}
+					{#if isEquippable(drawerItem) && !isEquipped(drawerItem)}
+						<button class="drawer-btn drawer-equip" on:click={() => equipItem(drawerItem.instanceId)}>Equip</button>
+					{/if}
+					<!-- Drop: <button class="drawer-btn drawer-drop" on:click={() => { dropItem(drawerItem.instanceId); closeDrawer(); }}>Drop</button> -->
 				</div>
-			{/if}
+			</div>
 		{/if}
 	</div>
 </div>
+
 <style>
 	.inventory {
 		display: flex;
 		flex-direction: column;
-		padding: 1em;
+		padding: 11px 13px 17px;
 		box-sizing: border-box;
-		/* background-color: var(--surface-1); */
-		height: 100%;
-		border-radius: 12px;
-		/* box-shadow: #00000056 0 -6px 0 6px inset; */
-		/* border-top: 3px solid #00000056; */
-	}
-
-	/* ====== TOP BOX ====== */
-	.item-info-box {
-		display: flex;
-		margin-bottom: 1em;
-		height: 120px; /* Fixed height */
-	}
-
-	.item-image {
-		margin-right: 1em;
-		width: 120px;
-		height: 120px;
-		padding-bottom: 0.5rem;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: var(--color-secondary);
-		/* border: 3px solid var(--color-border); */
-		border-radius: 5px;
-		flex-shrink: 0;
-		box-sizing: border-box;
+		border-radius: 8px;
+		border: 1px solid rgba(200, 169, 110, 0.28);
 		box-shadow: #00000056 0 -6px 0 3px inset;
-		border-top: 3px solid #00000056;
 	}
 
-	.item-description {
-		flex-grow: 1;
-		background-color: var(--surface-2);
-		color: var(--color-text);
-		padding: 0.5em 1em;
-		/* border: 3px solid var(--color-border); */
-		border-radius: 5px;
-		display: flex;
-		flex-direction: column;
-		box-sizing: border-box;
-		/* border: 3px solid var(--color-border); */
-		box-shadow: #00000056 0 -6px 0 3px inset;
-		border-top: 3px solid #00000056;
-	}
-
-	.item-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1em;
-	}
-
-	.item-header h3 {
-		margin: 0;
-		color: var(--text-item-name);
-		font-family: var(--font-family-main);
-		font-size: 1.2rem;
-		font-weight: 400;
-		flex-grow: 1;
-	}
-
-	.element-icon {
-		width: 24px;
-		height: 24px;
-	}
-
-	.description-text {
-		font-family: var(--font-family-pixel);
-		font-size: 0.8rem;
-		color: var(--color-text-muted);
-		color: var(--text-muted);
-		flex-grow: 1;
-		overflow-y: auto;
-		padding-top: 0.5em;
-		/* line-break: normal; */
-		white-space: pre-line;
-	}
-
-	/* ====== BOTTOM BOX ====== */
-	.item-stats-box {
-		position: relative;
-		/* border: 3px solid var(--color-border); */
-		border-radius: 5px;
-		background-color: var(--surface-2);
-		margin-bottom: 1rem;
-		flex-grow: 1;
-		min-height: 0; /* Prevent flex overflow */
-		display: flex;
-		flex-direction: column;
-		padding-bottom: 1rem;
-		box-shadow: #00000056 0 -6px 0 3px inset;
-		box-sizing: border-box;
-		border-top: 3px solid #00000056;
-	}
-
-	.scroll-content {
-		overflow-y: auto;
-		padding: 1em;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5em;
-		scrollbar-width: none;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		gap: 0.5em 1em;
-		font-size: 0.75em;
-		color: var(--color-text);
-	}
-
-	.effects-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5em;
-	}
-
-	.set-info {
-		/* font-style: italic; */
-		color: var(--color-accent);
-		font-size: 0.9em;
-		/* background-color: var(--color-background); */
-		background-color: rgba(0, 0, 0, 0.2);
-		padding: 1rem;
-		border-radius: 6px;
-		font-family: var(--font-family-pixel);
-		/* font-size: .75rem; */
-		/* margin-block: 1rem; */
-		color: var(--color-text);
-	}
-	.set-info ul {
-		list-style-type: none;
-		padding-left: 0rem;
-		/* margin: 0.5em 0 0 0; */
-		font-style: normal;
-		font-size: 0.9em;
-		display: flex;
-		flex-direction: column;
-	}
-	.set-info li {
-		border-radius: 4px;
-		color: var(--color-primary);
-		background-color: hsl(0, 0%, 0%, .5);
-		padding: 8px 16px;
-        margin-bottom: 8px;
-
-        p {
-            color: var(--color-text-muted);
-
-            i {
-                color: var(--color-secondary);
-            }
-        }
-	}
-
-	.buttons {
-		position: absolute;
-		bottom: 1rem;
-		right: 1rem;
-		display: flex;
-		gap: 0.5em;
-	}
-
-	.scroll-indicator {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		transform: translateX(-50%);
-		animation: bounce 2s infinite;
-	}
-
-	@keyframes bounce {
-		0%,
-		20%,
-		50%,
-		80%,
-		100% {
-			transform: translate(-50%, 0);
-		}
-		40% {
-			transform: translate(-50%, -3px);
-		}
-		60% {
-			transform: translate(-50%, -1.5px);
-		}
-	}
-
+	/* ── Tabs ── */
 	.tabs {
 		display: flex;
 		flex-shrink: 0;
-		border-inline: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
+		border-inline: 3px solid rgba(0,0,0,0.3);
+		margin-bottom: 0;
 	}
-
 	.tabs button {
 		font-family: var(--font-family-pixel);
-		font-size: 1rem;
+		font-size: 0.75rem;
 		box-sizing: border-box;
-		background-color: color-mix(in srgb, var(--surface-2) 70%, black);
+		background-color: rgba(0,0,0,0.3);
 		color: var(--text-muted);
 		padding: 0.5rem 1rem;
 		cursor: pointer;
 		flex-grow: 1;
 		border: none;
-		/* border-radius: 6px; */
-		/* box-shadow: #00000056 0 -3px 0 3px inset; */
-		transition: all 0.2s ease-in-out;
-		border-top: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
+		transition: all 0.15s;
+		border-top: 3px solid rgba(0,0,0,0.3);
 	}
-
 	.tabs button.active {
 		background: var(--color-accent);
 		color: var(--text-white);
-		/* border-color: #09625b; */
-		/* box-shadow: #09625b 4px 4px, #00000056 0 -3px 0 3px inset; */
-		/* font-weight: 600; */
-		/* color: var(--text-muted); */
 	}
-
 	.sub-tabs {
 		display: flex;
-		/* margin-bottom: 0.5em; */
 		flex-shrink: 0;
-		background-color: color-mix(in srgb, var(--surface-2) 70%, black);
-		border-inline: 3px solid color-mix(in srgb, var(--surface-2) 50%, black);
+		background-color: rgba(0,0,0,0.2);
+		border-inline: 3px solid rgba(0,0,0,0.3);
 	}
-
 	.sub-tabs button {
 		border: none;
-		background: var(--surface-2);
-		background-color: transparent;
+		background: transparent;
 		color: var(--color-text-muted);
 		padding: 0.25rem 0.75rem;
 		cursor: pointer;
 		border-radius: 3px;
+		font-family: var(--font-family-pixel);
+		font-size: 0.7rem;
 	}
+	.sub-tabs button.active { color: var(--color-accent); }
 
-	.sub-tabs button.active {
-		/* background: var(--color-secondary); */
-		color: var(--color-accent);
+	/* ── Grid + Drawer layout ── */
+	.grid-and-drawer {
+		display: flex;
+		gap: 8px;
+		align-items: flex-start;
+		min-height: 0;
 	}
 
 	.grid-wrapper {
-		background-color: transparent;
+		flex: 1;
+		min-width: 0;
 		overflow-y: auto;
-		height: calc(5 * (40px + 10px));
+		max-height: calc(5 * (44px + 4px) + 16px);
 		scrollbar-width: none;
-		margin-bottom: 1rem;
 		border-radius: 0 0 6px 6px;
 		box-shadow: #00000056 0 -6px 0 3px inset;
-		border-top: 3px solid #00000056;
-		transition: all 0.2s ease-in-out;
-		background-color: var(--surface-2);
+		border-top: 3px solid rgba(0,0,0,0.3);
+		background-color: rgba(30,24,16,0.6);
+		transition: max-height 0.2s ease;
 	}
 
 	.item-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, 45px);
-		gap: 4px;
+		grid-template-columns: repeat(auto-fill, 44px);
+		gap: 7px 3px;
 		justify-content: flex-start;
-		padding: 16px 0px 16px 8px;
+		padding: 10px 6px 10px 8px;
 	}
 
+	/* ── Grid items ── */
 	.grid-item {
 		width: 40px;
 		height: 40px;
-		/* padding: 4px 2px; */
+		position: relative;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
+		justify-content: center;
 		cursor: pointer;
-		/* background-color: rgba(0, 0, 0, 0.208); */
-		background-color: rgb(47, 47, 47);
-		/* border: 1px solid var(--color-border); */
-		/* box-shadow: #00000056 0 -2px 0 2px inset; */
-		/* border-top: 2px solid #00000056; */
-		/* border-radius: 5px; */
-		/* display: inline-block; */
-        padding: 2px;
-
+		background-color: rgba(40, 34, 24, 0.9);
+		border: 1px solid rgba(200, 169, 110, 0.08);
+		border-radius: 4px;
+		padding: 2px;
+		box-sizing: border-box;
+		transition: border-color 0.1s, background-color 0.1s;
 	}
 
 	.grid-item:hover {
-		transition: 0.1s all ease-in;
-		background-color: var(--color-text);
-		/* cursor: none; */
+		border-color: rgba(200, 169, 110, 0.35);
+		background-color: rgba(60, 50, 30, 0.9);
 	}
 
-	.action-button {
-		font-family: var(--font-family-pixel);
-		background-color: var(--color-accent);
-		color: var(--text-white);
-		border: none;
-		padding: 0.5rem 1rem;
-		border-radius: 3px;
-		font-size: 0.8em;
-		line-height: 1;
+	.grid-item.selected {
+		border-color: rgba(200, 169, 110, 0.8);
+		box-shadow: 0 0 0 1px rgba(200, 169, 110, 0.4);
+	}
+
+
+/* ── Item action sheet (right-click) ── */
+	.sheet-backdrop {
+		position: fixed;
+		inset: 0;
+		z-index: 98;
+	}
+
+	.item-action-sheet {
+		position: absolute;
+		bottom: calc(100% + 4px);
+		left: 50%;
+		transform: translateX(-50%);
+		background: #1c1610;
+		border: 1px solid rgba(200, 169, 110, 0.35);
+		border-radius: 6px 6px 0 0;
+		padding: 5px;
+		display: flex;
+		gap: 4px;
+		z-index: 99;
+		box-shadow: 0 -4px 12px rgba(0,0,0,0.5);
 		white-space: nowrap;
-		cursor: pointer;
-		box-shadow:
-			inset 0 30px 30px -15px rgba(255, 255, 255, 0.1),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.3),
-			inset 0 1px 20px rgba(0, 0, 0, 0),
-			0 3px 0 #00000056,
-			0 3px 2px rgba(0, 0, 0, 0.2),
-			0 5px 10px rgba(0, 0, 0, 0.1),
-			0 10px 20px rgba(0, 0, 0, 0.1);
-		border-radius: 6px;
-		transition: 150ms all ease-in-out;
-
-		&:active {
-			transform: translateY(3px);
-			box-shadow:
-				inset 0 16px 2px -15px rgba(0, 0, 0, 0),
-				inset 0 0 0 1px rgba(255, 255, 255, 0.15),
-				inset 0 1px 20px rgba(0, 0, 0, 0.1),
-				0 0 0 #00000056,
-				0 0 0 2px rgba(255, 255, 255, 0.5),
-				0 0 0 rgba(0, 0, 0, 0),
-				0 0 0 rgba(0, 0, 0, 0);
-		}
 	}
+
+	.ias-btn {
+		padding: 4px 10px;
+		border-radius: 4px;
+		font-family: var(--font-family-pixel);
+		font-size: 0.55rem;
+		cursor: pointer;
+		border: 1px solid;
+		transition: background 0.1s;
+	}
+	.ias-use   { background: rgba(60,160,90,0.15);  border-color: rgba(60,160,90,0.4);  color: #50c878; }
+	.ias-equip { background: rgba(200,169,110,0.12); border-color: rgba(200,169,110,0.4); color: #c8a96e; }
+	.ias-drop  { background: rgba(180,50,50,0.12);   border-color: rgba(180,50,50,0.35);  color: #d06060; }
+	.ias-use:hover   { background: rgba(60,160,90,0.28); }
+	.ias-equip:hover { background: rgba(200,169,110,0.25); }
+	.ias-drop:hover  { background: rgba(180,50,50,0.25); }
+
+	/* ── Right drawer ── */
+	.item-drawer {
+		width: 200px;
+		flex-shrink: 0;
+		border-radius: 8px;
+		border: 1px solid rgba(200, 169, 110, 0.25);
+		background: rgba(28, 22, 16, 0.95);
+		box-shadow: #00000056 0 -5px 0 2px inset;
+		padding: 12px 12px 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		position: relative;
+		max-height: calc(5 * (44px + 4px) + 16px);
+		overflow-y: auto;
+		scrollbar-width: none;
+	}
+
+	.drawer-close {
+		position: absolute;
+		top: 6px;
+		right: 8px;
+		background: none;
+		border: none;
+		color: rgba(200,169,110,0.4);
+		font-size: 0.7rem;
+		cursor: pointer;
+		padding: 2px 4px;
+		line-height: 1;
+	}
+	.drawer-close:hover { color: rgba(200,169,110,0.8); }
+
+	.drawer-img {
+		display: flex;
+		/* justify-content: center;
+		align-items: center; */
+		/* padding: 8px; */
+		/* background: rgba(0,0,0,0.2); */
+		border-radius: 6px;
+		/* border: 1px solid rgba(200,169,110,0.12); */
+	}
+
+	.drawer-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 6px;
+	}
+
+	.drawer-name {
+		margin: 0;
+		font-family: var(--font-family-main);
+		font-size: 1rem;
+		font-weight: 400;
+		color: var(--text-item-name, #c8a96e);
+		flex-grow: 1;
+	}
+
+	.drawer-desc {
+		font-family: var(--font-family-pixel);
+		font-size: 0.65rem;
+		color: var(--text-muted);
+		line-height: 1.5;
+	}
+
+	.drawer-section-label {
+		font-family: var(--font-family-pixel);
+		font-size: 0.55rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: rgba(200,169,110,0.4);
+		margin-top: 2px;
+	}
+
+	.drawer-stats {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.drawer-set {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+	}
+
+	.set-bonus-line {
+		font-family: var(--font-family-pixel);
+		font-size: 0.6rem;
+		color: var(--color-accent);
+		padding: 4px 8px;
+		background: rgba(0,0,0,0.25);
+		border-radius: 4px;
+	}
+	.set-pieces {
+		color: var(--text-muted);
+		margin-right: 4px;
+	}
+
+	.drawer-effects {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+
+	.drawer-actions {
+		display: flex;
+		gap: 6px;
+		margin-top: auto;
+		padding-top: 4px;
+		border-top: 1px solid rgba(200,169,110,0.1);
+	}
+
+	.drawer-btn {
+		flex: 1;
+		padding: 6px 0;
+		border-radius: 5px;
+		font-family: var(--font-family-pixel);
+		font-size: 0.6rem;
+		cursor: pointer;
+		border: 1px solid;
+		text-align: center;
+		transition: background 0.1s;
+	}
+	.drawer-use   { background: rgba(60,160,90,0.15);  border-color: rgba(60,160,90,0.4);  color: #50c878; }
+	.drawer-equip { background: rgba(200,169,110,0.12); border-color: rgba(200,169,110,0.4); color: #c8a96e; }
+	.drawer-drop  { background: rgba(180,50,50,0.12);   border-color: rgba(180,50,50,0.35);  color: #d06060; }
+	.drawer-use:hover   { background: rgba(60,160,90,0.28); }
+	.drawer-equip:hover { background: rgba(200,169,110,0.25); }
+	.drawer-drop:hover  { background: rgba(180,50,50,0.25); }
 
 	@media (max-width: 768px) {
-		.grid-wrapper {
-			height: auto;
-			overflow-y: visible;
-		}
+		.grid-wrapper { max-height: none; }
+		.item-drawer  { max-width: 100%; max-height: none; }
+		/* .grid-and-drawer { flex-direction: column;} */
 	}
 </style>

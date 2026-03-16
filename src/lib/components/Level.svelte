@@ -8,16 +8,25 @@
 </script>
 
 <div class="player-level">
-	<img src={icon} alt="Level" class="lv-icon" />
+	<!-- <img src={icon} alt="Level" class="lv-icon" /> -->
+	<div class="lv-main">
+		<p>
+			Level
+		</p>
+		<span>
+			{level}
+		</span>
+	</div>
+
 	<div class="lv-body">
 		<div class="lv-header">
-			<span class="lv-label">Level</span>
-			<span class="lv-value">Lv. {level}</span>
+			<!-- <span class="lv-label">Player Level</span> -->
+			<!-- <span class="lv-value">Lv. {level}</span> -->
+			<div class="lv-track">
+				<div class="lv-fill" style="width: {pct}%"></div>
+			</div>
+			<span class="lv-xp">{currentXp} / {maxXp} XP</span>
 		</div>
-		<div class="lv-track">
-			<div class="lv-fill" style="width: {pct}%"></div>
-		</div>
-		<span class="lv-xp">{currentXp} / {maxXp} XP</span>
 	</div>
 </div>
 
@@ -26,6 +35,7 @@
         width: 100%;
         /* margin-bottom: 1rem; */
 		display: flex;
+		flex-direction: row-reverse;
 		align-items: center;
         box-sizing: border-box;
 		gap: 8px;
@@ -47,6 +57,25 @@
 		flex-shrink: 0;
 	}
 
+	.lv-main {
+		font-family: "Silkscreen";
+		font-weight: 600;
+		font-size: 1.3rem;
+		color: var(--orange);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		p {
+			font-size: .5rem;
+			font-weight: 400;
+			padding: 0;
+			margin: 0;
+		}
+		span {
+			line-height: 1rem;
+		}
+	}
+
 	.lv-body {
 		flex: 1;
 		display: flex;
@@ -56,8 +85,10 @@
 
 	.lv-header {
 		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
+		flex-direction: column-reverse;
+		/* justify-content: space-between; */
+		/* align-items: baseline; */
+		width: 100%;
 	}
 
 	.lv-label {
@@ -96,8 +127,10 @@
 
 	.lv-xp {
 		font-family: var(--font-family-pixel);
-		font-size: 0.45rem;
+		font-size: 0.5rem;
 		color: var(--text-muted, #5a5040);
 		letter-spacing: 0.06em;
+		margin-bottom: .25rem;
+		margin-left: 3px;
 	}
 </style>

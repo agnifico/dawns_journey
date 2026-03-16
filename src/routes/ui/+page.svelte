@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
+	import ExploBubble_OLD from './ExploBubble.svelte';
 	import ExploBubble from '$lib/components/ExploBubble.svelte';
 
 	const total = 3;

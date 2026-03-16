@@ -413,7 +413,7 @@ export const weapons: Item[] = [
         image: "/weapons/jade_spear.png", type: "weapon",
         stats: [{ name: "physicalAttack", value: 130 }, { name: "evasion", value: 25 }, { name: "precision", value: 20 }, { name: "speed", value: 15 }],
         element: "Wind",  flags: ['polearm'], instanceId: '',
-        gearPassives: [{ id: 'stun_immunity', name: 'Stun Immunity', flags: ['immune_to_stun'] }]
+        gearPassives: [{ id: 'stun_immunity', name: 'Stun Immunity', flags: ['immune_to_stun'], description: 'Gain complete immunity to [Stun]' }]
     },
     {
         id: "sun_wukongs_staff", name: "Sun Wukong's Staff",

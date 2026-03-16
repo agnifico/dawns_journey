@@ -16,44 +16,30 @@
         '/images/characters/player5.png',
         '/images/characters/player6.png',
         '/images/characters/player7.png',
-        // '/images/characters/player8.png',
         '/images/characters/player9.png',
-        // '/images/characters/player10.png',
         '/images/characters/player11.png',
-        // '/images/characters/player12.png',
         '/images/characters/player13.png',
         '/images/characters/player14.png',
-        // '/images/characters/player15.png',
         '/images/characters/player16.png',
-        // '/images/characters/player17.png',
         '/images/characters/player18.png',
         '/images/characters/player19.png',
         '/images/characters/player20.png',
     ];
-    
+
     let selectedAvatar = $playerStore.profile.avatar;
     let currentIndex = avatars.indexOf(selectedAvatar);
 
-    function startEditing() {
-        editing = true;
-    }
-
+    function startEditing() { editing = true; }
     function cancelEditing() {
         editing = false;
         selectedAvatar = $playerStore.profile.avatar;
         currentIndex = avatars.indexOf(selectedAvatar);
     }
-
-    function selectAvatar() {
-        setAvatar(selectedAvatar);
-        editing = false;
-    }
-
+    function selectAvatar() { setAvatar(selectedAvatar); editing = false; }
     function nextAvatar() {
         currentIndex = (currentIndex + 1) % avatars.length;
         selectedAvatar = avatars[currentIndex];
     }
-
     function prevAvatar() {
         currentIndex = (currentIndex - 1 + avatars.length) % avatars.length;
         selectedAvatar = avatars[currentIndex];
@@ -64,90 +50,109 @@
     <div class="avatar-container">
         <img src={selectedAvatar} alt="Player Avatar" class="avatar-image" />
         {#if !editing}
-            <button class="edit-button" on:click={startEditing}>Change</button>
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <div class="edit-overlay" on:click={startEditing}>
+                <span class="edit-label">Change</span>
+            </div>
+        {:else}
+            <div class="edit-controls">
+                <button class="ctrl-btn" on:click={prevAvatar}>
+                    <img src="/game_icons/arrow_left.png" alt="Previous">
+                </button>
+                <div class="ctrl-confirm">
+                    <button class="ctrl-btn" on:click={selectAvatar}>
+                        <img src="/game_icons/confirm.png" alt="Select">
+                    </button>
+                    <button class="ctrl-btn" on:click={cancelEditing}>
+                        <img src="/game_icons/cancel.png" alt="Cancel">
+                    </button>
+                </div>
+                <button class="ctrl-btn" on:click={nextAvatar}>
+                    <img src="/game_icons/arrow_right.png" alt="Next">
+                </button>
+            </div>
         {/if}
     </div>
-
-    {#if editing}
-        <div class="controls">
-            <button on:click={prevAvatar}><img src="/game_icons/arrow_left.png" alt="Previous"></button>
-            <div class="buttons">
-                <button on:click={selectAvatar}><img src="/game_icons/confirm.png" alt="Select"></button>
-                <button on:click={cancelEditing}><img src="/game_icons/cancel.png" alt="Cancel"></button>
-            </div>
-            <button on:click={nextAvatar}><img src="/game_icons/arrow_right.png" alt="Next"></button>
-        </div>
-    {/if}
 </div>
 
 <style>
     .avatar-selector {
-        image-rendering: auto;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 180px;
-        min-width: 180px;
-        box-sizing: border-box;
-        &:hover .edit-button {
-            visibility: visible;
-        }
+        flex-shrink: 0;
     }
+
     .avatar-container {
         position: relative;
-        /* max-width: 200px; */
-        flex-grow: 1;
-        border-radius: 12px;
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
         overflow: hidden;
-        border: 3px solid rgba(196, 154, 54, 0.602);
-        box-shadow: #00000056 0 6px 10px 0px;
+        border: 2px solid rgba(196, 154, 54, 0.5);
+        box-shadow: #00000056 0 6px 10px 0;
+        cursor: pointer;
     }
+
+    .avatar-container:hover .edit-overlay {
+        opacity: 1;
+    }
+
     .avatar-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: top center;
+        image-rendering: auto;
     }
-    .edit-button {
-        visibility: hidden;
+
+    .edit-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 8px;
+        opacity: 0;
+        transition: opacity 0.15s;
+    }
+
+    .edit-label {
+        font-family: var(--font-family-pixel);
+        font-size: 0.6rem;
+        color: rgba(228, 216, 190, 0.85);
+        letter-spacing: 0.08em;
+    }
+
+    .edit-controls {
         position: absolute;
         bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: rgba(0, 0, 0, 0.7);
-        color: white;
-        border: none;
-        padding: 0.25em 0.5em;
-        border-radius: 5px;
-        cursor: pointer;
-        font-family: var(--font-family-pixel);
-    }
-    .controls {
-        image-rendering: pixelated;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.75);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
-        margin-bottom: 3px;
-        border-radius: 0 0 8px 8px;
-        position: absolute;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.7);
+        padding: 4px 6px;
+        image-rendering: pixelated;
     }
-    .controls button {
+
+    .ctrl-btn {
         background: none;
         border: none;
         cursor: pointer;
-    }
-    .controls button img {
-        width: 24px;
-        height: 24px;
-    }
-    .buttons {
+        padding: 2px;
         display: flex;
-        justify-content: center;
-        gap: .5rem;
-        
+        align-items: center;
+    }
+
+    .ctrl-btn img {
+        width: 20px;
+        height: 20px;
+        image-rendering: pixelated;
+    }
+
+    .ctrl-confirm {
+        display: flex;
+        gap: 4px;
     }
 </style>

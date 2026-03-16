@@ -32,8 +32,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         name: 'Abandoned Shack',
         image: '/locations/shack.jpg',
         shortDesc: 'A weathered treasure chest.',
-        stepOnMessage: ['You\'ve found a treasure chest!','You opened the chest and found a stash of mead!','Go give it to Hela, you know she\'ll like it',],
-        message: ['You opened the chest and found a stash of mead!','Go give it to Hela, you know she\'ll like it'],
+        stepOnMessage: ['You\'ve found a treasure chest!', 'You opened the chest and found a stash of mead!', 'Go give it to Hela, you know she\'ll like it',],
+        message: ['You opened the chest and found a stash of mead!', 'Go give it to Hela, you know she\'ll like it'],
         effects: [{ type: 'give_item', itemId: 'forza_mead', quantity: 10 }],
         afterDescription: 'An empty treasure chest. You remember finding some mead here.',
     },
@@ -54,18 +54,18 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             },
         ],
     },
-    small_cave_1: {
-        id: 'small_cave_1',
-        name: 'Small cave in the woods',
+    malefic_cave: {
+        id: 'malefic_cave',
+        name: 'Malefic Cave',
         image: '/locations/crevice.png',
-        shortDesc: 'A small caved-in section of a small hill.',
-        stepOnMessage: 'You see something glittering in there.',
-        message: 'You swapped the stone for the gem.',
+        shortDesc: 'A dark aura emanates from the cave.',
+        stepOnMessage: ['You feel a nauseating dark aura seeping out of the small crevice by the hill.', 'You dare to venture in, finding a crack in the ground, with the dragon\'s lifeforce oozing out, but with maleficence.'],
+        message: ['You unleash your command over the elements and manage to contain the energy into the Empty Energy Orb Veres gave you.', 'The bulk of the unbound malefic energy is now contained. The area should be safe.', 'You should let Veres know.'],
         actions: [
             {
-                text: 'Swap a Stone for the Gem',
+                text: 'Contain the unbound energy using your Elemental powers.',
                 effects: [
-                    { type: 'SWAP_ITEM', takeItemId: 'stone', takeQuantity: 1, giveItemId: 'saints_greatsword', giveQuantity: 1 }
+                    { type: 'SWAP_ITEM', takeItemId: 'empty_energy_orb', takeQuantity: 1, giveItemId: 'dragon_energy_orb', giveQuantity: 1 }
                 ],
             },
         ],
@@ -128,30 +128,30 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         stepOnMessage: "You stand at a shattered crossroads, the path ahead diverging.",
         message: "Both the Solis Saints and the Shadowhand have presented you with an ultimatum. Your decision will shape your future alliances. Who will you side with?",
         actions: [
-          {
-            text: "Side with the Solis Saints",
-            requirement: { "type": "have_tag", "tag": "guinevere_ready_for_f3" },
-            effects: [
-              { type: "set_quest_state", questId: "guinevere_sword_4", state: "COMPLETED" },
-              { type: "set_quest_state", questId: "akari_sword_2", state: "FAILED" },
-              { type: "add_reputation", faction: "solis_saints", amount: 25 },
-              { type: "add_reputation", faction: "shadowhand", amount: -15 },
-              { type: "add_tag", tag: "chose_solis_saints" }
-            ],
-            responseMessage: "You have chosen to align with the Solis Saints. The path of light is now clearer, but shadows of resentment may follow."
-          },
-          {
-            text: "Side with the Shadowhand",
-            requirement: { "type": "have_tag", "tag": "akari_ready_for_f3" },
-            effects: [
-              { type: "set_quest_state", questId: "akari_sword_2", state: "COMPLETED" },
-              { type: "set_quest_state", questId: "guinevere_sword_4", state: "FAILED" },
-              { type: "add_reputation", faction: "shadowhand", amount: 25 },
-              { type: "add_reputation", faction: "solis_saints", amount: -15 },
-              { type: "add_tag", tag: "chose_shadowhand" }
-            ],
-            responseMessage: "You have cast your lot with the Shadowhand. You gain favor in the underworld, but have made a powerful enemy in the light."
-          }
+            {
+                text: "Side with the Solis Saints",
+                requirement: { "type": "have_tag", "tag": "guinevere_ready_for_f3" },
+                effects: [
+                    { type: "set_quest_state", questId: "guinevere_sword_4", state: "COMPLETED" },
+                    { type: "set_quest_state", questId: "akari_sword_2", state: "FAILED" },
+                    { type: "add_reputation", faction: "solis_saints", amount: 25 },
+                    { type: "add_reputation", faction: "shadowhand", amount: -15 },
+                    { type: "add_tag", tag: "chose_solis_saints" }
+                ],
+                responseMessage: "You have chosen to align with the Solis Saints. The path of light is now clearer, but shadows of resentment may follow."
+            },
+            {
+                text: "Side with the Shadowhand",
+                requirement: { "type": "have_tag", "tag": "akari_ready_for_f3" },
+                effects: [
+                    { type: "set_quest_state", questId: "akari_sword_2", state: "COMPLETED" },
+                    { type: "set_quest_state", questId: "guinevere_sword_4", state: "FAILED" },
+                    { type: "add_reputation", faction: "shadowhand", amount: 25 },
+                    { type: "add_reputation", faction: "solis_saints", amount: -15 },
+                    { type: "add_tag", tag: "chose_shadowhand" }
+                ],
+                responseMessage: "You have cast your lot with the Shadowhand. You gain favor in the underworld, but have made a powerful enemy in the light."
+            }
         ]
     },
     teleport_to_cathedral: {

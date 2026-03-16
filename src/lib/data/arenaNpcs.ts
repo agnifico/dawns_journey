@@ -48,7 +48,7 @@ const arenaNpcs: Record<string, Combatant> = {
         ...sylvieTemplate,
         baseStats: {
             ...withAccuracy(sylvieTemplate.baseStats),
-            maxHp: 420, hp: 420,
+            maxHp: 600, hp: 600,
             maxAuraShield: 60, auraShield: 60,
             physicalAttack: 120, elementalAttack: 165,
             physicalDefence: 200, elementalDefence: 220,
@@ -272,7 +272,7 @@ const arenaNpcs: Record<string, Combatant> = {
     // -----------------------------------------------------------------------
     aoife: {
         ...aoifeTemplate,
-        baseStats: { ...withAccuracy(aoifeTemplate.baseStats), hp: 160, maxHp: 160 },
+        baseStats: { ...withAccuracy(aoifeTemplate.baseStats), hp: 400, maxHp: 400, physicalAttack: 400, elementalDefence: 300},
         arenaBehavior: {
             phases: [
                 {

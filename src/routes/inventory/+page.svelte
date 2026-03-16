@@ -9,14 +9,12 @@
 
 <main>
     <div class="desktop-layout">
-        <div class="player-stats-column">
+        <div class="left-column">
             <PlayerStats />
             <FactionDisplay />
         </div>
-        <div class="equipment-column">
+        <div class="right-column">
             <Equipment />
-        </div>
-        <div class="inventory-column">
             <Inventory />
         </div>
     </div>
@@ -43,32 +41,49 @@
         display: flex;
         flex-direction: column;
         position: relative;
-        background-color: #1c1e21;
+        background-color: #1a1610;
     }
 
     .desktop-layout {
         height: 100%;
         flex-grow: 1;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 2rem;
-        padding: 1rem 2rem;
+        grid-template-columns: 380px 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        align-items: start;
+        box-sizing: border-box;
     }
 
-    .player-stats-column, .equipment-column, .inventory-column {
-        /* overflow-y: auto; */
-        /* background-color: transparent; */
-        /* border: 6px solid var(--color-border); */
-        border-radius: 12px;
-        min-height: 0;
-        /* box-shadow: var(--color-border) 4px 4px; */
-        height: fit-content;
-        /* height: 80%; */
+    .left-column {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        position: sticky;
+        top: 1rem;
+        /* border: 1px solid white; */
+    }
+
+    .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        min-width: 0;
+        /* overflow: hidden; */
     }
 
     .mobile-layout {
         display: none;
         align-items: center;
+    }
+
+    @media (max-width: 900px) {
+        .desktop-layout {
+            grid-template-columns: 1fr;
+        }
+        .left-column {
+            position: static;
+        }
     }
 
     @media (max-width: 768px) {
@@ -77,7 +92,7 @@
         }
         .mobile-layout {
             display: block;
-            background-color: #1c1e21;
+            background-color: #1a1610;
         }
     }
 </style>

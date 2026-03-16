@@ -14,6 +14,7 @@
 	import ChoiceMenu from './ChoiceMenu.svelte';
 	import EventScreen from '../EventScreen.svelte';
 	import { toastStore } from '$lib/stores/toastStore';
+	import HPBar from '../HPBar.svelte';
 
 	$: bread = getFirstInventoryItem($playerStore.inventory, 'bread');
 	$: breadCount = $playerStore.inventory.filter((i) => i.id === 'bread').length;
@@ -73,12 +74,14 @@
 		<div class="row-flex">
 			<TimeDisplay />
 			<div class="stat-bars">
-				<StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
+				<HPBar type="hp" current={$playerStats.hp} max={$playerStats.maxHp} />
+				<HPBar type="aura" current={$playerStats.auraShield} max={$playerStats.maxAuraShield} />
+				<!-- <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
 				<StatBar
 					current={$playerStats.auraShield}
 					max={$playerStats.maxAuraShield}
 					color="#a98467"
-				/>
+				/> -->
 			</div>
 		</div>
 		<MapEventNotif />
@@ -248,6 +251,7 @@
 		background-color: rgba(0, 0, 0, 0.5);
 		padding: 0.5rem;
 		border-radius: 8px;
+		width: 200px;
 	}
 
 	@media (max-width: 768px) {

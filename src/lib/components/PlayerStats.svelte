@@ -75,12 +75,12 @@
 					</div>
 				</div> -->
 				<!-- <div class="stats-column"> -->
-				<!-- <Stat
+				<Stat
 					view="short"
 					statId="hp"
 					value={`${$playerStats.hp} / ${$playerStats.maxHp}`}
 					baseValue={$playerStore.baseStats.maxHp}
-				/> -->
+				/>
 				<Stat
 					view="short"
 					statId="physicalAttack"
@@ -109,12 +109,12 @@
 				<!-- </div> -->
 				<!-- <div class="stats-column"> -->
 
-				<!-- <Stat
+				<Stat
 					view="short"
 					statId="maxAuraShield"
 					value={$playerStats.maxAuraShield}
 					baseValue={$playerStore.baseStats.maxAuraShield}
-				/> -->
+				/>
 
 				<Stat
 					view="short"
@@ -212,7 +212,7 @@
 		/* box-shadow: #00000056 0 -6px 0 6px inset; */
 		/* border-top: 3px solid #00000056; */
 		/* height: 100%; */
-		width: 400px;
+		/* width: 100%; */
 	}
 	.header {
 		width: 100%;

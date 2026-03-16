@@ -64,11 +64,11 @@ export const sets: Set[] = [
     {
         id: 'sky_jewels',
         name: 'Trinkets of the Sky',
-        relicIds: ['ring_of_the_sky', 'brooch_of_the_sky'],
+        relicIds: ['ring_of_the_sky', 'brooch_of_the_sky', 'sky_amulet'],
         bonuses: [
             {
-                pieces: 2,
-                stats: [{ name: 'precision', value: 20 }, { name: 'evasion', value: 20 }]
+                pieces: 3,
+                stats: [{ name: 'precision', value: 25 }, { name: 'evasion', value: 25 }, { name: "speed", value: 20 }, { name: "physicalAttack", value: 125 }]
             }
         ]
     },

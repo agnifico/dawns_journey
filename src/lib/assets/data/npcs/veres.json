@@ -18,7 +18,10 @@
     "description": "A dark-winged angel who has watched this island longer than the Saints have been building on it. She chose the mountain. She does not regret this.",
     "faction": "",
     "isCombatant": true,
-    "types": ["Dark", "Wind"],
+    "types": [
+        "Dark",
+        "Wind"
+    ],
     "baseStats": {
         "hp": 600,
         "maxHp": 600,
@@ -95,7 +98,9 @@
             "stages": [
                 {
                     "objective": "Speak with Veres",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "I know Hela sent you.",
                         "I'm not annoyed. I expected it eventually.",
@@ -119,8 +124,14 @@
                         "I do that. It helps me remember I'm still in motion, even when I'm sitting still."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "veres_sword_1_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 5
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "veres_sword_1_complete"
+                        }
                     ]
                 }
             ]
@@ -136,7 +147,9 @@
             "stages": [
                 {
                     "objective": "Speak with Veres",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "Something is wrong with the Biceons. I can feel it in the wind off the mountain.",
                         "Come back soon. I don't like what I'm hearing."
@@ -172,9 +185,24 @@
                         "Come. Sit. Tell me what you found."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "veres_sword_2_complete" },
-                        { "type": "item", "itemId": "bite_mark",  "quantity": 1}
+                        {
+                            "type": "world_resonance",
+                            "amount": 5
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "veres_sword_2_complete"
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "bite_mark",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "empty_energy_orb",
+                            "quantity": 1
+                        }
                     ]
                 }
             ]
@@ -190,7 +218,9 @@
             "stages": [
                 {
                     "objective": "Speak with Veres",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "I'm still listening. Come back shortly."
                     ],
@@ -207,19 +237,29 @@
                         "This is not that.",
                         "I want you to go to the southern edge of the mountain range — the closest point to the Tower site.",
                         "There's a place the Biceons used to graze. I need to know if they're still going there.",
-                        "Look for tracks. Look for what's missing.",
+                        "Look for a small cave.",
                         "I'll be here. Working something out."
                     ]
                 },
                 {
                     "objective": "Investigate the Biceon grazing grounds",
                     "requirement": {
-                        "type": "finish_location_event",
-                        "eventId": "small_cave_1"
+                        "operator": "AND",
+                        "conditions": [
+                            {
+                                "type": "have_item",
+                                "itemId": "dragon_energy_orb",
+                                "quantity": 1
+                            },
+                            {
+                                "type": "finish_location_event",
+                                "eventId": "malefic_cave"
+                            }
+                        ]
                     },
                     "reminder_dialogue": [
-                        "Southern edge of the mountain range. Look for the flat expanse below the snowline.",
-                        "You'll know it by the silence. Nothing grazes there anymore."
+                        "Southern edge of the mountain range. Look for a source of malevolent energy.",
+                        "Something must be throwing my dear Biceons away..."
                     ],
                     "success_dialogue": [
                         "Empty.",
@@ -233,9 +273,19 @@
                         "You stop worrying about consistency and start worrying about whether you're still curious."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 8 },
-                        { "type": "tag", "tagId": "veres_sword_3_complete" },
-                        { "type": "item", "itemId": "dragon_rider_helmet",  "quantity": 1}
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "veres_sword_3_complete"
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "dragon_rider_helmet",
+                            "quantity": 1
+                        }
                     ]
                 }
             ]
@@ -251,7 +301,9 @@
             "stages": [
                 {
                     "objective": "Speak with Veres",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "I'm not ready yet. Give me a little time.",
                         "Some things need to be said in the right moment."
@@ -279,10 +331,19 @@
                         "That's a better reference than most."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "veres_sword_4_complete" },
-                        { "type": "item", "itemId": "seabed_fossil",  "quantity": 1}
-                        
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "veres_sword_4_complete"
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "seabed_fossil",
+                            "quantity": 1
+                        }
                     ]
                 }
             ]
@@ -298,7 +359,9 @@
             "stages": [
                 {
                     "objective": "Speak with Veres",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "I'm almost ready. The wind is still settling.",
                         "Come back soon."
@@ -323,9 +386,19 @@
                         "The mountain will be here."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "item", "itemId": "turquoise", "quantity": 10 },
-                        { "type": "tag", "tagId": "veres_sword_5_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "turquoise",
+                            "quantity": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "veres_sword_5_complete"
+                        }
                     ]
                 }
             ]
@@ -342,8 +415,14 @@
                 "I change it when I'm thinking. Which means it changes a lot."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "veres_heart_rank_1_unlocked" },
-                { "type": "world_resonance", "amount": 8 }
+                {
+                    "type": "tag",
+                    "tagId": "veres_heart_rank_1_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 8
+                }
             ],
             "giftingOptions": [
                 {
@@ -388,10 +467,24 @@
                 "Just — be careful with it. That's all I'll say."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "veres_heart_rank_2_unlocked" },
-                { "type": "world_resonance", "amount": 12 },
-                { "type": "item", "itemId": "turquoise", "quantity": 15 },
-                { "type": "item", "itemId": "brooch_of_the_sky", "quantity": 1 }
+                {
+                    "type": "tag",
+                    "tagId": "veres_heart_rank_2_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 12
+                },
+                {
+                    "type": "item",
+                    "itemId": "turquoise",
+                    "quantity": 15
+                },
+                {
+                    "type": "item",
+                    "itemId": "brooch_of_the_sky",
+                    "quantity": 1
+                }
             ],
             "giftingOptions": [
                 {
@@ -459,10 +552,24 @@
                 "Don't go anywhere."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "veres_heart_rank_3_unlocked" },
-                { "type": "world_resonance", "amount": 15 },
-                { "type": "item", "itemId": "turquoise", "quantity": 20 },
-                { "type": "item", "itemId": "ring_of_the_sky", "quantity": 1 }
+                {
+                    "type": "tag",
+                    "tagId": "veres_heart_rank_3_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 15
+                },
+                {
+                    "type": "item",
+                    "itemId": "turquoise",
+                    "quantity": 20
+                },
+                {
+                    "type": "item",
+                    "itemId": "ring_of_the_sky",
+                    "quantity": 1
+                }
             ],
             "giftingOptions": [
                 {
