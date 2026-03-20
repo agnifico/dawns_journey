@@ -108,7 +108,7 @@ export const generalItems: Item[] = [
         description: "A loaf of freshly baked bread.",
         image: "/general/bread.png",
         type: "general",
-        effects: [{ hp: 100 }, { auraShield: 500 }],
+        effects: [{ hp: 500 }, { auraShield: 500 }],
         flags: ['stackable',],
     },
     {

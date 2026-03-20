@@ -30,7 +30,7 @@
         "evasion": 70,
         "critChance": 0.15,
         "critDamage": 1.6,
-        "precision": 1
+        "precision": 65
     },
     "swordRank": 0,
     "heartRank": 0,

@@ -2,23 +2,19 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	// ── Article data ──────────────────────────────────────────────────────────
-	// Each article is keyed by its slug. Add new articles here.
-	// You can later move this to a separate data file and import it.
-
 	type InfoBox = { type: 'tip' | 'note' | 'warning'; content: string };
 	type TableRow = { cells: string[] };
 
 	type ArticleSection = {
 		heading?: string;
-		body?: string; // HTML string — use sparingly, prefer structured content
+		body?: string;
 		infoBox?: InfoBox;
 		table?: { headers: string[]; rows: TableRow[] };
 	};
 
 	type Article = {
 		slug: string;
-		section: string; // Section label (e.g. "Movement & World")
+		section: string;
 		title: string;
 		lead: string;
 		content: ArticleSection[];
@@ -66,11 +62,6 @@
 			]
 		},
 
-		// ── ADD MORE ARTICLES BELOW ──
-		// Copy the structure above. Each article maps its slug to its content.
-		// The help index in HowToPlayChapter.svelte uses `/help/{slug}` hrefs —
-		// make sure the slugs match.
-
 		'world-resonance': {
 			slug: 'world-resonance',
 			section: 'Movement & World',
@@ -105,23 +96,28 @@
 				{ icon: '💀', name: 'Legendary Enemies', href: '/help/legendary-enemies' }
 			]
 		}
+
+		// ── ADD MORE ARTICLES BELOW ──
+		// Each article maps its slug to its content.
+		// The help index in /help/+page.svelte uses `/help/{slug}` hrefs —
+		// make sure the slugs match.
 	};
 
-	// ── Route resolution ──────────────────────────────────────────────────────
 	$: slug = $page.params.slug;
 	$: article = articles[slug] ?? null;
 
-	// Info box label map
 	const infoLabels = { tip: 'Tip', note: 'Note', warning: 'Warning' };
 </script>
 
 <div class="help-wrap">
 	<!-- Breadcrumb -->
 	<div class="breadcrumb">
-		<button class="bc-link" on:click={() => goto('/journal')}>Journal</button>
+		<button class="bc-link" on:click={() => goto('/help')}>Help</button>
 		<span class="bc-sep">›</span>
-		<button class="bc-link" on:click={() => goto('/journal')}>Game Basics</button>
-		<span class="bc-sep">›</span>
+		{#if article}
+			<span class="bc-section">{article.section}</span>
+			<span class="bc-sep">›</span>
+		{/if}
 		<span class="bc-current">{article?.title ?? slug}</span>
 	</div>
 
@@ -198,7 +194,7 @@
 		<div class="not-found">
 			<p class="nf-title">Article not found</p>
 			<p class="nf-sub">This topic hasn't been written yet, or the link is incorrect.</p>
-			<button class="nf-back" on:click={() => goto('/journal')}>← Back to Journal</button>
+			<button class="nf-back" on:click={() => goto('/help')}>← Back to Help</button>
 		</div>
 	{/if}
 </div>
@@ -220,6 +216,7 @@
 		font-size: 0.55rem;
 		letter-spacing: 2px;
 		text-transform: uppercase;
+		flex-wrap: wrap;
 	}
 
 	.bc-link {
@@ -240,6 +237,10 @@
 
 	.bc-sep {
 		color: #3d2810;
+	}
+
+	.bc-section {
+		color: #5a3a18;
 	}
 
 	.bc-current {

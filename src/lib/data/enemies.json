@@ -6,8 +6,8 @@
         "image": "/images/enemies/aquamech_shark.png",
         "thumbnailImage": "/images/enemies/aquamech_shark.png",
         "types": ["Water"],
-        "resonanceRequirement": 0,
-        "xp": 50,
+        "resonanceRequirement": 100,
+        "xp": 200,
         "hpCost": 5,
         "drops": [
             { "itemId": "shark_fin", "quantity": 1 },
@@ -36,8 +36,8 @@
         "image": "/images/enemies/white_wyvern.png",
         "thumbnailImage": "/images/enemies/white_wyvern.png",
         "types": ["Wind"],
-        "resonanceRequirement": 10,
-        "xp": 100,
+        "resonanceRequirement": 75,
+        "xp": 150,
         "hpCost": 8,
         "drops": [
             { "itemId": "dragon_fang", "quantity": 1 },
@@ -52,9 +52,9 @@
         "image": "/images/enemies/woodmech_bear.png",
         "thumbnailImage": "/images/enemies/woodmech_bear.png",
         "types": ["Earth"],
-        "resonanceRequirement": 15,
+        "resonanceRequirement": 30,
         "xp": 60,
-        "hpCost": 6,
+        "hpCost": 3,
         "drops": [
             { "itemId": "bear_skin", "quantity": 3 },
             { "itemId": "blueberries", "quantity": 1, "chance": 0.5 },
@@ -69,8 +69,8 @@
         "image": "/images/enemies/vanguard_siren.png",
         "thumbnailImage": "/images/enemies/vanguard_siren.png",
         "types": ["Water"],
-        "resonanceRequirement": 20,
-        "xp": 90,
+        "resonanceRequirement": 120,
+        "xp": 240,
         "hpCost": 7,
         "drops": [
             { "itemId": "shark_fin", "quantity": 2 },
@@ -85,8 +85,8 @@
         "image": "/images/enemies/biceon.png",
         "thumbnailImage": "/images/enemies/biceon.png",
         "types": ["Water", "Earth"],
-        "resonanceRequirement": 25,
-        "xp": 40,
+        "resonanceRequirement": 35,
+        "xp": 70,
         "hpCost": 4,
         "drops": [
             { "itemId": "bear_skin", "quantity": 2 },
@@ -100,8 +100,8 @@
         "image": "/images/enemies/coral-eyes.png",
         "thumbnailImage": "/images/enemies/coral-eyes.png",
         "types": ["Water"],
-        "resonanceRequirement": 30,
-        "xp": 30,
+        "resonanceRequirement": 100,
+        "xp": 200,
         "hpCost": 3,
         "drops": [
             { "itemId": "coral_reef", "quantity": 3 },
@@ -115,8 +115,8 @@
         "image": "/images/enemies/forest_prowler.png",
         "thumbnailImage": "/images/enemies/forest_prowler.png",
         "types": ["Earth", "Wind"],
-        "resonanceRequirement": 40,
-        "xp": 55,
+        "resonanceRequirement": 70,
+        "xp": 160,
         "hpCost": 5,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
@@ -131,8 +131,8 @@
         "image": "/images/enemies/inkjet_ray.png",
         "thumbnailImage": "/images/enemies/inkjet_ray.png",
         "types": ["Earth", "Wind"],
-        "resonanceRequirement": 50,
-        "xp": 55,
+        "resonanceRequirement": 100,
+        "xp": 200,
         "hpCost": 5,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
@@ -147,8 +147,8 @@
         "image": "/images/enemies/mountain_basilisk.png",
         "thumbnailImage": "/images/enemies/mountain_basilisk.png",
         "types": ["Earth"],
-        "resonanceRequirement": 60,
-        "xp": 70,
+        "resonanceRequirement": 50,
+        "xp": 120,
         "hpCost": 7,
         "drops": [
             { "itemId": "stone", "quantity": 5 },
@@ -163,8 +163,8 @@
         "image": "/images/enemies/punching_tortoise.png",
         "thumbnailImage": "/images/enemies/punching_tortoise.png",
         "types": ["Water", "Earth"],
-        "resonanceRequirement": 65,
-        "xp": 25,
+        "resonanceRequirement": 100,
+        "xp": 200,
         "hpCost": 2,
         "drops": [
             { "itemId": "stone", "quantity": 2 },
@@ -180,7 +180,7 @@
         "thumbnailImage": "/images/enemies/rock_lion.png",
         "types": ["Earth"],
         "resonanceRequirement": 70,
-        "xp": 60,
+        "xp": 140,
         "hpCost": 6,
         "drops": [
             { "itemId": "meat", "quantity": 2 },
@@ -194,8 +194,8 @@
         "image": "/images/enemies/shark_soldier.png",
         "thumbnailImage": "/images/enemies/shark_soldier.png",
         "types": ["Water"],
-        "resonanceRequirement": 80,
-        "xp": 65,
+        "resonanceRequirement": 130,
+        "xp": 260,
         "hpCost": 6,
         "drops": [
             { "itemId": "shark_fin", "quantity": 1 },
@@ -212,8 +212,8 @@
         "image": "/images/enemies/solis_sentinel.png",
         "thumbnailImage": "/images/enemies/solis_sentinel.png",
         "types": ["Light"],
-        "resonanceRequirement": 85,
-        "xp": 80,
+        "resonanceRequirement": 80,
+        "xp": 180,
         "hpCost": 8,
         "drops": [
             { "itemId": "citrine", "quantity": 1, "chance": 0.3 },
@@ -229,7 +229,7 @@
         "image": "/images/enemies/toxolotl.png",
         "thumbnailImage": "/images/enemies/toxolotl.png",
         "types": ["Water", "Dark"],
-        "resonanceRequirement": 90,
+        "resonanceRequirement": 10,
         "xp": 30,
         "hpCost": 3,
         "drops": [
@@ -244,8 +244,8 @@
         "image": "/images/enemies/water_spirit_beast.png",
         "thumbnailImage": "/images/enemies/water_spirit_beast.png",
         "types": ["Water"],
-        "resonanceRequirement": 100,
-        "xp": 120,
+        "resonanceRequirement": 120,
+        "xp": 240,
         "hpCost": 9,
         "drops": [
             { "itemId": "turquoise", "quantity": 1, "chance": 0.4 },
@@ -268,8 +268,8 @@
             "elementalAttack": 180, "elementalDefence": 90,
             "speed": 150, "evasion": 0.2, "critChance": 0.25, "critDamage": 1.75
         },
-        "xp": 500,
-        "hpCost": 9,
+        "xp": 1000,
+        "hpCost": 50,
         "drops": [
             { "itemId": "gold", "quantity": 1, "chance": 0.5 },
             { "itemId": "azurite", "quantity": 5, "chance": 0.3 },
@@ -284,7 +284,7 @@
         "image": "/images/enemies/bob.png",
         "thumbnailImage": "/images/enemies/bob.png",
         "types": ["Water", "Wind"],
-        "resonanceRequirement": 160,
+        "resonanceRequirement": 150,
         "isLegendary": true,
         "baseStats": {
             "hp": 2500, "maxHp": 2500, "auraShield": 0, "maxAuraShield": 0,
@@ -293,7 +293,7 @@
             "speed": 40, "evasion": 0, "critChance": 0.05, "critDamage": 1.5
         },
         "xp": 1000,
-        "hpCost": 9,
+        "hpCost": 50,
         "drops": [
             { "itemId": "tranquility_pearl", "quantity": 1 },
             { "itemId": "argentum", "quantity": 5000 }
@@ -306,7 +306,7 @@
         "image": "/images/enemies/wilhemina.png",
         "thumbnailImage": "/images/enemies/wilhemina.png",
         "types": ["Water"],
-        "resonanceRequirement": 200,
+        "resonanceRequirement": 150,
         "isLegendary": true,
         "baseStats": {
             "hp": 1200, "maxHp": 1200, "auraShield": 500, "maxAuraShield": 500,
@@ -314,8 +314,8 @@
             "elementalAttack": 150, "elementalDefence": 110,
             "speed": 110, "evasion": 0.1, "critChance": 0.15, "critDamage": 1.6
         },
-        "xp": 750,
-        "hpCost": 9,
+        "xp": 1250,
+        "hpCost": 50,
         "drops": [
             { "itemId": "turquoise", "quantity": 3 },
             { "itemId": "argentum", "quantity": 1500 },

@@ -1,7 +1,7 @@
 {
-  "width": 30,
-  "height": 20,
-  "image": "/maps/dragon_island.png",
+  "width": 45,
+  "height": 42,
+  "image": "/maps/NEW_WORLD.png",
   "defaultRegion": "walkable_grass",
   "defaultLandscape": "pleasure_island",
   "unwalkable": [
