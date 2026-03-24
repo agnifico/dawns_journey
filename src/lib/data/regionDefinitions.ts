@@ -35,8 +35,8 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
             { id: 'fire_tulip', chance: 0.3 }
         ]
     },
-    solo_forest: {
-        id: 'solo_forest',
+    forest1: {
+        id: 'forest1',
         name: 'Forest',
         gates: null,
         enemies: [
@@ -50,8 +50,8 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
             { id: 'mushrooms', chance: 0.1 }
         ]
     },
-    mountain: {
-        id: 'mountain',
+    veres_hill: {
+        id: 'veres_hill',
         name: 'Mountain',
         gates: [{ element: 'Earth', level: 1 }, { element: 'Wind', level: 1 }],
         enemies: [

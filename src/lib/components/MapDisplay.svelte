@@ -13,7 +13,7 @@
 	export let mapData: MapData;
 	export let player: Player;
 
-	const TILE_SIZE = 16;
+	const TILE_SIZE = 32;
 	$: RENDER_SCALE = $settingsStore.renderScale;
 	$: FINAL_TILE_SIZE = TILE_SIZE * RENDER_SCALE;
 
