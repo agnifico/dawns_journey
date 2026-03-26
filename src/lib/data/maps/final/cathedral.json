@@ -104,13 +104,6 @@
     },
     {
       "x": 21,
-      "y": 26,
-      "width": 9,
-      "height": 1,
-      "regionType": ""
-    },
-    {
-      "x": 21,
       "y": 27,
       "width": 9,
       "height": 7,
@@ -164,13 +157,6 @@
       "width": 6,
       "height": 1,
       "regionType": "sewers"
-    },
-    {
-      "x": 5,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "regionType": ""
     },
     {
       "x": 8,
@@ -376,27 +362,6 @@
       "regionType": "backforest"
     },
     {
-      "x": 25,
-      "y": 1,
-      "width": 1,
-      "height": 2,
-      "regionType": ""
-    },
-    {
-      "x": 24,
-      "y": 1,
-      "width": 1,
-      "height": 1,
-      "regionType": ""
-    },
-    {
-      "x": 22,
-      "y": 1,
-      "width": 1,
-      "height": 1,
-      "regionType": ""
-    },
-    {
       "x": 4,
       "y": 2,
       "width": 3,
@@ -579,20 +544,6 @@
       "regionType": "tower_balcony"
     },
     {
-      "x": 7,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "regionType": ""
-    },
-    {
-      "x": 9,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "regionType": ""
-    },
-    {
       "x": 29,
       "y": 25,
       "width": 1,
@@ -608,15 +559,9 @@
       "y": 14,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "npc",
+      "type": "npc",
+      "multiTile": true,
       "npcId": "claudia2"
-    },
-    {
-      "x": 7,
-      "y": 14,
-      "type": "multi_tile_part",
-      "parentId": "multi-0"
     },
     {
       "x": 7,
@@ -642,15 +587,9 @@
       "y": 12,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "npc",
+      "type": "npc",
+      "multiTile": true,
       "npcId": "gwen"
-    },
-    {
-      "x": 13,
-      "y": 12,
-      "type": "multi_tile_part",
-      "parentId": "multi-1"
     },
     {
       "x": 13,
@@ -676,15 +615,9 @@
       "y": 15,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "npc",
+      "type": "npc",
+      "multiTile": true,
       "npcId": "cygwin2"
-    },
-    {
-      "x": 22,
-      "y": 15,
-      "type": "multi_tile_part",
-      "parentId": "multi-2"
     },
     {
       "x": 22,
@@ -710,15 +643,9 @@
       "y": 26,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "npc",
+      "type": "npc",
+      "multiTile": true,
       "npcId": "juliet"
-    },
-    {
-      "x": 21,
-      "y": 26,
-      "type": "multi_tile_part",
-      "parentId": "multi-3"
     },
     {
       "x": 21,
@@ -744,15 +671,9 @@
       "y": 26,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "npc",
-      "npcId": "nyx"
-    },
-    {
-      "x": 19,
-      "y": 26,
-      "type": "multi_tile_part",
-      "parentId": "multi-4"
+      "type": "npc",
+      "multiTile": true,
+      "npcId": "bonnie"
     },
     {
       "x": 19,
@@ -778,15 +699,9 @@
       "y": 14,
       "width": 3,
       "height": 3,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "gem_fountain"
-    },
-    {
-      "x": 13,
-      "y": 14,
-      "type": "multi_tile_part",
-      "parentId": "multi-5"
     },
     {
       "x": 13,
@@ -842,15 +757,9 @@
       "y": 25,
       "width": 3,
       "height": 3,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "gem_fountain"
-    },
-    {
-      "x": 5,
-      "y": 25,
-      "type": "multi_tile_part",
-      "parentId": "multi-6"
     },
     {
       "x": 5,
@@ -906,15 +815,9 @@
       "y": 25,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "flower_pillar"
-    },
-    {
-      "x": 8,
-      "y": 25,
-      "type": "multi_tile_part",
-      "parentId": "multi-7"
     },
     {
       "x": 8,
@@ -928,15 +831,9 @@
       "y": 31,
       "width": 3,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "garden_bench"
-    },
-    {
-      "x": 6,
-      "y": 31,
-      "type": "multi_tile_part",
-      "parentId": "multi-8"
     },
     {
       "x": 6,
@@ -974,15 +871,9 @@
       "y": 25,
       "width": 3,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "garden_bench"
-    },
-    {
-      "x": 23,
-      "y": 25,
-      "type": "multi_tile_part",
-      "parentId": "multi-9"
     },
     {
       "x": 23,
@@ -1020,15 +911,9 @@
       "y": 27,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "gravestone_flower"
-    },
-    {
-      "x": 27,
-      "y": 27,
-      "type": "multi_tile_part",
-      "parentId": "multi-10"
     },
     {
       "x": 27,
@@ -1042,15 +927,9 @@
       "y": 30,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "gravestone_flower"
-    },
-    {
-      "x": 25,
-      "y": 30,
-      "type": "multi_tile_part",
-      "parentId": "multi-11"
     },
     {
       "x": 25,
@@ -1064,15 +943,9 @@
       "y": 30,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "gravestone_flower"
-    },
-    {
-      "x": 27,
-      "y": 30,
-      "type": "multi_tile_part",
-      "parentId": "multi-12"
     },
     {
       "x": 27,
@@ -1086,15 +959,9 @@
       "y": 28,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "event",
+      "type": "event",
+      "multiTile": true,
       "eventId": "gravestone_flower"
-    },
-    {
-      "x": 23,
-      "y": 28,
-      "type": "multi_tile_part",
-      "parentId": "multi-13"
     },
     {
       "x": 23,
@@ -1108,15 +975,9 @@
       "y": 15,
       "width": 2,
       "height": 4,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "tribute_chests"
-    },
-    {
-      "x": 27,
-      "y": 15,
-      "type": "multi_tile_part",
-      "parentId": "multi-14"
     },
     {
       "x": 27,
@@ -1166,15 +1027,9 @@
       "y": 16,
       "width": 1,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "tribute_chests"
-    },
-    {
-      "x": 26,
-      "y": 16,
-      "type": "multi_tile_part",
-      "parentId": "multi-15"
     },
     {
       "x": 26,
@@ -1200,15 +1055,9 @@
       "y": 18,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "rice_sack"
-    },
-    {
-      "x": 25,
-      "y": 18,
-      "type": "multi_tile_part",
-      "parentId": "multi-16"
     },
     {
       "x": 25,
@@ -1234,15 +1083,9 @@
       "y": 17,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "rice_sack"
-    },
-    {
-      "x": 23,
-      "y": 17,
-      "type": "multi_tile_part",
-      "parentId": "multi-17"
     },
     {
       "x": 23,
@@ -1274,15 +1117,9 @@
       "y": 18,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "table_scrolls"
-    },
-    {
-      "x": 21,
-      "y": 18,
-      "type": "multi_tile_part",
-      "parentId": "multi-18"
     },
     {
       "x": 21,
@@ -1338,15 +1175,9 @@
       "y": 15,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "table_scrolls"
-    },
-    {
-      "x": 20,
-      "y": 15,
-      "type": "multi_tile_part",
-      "parentId": "multi-19"
     },
     {
       "x": 20,
@@ -1372,15 +1203,9 @@
       "y": 18,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "tree_log"
-    },
-    {
-      "x": 17,
-      "y": 18,
-      "type": "multi_tile_part",
-      "parentId": "multi-20"
     },
     {
       "x": 17,
@@ -1412,15 +1237,9 @@
       "y": 0,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "rock_mine"
-    },
-    {
-      "x": 17,
-      "y": 0,
-      "type": "multi_tile_part",
-      "parentId": "multi-21"
     },
     {
       "x": 17,
@@ -1446,15 +1265,9 @@
       "y": 9,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "rock_mine"
-    },
-    {
-      "x": 28,
-      "y": 9,
-      "type": "multi_tile_part",
-      "parentId": "multi-22"
     },
     {
       "x": 28,
@@ -1516,15 +1329,9 @@
       "y": 16,
       "width": 2,
       "height": 2,
-      "type": "multi_tile_entity",
-      "entityType": "resource",
+      "type": "resource",
+      "multiTile": true,
       "resourceId": "treasure_gold"
-    },
-    {
-      "x": 24,
-      "y": 16,
-      "type": "multi_tile_part",
-      "parentId": "multi-23"
     },
     {
       "x": 24,
@@ -1656,13 +1463,6 @@
     },
     {
       "x": 21,
-      "y": 26,
-      "width": 9,
-      "height": 1,
-      "landscape": ""
-    },
-    {
-      "x": 21,
       "y": 27,
       "width": 9,
       "height": 7,
@@ -1716,13 +1516,6 @@
       "width": 6,
       "height": 1,
       "landscape": "sewers"
-    },
-    {
-      "x": 5,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "landscape": ""
     },
     {
       "x": 8,
@@ -1928,27 +1721,6 @@
       "landscape": "backforest"
     },
     {
-      "x": 25,
-      "y": 1,
-      "width": 1,
-      "height": 2,
-      "landscape": ""
-    },
-    {
-      "x": 24,
-      "y": 1,
-      "width": 1,
-      "height": 1,
-      "landscape": ""
-    },
-    {
-      "x": 22,
-      "y": 1,
-      "width": 1,
-      "height": 1,
-      "landscape": ""
-    },
-    {
       "x": 4,
       "y": 2,
       "width": 3,
@@ -2129,20 +1901,6 @@
       "width": 3,
       "height": 3,
       "landscape": "tower_balcony"
-    },
-    {
-      "x": 7,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "landscape": ""
-    },
-    {
-      "x": 9,
-      "y": 25,
-      "width": 1,
-      "height": 1,
-      "landscape": ""
     },
     {
       "x": 29,

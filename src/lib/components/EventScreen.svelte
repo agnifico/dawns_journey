@@ -299,7 +299,8 @@
 		justify-content: center;
 		align-items: center;
 		color: white;
-		min-height: 300px;
+		/* min-height: 200px; */
+		/* max-width: 400px; */
 		box-sizing: border-box;
 		overflow: hidden;
 		gap: 1rem;

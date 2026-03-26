@@ -1,159 +1,87 @@
 <script lang="ts">
+	// MapObject.svelte
+	// Renders a single parent entity (npc, resource, or event) at its full tile footprint.
+	// Never receives multi_tile_part objects — those are filtered out upstream in MapDisplay.
+
 	import { npcStore } from '$lib/stores/npcStore';
 	import { locationEventDefinitions as locationEvents } from '$lib/data/locationEvents';
 	import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
+	import NpcSprite from './NpcSprite.svelte';
 
 	export let mapObject: any;
 	export let FINAL_TILE_SIZE: number;
-	export let allObjects: any[];
 
-	let imageUrl = '';
-	let objectName = '';
-	let width = 1;
-	let height = 1;
-	let objectPosition = '0 0';
+	type ResolvedEntity = {
+		imageUrl: string;
+		name: string;
+		isNpc: boolean;
+		npcData?: any;
+	};
 
-	$: {
-		if (mapObject.type === 'multi_tile_part') {
-			const parent = allObjects.find((o) => o.id === mapObject.parentId);
-			if (parent) {
-				switch (parent.entityType) {
-					case 'npc':
-						const npc = $npcStore.globalNpcs[parent.npcId];
-						if (npc) {
-							imageUrl = npc.profileImage;
-							objectName = npc.name;
-						}
-						break;
-					case 'resource':
-						const resource = resourceNodeDefinitions[parent.resourceId];
-						if (resource) {
-							imageUrl = resource.image;
-							objectName = resource.name;
-						}
-						break;
-					case 'event':
-						const eventData = locationEvents[parent.eventId];
-						if (eventData) {
-							imageUrl = eventData.image;
-							objectName = eventData.name;
-						}
-						break;
-				}
-				width = parent.width;
-				height = parent.height;
-				const xOffset = mapObject.x - parent.x;
-				const yOffset = mapObject.y - parent.y;
-
-				// This is tricky. The image is scaled to the parent size,
-				// and we need to find the top-left corner of the tile
-				// within the scaled image.
-				const imgWidth = width * FINAL_TILE_SIZE;
-				const imgHeight = height * FINAL_TILE_SIZE;
-
-				const left = -(xOffset * FINAL_TILE_SIZE);
-				const top = -(yOffset * FINAL_TILE_SIZE);
-
-				objectPosition = `${left}px ${top}px`;
+	function resolveEntity(obj: any): ResolvedEntity | null {
+		switch (obj.type) {
+			case 'npc': {
+				const npc = $npcStore.globalNpcs[obj.npcId];
+				if (!npc) return null;
+				return { imageUrl: npc.spriteGif ?? npc.profileImage, name: npc.name, isNpc: true, npcData: npc };
 			}
-		} else if (mapObject.type === 'multi_tile_entity') {
-			const parent = mapObject;
-			switch (parent.entityType) {
-				case 'npc':
-					const npc = $npcStore.globalNpcs[parent.npcId];
-					if (npc) {
-						imageUrl = npc.profileImage;
-						objectName = npc.name;
-					}
-					break;
-				case 'resource':
-					const resource = resourceNodeDefinitions[parent.resourceId];
-					if (resource) {
-						imageUrl = resource.image;
-						objectName = resource.name;
-					}
-					break;
-				case 'event':
-					const eventData = locationEvents[parent.eventId];
-					if (eventData) {
-						imageUrl = eventData.image;
-						objectName = eventData.name;
-					}
-					break;
+			case 'resource': {
+				const resource = resourceNodeDefinitions[obj.resourceId];
+				if (!resource) return null;
+				return { imageUrl: resource.image, name: resource.name, isNpc: false };
 			}
-			width = parent.width;
-			height = parent.height;
-			objectPosition = '0px 0px';
-		} else {
-			width = mapObject.width || 1;
-			height = mapObject.height || 1;
-			switch (mapObject.type) {
-				case 'npc':
-					const npc = $npcStore.globalNpcs[mapObject.npcId];
-					if (npc) {
-						imageUrl = npc.profileImage;
-						objectName = npc.name;
-					}
-					break;
-				case 'resource':
-					const resource = resourceNodeDefinitions[mapObject.resourceId];
-					if (resource) {
-						imageUrl = resource.image;
-						objectName = resource.name;
-					}
-					break;
-				case 'event':
-					const eventData = locationEvents[mapObject.eventId];
-					if (eventData) {
-						imageUrl = eventData.image;
-						objectName = eventData.name;
-					}
-					break;
+			case 'event': {
+				const event = locationEvents[obj.eventId];
+				if (!event) return null;
+				return { imageUrl: event.image, name: event.name, isNpc: false };
 			}
+			default:
+				return null;
 		}
 	}
+
+	$: entity = resolveEntity(mapObject);
+
+	$: footprintW = (mapObject.width  ?? 1) * FINAL_TILE_SIZE;
+	$: footprintH = (mapObject.height ?? 1) * FINAL_TILE_SIZE;
+	$: posLeft    = mapObject.x * FINAL_TILE_SIZE;
+	$: posTop     = mapObject.y * FINAL_TILE_SIZE;
 </script>
 
-<div
-	class="map-object"
-	style="top: {mapObject.y * FINAL_TILE_SIZE}px; left: {mapObject.x *
-		FINAL_TILE_SIZE}px; width: {FINAL_TILE_SIZE}px; height: {FINAL_TILE_SIZE}px;"
-	title={objectName}
->
-	{#if imageUrl}
-		<img
-			src={imageUrl}
-			alt={objectName}
-			style="object-position: {objectPosition}; width: {width *
-				FINAL_TILE_SIZE}px; height: {height * FINAL_TILE_SIZE}px;"
-		/>
-	{/if}
-</div>
+{#if entity}
+	<div
+		class="map-entity"
+		style="
+			left:   {posLeft}px;
+			top:    {posTop}px;
+			width:  {footprintW}px;
+			height: {footprintH}px;
+		"
+		title={entity.name}
+	>
+		{#if entity.isNpc && entity.npcData}
+			<NpcSprite npc={entity.npcData} {footprintW} {footprintH} />
+		{:else}
+			<img
+				src={entity.imageUrl}
+				alt={entity.name}
+				class="entity-img"
+				style="width: {footprintW}px; height: {footprintH}px;"
+			/>
+		{/if}
+	</div>
+{/if}
 
 <style>
-	.map-object {
+	.map-entity {
 		position: absolute;
 		z-index: 10;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-	}
-	img {
-		position: absolute;
-		max-width: none;
-		max-height: none;
-		object-fit: none;
-		image-rendering: auto;
-		border-radius: 6px;
-		box-sizing: border-box;
-		border: 3px solid white;
-		opacity: 0;
+		pointer-events: auto;
 	}
 
-	.map-object:hover {
-		img {
-			opacity: 1;
-		}
+	.entity-img {
+		display: block;
+		image-rendering: pixelated;
+		object-fit: cover;
 	}
 </style>

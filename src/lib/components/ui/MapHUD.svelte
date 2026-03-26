@@ -16,20 +16,24 @@
 	import { toastStore } from '$lib/stores/toastStore';
 	import HPBar from '../HPBar.svelte';
 
+	// ── Highlight toggle ─────────────────────────────────────────────────────
+	// MapDisplay exposes `toggleHighlight` and `showHighlights` via bind:this.
+	// MapHUD receives them as props so the button can reflect current state.
+	export let showHighlights: boolean = false;
+	export let onToggleHighlight: () => void = () => {};
+
 	$: bread = getFirstInventoryItem($playerStore.inventory, 'bread');
 	$: breadCount = $playerStore.inventory.filter((i) => i.id === 'bread').length;
 
 	// ── Draggable EventScreen ────────────────────────────────────────────────
-	// Constrained to the parent .map-hud-container bounds.
 	let esEl: HTMLElement;
 	let dragging = false;
 	let dragOffsetX = 0;
 	let dragOffsetY = 0;
-	let esX = 16; // initial left
-	let esY = 16; // initial top
+	let esX = 16;
+	let esY = 16;
 
 	function onDragStart(e: MouseEvent) {
-		// Only drag on the header, not on buttons
 		if ((e.target as HTMLElement).closest('button')) return;
 		dragging = true;
 		dragOffsetX = e.clientX - esX;
@@ -42,19 +46,13 @@
 		const parent = esEl.parentElement!;
 		const pr = parent.getBoundingClientRect();
 		const er = esEl.getBoundingClientRect();
-		esX = Math.min(Math.max(0, e.clientX - dragOffsetX - pr.left), pr.width - er.width);
-		esY = Math.min(Math.max(0, e.clientY - dragOffsetY - pr.top), pr.height - er.height);
+		esX = Math.min(Math.max(0, e.clientX - dragOffsetX - pr.left), pr.width  - er.width);
+		esY = Math.min(Math.max(0, e.clientY - dragOffsetY - pr.top),  pr.height - er.height);
 	}
 
-	function onDragEnd() {
-		dragging = false;
-	}
+	function onDragEnd() { dragging = false; }
 
-	// Reset position when event changes so it re-docks to top-left
-	$: if ($eventScreen.type) {
-		esX = 16;
-		esY = 16;
-	}
+	// $: if ($eventScreen.type) { esX = 16; esY = 16; }
 
 	$: showChoiceMenu =
 		$eventScreen.type === 'npc' ||
@@ -66,7 +64,18 @@
 <svelte:window on:mousemove={onDragMove} on:mouseup={onDragEnd} />
 
 <div class="map-hud-container">
+
+	<!-- Top-left: coordinates + highlight toggle -->
 	<div class="top-left">
+		<button
+			class="highlight-toggle"
+			class:active={showHighlights}
+			on:click={onToggleHighlight}
+			title="Toggle entity highlights (H)"
+		>
+			<span class="toggle-icon">{showHighlights ? '◉' : '◎'}</span>
+			<span class="toggle-label">Points of Interest</span>
+		</button>
 		<CoordinateDisplay />
 	</div>
 
@@ -74,14 +83,8 @@
 		<div class="row-flex">
 			<TimeDisplay />
 			<div class="stat-bars">
-				<HPBar type="hp" current={$playerStats.hp} max={$playerStats.maxHp} />
-				<HPBar type="aura" current={$playerStats.auraShield} max={$playerStats.maxAuraShield} />
-				<!-- <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
-				<StatBar
-					current={$playerStats.auraShield}
-					max={$playerStats.maxAuraShield}
-					color="#a98467"
-				/> -->
+				<HPBar type="hp"   current={$playerStats.hp}          max={$playerStats.maxHp}          />
+				<HPBar type="aura" current={$playerStats.auraShield}   max={$playerStats.maxAuraShield}  />
 			</div>
 		</div>
 		<MapEventNotif />
@@ -94,6 +97,7 @@
 	<div class="top-center">
 		<RegionNotification />
 	</div>
+
 	<div class="bottom-center">
 		<WeaponWidget />
 		<button
@@ -106,18 +110,16 @@
 				} else toastStore.warning("OH FUCK WE'RE OUT OF BREAD!! GET SOME BREAD!");
 			}}
 		>
-			<img src="/general/bread.png" alt="" srcset="" /></button
-		>
+			<img src="/general/bread.png" alt="" />
+		</button>
 	</div>
 
 	<div class="bottom-right">
 		<DPad />
 	</div>
 
-	<!-- Draggable EventScreen — only shown when $showEventScreen is true -->
 	{#if $showEventScreen}
 		<div class="es-wrapper" class:dragging style="left: {esX}px; top: {esY}px;" bind:this={esEl}>
-			<!-- Drag handle strip -->
 			<div class="drag-handle" on:mousedown={onDragStart} role="presentation">
 				<span class="drag-dots">⠿</span>
 			</div>
@@ -132,27 +134,60 @@
 <style>
 	.map-hud-container {
 		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
 		pointer-events: none;
 		z-index: 10;
 	}
-
 	.map-hud-container > * {
 		pointer-events: all;
 		position: absolute;
 	}
 
+	/* ── Highlight toggle button ── */
+	.highlight-toggle {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		margin-top: 6px;
+		padding: 4px 8px 4px 6px;
+		background: rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 6px;
+		color: rgba(255, 255, 255, 0.55);
+		font-size: 10px;
+		font-family: monospace;
+		letter-spacing: 0.5px;
+		cursor: pointer;
+		transition: all 0.15s ease;
+		white-space: nowrap;
+	}
+	.highlight-toggle:hover {
+		background: rgba(0, 0, 0, 0.7);
+		color: rgba(255, 255, 255, 0.85);
+		border-color: rgba(255, 255, 255, 0.25);
+	}
+	.highlight-toggle.active {
+		background: rgba(99, 202, 255, 0.15);
+		border-color: rgba(99, 202, 255, 0.5);
+		color: rgba(99, 202, 255, 0.9);
+	}
+	.toggle-icon {
+		font-size: 12px;
+		line-height: 1;
+	}
+	.toggle-label {
+		text-transform: uppercase;
+	}
+
+	/* ── Bread button ── */
 	.bread {
 		position: relative;
 		aspect-ratio: 1;
 		background-color: transparent;
 		border: none;
-		padding: none;
+		padding: 0;
 		border-radius: 0;
-		/* padding: .5rem; */
 		&:hover {
 			background-color: var(--color-primary);
 			border-radius: 12px;
@@ -165,22 +200,14 @@
 		max-width: 400px;
 		width: fit-content;
 		position: absolute;
-		/* border-radius: 12px; */
-		/* overflow: hidden; */
-		/* box-shadow: 0 8px 24px rgba(0,0,0,0.5); */
 		user-select: none;
-		/* Smooth snap back on event change */
-		transition:
-			left 0.15s ease,
-			top 0.15s ease;
+		transition: left 0.15s ease, top 0.15s ease;
 	}
-
 	.es-wrapper.dragging {
 		transition: none;
 		cursor: grabbing;
 		opacity: 0.95;
 	}
-
 	.drag-handle {
 		height: 18px;
 		background: rgba(0, 0, 0, 0.4);
@@ -190,11 +217,7 @@
 		cursor: grab;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 	}
-
-	.drag-handle:active {
-		cursor: grabbing;
-	}
-
+	.drag-handle:active { cursor: grabbing; }
 	.drag-dots {
 		font-size: 0.7rem;
 		color: rgba(255, 255, 255, 0.25);
@@ -208,13 +231,14 @@
 		gap: 1rem;
 	}
 	.top-left {
-		top: 1rem;
-		left: 1rem;
+		top: 1rem; left: 1rem;
 		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 	}
 	.top-right {
-		top: 1rem;
-		right: 1rem;
+		top: 1rem; right: 1rem;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
@@ -233,17 +257,14 @@
 		transform: translateX(-50%);
 	}
 	.bottom-left {
-		bottom: 1rem;
-		left: 1rem;
+		bottom: 1rem; left: 1rem;
 		display: flex;
 		align-items: flex-end;
 		gap: 1rem;
 	}
 	.bottom-right {
-		bottom: 1rem;
-		right: 1rem;
+		bottom: 1rem; right: 1rem;
 	}
-
 	.stat-bars {
 		display: flex;
 		flex-direction: column;
@@ -255,12 +276,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.bottom-left {
-			display: none;
-		}
-		.top-left,
-		.top-right {
-			margin-top: 2rem;
-		}
+		.bottom-left { display: none; }
+		.top-left, .top-right { margin-top: 2rem; }
 	}
 </style>

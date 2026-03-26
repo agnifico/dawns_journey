@@ -27,6 +27,13 @@
 	let isMobile = false;
 	let lastSteps = $playerStore.stepsTaken;
 
+	// ── Highlight toggle state ──────────────────────────────────────────────
+	// Lives here so both MapDisplay and MapHUD can share it.
+	let showHighlights = false;
+	function toggleHighlight() {
+		showHighlights = !showHighlights;
+	}
+
 	onMount(async () => {
 		const mediaQuery = window.matchMedia('(max-width: 768px)');
 		isMobile = mediaQuery.matches;
@@ -73,21 +80,27 @@
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
+
+		// H — toggle entity highlight layer
+		if (event.key === 'h' || event.key === 'H') {
+			toggleHighlight();
+			return;
+		}
+
 		handleMovement(event.key);
 	}
 
 	function handleMovement(key: string) {
 		let dx = 0, dy = 0;
 		switch (key) {
-			case 'ArrowUp':   case 'w': dy = -1; break;
-			case 'ArrowDown': case 's': dy =  1; break;
-			case 'ArrowLeft': case 'a': dx = -1; break;
-			case 'ArrowRight':case 'd': dx =  1; break;
+			case 'ArrowUp':    case 'w': dy = -1; break;
+			case 'ArrowDown':  case 's': dy =  1; break;
+			case 'ArrowLeft':  case 'a': dx = -1; break;
+			case 'ArrowRight': case 'd': dx =  1; break;
 		}
 		if (dx !== 0 || dy !== 0) game.movePlayer(dx, dy);
 	}
 
-	// Tray is visible if either toggle is on
 	$: showTray = $showMessageBox || $showQuestTracker;
 </script>
 
@@ -105,25 +118,26 @@
 			<div class="center-col">
 				<div class="game-view-container">
 					{#if $currentMapData && $playerStore.position}
-						<MapHUD />
-						<MapDisplay mapData={$currentMapData} player={$playerStore} />
+						<!-- MapHUD gets the toggle state + callback so its button stays in sync -->
+						<MapHUD {showHighlights} onToggleHighlight={toggleHighlight} />
+						<!-- MapDisplay receives showHighlights directly -->
+						<MapDisplay
+							mapData={$currentMapData}
+							player={$playerStore}
+							{showHighlights}
+						/>
 					{:else}
 						<p>Loading map...</p>
 					{/if}
 				</div>
 
-				<!-- Tray only renders if at least one panel is toggled on -->
 				{#if showTray}
 					<div class="tray">
 						{#if $showMessageBox}
-							<div class="tray-message">
-								<MessageLog />
-							</div>
+							<div class="tray-message"><MessageLog /></div>
 						{/if}
 						{#if $showQuestTracker}
-							<div class="tray-tracker">
-								<QuestTracker />
-							</div>
+							<div class="tray-tracker"><QuestTracker /></div>
 						{/if}
 					</div>
 				{/if}
@@ -140,7 +154,6 @@
 		outline: none;
 		overflow: hidden;
 	}
-
 	.console {
 		display: flex;
 		gap: 1rem;
@@ -155,7 +168,6 @@
 		height: 100%;
 		overflow: hidden;
 	}
-
 	.center-col {
 		display: flex;
 		flex-direction: column;
@@ -164,8 +176,6 @@
 		min-width: 0;
 		overflow: hidden;
 	}
-
-	/* Map grows to fill everything the tray doesn't take */
 	.game-view-container {
 		flex: 1;
 		min-height: 0;
@@ -176,16 +186,12 @@
 		border: 3px solid var(--surface-2);
 		box-sizing: border-box;
 	}
-
-	/* Tray: fixed height, items side by side */
 	.tray {
 		display: flex;
 		gap: 1rem;
 		height: 180px;
 		flex-shrink: 0;
 	}
-
-	/* MessageLog stretches to fill remaining tray width */
 	.tray-message {
 		flex: 1;
 		min-width: 0;
@@ -196,8 +202,6 @@
 		display: flex;
 		flex-direction: column;
 	}
-
-	/* QuestTracker fixed width */
 	.tray-tracker {
 		flex-shrink: 0;
 		width: 240px;
@@ -205,7 +209,6 @@
 		border-radius: 12px;
 		overflow: hidden;
 	}
-
 	@media (max-width: 768px) {
 		.console { display: none; }
 	}

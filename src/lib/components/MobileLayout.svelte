@@ -14,6 +14,8 @@
 	import MobileEventCard from '$lib/components/MobileEventCard.svelte';
 	import MobileEventPanel from '$lib/components/MobileEventPanel.svelte';
 	import NewItemNotif from './NewItemNotif.svelte';
+	import WeaponWidget from '$lib/components/ui/WeaponWidget.svelte';
+	import RegionNotification from '$lib/components/RegionNotification.svelte';
 	// import Notification from './Notification.svelte';
 	// import DialogueBox from './DialogueBox.svelte';
 	import MapEventNotif from './MapEventNotif.svelte';
@@ -80,6 +82,8 @@
 			<MapDisplay mapData={$currentMapData} player={$playerStore} />
 			<NewItemNotif/>
 			<MapEventNotif/>
+			<!-- <RegionNotification/> -->
+			<!-- <WeaponWidget/>	 -->
 			<!-- <DialogueBox /> -->
 		{:else}
 			<div class="loading">Loading map...</div>
@@ -223,6 +227,8 @@
 		flex: 1;
 		min-height: 0;
 		overflow: hidden;
+		width: 100%;
+		height: 100%;
 	}
 
 	.loading {
