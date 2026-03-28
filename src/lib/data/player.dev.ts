@@ -10,7 +10,7 @@ import guinevere from '../assets/data/npcs/guinevere.json';
 import aoife from '../assets/data/npcs/aoife.json';
 import hela from '../assets/data/npcs/hela.json';
 import marjane from '../assets/data/npcs/marjane.json';
-import nyx from '../assets/data/npcs/nyx.json';
+import verona from '../assets/data/npcs/verona.json';
 import sylvie from '../assets/data/npcs/sylvie.json';
 import veres from '../assets/data/npcs/veres.json';
 
@@ -62,7 +62,7 @@ export const playerDev: Player = {
 
 // --- 2. NPC State ---
 const baseNpcs: Record<string, NPC> = {
-    akari, claudia, cygwin, guinevere, aoife, hela, marjane, nyx, sylvie, veres
+    akari, claudia, cygwin, guinevere, aoife, hela, marjane, verona, sylvie, veres
 };
 
 // Create a deep copy to avoid modifying the original JSON imports

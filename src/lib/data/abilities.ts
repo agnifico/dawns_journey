@@ -639,12 +639,12 @@ export const npcAbilities: Ability[] = [
     },
 
     // -------------------------------------------------------------------------
-    // Nyx — The Trickster
+    // Verona — The Speed Duelist
     // -------------------------------------------------------------------------
     {
         id: 'double_team',
         name: 'Double Team',
-        description: 'Nyx blurs into afterimages, dramatically raising her evasion for 3 turns.',
+        description: 'Verona blurs into afterimages, dramatically raising her evasion for 3 turns.',
         abilityType: 'Special',
         effects: [{
             type: 'apply_status', target: 'self',
