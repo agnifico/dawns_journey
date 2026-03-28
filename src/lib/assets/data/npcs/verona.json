@@ -1,20 +1,19 @@
 {
-    "id": "nyx",
-    "name": "Nyx",
-    "profileImage": "/images/characters/nyx/nyx_avatar.png",
-    "image": "/images/characters/nyx/nyx0.png",
+    "id": "verona",
+    "name": "Verona",
+    "profileImage": "/images/characters/verona/avatar.png",
+    "image": "/images/characters/verona/2.png",
+    "spriteGif": "/images/verona.gif",
     "galleryImages": [
-        "/images/characters/nyx/nyx0.png",
-        "/images/characters/nyx/nyx1.png",
-        "/images/characters/nyx/nyx2.png",
-        "/images/characters/nyx/nyx3.png",
-        "/images/characters/nyx/nyx4.png",
-        "/images/characters/nyx/nyx5.png",
-        "/images/characters/nyx/nyx6.png"
+        "/images/characters/verona/1.png",
+        "/images/characters/verona/2.png",
+        "/images/characters/verona/3.png",
+        "/images/characters/verona/4.png",
+        "/images/characters/verona/5.png"
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
-        "Dark"
+        "Earth", "Light"
     ],
     "baseStats": {
         "hp": 100,

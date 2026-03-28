@@ -13,7 +13,7 @@
         "/images/characters/bonnie/bonnie6.png"
 
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Earth", "Dark"
     ],

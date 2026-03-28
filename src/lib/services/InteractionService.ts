@@ -5,43 +5,58 @@ import { showEvent } from '$lib/stores/uiStore';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { resourceStore } from '$lib/stores/resourceStore';
-import { time } from '$lib/stores/timeStore';
+import { time, phase } from '$lib/stores/timeStore';
 import { npcStore, getNpcData } from '$lib/stores/npcStore';
 import { resourceNodeDefinitions } from '$lib/data/resourceNodeDefinitions';
 import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { gainExperience } from '$lib/services/SkillService';
 import { addItems } from '$lib/services/InventoryService';
 import { triggerLocationEvent } from '$lib/services/LocationEventService';
+import { resolveNpcPosition } from '$lib/services/MapService';
 import { game } from '$lib/game/game';
 import { toastStore } from '$lib/stores/toastStore';
 
+const INTERACTIVE = new Set(['npc', 'resource', 'event', 'teleport']);
+
 /**
  * Finds the interactive parent entity whose footprint contains (x, y).
- * - Parent entities: type is 'npc' | 'resource' | 'event' | 'teleport'
- * - multi_tile_part objects are resolved to their parent automatically.
- * - Returns null if no entity covers the given tile.
+ * NPC positions are resolved against the player's current tags and phase,
+ * so moving NPCs trigger correctly at their new location.
  */
 function getEntityAtPosition(x: number, y: number, objects: any[]): any | null {
+    const player       = get(playerStore);
+    const mapId        = get(mapStore).currentMapId;
+    const tags         = player.worldTags ?? [];
+    const currentPhase = get(phase) as 'Dawnrise' | 'Duskfall';
+    const npcs         = get(npcStore).globalNpcs;
+
     for (const obj of objects) {
         if (obj.type === 'multi_tile_part') continue;
+        if (!INTERACTIVE.has(obj.type)) continue;
 
-        // Only match interactive types — skip anything unrecognised
-        const INTERACTIVE = new Set(['npc', 'resource', 'event', 'teleport']);
-        if (!INTERACTIVE.has(obj.type)) continue;   // ← add this line
+        let objX = obj.x;
+        let objY = obj.y;
+
+        if (obj.type === 'npc') {
+            const npc = npcs[obj.npcId];
+            if (npc?.mapPositions) {
+                const pos = resolveNpcPosition(npc, mapId, tags, currentPhase);
+                if (!pos) continue; // NPC absent from this map right now
+                objX = pos.x;
+                objY = pos.y;
+            }
+        }
 
         const w = obj.width  ?? 1;
         const h = obj.height ?? 1;
-        if (x >= obj.x && x < obj.x + w && y >= obj.y && y < obj.y + h) {
+
+        if (x >= objX && x < objX + w && y >= objY && y < objY + h) {
             return obj;
         }
     }
     return null;
 }
 
-/**
- * Checks for and handles interactions with fixed objects on the current tile.
- * @returns {boolean} - True if an interaction occurred, false otherwise.
- */
 export async function checkForTileInteraction(): Promise<boolean> {
     const player = get(playerStore);
     const mapStoreState = get(mapStore);
@@ -59,7 +74,7 @@ export async function checkForTileInteraction(): Promise<boolean> {
             case 'npc': {
                 const npcData = await getNpcData(mapObject.npcId);
                 if (!npcData) {
-                    console.warn(`No NPC data found for npcId: "${mapObject.npcId}" at (${mapObject.x}, ${mapObject.y})`);
+                    console.warn(`No NPC data found for npcId: "${mapObject.npcId}"`);
                     break;
                 }
                 showEvent('npc', npcData.profileImage, { npcId: npcData.id, fullImage: npcData.image });
@@ -79,8 +94,8 @@ export async function checkForTileInteraction(): Promise<boolean> {
             case 'event': {
                 const eventData = locationEventDefinitions[mapObject.eventId];
                 if (!eventData) {
-                    console.warn(`No event definition found for eventId: "${mapObject.eventId}" at (${mapObject.x}, ${mapObject.y}). Add it to locationEventDefinitions to activate this tile.`);
-                    break; // don't crash — treat as empty tile until the event is written
+                    console.warn(`No event definition for eventId: "${mapObject.eventId}" at (${mapObject.x}, ${mapObject.y}). Add to locationEventDefinitions to activate.`);
+                    break;
                 }
 
                 const hasBeenCompleted = (player.locationEventHistory?.[eventData.id] || 0) > 0;
@@ -107,7 +122,6 @@ export async function checkForTileInteraction(): Promise<boolean> {
         }
     }
 
-    // No interaction — close dialogue if it was open from a previous tile
     const dialogue = get(dialogueStore);
     if (dialogue.isOpen && !dialogue.justClosed) {
         dialogueStore.closeDialogue();
@@ -116,9 +130,6 @@ export async function checkForTileInteraction(): Promise<boolean> {
     return false;
 }
 
-/**
- * Handles the logic for a player attempting to gather a resource.
- */
 export function gatherResource() {
     const player = get(playerStore);
     const mapStoreState = get(mapStore);
@@ -149,19 +160,17 @@ export function gatherResource() {
         return;
     }
 
-    // Key off the parent's origin tile so all parts of a multi-tile node share one state
     const resourceNodeKey = `${get(mapStore).currentMapId}-${mapObject.x}-${mapObject.y}`;
 
     resourceStore.update(rs => {
         const currentTime = get(time);
-        let currentState = rs.resourceNodeStates[resourceNodeKey] || { currentGatherCount: 0, cooldownEndTime: 0 };
+        const currentState = rs.resourceNodeStates[resourceNodeKey] || { currentGatherCount: 0, cooldownEndTime: 0 };
 
         if (currentState.currentGatherCount >= node.maxGathers && currentState.cooldownEndTime <= currentTime) {
-            const newResourceNodeStates = { ...rs.resourceNodeStates };
-            newResourceNodeStates[resourceNodeKey] = { currentGatherCount: 0, cooldownEndTime: 0 };
+            const newStates = { ...rs.resourceNodeStates, [resourceNodeKey]: { currentGatherCount: 0, cooldownEndTime: 0 } };
             messageStore.addMessage(`The ${node.name} has respawned.`, ['World']);
             toastStore.info(`The ${node.name} has respawned.`);
-            return { ...rs, resourceNodeStates: newResourceNodeStates };
+            return { ...rs, resourceNodeStates: newStates };
         }
 
         if (currentState.cooldownEndTime > currentTime) {
@@ -176,15 +185,13 @@ export function gatherResource() {
         }
 
         const newGatherCount = currentState.currentGatherCount + 1;
-        let newCooldownEndTime = currentState.cooldownEndTime;
-        if (newGatherCount >= node.maxGathers) {
-            newCooldownEndTime = currentTime + (node.cooldown * 50);
-        }
+        const newCooldownEndTime = newGatherCount >= node.maxGathers
+            ? currentTime + (node.cooldown * 50)
+            : currentState.cooldownEndTime;
 
-        const newResourceNodeStates = { ...rs.resourceNodeStates };
-        newResourceNodeStates[resourceNodeKey] = {
-            currentGatherCount: newGatherCount,
-            cooldownEndTime: newCooldownEndTime
+        const newStates = {
+            ...rs.resourceNodeStates,
+            [resourceNodeKey]: { currentGatherCount: newGatherCount, cooldownEndTime: newCooldownEndTime }
         };
 
         playerStore.update(p => {
@@ -196,6 +203,6 @@ export function gatherResource() {
         });
 
         messageStore.addMessage(node.dialogue.success, ['World']);
-        return { ...rs, resourceNodeStates: newResourceNodeStates };
+        return { ...rs, resourceNodeStates: newStates };
     });
 }

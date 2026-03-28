@@ -537,11 +537,39 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             "Cygwin's notes, pinned to the side of the casing, read: 'Output stable. Resonance bleed: 0.3%. Within tolerance. For now.'",
             "'For now' is underlined twice.",
         ],
-        requirement: { type: 'have_tag', tag: 'can_interact_extractor' },
+        requirement: { type: 'have_tag', tag: 'cygwin_ready_for_f2' },
         requirementNotMetMessage: "A bore shaft drops into the dark. You have no business here yet.",
         actions: [
             {
                 text: "Read Cygwin's field notes",
+                effects: [
+                    { type: 'add_tag', tag: 'underground_well1_read' },
+                    { type: 'give_item', itemId: 'stone', quantity: 2 }
+                ]
+            }
+        ],
+        afterDescription: "Well One continues its work. Cygwin's notes are still pinned to the casing.",
+        reusable: false
+    },
+
+    underground_well2: {
+        id: 'underground_well2',
+        name: 'Underground Well — Site Two',
+        image: '/locations/underground_well.png',
+        shortDesc: "A shaft bored straight down into the island's core. First of its kind.",
+        stepOnMessage: "A reinforced shaft drops straight into the earth. Cold air rises from it, carrying something metallic.",
+        message: [
+            "Well Two is Cygwin's project — the first bore site, placed deliberately far from the Dragon Empire ruins.",
+            "She chose this location after three weeks of resonance mapping.",
+            "The shaft goes down 200 metres. At the bottom, the island's energy runs like a river.",
+            "Claudia's notes, pinned to the side of the casing, read: 'Output stable. Resonance bleed: 0.3%. Within tolerance. For now.'",
+            "'For now' is underlined twice.",
+        ],
+        requirement: { type: 'have_tag', tag: 'cygwin_ready_for_f2' },
+        requirementNotMetMessage: "A bore shaft drops into the dark. You have no business here yet.",
+        actions: [
+            {
+                text: "Read Claudia's field notes",
                 effects: [
                     { type: 'add_tag', tag: 'underground_well1_read' },
                     { type: 'give_item', itemId: 'stone', quantity: 2 }

@@ -17,7 +17,7 @@
     ],
     "description": "A dark-winged angel who has watched this island longer than the Saints have been building on it. She chose the mountain. She does not regret this.",
     "faction": "",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Dark",
         "Wind"

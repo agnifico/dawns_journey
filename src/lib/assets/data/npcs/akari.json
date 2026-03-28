@@ -11,7 +11,7 @@
     ],
     "description": "A mysterious agent of the Shadowhand, working to thwart the plans of the Solis Saints.",
     "faction": "shadowhand",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Fire"
     ],

@@ -21,7 +21,7 @@
     ],
     "description": "The Queen of Hell. Wielder of limitless power, subject to a lifetime of boredom from her menial duties in the underworld. Now, lost in the new world, she has found a new avenue for fun — you.",
     "faction": "",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": ["Dark", "Fire"],
     "baseStats": {
         "hp": 1000,

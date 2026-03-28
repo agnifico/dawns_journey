@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { playerStore, playerStats, playerActiveElements } from '../stores/playerStore';
+	import { playerStore, playerStats, playerActiveElements, setPlayerName } from '../stores/playerStore';
 	import Stat from './Stat.svelte';
 	import StatBar from './ui/StatBar.svelte';
 	import AvatarSelector from './AvatarSelector.svelte';
@@ -7,14 +7,31 @@
 	import { getXpForLevel as getXpForSkillLevel } from '$lib/services/SkillService';
 	import { getXpForLevel, getXpForLevelUp } from '$lib/services/PlayerLevelService';
 	import WRHeader from './WRHeader.svelte';
-	import { get } from 'svelte/store';
 	import HPBar from './HPBar.svelte';
 	import Level from './Level.svelte';
 
 	let currentView: 'stats' | 'skills' = 'stats';
-
 	function toggleView() {
 		currentView = currentView === 'stats' ? 'skills' : 'stats';
+	}
+
+	// Name editing
+	let editingName = false;
+	let nameInput = '';
+
+	function startEditing() {
+		nameInput = $playerStore.profile.name ?? '';
+		editingName = true;
+	}
+
+	function commitName() {
+		if (nameInput.trim()) setPlayerName(nameInput);
+		editingName = false;
+	}
+
+	function onNameKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') commitName();
+		if (e.key === 'Escape') editingName = false;
 	}
 </script>
 
@@ -22,16 +39,31 @@
 	<div class="header">
 		<div class="header-left">
 			<AvatarSelector />
+
+			<!-- Name display / edit -->
+			<div class="name-row">
+				{#if editingName}
+					<!-- svelte-ignore a11y_autofocus -->
+					<input
+						class="name-input"
+						bind:value={nameInput}
+						on:blur={commitName}
+						on:keydown={onNameKeydown}
+						maxlength="24"
+						autofocus
+					/>
+				{:else}
+					<button class="name-display" on:click={startEditing} title="Click to rename">
+						<span class="name-text">{$playerStore.profile.name || 'Traveller'}</span>
+						<span class="name-edit-hint">✎</span>
+					</button>
+				{/if}
+			</div>
 		</div>
+
 		<div class="header-right">
 			<Switch text1="Stats" text2="Skills" fn={toggleView} />
 			<div class="stat-bars">
-				<!-- <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
-				<StatBar
-					current={$playerStats.auraShield}
-					max={$playerStats.maxAuraShield}
-					color="#a98467"
-				/> -->
 				<HPBar type="hp" current={$playerStats.hp} max={$playerStats.maxHp} />
 				<HPBar type="aura" current={$playerStats.auraShield} max={$playerStats.maxAuraShield} />
 			</div>
@@ -40,114 +72,25 @@
 				{@const xpNeeded = getXpForLevelUp($playerStore.level)}
 				<Level level={$playerStore.level} currentXp={xpInLevel} maxXp={xpNeeded} />
 			{/if}
-			<!-- {$playerStore.worldResonance} -->
-			<!-- {$playerStore.worldTags} -->
 		</div>
 	</div>
+
 	<WRHeader value={$playerStore.worldResonance} elements={$playerActiveElements} />
 
 	{#if currentView === 'stats'}
 		<div class="stats-grid">
 			{#if $playerStats}
-				<!-- <div class="skill-wrap">
-					<div class="skill-item-intra">
-						<img class="skill-icon" src="/game_icons/player_level.png" alt="" srcset="" />
-						<div class="skill-item" style="grid-column: 1 / -1;">
-							<div class="skill-info">
-								<span class="name">Level</span>
-								<span class="level">Lv. {$playerStore.level}</span>
-							</div>
-							{#if xpNeeded !== null}
-								<div class="xp-bar">
-									<div
-										class="xp-fill"
-										style="width: {Math.min(100, (xpInLevel / xpNeeded) * 100)}%;"
-									></div>
-									<div class="xp-text">{xpInLevel} / {xpNeeded}</div>
-								</div>
-							{:else}
-								<div class="xp-bar">
-									<div class="xp-fill" style="width: 100%;"></div>
-									<div class="xp-text">Max Level</div>
-								</div>
-							{/if}
-						</div>
-					</div>
-				</div> -->
-				<!-- <div class="stats-column"> -->
-				<Stat
-					view="short"
-					statId="hp"
-					value={`${$playerStats.hp} / ${$playerStats.maxHp}`}
-					baseValue={$playerStore.baseStats.maxHp}
-				/>
-				<Stat
-					view="short"
-					statId="physicalAttack"
-					value={$playerStats.physicalAttack}
-					baseValue={$playerStore.baseStats.physicalAttack}
-				/>
-				<Stat
-					view="short"
-					statId="elementalAttack"
-					value={$playerStats.elementalAttack}
-					baseValue={$playerStore.baseStats.elementalAttack}
-				/>
-				<Stat
-					view="short"
-					statId="physicalDefence"
-					value={$playerStats.physicalDefence}
-					baseValue={$playerStore.baseStats.physicalDefence}
-				/>
-				<Stat
-					view="short"
-					statId="elementalDefence"
-					value={$playerStats.elementalDefence}
-					baseValue={$playerStore.baseStats.elementalDefence}
-				/>
-
-				<!-- </div> -->
-				<!-- <div class="stats-column"> -->
-
-				<Stat
-					view="short"
-					statId="maxAuraShield"
-					value={$playerStats.maxAuraShield}
-					baseValue={$playerStore.baseStats.maxAuraShield}
-				/>
-
-				<Stat
-					view="short"
-					statId="critChance"
-					value={$playerStats.critChance}
-					baseValue={$playerStore.baseStats.critChance}
-				/>
-				<Stat
-					view="short"
-					statId="critDamage"
-					value={$playerStats.critDamage}
-					baseValue={$playerStore.baseStats.critDamage}
-				/>
-				<Stat
-					view="short"
-					statId="precision"
-					value={$playerStats.precision}
-					baseValue={$playerStore.baseStats.precision}
-				/>
-				<Stat
-					view="short"
-					statId="speed"
-					value={$playerStats.speed}
-					baseValue={$playerStore.baseStats.speed}
-				/>
-
-				<Stat
-					view="short"
-					statId="evasion"
-					value={$playerStats.evasion}
-					baseValue={$playerStore.baseStats.evasion}
-				/>
-				<!-- </div> -->
+				<Stat view="short" statId="hp"              value={`${$playerStats.hp} / ${$playerStats.maxHp}`}  baseValue={$playerStore.baseStats.maxHp} />
+				<Stat view="short" statId="physicalAttack"  value={$playerStats.physicalAttack}   baseValue={$playerStore.baseStats.physicalAttack} />
+				<Stat view="short" statId="elementalAttack" value={$playerStats.elementalAttack}  baseValue={$playerStore.baseStats.elementalAttack} />
+				<Stat view="short" statId="physicalDefence" value={$playerStats.physicalDefence}  baseValue={$playerStore.baseStats.physicalDefence} />
+				<Stat view="short" statId="elementalDefence" value={$playerStats.elementalDefence} baseValue={$playerStore.baseStats.elementalDefence} />
+				<Stat view="short" statId="maxAuraShield"   value={$playerStats.maxAuraShield}    baseValue={$playerStore.baseStats.maxAuraShield} />
+				<Stat view="short" statId="critChance"      value={$playerStats.critChance}       baseValue={$playerStore.baseStats.critChance} />
+				<Stat view="short" statId="critDamage"      value={$playerStats.critDamage}       baseValue={$playerStore.baseStats.critDamage} />
+				<Stat view="short" statId="precision"       value={$playerStats.precision}        baseValue={$playerStore.baseStats.precision} />
+				<Stat view="short" statId="speed"           value={$playerStats.speed}            baseValue={$playerStore.baseStats.speed} />
+				<Stat view="short" statId="evasion"         value={$playerStats.evasion}          baseValue={$playerStore.baseStats.evasion} />
 			{:else}
 				<p>Loading stats...</p>
 			{/if}
@@ -158,33 +101,18 @@
 				{#each $playerStore.skills as skill}
 					<div class="skill-wrap">
 						<div class="skill-item-intra">
-							<img
-								class="skill-icon"
-								src="/game_icons/{skill.name.toLowerCase()}.png"
-								alt=""
-								srcset=""
-							/>
+							<img class="skill-icon" src="/game_icons/{skill.name.toLowerCase()}.png" alt="" />
 							<div class="skill-item">
 								<div class="skill-info">
 									<span class="name">{skill.name}</span>
 									<span class="level">Lv. {skill.level}</span>
 								</div>
-
 								<div class="xp-bar">
-									<div
-										class="xp-fill"
-										style="width: {Math.min(
-											100,
-											(skill.experience / getXpForSkillLevel(skill.id, skill.level)) * 100
-										)}%;"
-									></div>
-									<div class="xp-text">
-										{skill.experience} / {getXpForSkillLevel(skill.id, skill.level)}
-									</div>
+									<div class="xp-fill" style="width: {Math.min(100, (skill.experience / getXpForSkillLevel(skill.id, skill.level)) * 100)}%;"></div>
+									<div class="xp-text">{skill.experience} / {getXpForSkillLevel(skill.id, skill.level)}</div>
 								</div>
 							</div>
 						</div>
-						<!-- <p class="skill-desc">{skill.description}</p> -->
 					</div>
 				{/each}
 			{:else}
@@ -195,24 +123,11 @@
 </div>
 
 <style>
-	h2 {
-		font-family: 'DePixel';
-		font-size: 1rem;
-		color: var(--text-header);
-		text-align: left;
-		width: 100%;
-		padding-left: 1rem;
-	}
 	.player-stats {
 		padding: 1rem;
 		padding-bottom: 2rem;
-		/* background-color: var(--surface-3); */
 		position: relative;
 		border-radius: 12px;
-		/* box-shadow: #00000056 0 -6px 0 6px inset; */
-		/* border-top: 3px solid #00000056; */
-		/* height: 100%; */
-		/* width: 100%; */
 	}
 	.header {
 		width: 100%;
@@ -227,120 +142,77 @@
 		flex-shrink: 0;
 		width: fit-content;
 		max-width: 180px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.4rem;
 	}
 	.header-right {
 		flex-grow: 1;
-		/* border: 1px solid white; */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		align-items: flex-end;
 		gap: 0.5rem;
 	}
-	.toggle-button {
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-	}
-	.toggle-button img {
-		width: 24px;
-		height: 24px;
-	}
-	.stat-bars {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		/* margin-bottom: 1em; */
-		max-width: 200px;
+
+	/* ── Name field ── */
+	.name-row {
 		width: 100%;
 	}
-	.stats-grid {
-		display: grid;
-		margin-top: 1rem;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		gap: 0.5rem;
-	}
-	.stats-column {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5em;
-	}
-	.skills-grid {
-		display: flex;
-		/* grid-template-columns: 1fr; */
-		flex-direction: column;
-		gap: 0.75em;
-	}
-	.skill-wrap {
-		background-color: #3a3a3a;
-		display: flex;
-		flex-direction: column;
-		padding: 0.5rem;
-		gap: 0.5rem;
-		border-radius: 6px;
-	}
-
-	.skill-item {
-		font-family: var(--font-family-pixel);
-		font-size: 1rem;
-		display: flex;
-		flex-direction: column;
-		background-color: var(--color-surface-3);
-		padding: 0.5em;
-		border-radius: 5px;
-		color: var(--color-text-primary);
-		color: var(--orange);
-		gap: 0.25rem;
-
-		flex-grow: 1;
-	}
-	.skill-item-intra {
+	.name-display {
 		display: flex;
 		align-items: center;
+		gap: 4px;
+		background: none;
+		border: none;
+		border-bottom: 1px dashed rgba(255,255,255,0.2);
+		padding: 2px 4px;
+		cursor: pointer;
+		width: 100%;
+		justify-content: center;
 	}
-	.skill-icon {
-		width: 32px;
-		height: 32px;
-		background-color: #a28269;
-		padding: 4px 4px 7px;
-		border-radius: 6px;
-		box-shadow: #00000056 0 -3px 0 0 inset;
-		border: 3px solid #3a3a3a;
+	.name-display:hover .name-edit-hint {
+		opacity: 1;
 	}
-	.skill-info {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-	}
-
-	.skill-desc {
+	.name-text {
 		font-family: var(--font-family-pixel);
 		font-size: 0.75rem;
-		color: var(--orange);
-		margin-left: 0.5rem;
+		color: var(--color-text-primary, #eee);
+		letter-spacing: 0.5px;
+	}
+	.name-edit-hint {
+		font-size: 0.65rem;
+		color: rgba(255,255,255,0.35);
+		opacity: 0;
+		transition: opacity 0.15s;
+	}
+	.name-input {
+		width: 100%;
+		background: rgba(255,255,255,0.08);
+		border: 1px solid rgba(255,255,255,0.25);
+		border-radius: 4px;
+		color: #eee;
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		padding: 3px 6px;
+		text-align: center;
+		outline: none;
+	}
+	.name-input:focus {
+		border-color: var(--color-primary, #aaa);
 	}
 
-	.xp-bar {
-		width: 100%;
-		height: 14px;
-		background-color: var(--surface-1);
-		border-radius: 3px;
-		position: relative;
-		border: 1px solid black;
-	}
-	.xp-fill {
-		height: 100%;
-		background-color: var(--color-primary);
-		border-radius: 2px;
-	}
-	.xp-text {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 0.6rem;
-		color: white;
-		text-shadow: 1px 1px 0 black;
-	}
+	/* ── Rest unchanged ── */
+	.stat-bars { display: flex; flex-direction: column; gap: 4px; max-width: 200px; width: 100%; }
+	.stats-grid { display: grid; margin-top: 1rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; }
+	.skills-grid { display: flex; flex-direction: column; gap: 0.75em; }
+	.skill-wrap { background-color: #3a3a3a; display: flex; flex-direction: column; padding: 0.5rem; gap: 0.5rem; border-radius: 6px; }
+	.skill-item { font-family: var(--font-family-pixel); font-size: 1rem; display: flex; flex-direction: column; background-color: var(--color-surface-3); padding: 0.5em; border-radius: 5px; color: var(--orange); gap: 0.25rem; flex-grow: 1; }
+	.skill-item-intra { display: flex; align-items: center; }
+	.skill-icon { width: 32px; height: 32px; background-color: #a28269; padding: 4px 4px 7px; border-radius: 6px; box-shadow: #00000056 0 -3px 0 0 inset; border: 3px solid #3a3a3a; }
+	.skill-info { display: flex; justify-content: space-between; align-items: baseline; }
+	.xp-bar { width: 100%; height: 14px; background-color: var(--surface-1); border-radius: 3px; position: relative; border: 1px solid black; }
+	.xp-fill { height: 100%; background-color: var(--color-primary); border-radius: 2px; }
+	.xp-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.6rem; color: white; text-shadow: 1px 1px 0 black; }
 </style>

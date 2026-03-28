@@ -16,8 +16,12 @@
     ],
     "description": "Commander of the Solis Saints' eastern operations. Aristocrat by birth, soldier by choice, and the person most likely to have already planned your birthday party.",
     "faction": "solis_saints",
+    "hidden": false,
     "isCombatant": true,
-    "types": ["Water", "Wind"],
+    "types": [
+        "Water",
+        "Wind"
+    ],
     "baseStats": {
         "hp": 400,
         "maxHp": 400,
@@ -76,7 +80,9 @@
             "stages": [
                 {
                     "objective": "Speak with Claudia",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "Not now, I'm in the middle of something.",
                         "Come back when I look less like I'm doing three things at once.",
@@ -96,7 +102,10 @@
                         "Also you never told me your birthday, which is fine, I'll find out eventually."
                     ],
                     "success_rewards": [
-                        { "type": "tag", "tagId": "claudia_ready_for_f1" }
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_ready_for_f1"
+                        }
                     ]
                 },
                 {
@@ -117,8 +126,14 @@
                         "She already knows, she always knows, but I'm telling her anyway."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "claudia_sword_1_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 5
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_sword_1_complete"
+                        }
                     ]
                 }
             ]
@@ -164,8 +179,14 @@
                         "She loves surprises. She pretends she doesn't. She loves them."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "claudia_sword_2_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 5
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_sword_2_complete"
+                        }
                     ]
                 }
             ]
@@ -181,7 +202,9 @@
             "stages": [
                 {
                     "objective": "Attend Claudia's gathering",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "Tonight! I said tonight!",
                         "The fire pit, eastern camp, after Duskfall.",
@@ -209,9 +232,19 @@
                         "Don't worry about it. I will handle it."
                     ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "forza_mead", "quantity": 1 },
-                        { "type": "world_resonance", "amount": 8 },
-                        { "type": "tag", "tagId": "claudia_sword_3_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "forza_mead",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_sword_3_complete"
+                        }
                     ]
                 }
             ]
@@ -227,7 +260,9 @@
             "stages": [
                 {
                     "objective": "Speak with Claudia",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
                         "I'm still working through something. Give me a little more time.",
                         "It's the Platform Seven thing. I can't leave it alone."
@@ -255,8 +290,14 @@
                         "Come back in a few days. I might have a better shape for it by then."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "claudia_sword_4_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_sword_4_complete"
+                        }
                     ]
                 }
             ]
@@ -270,14 +311,22 @@
                     "startRequirement": {
                         "operator": "AND",
                         "conditions": [
-                            { "type": "have_tag", "tag": "claudia_sword_4_complete" },
-                            { "type": "have_tag", "tag": "sided_with_solis_saints" }
+                            {
+                                "type": "have_tag",
+                                "tag": "claudia_sword_4_complete"
+                            },
+                            {
+                                "type": "have_tag",
+                                "tag": "sided_with_solis_saints"
+                            }
                         ]
                     },
                     "stages": [
                         {
                             "objective": "Speak with Claudia",
-                            "requirement": { "type": "dialogue" },
+                            "requirement": {
+                                "type": "dialogue"
+                            },
                             "success_dialogue": [
                                 "So. The Altar.",
                                 "Guinevere-onii-chan's plan worked. Of course it did.",
@@ -295,8 +344,14 @@
                                 "Getting there."
                             ],
                             "success_rewards": [
-                                { "type": "world_resonance", "amount": 10 },
-                                { "type": "tag", "tagId": "claudia_sword_5_complete" }
+                                {
+                                    "type": "world_resonance",
+                                    "amount": 10
+                                },
+                                {
+                                    "type": "tag",
+                                    "tagId": "claudia_sword_5_complete"
+                                }
                             ]
                         }
                     ]
@@ -308,14 +363,22 @@
                     "startRequirement": {
                         "operator": "AND",
                         "conditions": [
-                            { "type": "have_tag", "tag": "claudia_sword_4_complete" },
-                            { "type": "have_tag", "tag": "sided_with_shadowhand" }
+                            {
+                                "type": "have_tag",
+                                "tag": "claudia_sword_4_complete"
+                            },
+                            {
+                                "type": "have_tag",
+                                "tag": "sided_with_shadowhand"
+                            }
                         ]
                     },
                     "stages": [
                         {
                             "objective": "Speak with Claudia",
-                            "requirement": { "type": "dialogue" },
+                            "requirement": {
+                                "type": "dialogue"
+                            },
                             "success_dialogue": [
                                 "You chose the other side.",
                                 "I'm not — I'm not angry at you.",
@@ -332,8 +395,14 @@
                                 "I already have you in the birthday calendar. It's too late to remove you."
                             ],
                             "success_rewards": [
-                                { "type": "world_resonance", "amount": 8 },
-                                { "type": "tag", "tagId": "claudia_sword_5_complete" }
+                                {
+                                    "type": "world_resonance",
+                                    "amount": 8
+                                },
+                                {
+                                    "type": "tag",
+                                    "tagId": "claudia_sword_5_complete"
+                                }
                             ]
                         }
                     ]
@@ -352,9 +421,19 @@
                 "Welcome to the inner circle. There are perks. I organise things."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "claudia_heart_rank_1_unlocked" },
-                { "type": "world_resonance", "amount": 5 },
-                { "type": "item", "itemId": "heart_shaped_chocolates", "quantity": 1 }
+                {
+                    "type": "tag",
+                    "tagId": "claudia_heart_rank_1_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 5
+                },
+                {
+                    "type": "item",
+                    "itemId": "heart_shaped_chocolates",
+                    "quantity": 1
+                }
             ],
             "giftingOptions": [
                 {
@@ -442,8 +521,14 @@
                 "Guinevere-onii-chan already knew. She always already knows."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "claudia_heart_rank_2_unlocked" },
-                { "type": "world_resonance", "amount": 8 }
+                {
+                    "type": "tag",
+                    "tagId": "claudia_heart_rank_2_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 8
+                }
             ],
             "giftingOptions": [
                 {
@@ -539,8 +624,14 @@
                 "Okay moving on!"
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "claudia_heart_rank_3_unlocked" },
-                { "type": "world_resonance", "amount": 10 }
+                {
+                    "type": "tag",
+                    "tagId": "claudia_heart_rank_3_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 10
+                }
             ],
             "giftingOptions": [
                 {
@@ -642,8 +733,14 @@
                 "But I was still right."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "claudia_heart_rank_4_unlocked" },
-                { "type": "world_resonance", "amount": 12 }
+                {
+                    "type": "tag",
+                    "tagId": "claudia_heart_rank_4_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 12
+                }
             ],
             "giftingOptions": [
                 {
@@ -722,8 +819,14 @@
                 "Stay in my territory."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "claudia_heart_rank_5_unlocked" },
-                { "type": "world_resonance", "amount": 15 }
+                {
+                    "type": "tag",
+                    "tagId": "claudia_heart_rank_5_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 15
+                }
             ],
             "giftingOptions": [
                 {

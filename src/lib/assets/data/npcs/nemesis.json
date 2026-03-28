@@ -18,7 +18,7 @@
          "/images/characters/nemesis/nemesis11.png",
          "/images/characters/nemesis/nemesis12.png"
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Water", "Fire"
     ],

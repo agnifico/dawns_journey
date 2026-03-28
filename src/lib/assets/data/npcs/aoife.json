@@ -14,7 +14,7 @@
 
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": ["Fire"],
     
     "baseStats": {

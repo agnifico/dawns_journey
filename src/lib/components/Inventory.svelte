@@ -193,7 +193,7 @@ function getStatName(statId: string): string {
 						on:click={() => selectItem(item)}
 						on:contextmenu|preventDefault={(e) => openActionSheet(item, e)}
 					>
-						<ItemBox {item} viewSize="small" base="" />
+						<ItemBox {item} viewSize="medium" base="" />
 
 						<!-- Action sheet above slot on right-click / long-press -->
 						{#if actionSheetItem?.id === item.id}
@@ -360,16 +360,17 @@ function getStatName(statId: string): string {
 		gap: 8px;
 		align-items: flex-start;
 		min-height: 0;
+		overflow-y: hidden;
 	}
 
 	.grid-wrapper {
 		flex: 1;
 		min-width: 0;
-		overflow-y: auto;
 		max-height: calc(5 * (44px + 4px) + 16px);
+		overflow-y: auto;
 		scrollbar-width: none;
 		border-radius: 0 0 6px 6px;
-		box-shadow: #00000056 0 -6px 0 3px inset;
+		/* box-shadow: #00000056 0 -6px 0 3px inset; */
 		border-top: 3px solid rgba(0,0,0,0.3);
 		background-color: rgba(30,24,16,0.6);
 		transition: max-height 0.2s ease;
@@ -377,7 +378,7 @@ function getStatName(statId: string): string {
 
 	.item-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, 44px);
+		grid-template-columns: repeat(auto-fill, 68px);
 		gap: 7px 3px;
 		justify-content: flex-start;
 		padding: 10px 6px 10px 8px;
@@ -385,15 +386,15 @@ function getStatName(statId: string): string {
 
 	/* ── Grid items ── */
 	.grid-item {
-		width: 40px;
-		height: 40px;
+		width: 60px;
+		height: 60px;
 		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
-		background-color: rgba(40, 34, 24, 0.9);
-		border: 1px solid rgba(200, 169, 110, 0.08);
+		/* background-color: rgba(40, 34, 24, 0.9); */
+		/* border: 1px solid rgba(200, 169, 110, 0.08); */
 		border-radius: 4px;
 		padding: 2px;
 		box-sizing: border-box;

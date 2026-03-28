@@ -41,6 +41,7 @@
 	}
 
 	function getNpcImagePath(npc: Combatant): string {
+		return npc.profileImage;
 		return `/images/characters/${npc.id}/${npc.id}_avatar.png`;
 	}
 </script>

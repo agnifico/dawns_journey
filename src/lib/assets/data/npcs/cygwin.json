@@ -16,8 +16,8 @@
     ],
     "description": "Commander of the Solis Saints' southern operations. She made herself into what her people needed. She has not stopped.",
     "faction": "solis_saints",
-    "isCombatant": true,
-    "types": ["Earth", "Light"],
+    "hidden": false, "isCombatant": true,
+    "types": ["Fire", "Earth"],
     "baseStats": {
         "hp": 500,
         "maxHp": 500,

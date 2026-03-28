@@ -11,7 +11,7 @@
         "/images/characters/marjane/marjane6.png"
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": ["Water"],
     "baseStats": {
         "hp": 1000,

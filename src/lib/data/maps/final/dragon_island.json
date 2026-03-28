@@ -3282,6 +3282,22 @@
       "parentId": "multi-0"
     },
     {
+      "id": "multi-00",
+      "x": 5,
+      "y": 65,
+      "width": 1,
+      "height": 2,
+      "type": "npc",
+      "multiTile": true,
+      "npcId": "verona"
+    },
+    {
+      "x": 5,
+      "y": 66,
+      "type": "multi_tile_part",
+      "parentId": "multi-00"
+    },
+    {
       "id": "multi-1",
       "x": 23,
       "y": 43,

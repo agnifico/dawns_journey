@@ -54,7 +54,7 @@
 			applyProfile(selectedProfileId);
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true }));
+			playerStore.update((p) => ({ ...p, isInitialized: true, position: {x: 25, y: 30} }));
 			goto('/map');
 		}
 	}
@@ -64,7 +64,7 @@
 			applyProfile('mage');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true }));
+			playerStore.update((p) => ({ ...p, isInitialized: true, position: {x: 25, y: 30} } ));
 			goto('/map');
 		}
 	}

@@ -9,7 +9,7 @@
         "/images/characters/ariana/ariana2.png",
         "/images/characters/ariana/ariana3.png"
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Water",
         "Light"

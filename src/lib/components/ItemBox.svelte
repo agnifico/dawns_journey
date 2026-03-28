@@ -228,8 +228,8 @@
 	.item-box img {
 		position: relative;
 		top: -2px;
-		max-width: 32px;
-		max-height: 32px;
+		max-width: 64px;
+		max-height: 64px;
 		image-rendering: pixelated;
 	}
 

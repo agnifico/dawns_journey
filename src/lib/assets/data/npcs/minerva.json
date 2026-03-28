@@ -13,7 +13,7 @@
          "/images/characters/minerva/minerva6.png",
          "/images/characters/minerva/minerva7.png"
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": [
         "Earth"
     ],

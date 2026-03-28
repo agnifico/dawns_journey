@@ -15,7 +15,7 @@
     ],
     "description": "Commander of the Solis Saints on Ashenfall. She feeds people, houses people, protects people, and is building Towers that are tearing the island apart. She sees no contradiction in this.",
     "faction": "solis_saints",
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": ["Light", "Dark"],
     "baseStats": {
         "hp": 700,

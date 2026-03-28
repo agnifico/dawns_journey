@@ -592,3 +592,71 @@ export interface Faction {
 export function countItemsById(inventory: Item[], itemId: string): number {
     return inventory.filter(i => i.id === itemId).length;
 }
+
+// ─── Add these to types.ts ───────────────────────────────────────────────────
+// Place NpcPosition before the NPC interface.
+// Add hidden? and mapPositions? to the existing NPC interface.
+
+export interface NpcPosition {
+    mapId: string;
+    x: number;
+    y: number;
+    default?: boolean;
+    requiredTag?: string;
+    phase?: 'Dawnrise' | 'Duskfall'; // omit to apply to both phases
+}
+
+// Add these two fields to your existing NPC interface:
+//   hidden?: boolean;
+//   mapPositions?: NpcPosition[];
+//
+// Full NPC interface for reference — merge with whatever you already have:
+
+export interface NPC {
+    id: string;
+    name: string;
+    title?: string;
+    description: string;
+    profileImage: string;
+    image: string;
+    spriteGif?: string;
+    galleryImages?: string[];
+    faction?: string;
+    isCombatant?: boolean;
+    types: string[];
+    baseStats: PlayerBaseStats;
+    swordRank: number;
+    heartRank: number;
+    affinity: number;
+    swordState: string;
+    heartState: string;
+    swordRanks: any[];
+    heartRanks: any[];
+    statGrowth?: any[];
+    abilityCycle?: string[];
+    battleAftermathsBySwordRank?: any[];
+    drops?: any[];
+
+    // ── New fields ──────────────────────────────────────────────────────────
+    /**
+     * When true, this NPC is excluded from all list UIs:
+     * journal character list, arena roster, gallery, NpcViewer.
+     * Use for hidden duplicates that appear on a second map with
+     * different dialogue/context.
+     */
+    hidden?: boolean;
+
+    /**
+     * Tag- and phase-driven position overrides.
+     * Resolution priority (first match wins):
+     *   1. requiredTag matches AND phase matches
+     *   2. requiredTag matches (no phase restriction)
+     *   3. phase matches (no tag restriction)
+     *   4. default: true
+     *
+     * If no entry matches the current map, the NPC does not appear.
+     * If mapPositions is omitted entirely, the static map object
+     * coordinates are used as before (backward-compatible).
+     */
+    mapPositions?: NpcPosition[];
+}

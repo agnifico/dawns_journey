@@ -10,7 +10,7 @@ import marjaneTemplateJson from '$lib/assets/data/npcs/marjane.json';
 import minervaTemplateJson from '$lib/assets/data/npcs/minerva.json';
 import bonnieTemplateJson from '$lib/assets/data/npcs/bonnie.json';
 import arianaTemplateJson from '$lib/assets/data/npcs/ariana.json';
-import nyxTemplateJson from '$lib/assets/data/npcs/nyx.json';
+import veronaTemplateJson from '$lib/assets/data/npcs/verona.json';
 import veresTemplateJson from '$lib/assets/data/npcs/veres.json';
 import akariTemplateJson from '$lib/assets/data/npcs/akari.json';
 import nemesisTemplateJson from '$lib/assets/data/npcs/nemesis.json';
@@ -25,7 +25,7 @@ const marjaneTemplate = marjaneTemplateJson as NPC;
 const minervaTemplate = minervaTemplateJson as NPC;
 const bonnieTemplate = bonnieTemplateJson as NPC;
 const arianaTemplate = arianaTemplateJson as NPC;
-const nyxTemplate = nyxTemplateJson as NPC;
+const veronaTemplate = veronaTemplateJson as NPC;
 const veresTemplate = veresTemplateJson as NPC;
 const akariTemplate = akariTemplateJson as NPC;
 const nemesisTemplate = nemesisTemplateJson as NPC;
@@ -532,16 +532,16 @@ const arenaNpcs: Record<string, Combatant> = {
     },
 
     // -----------------------------------------------------------------------
-    // Nyx — The Trickster
+    // verona — The Trickster
     // High evasion. Makes you miss. Punishes missed turns.
     // Double Team + Feint creates a wall of evasion you can't penetrate.
     // Lock On hard-counters her — she has no immunity to guaranteed_hit.
     // High precision means your evasion doesn't help much either.
     // -----------------------------------------------------------------------
-    nyx: {
-        ...nyxTemplate,
+    verona: {
+        ...veronaTemplate,
         baseStats: {
-            ...withAccuracy(nyxTemplate.baseStats),
+            ...withAccuracy(veronaTemplate.baseStats),
             hp: 280, maxHp: 280,
             maxAuraShield: 40, auraShield: 40,
             physicalAttack: 170, elementalAttack: 100,

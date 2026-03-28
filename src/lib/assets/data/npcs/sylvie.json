@@ -16,7 +16,7 @@
         "/images/characters/sylvie/sylvie8.png",
         "/images/characters/sylvie/sylvie9.png"
     ],
-    "isCombatant": true,
+    "hidden": false, "isCombatant": true,
     "types": ["Earth"],
     "abilityCycle": [
         "basic_slash",
@@ -81,10 +81,25 @@
                     "value": 1,
                     "dialogue": [
                         "You fought well, but the forest is stronger.",
-                        "(Hint: You should equip the weapon — Basic Bow/Sword. Check out your Inventory, 'treasure chest' icon on top.)"
+                        "(Hint: You can equip Weapons and Relics in your Inventory. To go there, click the 'treasure chest' icon in the menu.)"
                     ]
                 }
             ]
+        }
+    ],
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 7,
+            "y": 39
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "sylvie_sword_1_complete",
+            "phase": "Duskfall",
+            "x": -1,
+            "y": -1
         }
     ],
     "swordRanks": [
@@ -98,7 +113,7 @@
                     "objective": "Talk to Sylvie (X:13, Y:2)",
                     "requirement": { "type": "dialogue" },
                     "success_dialogue": [
-                        "Welcome Traveler, this is Dawn's Journey",
+                        "Welcome {playerName}, this is Dawn's Journey",
                         "Move around, you'll find random loot you can pick up.",
                         "There are some places you can't go to right now, but you will, later.",
                         "For now, can you go into the water and get me a Fish?"
@@ -220,17 +235,14 @@
                         "And again, if you need further help, Talk to me."
                     ],
                     "reminder_dialogue": [
-                        "You need help? Start by Equip-ing the Vine Whip I gave you last quest.",
-                        "Go to the Inventory, and Equip it.",
-                        "You'll see yourself having some 'Weapon Mastery'",
-                        "Combat against these monsters is simple: if you have an element and a number higher than the ones listed, you win.",
-                        "So Greenhorns can be handled with 15 Earth Mastery or 25 Fire Mastery.",
-                        "Remember: OR, not AND. Either will do.",
-                        "However, Characters (with a capital 'C') like me, are a different story entirely.",
-                        "Well, maybe not me, because I'm a tutorial character and I'm designed and coded for you, *bites lips* ... to have an easy time with me."
+                        "You need help? Combat against wild enemies is easy.",
+                        "If you have a World Resonance higher than the Enemy creature, you win. Automatically; with the loot added to your Inventory.",
+                        "You also get some XP, which helps you Level Up!"
                     ],
                     "success_dialogue": [
-                        "Ooh I see you're good with that whip, mommy."
+                        "Was that easy?",
+                        "One of the major game design decisions taken was the concept of not having to do things repeatedly.",
+                        "Anti-grind, in gaming terms. Just imagine, having to battle every single creature across the world as you move around..."
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "citrine", "quantity": 2 },
@@ -284,8 +296,8 @@
                     },
                     "intro_dialogue": [
                         "Next, I sense this weird sense of power around this island. I don't know who or what is this source of strange, dark, yet liberating aura.",
-                        "Maybe it's someone over on the dildo shaped island to the West. No wonder we call it Pleasure Island xD",
-                        "Pleasure Island to the North, and a Treasure Island, along the same X-Axis to the south.",
+                        "Maybe it's someone over on the dildo shaped island to the North. No wonder we call it Pleasure Island xD",
+                        "(Pleasure Island to the North, and a Treasure Island, along the same Y-Axis to the West. Funny no?)",
                         "Can you go and see what this aura is coming from?"
                     ],
                     "reminder_dialogue": [
