@@ -52,7 +52,7 @@ export const profiles: Profile[] = [
             ...otherGeneralItems.map(item => ({ itemId: item.id, amount: 5 })),
         ],
         equippedWeapons: ['queens_trident', 'unity'],
-        equippedRelics: ['helas_whip', 'wicked_jewel', 'sylvies_shorts', 'cygwins_love'],
+        equippedRelics: ['helas_whip', 'sylvies_shorts', 'iron_shackles', 'spiked_choker'],
     },
     
 ];

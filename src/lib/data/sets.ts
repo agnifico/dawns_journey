@@ -19,7 +19,7 @@ export const sets: Set[] = [
     {
         id: 'toys',
         name: 'Hela\'s Toys',
-        relicIds: ['helas_whip', 'nualas_hood', 'wicked_jewel', 'spiked_choker'],
+        relicIds: ['helas_whip', 'sylvies_shorts', 'iron_shackles', 'spiked_choker'],
         bonuses: [
             {
                 pieces: 2,
@@ -45,26 +45,22 @@ export const sets: Set[] = [
     {
         id: 'beach_day',
         name: 'Beach Day',
-        relicIds: ['green_bra', 'green_bikini', 'pink_sarong', 'orange_bandana'],
+        relicIds: ['red_bra', 'purple_bikini', 'pink_sarong', 'orange_bandana', 'blue_undies'],
         bonuses: [
             {
                 pieces: 2,
                 stats: [{ name: 'physicalDefence', value: 100 }, { name: 'elementalDefence', value: 100 }]
             },
             {
-                pieces: 3,
-                stats: [{ name: 'physicalDefence', value: 150 }, { name: 'elementalDefence', value: 150 }]
-            },
-            {
                 pieces: 4,
-                stats: [{ name: 'physicalDefence', value: 200 }, { name: 'elementalDefence', value: 200 }]
+                stats: [{ name: 'physicalDefence', value: 150 }, { name: 'elementalDefence', value: 150 }]
             }
         ]
     },
     {
         id: 'sky_jewels',
         name: 'Trinkets of the Sky',
-        relicIds: ['ring_of_the_sky', 'brooch_of_the_sky', 'sky_amulet'],
+        relicIds: ['ring_of_the_sky', 'sky_bracers', 'sky_amulet'],
         bonuses: [
             {
                 pieces: 3,

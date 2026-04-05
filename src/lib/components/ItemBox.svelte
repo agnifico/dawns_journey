@@ -131,7 +131,7 @@
 	<img
 		src={item.image}
 		alt={item.name}
-		style:scale={item.flags?.includes('24px') ? Math.round(size / 30) : Math.round(size / 40)}
+		style:scale={item.flags?.includes('24px') ? Math.round(size / 32) : (size / 40)}
 	/>
 
 	{#if item.amount && item.amount > 1}

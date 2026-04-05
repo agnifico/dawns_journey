@@ -62,12 +62,12 @@
 		{#if entity.isNpc && entity.npcData}
 			<NpcSprite npc={entity.npcData} {footprintW} {footprintH} />
 		{:else}
-			<img
+			<!-- <img
 				src={entity.imageUrl}
 				alt={entity.name}
 				class="entity-img"
 				style="width: {footprintW}px; height: {footprintH}px;"
-			/>
+			/> -->
 		{/if}
 	</div>
 {/if}
@@ -77,6 +77,7 @@
 		position: absolute;
 		z-index: 10;
 		pointer-events: auto;
+		overflow: visible;
 	}
 
 	.entity-img {

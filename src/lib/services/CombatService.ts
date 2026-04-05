@@ -308,6 +308,7 @@ function endCombat(outcome: 'win' | 'lose', player: Combatant, opponent: Combata
     });
 
     const npc = get(npcStore).globalNpcs[opponent.id];
+
     if (npc) {
         const aftermath = selectBattleAftermath(npc, get(playerStore), get(npcStore).globalNpcs, outcome);
         if (aftermath) {

@@ -58,70 +58,6 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             effects: [{ type: 'SWAP_ITEM', takeItemId: 'empty_energy_orb', takeQuantity: 1, giveItemId: 'dragon_energy_orb', giveQuantity: 1 }]
         }],
     },
-    F1: {
-        id: 'F1',
-        name: 'Forgotten Shrine',
-        shortDesc: 'A forgotten shrine humming with a faint energy.',
-        image: '/locations/tower1-landscape.png',
-        reusable: false,
-        stepOnMessage: "You've discovered a Forgotten Shrine.",
-        message: 'The air is thick with old magic. A single button on a pedestal seems to be the only point of interaction.',
-        requirementNotMetMessage: 'The shrine is dormant. Perhaps someone needs to tell you about it first.',
-        requirement: { type: 'have_tag', tag: 'claudia_ready_for_f1' },
-        actions: [{
-            text: 'Press the Button',
-            effects: [{ type: 'add_tag', tag: 'f1_complete' }, { type: 'give_item', itemId: 'turquoise', quantity: 1 }]
-        }]
-    },
-    F2: {
-        id: 'F2',
-        name: 'Decrepit Spire',
-        shortDesc: 'A decrepit spire pulsing with a strange light.',
-        image: '/locations/tower2-landscape.png',
-        reusable: false,
-        stepOnMessage: "You've found a Decrepit Spire.",
-        message: 'The structure is ancient, yet a single button on a console seems to be active.',
-        requirementNotMetMessage: 'The spire is dormant. Perhaps someone needs to tell you about it first.',
-        requirement: { type: 'have_tag', tag: 'cygwin_ready_for_f2' },
-        actions: [{
-            text: 'Press the Button',
-            effects: [{ type: 'add_tag', tag: 'f2_complete' }, { type: 'give_item', itemId: 'citrine', quantity: 1 }]
-        }]
-    },
-    F3: {
-        id: 'F3',
-        name: 'The Shattered Crossroads',
-        image: '/locations/tower3-landscape.png',
-        shortDesc: 'The path ahead diverges. A choice must be made.',
-        stepOnMessage: 'You stand at a shattered crossroads, the path ahead diverging.',
-        message: 'Both the Solis Saints and the Shadowhand have presented you with an ultimatum. Your decision will shape your future alliances. Who will you side with?',
-        actions: [
-            {
-                text: 'Side with the Solis Saints',
-                requirement: { type: 'have_tag', tag: 'guinevere_ready_for_f3' },
-                effects: [
-                    { type: 'set_quest_state', questId: 'guinevere_sword_4', state: 'COMPLETED' },
-                    { type: 'set_quest_state', questId: 'akari_sword_2', state: 'FAILED' },
-                    { type: 'add_reputation', faction: 'solis_saints', amount: 25 },
-                    { type: 'add_reputation', faction: 'shadowhand', amount: -15 },
-                    { type: 'add_tag', tag: 'chose_solis_saints' }
-                ],
-                responseMessage: 'You have chosen to align with the Solis Saints. The path of light is now clearer, but shadows of resentment may follow.'
-            },
-            {
-                text: 'Side with the Shadowhand',
-                requirement: { type: 'have_tag', tag: 'akari_ready_for_f3' },
-                effects: [
-                    { type: 'set_quest_state', questId: 'akari_sword_2', state: 'COMPLETED' },
-                    { type: 'set_quest_state', questId: 'guinevere_sword_4', state: 'FAILED' },
-                    { type: 'add_reputation', faction: 'shadowhand', amount: 25 },
-                    { type: 'add_reputation', faction: 'solis_saints', amount: -15 },
-                    { type: 'add_tag', tag: 'chose_shadowhand' }
-                ],
-                responseMessage: "You have cast your lot with the Shadowhand. You gain favour in the underworld, but have made a powerful enemy in the light."
-            }
-        ]
-    },
     teleport_to_cathedral: {
         id: 'teleport_to_cathedral',
         name: 'Teleporter to Cathedral',
@@ -152,7 +88,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A sturdy boat moored at the dock.',
         stepOnMessage: 'A weather-beaten boat sits ready at the dock.',
         message: 'The mainland is a long way off. The boat could take you there — if you\'re ready.',
-        actions: [{ text: 'Set sail', effects: [{ type: 'switch_map', mapId: 'mainland', x: 0, y: 0 }] }],
+        actions: [{ text: 'Set sail', effects: [{ type: 'switch_map', mapId: 'dragon_island', x: 6, y: 25 }] }],
         reusable: true
     },
     boat_to_pleasure_island: {
@@ -162,7 +98,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A small vessel pointed northeast.',
         stepOnMessage: 'A small boat is moored here, pointed toward the island to the northeast.',
         message: 'Pleasure Island sits out there in the water, vivid and strange. The boat is seaworthy.',
-        actions: [{ text: 'Head to Pleasure Island', effects: [{ type: 'switch_map', mapId: 'dragon_island', x: 2, y: 2 }] }],
+        actions: [{ text: 'Head to Pleasure Island', effects: [{ type: 'switch_map', mapId: 'dragon_island', x: 13, y: 13 }] }],
         reusable: true
     },
 
@@ -175,7 +111,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A large, ornate chest half-buried in the earth.',
         stepOnMessage: 'You stumble upon an ancient chest, its lock long since rusted open.',
         message: 'Inside, amongst the dust, something still gleams.',
-        effects: [{ type: 'give_item', itemId: 'gold', quantity: 3 }, { type: 'give_item', itemId: 'stone', quantity: 5 }],
+        effects: [{ type: 'give_item', itemId: 'roasted_chicken', quantity: 3 }, { type: 'give_item', itemId: 'stone', quantity: 5 }],
         afterDescription: 'An empty ancient chest. You cleaned it out.',
         reusable: false
     },
@@ -232,7 +168,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         message: "The inscription reads: 'To guard is not to rule. The first accord was made in trust, and trust is what we leave behind.'",
         requirement: { type: 'have_tag', tag: 'found_dragon_empire_chest' },
         requirementNotMetMessage: 'Something is buried here. You sense it, but cannot reach it yet.',
-        effects: [{ type: 'give_item', itemId: 'dragon_fang', quantity: 1 }, { type: 'add_tag', tag: 'legendary_sword1_found' }],
+        actions: [{ text: 'Revere the shrine', effects: [{ type: 'give_item', itemId: 'amaterasu', quantity: 1 }, { type: 'add_tag', tag: 'legendary_sword1_found' }] }],
+
         afterDescription: 'An empty impression in the earth where a sword once rested.',
         reusable: false
     },
@@ -683,4 +620,355 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: "A hidden chamber with ancient carvings and a glowing spring. You've been here.",
         reusable: false
     },
+
+    empty_sword_site_claudia: {
+        id: 'empty_sword_site_claudia',
+        name: 'The Eastern Bank',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'A shallow depression in the riverbank. Something was here.',
+        stepOnMessage: 'The ground here is disturbed. Not by digging — by emergence.',
+        message: [
+            'A slight depression in the earth. The grass around it grew back wrong — too fast, too green, slightly luminous at the edges.',
+            'This is a sword site. Was a sword site.',
+            'Someone pulled what was here already.',
+            'There are boot prints. Small. Precise.',
+            'And a Coalition insignia scratched into a nearby stone — not hidden, just left.',
+            "Like a signature. Like: I was here first.",
+        ],
+        afterDescription: 'An empty depression in the riverbank. The Coalition was here before you.',
+        reusable: false
+    },
+ 
+    empty_sword_site_cygwin: {
+        id: 'empty_sword_site_cygwin',
+        name: 'The High Pass',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'A ring of flattened stone near the mountain path. The air still hums.',
+        stepOnMessage: 'The stone underfoot feels different here. Like something passed through it recently.',
+        message: [
+            'A ring of stone, slightly flattened, the way ground looks after something immensely heavy sat in it for a very long time.',
+            'The sword is gone.',
+            'The site still hums — faint, residual, the way a struck bell continues to sound after the hammer lifts.',
+            'Someone stood here and pulled whatever this was free.',
+            'The disturbance in the stone is recent. Days, not weeks.',
+            'There are no footprints.',
+            'Whoever came here knew exactly where to step.',
+        ],
+        afterDescription: 'A ring of flattened stone. Whatever was here is gone.',
+        reusable: false
+    },
+ 
+    // ─── Claudia SR2 — Platform inspection ───────────────────────────────────
+ 
+    platform_inspection: {
+        id: 'platform_inspection',
+        name: 'The Extraction Platform',
+        image: '/locations/red_extractor.png',
+        shortDesc: 'The main Coalition extraction platform. Claudia is already here.',
+        stepOnMessage: 'The machinery hums loudly. Something is off about the angle.',
+        message: [
+            "The platform is larger up close — red metal, two stories of extraction equipment, the drill housing angled into the substrate below the sand.",
+            "Claudia is already here, crouching near the drill housing with a measuring tool, frowning.",
+            "She looks up when you arrive.",
+            '"See that?" She points at the drill head. "Three degrees off true. At this depth that\'s — significant."',
+            'The leakage has been going somewhere it was never supposed to go.',
+        ],
+        effects: [{ type: 'add_tag', tag: 'platform_inspected' }],
+        afterDescription: 'The extraction platform. Three degrees off true. You know what that means now.',
+        reusable: false
+    },
+ 
+    // ─── Claudia SR3 — Mistweaver site ───────────────────────────────────────
+ 
+    mistweaver_site: {
+        id: 'mistweaver_site',
+        name: 'The River Fork',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'A fork in the eastern river. The water moves strangely here.',
+        stepOnMessage: 'The water slows at the fork. Something beneath the surface catches the light.',
+        message: [
+            'The river splits here, the two channels moving at different speeds around a low bank of silt.',
+            'Half-buried in that bank — a sword.',
+            'It emerges from the earth the way all of them do: partially, patient, waiting.',
+            'The water moves around it without touching it.',
+            'You reach down. It comes free without resistance.',
+        ],
+        effects: [
+            { type: 'give_item', itemId: 'mistweaver', quantity: 1 },
+            { type: 'add_tag', tag: 'mistweaver_found' }
+        ],
+        afterDescription: 'A bank of silt at the river fork. The impression where the sword rested is still there.',
+        reusable: false
+    },
+ 
+    // ─── Cygwin SR2 — Substrate mapping walk ─────────────────────────────────
+ 
+    substrate_mapping_site: {
+        id: 'substrate_mapping_site',
+        name: 'The Southern Resonance Point',
+        image: '/locations/underground_well.png',
+        shortDesc: 'A site Cygwin has been mapping for weeks. The ground hums here.',
+        stepOnMessage: 'The humming in the earth is stronger here than anywhere else on the southern path.',
+        message: [
+            'Cygwin has a marker here — a small iron stake driven into the ground, a reading on a strip of paper tied to it.',
+            '"Output: 4.7. Bleed: 0.8%. Rising."',
+            "The substrate resonance at this point is higher than the wells. Significantly higher.",
+            "This is not where the extraction equipment is pointed.",
+            "This is where the energy is actually going.",
+            "The leakage from the wells is accumulating here.",
+            "You should tell Cygwin.",
+        ],
+        effects: [{ type: 'add_tag', tag: 'resonance_point_found' }],
+        afterDescription: "A resonance point Cygwin has been tracking. The reading on the stake is still rising.",
+        reusable: false
+    },
+ 
+    // ─── Cygwin SR3 — Groundbreaker site ─────────────────────────────────────
+ 
+    groundbreaker_site: {
+        id: 'groundbreaker_site',
+        name: 'The Stone Circle',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'A circle of standing stones on the mountain plateau. Something stands at the centre.',
+        stepOnMessage: 'The stones here were placed. Not by the Dragon Empire — older than that.',
+        message: [
+            'A circle of standing stones, each one taller than a person, arranged with deliberate precision.',
+            'At the centre: a sword, driven into the bedrock to the hilt.',
+            'Not emerged — driven. As if someone placed it here on purpose and walked away.',
+            'The stone around the blade shows no stress fractures. It went in cleanly.',
+            'You take hold of it. It comes out the same way — cleanly, completely, like a key from a lock.',
+        ],
+        effects: [
+            { type: 'give_item', itemId: 'groundbreaker', quantity: 1 },
+            { type: 'add_tag', tag: 'groundbreaker_found' }
+        ],
+        afterDescription: 'A circle of standing stones with a clean slot at the centre where the sword rested.',
+        reusable: false
+    },
+ 
+    // ─── Gwen SR1 — Ruined Quarters (extended, replaces existing) ────────────
+    // Note: ruined_quarters already exists in locationEvents.ts as a lore event.
+    // This version is gated by gwen_sr1_started and gives research_materials.
+    // Recommend renaming this gwen_ruined_quarters to avoid collision.
+ 
+    gwen_ruined_quarters: {
+        id: 'gwen_ruined_quarters',
+        name: 'Ruined Quarters — Research Survey',
+        image: '/locations/ruined_quarters.png',
+        shortDesc: 'The Dragon Empire ruins. Gwen needs specific inscriptions from the inner walls.',
+        stepOnMessage: "The inner walls are more intact than the outer ones. The inscriptions here are still legible.",
+        message: [
+            'The inner chamber of the Ruined Quarters survived the collapse — low ceiling, stone walls, the inscriptions Gwen described.',
+            'Pre-Concordat script. Dense, pictographic, describing the Theosi without hierarchy or ranking.',
+            'Here they simply are.',
+            'You make rubbings of the clearest panels. A partial glossary. Enough to work from.',
+            'There is one inscription you cannot copy — it covers an entire wall and the text is too fine for a rubbing.',
+            'You memorise the shape of it instead.',
+        ],
+        requirement: { type: 'have_tag', tag: 'gwen_sr1_started' },
+        requirementNotMetMessage: "The ruins are open but you don't know what you're looking for yet. Talk to Guinevere first.",
+        effects: [
+            { type: 'give_item', itemId: 'research_materials', quantity: 1 },
+            { type: 'add_tag', tag: 'ruined_quarters_surveyed' }
+        ],
+        afterDescription: 'The inner chamber of the ruins. Your rubbings are done. The wall inscription stays in your memory.',
+        reusable: false
+    },
+ 
+    // ─── Gwen SR2 — Her Majesty's Watch site ─────────────────────────────────
+ 
+    her_majestys_watch_site: {
+        id: 'her_majestys_watch_site',
+        name: 'The Shrine Sanctum',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'The inner sanctum of the Dragon Shrine. Something is waiting here.',
+        stepOnMessage: 'The air in here is heavier. Something in the stone is paying attention.',
+        message: [
+            'The inner sanctum is a circular chamber, stone, very old — older than the shrine built around it.',
+            "Her Majesty's Watch stands at the centre.",
+            'Not a conventional sword. A greatsword with a living eye set into the crossguard — iris moving slowly, tracking nothing in particular. Or everything.',
+            'It emerges from the floor at exactly the angle of something that has been waiting to be retrieved.',
+            'Gwen is behind you. She has stood in this doorway many times.',
+            'She has not been able to cross the threshold to touch it.',
+            'You cross it. You take it. It comes free without a sound.',
+        ],
+        requirement: { type: 'have_tag', tag: 'gwen_sr2_started' },
+        requirementNotMetMessage: "The sanctum is accessible but you have no reason to be here yet.",
+        effects: [
+            { type: 'give_item', itemId: 'her_majestys_watch', quantity: 1 },
+            { type: 'add_tag', tag: 'watch_found' }
+        ],
+        afterDescription: 'The shrine sanctum. The floor where the Watch stood is unmarked. It left no impression.',
+        reusable: false
+    },
+ 
+    // ─── Dragonblood Tree — choice version (replaces existing rest-only version) ──
+    // Note: dragonblood_tree already exists as a reusable rest point.
+    // This version fires when gwen_tree_quest_started is set.
+    // Recommend handling via requirement so existing event stays for casual visitors.
+ 
+    dragonblood_tree_choice: {
+        id: 'dragonblood_tree_choice',
+        name: 'Dragonblood Tree',
+        image: '/locations/dragonblood_tree.png',
+        shortDesc: 'Gwen wants the heartwood. Verona has something to say about that.',
+        stepOnMessage: 'Verona is standing at the base of the tree. She was waiting for you.',
+        message: [
+            'The tree pulses with the same slow rhythm as the substrate beneath the island.',
+            "Verona doesn't speak immediately. She lets you look at it first.",
+            '"Guinevere wants the heartwood. I understand why."',
+            '"This tree is a stabilising point. The island\'s energy runs through it the way water runs through roots."',
+            '"Cutting it won\'t destroy anything. But the sword sites will become more volatile. The discharge patches will spread."',
+            '"The tree grows back. The question is what happens in between."',
+            '"I\'m not here to make the choice for you."',
+        ],
+        requirement: { type: 'have_tag', tag: 'gwen_tree_quest_started' },
+        requirementNotMetMessage: 'The tree stands. You can rest beneath it.',
+        actions: [
+            {
+                text: 'Cut the tree for Guinevere',
+                requirement: { type: 'have_tag', tag: 'woodcutting_level_5' },
+                effects: [
+                    { type: 'give_item', itemId: 'dragonblood_wood', quantity: 1 },
+                    { type: 'add_tag', tag: 'tree_cut' },
+                    { type: 'add_tag', tag: 'substrate_destabilised' }
+                ],
+                responseMessage: "The heartwood is deep red, warm to the touch. The pulse in the ground stutters — then resumes, slower."
+            },
+            {
+                text: 'Leave the tree standing',
+                effects: [
+                    { type: 'add_tag', tag: 'tree_spared' }
+                ],
+                responseMessage: "You step back. The tree stands. The pulse continues, steady. Verona exhales beside you."
+            }
+        ],
+        reusable: false
+    },
+ 
+    // ─── Glacier — Frostfall site ─────────────────────────────────────────────
+ 
+    frostfall_site: {
+        id: 'frostfall_site',
+        name: 'The Glacier Shelf',
+        image: '/locations/legendary_sword.png',
+        shortDesc: 'A wide shelf of ancient ice. A sword is suspended inside it.',
+        stepOnMessage: 'The ice here is older than the glacier above it. Something is preserved inside.',
+        message: [
+            'The shelf extends from the glacier face, flat and pale blue.',
+            'Frostfall is here — not in the ground but in the ice itself.',
+            'The blade is visible through six inches of ice, perfectly still, untouched by centuries.',
+            'You press your hand to the surface.',
+            'The ice cracks — not explosively, cleanly, along precise lines, like it was waiting for exactly this.',
+            'Gwen watches from ten feet back.',
+            'She says nothing for a long moment.',
+        ],
+        requirement: { type: 'have_tag', tag: 'glacier_reached' },
+        requirementNotMetMessage: 'The glacier shelf is ahead. You need to get there first.',
+        effects: [
+            { type: 'give_item', itemId: 'frostfall', quantity: 1 },
+            { type: 'add_tag', tag: 'frostfall_found' }
+        ],
+        afterDescription: 'A glacier shelf with a clean crack running through it where the ice released the sword.',
+        reusable: false
+    },
+ 
+    // ─── Warm Spring ──────────────────────────────────────────────────────────
+ 
+    warm_spring: {
+        id: 'warm_spring',
+        name: 'The Warm Spring',
+        image: '/locations/campfire.png',
+        shortDesc: 'A thermal spring inside the glacier territory. Impossibly warm.',
+        stepOnMessage: 'The temperature rises sharply. Steam rises from still water ahead.',
+        message: [
+            'A pool of perfectly still water, fed by something volcanic far beneath the ice.',
+            'The glacier walls around it are curved smooth by decades of warmth.',
+            'This spring has been here longer than the ice that surrounds it.',
+            'Gwen is sitting at the edge.',
+            'She has been here before, by the look of her — settled, like she knew this was coming.',
+            'She does not speak immediately.',
+            'For once, neither of you need to.',
+        ],
+        actions: [
+            {
+                text: 'Sit with her',
+                effects: [
+                    { type: 'RESTORE_HP', value: 9999 },
+                    { type: 'RESTORE_AURA', value: 100 },
+                    { type: 'add_tag', tag: 'warm_spring_visited' },
+                    { type: 'add_world_resonance', amount: 5 }
+                ]
+            }
+        ],
+        reusable: true
+    },
+ 
+    // ─── Discharge sites — Hela SR1 ───────────────────────────────────────────
+ 
+    discharge_site_1: {
+        id: 'discharge_site_1',
+        name: 'The Burned Patch',
+        image: '/locations/hells_glow.png',
+        shortDesc: 'Scorched earth in a perfect circle. The ground beneath is still warm.',
+        stepOnMessage: 'The grass is burned in a perfect circle. The ground beneath your feet is warm.',
+        message: [
+            'A circle of scorched earth, ten feet across, ash at the centre fading to yellow at the edges.',
+            'The ground is warm — the warmth of something that passed through recently and left heat behind.',
+            'This is what happens when a soul tries to pass through a blocked substrate and has nowhere to go.',
+            'The energy discharges. The earth remembers it.',
+            'Hela will want the exact location.',
+        ],
+        effects: [{ type: 'add_tag', tag: 'discharge_site_1_found' }],
+        afterDescription: 'A circle of scorched earth. Still warm. Hela knows about this one now.',
+        reusable: false
+    },
+ 
+    discharge_site_2: {
+        id: 'discharge_site_2',
+        name: 'The Second Scar',
+        image: '/locations/hells_glow.png',
+        shortDesc: 'A larger discharge site. More recent. The cracks go deep.',
+        stepOnMessage: 'Larger than the first. The burn pattern has depth to it — the earth cracked, not just scorched.',
+        message: [
+            'Fifteen feet across. The earth at the centre fractured — a spiderweb of fine cracks radiating outward.',
+            'More energy. More pressure. More souls that could not pass through.',
+            'The substrate beneath Ashenfall is getting worse, not better.',
+            'This discharge is newer than the first. Days newer.',
+            'Hela will want to know this too.',
+        ],
+        effects: [{ type: 'add_tag', tag: 'discharge_site_2_found' }],
+        afterDescription: 'A cracked scar in the earth. Newer than the first. The substrate is deteriorating.',
+        reusable: false
+    },
+ 
+    // ─── Faraway Archipelago — Dawnbringer ────────────────────────────────────
+ 
+    dawnbringer_site: {
+        id: 'dawnbringer_site',
+        name: 'The Farthest Shore',
+        image: '/locations/legendary_sword.png',
+        shortDesc: "The edge of the known map. Something has been waiting here a very long time.",
+        stepOnMessage: "The ocean beyond this shore has no name yet. The ground here feels unlike anywhere else.",
+        message: [
+            'The shore is quiet.',
+            'The water is dark and moves in patterns that do not match the wind.',
+            'Dawnbringer is at the waterline — half in sand, half in shallow water.',
+            'It has been here the longest of any of them.',
+            'You reach for it.',
+            'There is a moment of resistance. Not from the site — from the sword itself.',
+            'Like something that has been waiting so long it forgot how to let go.',
+            'And then it does.',
+        ],
+        requirement: { type: 'have_tag', tag: 'hela_sr4_complete' },
+        requirementNotMetMessage: "Something is here. You can feel it. But the time is not right.",
+        effects: [
+            { type: 'give_item', itemId: 'dawnbringer', quantity: 1 },
+            { type: 'add_tag', tag: 'dawnbringer_found' },
+            { type: 'add_world_resonance', amount: 20 }
+        ],
+        afterDescription: "The waterline where Dawnbringer rested. The sand has settled back as if it was never disturbed.",
+        reusable: false
+    },
+    
 };

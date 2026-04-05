@@ -195,7 +195,7 @@
         "image": "/cafe/86_roastedchicken_dish.png",
         "type": "general",
         "price": 22,
-        "flags": ["stackable", "cafe"]
+        "flags": ["stackable", "cafe", "legendary"]
     },
     {
         "id": "ramen",

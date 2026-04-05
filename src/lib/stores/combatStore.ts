@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Combatant, CombatLogMessage, PlayerBaseStats } from '$lib/types';
+import type { Combatant, CombatLogMessage, PlayerBaseStats, CombatWager } from '$lib/types';
 
 export interface CombatState {
     isInCombat: boolean;
@@ -22,6 +22,7 @@ export interface CombatState {
     initialPlayerStats: PlayerBaseStats | null;
     /** Snapshot of opponent stats at combat start */
     initialOpponentStats: PlayerBaseStats | null;
+    wager?: CombatWager | null;
 }
 
 const initialState: CombatState = {
@@ -38,6 +39,7 @@ const initialState: CombatState = {
     drops: [],
     initialPlayerStats: null,
     initialOpponentStats: null,
+    wager: null,
 };
 
 function createCombatStore() {

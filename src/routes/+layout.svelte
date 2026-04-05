@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
-	import Notification from '$lib/components/Notification.svelte';
+	// import Notification from '$lib/components/Notification.svelte';
 	import GiftModal from '$lib/components/ui/GiftModal.svelte';
 	import GenericModal from '$lib/components/ui/GenericModal.svelte';
 	import AchievementNotification from '$lib/components/AchievementNotification.svelte';
 	// import RainOverlay from '$lib/components/ui/RainOverlay.svelte';
 	import './app.css';
 	import '$lib/styles/theme.css';
-	import favicon from '$lib/assets/favicon.svg';
+	// import favicon from '$lib/assets/favicon.svg';
 	import { phase } from '$lib/stores/timeStore';
 	import { messageStore } from '$lib/stores/messageStore';
 	import { skillTreeStore } from '$lib/stores/skillTreeStore'; // Import skillTreeStore
@@ -44,8 +44,8 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
-	<title>Dawn's Journey : A serverless browser based game</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Dawn's Journey : A serverless browser based game</title>
 </svelte:head>
 
 {#if !$hideNavbar}

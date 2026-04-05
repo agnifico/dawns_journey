@@ -89,6 +89,9 @@ const requirementCheckers: Record<string, RequirementCheck> = {
         if (!factionData) return false;
         return factionData.score >= condition.minScore;
     },
+    watch_scene: (condition, player) => {
+        return (player.watchedScenes ?? []).includes(condition.sceneId);
+    },
     stat_check: (condition, player) => player.baseStats[condition.stat] >= condition.value,
     element_exploration_level_check: (condition, player) =>
         player.equipment.weapon_slots.some(w => w?.exploration?.some(e => e.name === condition.element && e.level >= condition.level)),

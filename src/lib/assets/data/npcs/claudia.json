@@ -4,6 +4,7 @@
     "profileImage": "/images/characters/claudia/claudia_avatar.png",
     "image": "/images/characters/claudia/claudia1.png",
     "title": "Commander of the Eastern Front",
+    "spriteGif": "/images/claudia.gif",
     "galleryImages": [
         "/images/characters/claudia/claudia1.png",
         "/images/characters/claudia/claudia2.png",
@@ -43,26 +44,70 @@
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
     "statGrowth": [],
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 51,
+            "y": 24
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "claudia_sr1_complete",
+            "x": 31,
+            "y": 38
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "claudia_sword_3_complete",
+            "x": 51,
+            "y": 47
+        }
+    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
             "aftermaths": [
                 {
                     "outcome": "lose",
-                    "value": 3,
+                    "value": 2,
                     "dialogue": [
                         "Oh, don't look so miserable about it.",
-                        "I've been doing this since I was seventeen. You'll get there.",
-                        "Come back when the bruises fade. I'll buy you something."
+                        "You did well. Come back when you want to try again."
                     ]
                 },
                 {
                     "outcome": "win",
-                    "value": 2,
+                    "value": -2,
                     "dialogue": [
                         "Okay THAT was impressive.",
-                        "Don't tell Guinevere-onii-chan I said that, she'll get smug about sending you.",
-                        "...she was right though. Ugh."
+                        "...",
+                        "Don't tell Cygwin I said that."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 2,
+            "aftermaths": [
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "Ha!",
+                        "Mistweaver agrees with me, apparently.",
+                        "You're good though. Come back — I want to try that again properly."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": 0,
+                    "dialogue": [
+                        "...",
+                        "Okay.",
+                        "You beat me AND my new sword.",
+                        "That's — honestly? That's exciting.",
+                        "Don't go anywhere. I need to process this."
                     ]
                 }
             ]
@@ -71,11 +116,11 @@
     "swordRanks": [
         {
             "questId": "claudia_sword_1",
-            "title": "The Forgotten Shrine",
-            "description": "Commander Claudia needs someone to activate a shrine to the south. She has opinions about doing it herself.",
+            "title": "The Wells",
+            "description": "Claudia won't go down the wells herself. She's completely unapologetic about this. She'd like you to go instead.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "can_assist_claudia"
+                "tag": "met_claudia"
             },
             "stages": [
                 {
@@ -84,51 +129,65 @@
                         "type": "dialogue"
                     },
                     "unavailable_dialogue": [
-                        "Not now, I'm in the middle of something.",
-                        "Come back when I look less like I'm doing three things at once.",
-                        "...I'm always doing three things at once. Fine. Give me a moment."
+                        "Oh! There you are.",
+                        "I have a thing. Come here."
                     ],
                     "intro_dialogue": [
-                        "Oh GOOD, Guinevere-onii-chan actually sent someone.",
-                        "Okay so — there's a shrine, southern edge of my territory, needs activating as part of the platform stabilisation work.",
-                        "I would go myself but I am, and I cannot stress this enough, absolutely buried right now.",
-                        "Platform seven had a resonance spike this morning, I have three junior Saints arguing about whose fault it was, AND I promised Cygwin I'd have the eastern supply reports done by Duskfall.",
-                        "Which I will. Obviously. I always do.",
-                        "The shrine is at the southern marker. You'll feel it when you're close — the ground hums.",
-                        "Oh also! What's your birthday? I'm doing a calendar."
-                    ],
-                    "reminder_dialogue": [
-                        "The shrine! Southern marker! Humming ground!",
-                        "Also you never told me your birthday, which is fine, I'll find out eventually."
+                        "So.",
+                        "I have two underground wells that need their resonance readings checked.",
+                        "And I am not going down there.",
+                        "It's dark, it's narrow, and I have standards.",
+                        "You look like someone who doesn't mind dark and narrow.",
+                        "I mean that as a compliment.",
+                        "The wells are marked on the site — you'll find them.",
+                        "Just check the readings and come back. Easy."
                     ],
                     "success_rewards": [
                         {
                             "type": "tag",
-                            "tagId": "claudia_ready_for_f1"
+                            "tagId": "claudia_wells_started"
                         }
                     ]
                 },
                 {
-                    "objective": "Activate the Forgotten Shrine",
+                    "objective": "Check the first underground well",
                     "requirement": {
                         "type": "finish_location_event",
-                        "eventId": "F1",
+                        "eventId": "underground_well1",
                         "timing": "future"
                     },
                     "reminder_dialogue": [
-                        "Southern marker. Humming ground. You've got this.",
-                        "I believe in you! Unironically!"
+                        "First well. It's the one with the blue marker.",
+                        "You'll know it when you see it.",
+                        "I'll be here. Not going anywhere near those wells."
+                    ]
+                },
+                {
+                    "objective": "Check the second underground well",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "underground_well2",
+                        "timing": "future"
+                    },
+                    "reminder_dialogue": [
+                        "Second well now. Red marker.",
+                        "Almost done — I appreciate this more than I'm making it look."
                     ],
                     "success_dialogue": [
-                        "You did it! Platform resonance is already stabilising, look at these readings—",
-                        "Sorry, sorry, I get excited about data.",
-                        "You're good at this. I'm telling Guinevere-onii-chan.",
-                        "She already knows, she always knows, but I'm telling her anyway."
+                        "Perfect.",
+                        "Both wells nominal. The readings are exactly what Cygwin predicted.",
+                        "She's going to be insufferably pleased about that.",
+                        "Don't tell her I said 'insufferably'. She'll know it's affectionate and it'll ruin the bit.",
+                        "You're good at this. Come back soon — I think I have more things."
                     ],
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 5
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "claudia_sr1_complete"
                         },
                         {
                             "type": "tag",
@@ -140,48 +199,50 @@
         },
         {
             "questId": "claudia_sword_2",
-            "title": "Platform Seven",
-            "description": "Platform Seven has been causing problems. Claudia wants the player to go take a look — and she'll come with them.",
+            "title": "What We're Actually Doing Here",
+            "description": "Claudia wants to tell you something. Not a task — just something true.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "claudia_sword_1_complete"
             },
             "stages": [
                 {
-                    "objective": "Meet Claudia at Platform Seven",
+                    "objective": "Speak with Claudia",
                     "requirement": {
-                        "type": "finish_location_event",
-                        "eventId": "platform_seven_inspection"
+                        "type": "dialogue"
                     },
                     "unavailable_dialogue": [
-                        "Platform Seven! Eastern coast, you can't miss it.",
-                        "It's the one making the horrible noise.",
-                        "I'll meet you there."
+                        "Give me a moment.",
+                        "I'm trying to find the right way to say something."
                     ],
                     "intro_dialogue": [
-                        "Okay so, Platform Seven.",
-                        "I've been watching the resonance data and something is off.",
-                        "Not dangerous-off. Just — wrong-off. The kind of wrong that gets worse slowly.",
-                        "I want another set of eyes on it. Smart eyes.",
-                        "You have smart eyes. I can tell.",
-                        "Meet me there?"
+                        "Can I tell you something that's not about wells or readings?",
+                        "Just — something."
                     ],
                     "success_dialogue": [
-                        "Yeah. Yeah, I see it too.",
-                        "The drill angle is wrong. Just by a few degrees, but at this depth that means the extraction is pulling from a different layer than intended.",
-                        "Which means the energy leakage is going somewhere else.",
-                        "The animals in the eastern forest have been behaving strangely for two weeks.",
-                        "I wrote it off as seasonal. I don't think it's seasonal.",
-                        "I need to think about this.",
-                        "Come back tomorrow? I work better after I've slept on something.",
-                        "Also Cygwin is making dinner and she always makes too much and you should absolutely come.",
-                        "Don't tell her I invited you, let's make it a surprise.",
-                        "She loves surprises. She pretends she doesn't. She loves them."
+                        "We're here because Gabriella sent us.",
+                        "Gabriella is Gwen's superior in the Concordat.",
+                        "She's — she's very good at what she does.",
+                        "What she does is consolidate power and call it order.",
+                        "Gwen takes her orders and keeps about sixty percent of what they find.",
+                        "The rest goes up.",
+                        "I used to think that was enough.",
+                        "Doing good work inside a flawed system, quietly redirecting what you can.",
+                        "I still think it's the best available option.",
+                        "I just — I've been watching the villages downstream of our extraction sites.",
+                        "The water tastes different. The fishing has shifted.",
+                        "Nobody's reported it formally because nobody's asked.",
+                        "I'm asking. Internally. It's a process.",
+                        "Anyway.",
+                        "I wanted you to know we know.",
+                        "Gwen knows. Cygwin has the data.",
+                        "We're not pretending.",
+                        "Come back. I have one more thing — something good this time."
                     ],
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 5
+                            "amount": 8
                         },
                         {
                             "type": "tag",
@@ -193,102 +254,89 @@
         },
         {
             "questId": "claudia_sword_3",
-            "title": "Something Worth Celebrating",
-            "description": "Claudia has organised something. She does this. It is not optional.",
+            "title": "Mistweaver",
+            "description": "Claudia found something in the northeastern region. She pulled it herself. She wants to show you what it means.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "claudia_sword_2_complete"
             },
             "stages": [
                 {
-                    "objective": "Attend Claudia's gathering",
+                    "objective": "Find Claudia at the empty sword site",
                     "requirement": {
-                        "type": "dialogue"
+                        "type": "finish_location_event",
+                        "eventId": "empty_sword_site_claudia",
+                        "timing": "future"
                     },
                     "unavailable_dialogue": [
-                        "Tonight! I said tonight!",
-                        "The fire pit, eastern camp, after Duskfall.",
-                        "There will be food. And mead. And I will be very disappointed if you don't come."
+                        "Come find me up at the mountain site.",
+                        "You'll see where I mean — there's a cleared patch where something used to be.",
+                        "Was something, I should say.",
+                        "Come see."
                     ],
-                    "intro_dialogue": [
-                        "Okay so I organised a thing.",
-                        "It's not a big thing. It's a medium thing.",
-                        "Fire pit, eastern camp, everyone's coming, Cygwin already said yes even though she acted like she needed convincing.",
-                        "She never needs convincing. She just likes being asked.",
-                        "You're coming. I've already added you to the headcount.",
-                        "Come on."
+                    "reminder_dialogue": [
+                        "The mountain site. Northeast of here, up the ridge.",
+                        "I'll be there."
                     ],
                     "success_dialogue": [
-                        "See! This! This is what I mean!",
-                        "My family had parties. Big ones. Correct ones. With the right people and the right food and absolutely no one saying anything real to anyone.",
-                        "This is — we're tired and the eastern platform is misbehaving and someone spilled mead on the survey reports —",
-                        "That was me, I spilled the mead —",
-                        "And it's still better than anything I had at home.",
-                        "Guinevere-onii-chan gave this to me.",
-                        "Not the party. The — the having people.",
-                        "You know what I mean.",
-                        "Anyway. Eat something. I made too much. On purpose.",
-                        "Oh! I found out your birthday from the Saints registry.",
-                        "Don't worry about it. I will handle it."
+                        "There it is.",
+                        "Mistweaver.",
+                        "I pulled it three days ago.",
+                        "Didn't tell Cygwin immediately. Wanted to sit with it first.",
+                        "It felt — it felt like it had been waiting.",
+                        "Not for anyone. Specifically for me.",
+                        "Which sounds mad, I know.",
+                        "Cygwin says the sword sites respond to resonance.",
+                        "Maybe mine just — matched.",
+                        "Anyway.",
+                        "I want to see how it does against someone worth fighting.",
+                        "You've been training. I can tell.",
+                        "Fight me?"
                     ],
                     "success_rewards": [
                         {
-                            "type": "item",
-                            "itemId": "forza_mead",
-                            "quantity": 1
-                        },
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
-                        },
-                        {
                             "type": "tag",
-                            "tagId": "claudia_sword_3_complete"
+                            "tagId": "claudia_fight_ready"
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "questId": "claudia_sword_4",
-            "title": "The Wrong Degrees",
-            "description": "Claudia has been thinking about Platform Seven. She's reached a conclusion she doesn't entirely like.",
-            "startRequirement": {
-                "type": "have_tag",
-                "tag": "claudia_sword_3_complete"
-            },
-            "stages": [
+                },
                 {
-                    "objective": "Speak with Claudia",
+                    "objective": "Fight Claudia — she wants to test Mistweaver",
                     "requirement": {
-                        "type": "dialogue"
+                        "type": "fight_npc",
+                        "npcId": "claudia",
+                        "quantity": 1
                     },
-                    "unavailable_dialogue": [
-                        "I'm still working through something. Give me a little more time.",
-                        "It's the Platform Seven thing. I can't leave it alone."
+                    "reminder_dialogue": [
+                        "I'm right here.",
+                        "Mistweaver's ready when you are.",
+                        "Challenge me — I promise I won't hold back."
                     ],
-                    "intro_dialogue": [
-                        "Okay. I've been doing the numbers.",
-                        "Can I show you something?"
-                    ],
-                    "success_dialogue": [
-                        "So. Platform Seven.",
-                        "The drill angle being wrong means the leakage is hitting the eastern aquifer.",
-                        "Which feeds the river.",
-                        "Which is where three villages downstream get their water.",
-                        "I've been watching the health reports from the eastern settlements.",
-                        "There's a pattern. It started eight weeks ago. Right when Platform Seven came online.",
-                        "I reported it up the chain.",
-                        "I was told the data was within acceptable variance.",
-                        "And I — I filed it. I noted my concern and I filed it and I moved on.",
-                        "I'm telling you because I need to say it out loud to someone who isn't a Saint.",
-                        "Guinevere-onii-chan believes in what we're building. I know she does.",
-                        "And she's right that the long-term outcome is worth the short-term cost.",
-                        "She's almost certainly right.",
-                        "I just keep thinking about the villages.",
-                        "Don't — don't say anything yet. I'm not done thinking.",
-                        "Come back in a few days. I might have a better shape for it by then."
-                    ],
+                    "success_dialogue": {
+                        "default": [
+                            "Ha.",
+                            "Okay.",
+                            "That was real.",
+                            "Mistweaver approves, I think. She hums differently after a good fight.",
+                            "Come find us when things start moving.",
+                            "Gwen will need everyone she trusts in the same place at some point.",
+                            "That includes you."
+                        ],
+                        "branches": [
+                            {
+                                "requiredTag": "watch_won_combat",
+                                "lines": [
+                                    "Ha.",
+                                    "You beat me AND a legendary sword.",
+                                    "That's — okay. That's genuinely impressive.",
+                                    "Don't let Cygwin find out. She'll make it a whole thing.",
+                                    "Come find us when things start moving.",
+                                    "Gwen will want everyone she trusts together.",
+                                    "That includes you — obviously."
+                                ]
+                            }
+                        ]
+                    },
                     "success_rewards": [
                         {
                             "type": "world_resonance",
@@ -296,114 +344,11 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "claudia_sword_4_complete"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "variants": [
-                {
-                    "questId": "claudia_sword_5_saints",
-                    "title": "Acceptable Variance",
-                    "description": "You sided with the Saints. Claudia has made her peace with Platform Seven — mostly.",
-                    "startRequirement": {
-                        "operator": "AND",
-                        "conditions": [
-                            {
-                                "type": "have_tag",
-                                "tag": "claudia_sword_4_complete"
-                            },
-                            {
-                                "type": "have_tag",
-                                "tag": "sided_with_solis_saints"
-                            }
-                        ]
-                    },
-                    "stages": [
+                            "tagId": "claudia_sword_3_complete"
+                        },
                         {
-                            "objective": "Speak with Claudia",
-                            "requirement": {
-                                "type": "dialogue"
-                            },
-                            "success_dialogue": [
-                                "So. The Altar.",
-                                "Guinevere-onii-chan's plan worked. Of course it did.",
-                                "I've been thinking about the villages.",
-                                "I went there. After the Altar. On my own, didn't tell anyone.",
-                                "Brought supplies. Helped where I could.",
-                                "It doesn't fix the data. But it's something.",
-                                "Cygwin says I'm trying to personally compensate for a systemic problem.",
-                                "She's right. She's almost always right about things like that.",
-                                "But also I'm going back next week.",
-                                "I believe in what we're building.",
-                                "I just also believe in the villages.",
-                                "I think Guinevere-onii-chan would say those aren't in conflict.",
-                                "I'm trying to agree with her.",
-                                "Getting there."
-                            ],
-                            "success_rewards": [
-                                {
-                                    "type": "world_resonance",
-                                    "amount": 10
-                                },
-                                {
-                                    "type": "tag",
-                                    "tagId": "claudia_sword_5_complete"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "questId": "claudia_sword_5_shadowhand",
-                    "title": "Going Back",
-                    "description": "You sided against the Saints. Claudia is doing her own accounting.",
-                    "startRequirement": {
-                        "operator": "AND",
-                        "conditions": [
-                            {
-                                "type": "have_tag",
-                                "tag": "claudia_sword_4_complete"
-                            },
-                            {
-                                "type": "have_tag",
-                                "tag": "sided_with_shadowhand"
-                            }
-                        ]
-                    },
-                    "stages": [
-                        {
-                            "objective": "Speak with Claudia",
-                            "requirement": {
-                                "type": "dialogue"
-                            },
-                            "success_dialogue": [
-                                "You chose the other side.",
-                                "I'm not — I'm not angry at you.",
-                                "I've been going to the villages.",
-                                "Every few days. Just to check.",
-                                "The health data is still bad.",
-                                "I think you were looking at the same numbers I was.",
-                                "I think you made a different call than I did.",
-                                "I'm not sure you were wrong.",
-                                "I'm still a Saint. That's not changing.",
-                                "But I went to the villages.",
-                                "I think that's the most honest thing I can tell you right now.",
-                                "Don't be a stranger, okay?",
-                                "I already have you in the birthday calendar. It's too late to remove you."
-                            ],
-                            "success_rewards": [
-                                {
-                                    "type": "world_resonance",
-                                    "amount": 8
-                                },
-                                {
-                                    "type": "tag",
-                                    "tagId": "claudia_sword_5_complete"
-                                }
-                            ]
+                            "type": "tag",
+                            "tagId": "claudia_sr1_complete"
                         }
                     ]
                 }

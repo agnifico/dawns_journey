@@ -58,7 +58,7 @@
 <style>
 	.npc-sprite-root {
 		position: relative;
-		overflow: hidden;
+		/* overflow: hidden; */
 		cursor: pointer;
 	}
 

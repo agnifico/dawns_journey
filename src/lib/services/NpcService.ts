@@ -1,4 +1,4 @@
-import type { NPC, Player, Requirement, Reward, GiftingOption, RankData, Quest } from '$lib/types';
+import type { NPC, Player, Requirement, Reward, GiftingOption, RankData, Quest, ConditionalDialogue } from '$lib/types';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { addItems, removeItemsByItemId } from './InventoryService';
@@ -16,8 +16,26 @@ import { revolut } from '$lib/stores/timeStore';
 import { increaseFactionScore } from './FactionService';
 import { toastStore } from '$lib/stores/toastStore';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { npcStore } from '$lib/stores/npcStore';
+import { scenes } from '$lib/data/scenes';
 
 
+
+function resolveSuccessDialogue(
+    dialogue: string[] | ConditionalDialogue | undefined,
+    playerTags: string[]
+): string[] {
+    if (!dialogue) return [];
+    if (Array.isArray(dialogue)) return dialogue;
+
+    // ConditionalDialogue — find first matching branch
+    for (const branch of dialogue.branches) {
+        if (playerTags.includes(branch.requiredTag)) {
+            return branch.lines;
+        }
+    }
+    return dialogue.default;
+}
 
 // ---------------------------------------------------------------------------
 // Reward handler
@@ -144,7 +162,7 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
 
         if (firstStage.requirement.type === 'dialogue') {
             const intro = firstStage.intro_dialogue || ['A new opportunity awaits.'];
-            const success = firstStage.success_dialogue || [];
+            const success = resolveSuccessDialogue(firstStage.success_dialogue, updatedPlayer.worldTags);
             dialogueStore.startDialogue([...intro, ...success], npc.name);
 
             if (firstStage.success_rewards) {
@@ -199,10 +217,105 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
             dialogueStore.startDialogue(cooldownLines, npc.name);
             return { updatedNpc, updatedPlayer };
         }
+        if (stage.requirement.type === 'watch_scene') {
+            const { sceneId } = stage.requirement;
+
+            // Check if already watched — treat like a completed dialogue stage
+            if ((updatedPlayer.watchedScenes ?? []).includes(sceneId)) {
+                // Scene already watched — fall through to success handling below
+                // (identical to how 'dialogue' stages work when re-talked)
+                const resolvedSuccess = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
+                if (resolvedSuccess.length) {
+                    dialogueStore.startDialogue(resolvedSuccess, npc.name);
+                }
+                if (stage.success_rewards) {
+                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+                }
+                if (currentStageIndex >= rankData.stages.length - 1) {
+                    questStore.setQuestState(quest.id, 'COMPLETED');
+                    updatedNpc.swordRank++;
+                    messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'NPC']);
+                    toastStore.success(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`);
+                    updatedPlayer = checkQuestTriggers(updatedPlayer);
+                } else {
+                    questStore.advanceQuestStage(quest.id);
+                }
+                return { updatedNpc, updatedPlayer };
+            }
+
+            // Scene not yet watched — trigger it now
+            // Import at top of NpcService.ts if not already there:
+            //   import { scenes } from '$lib/data/scenes';
+            //   import { playerStore } from '$lib/stores/playerStore';
+            const sceneFactory = scenes[sceneId];
+            if (!sceneFactory) {
+                console.warn(`[NpcService] No scene found for sceneId: "${sceneId}"`);
+                dialogueStore.startDialogue(
+                    stage.unavailable_dialogue ?? [`${npc.name} has something to show you.`],
+                    npc.name
+                );
+                return { updatedNpc, updatedPlayer };
+            }
+
+            // Build scene with current NPC images and player avatar
+            const sceneLines = sceneFactory(globalNpcs, updatedPlayer.profile.avatar);
+            const playerTags = updatedPlayer.worldTags ?? [];
+
+            // onComplete: mark scene as watched, apply rewards, advance quest
+            const onComplete = () => {
+                playerStore.update(p => {
+                    let newP = {
+                        ...p,
+                        watchedScenes: [...(p.watchedScenes ?? []), sceneId]
+                    };
+                    if (stage.success_rewards) {
+                        newP = handleRewards(newP, stage.success_rewards);
+                    }
+                    if (currentStageIndex >= rankData.stages.length - 1) {
+                        questStore.setQuestState(quest.id, 'COMPLETED');
+                        // swordRank increment happens via interactTalk on next call
+                        // so we just advance the quest here
+                    } else {
+                        questStore.advanceQuestStage(quest.id);
+                    }
+                    return checkQuestTriggers(newP);
+                });
+
+                // Re-run interactTalk to pick up the COMPLETED state and increment swordRank
+                if (currentStageIndex >= rankData.stages.length - 1) {
+                    // Small delay so the scene dialog fully closes first
+                    setTimeout(() => {
+                        const currentPlayer = get(playerStore);
+                        const currentNpcState = get(npcStore).globalNpcs[npc.id];
+                        if (currentNpcState) {
+                            // Manually increment swordRank since we can't call interactTalk
+                            // from within itself cleanly
+                            npcStore.update(s => ({
+                                ...s,
+                                globalNpcs: {
+                                    ...s.globalNpcs,
+                                    [npc.id]: { ...currentNpcState, swordRank: currentNpcState.swordRank + 1 }
+                                }
+                            }));
+                            messageStore.addMessage(
+                                `Your Sword Rank with ${npc.name} is now ${currentNpcState.swordRank + 1}.`,
+                                ['World', 'NPC']
+                            );
+                            toastStore.success(`Your Sword Rank with ${npc.name} is now ${currentNpcState.swordRank + 1}.`);
+                            questStore.setQuestState(quest.id, 'COMPLETED');
+                        }
+                    }, 300);
+                }
+            };
+
+            dialogueStore.startScene(sceneLines, playerTags, onComplete);
+            return { updatedNpc, updatedPlayer };
+        }
 
         if (stage.requirement.type === 'dialogue') {
-            if (stage.success_dialogue?.length) {
-                dialogueStore.startDialogue(stage.success_dialogue, npc.name);
+            const resolvedSuccess = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
+            if (resolvedSuccess.length) {
+                dialogueStore.startDialogue(resolvedSuccess, npc.name);
             }
             if (stage.success_rewards) {
                 updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
@@ -234,7 +347,7 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                 updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
             }
 
-            let finalDialogue = stage.success_dialogue || [];
+            let finalDialogue = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
             if (currentStageIndex < rankData.stages.length - 1) {
                 const nextStage = rankData.stages[currentStageIndex + 1];
                 if (nextStage?.intro_dialogue) {
@@ -276,9 +389,9 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
             questStore.setQuestState(quest.id, 'COMPLETED');
             messageStore.addMessage(`You reported to ${npc.name}. Quest "${quest.title}" completed!`, ['World', 'NPC']);
             toastStore.success('Sword Rank Quest Complete!');
-            if (pendingStage?.success_rewards) updatedPlayer = handleRewards(updatedPlayer, pendingStage.success_rewards);
-            const dialogue = pendingStage?.success_dialogue?.length
-                ? pendingStage.success_dialogue
+            const resolvedPending = resolveSuccessDialogue(pendingStage?.success_dialogue, updatedPlayer.worldTags);
+            const dialogue = resolvedPending.length
+                ? resolvedPending
                 : [`Thank you for your report on "${quest.title}". Well done.`];
             dialogueStore.startDialogue(dialogue, npc.name);
         } else if (finalState === 'FAILED') {
@@ -305,18 +418,19 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
         });
         if (updatedNpc.swordRank === questSlotIndex) {
             const finalStage = rankData.stages[rankData.stages.length - 1];
-            if (finalStage?.success_dialogue?.length) {
-                dialogueStore.startDialogue(finalStage.success_dialogue, npc.name);
+            const completedDialogue = resolveSuccessDialogue(finalStage?.success_dialogue, updatedPlayer.worldTags);
+            if (completedDialogue.length) {
+                dialogueStore.startDialogue(completedDialogue, npc.name);
+            } else {
+                const fallback = rankData.post_completion_dialogue || [`${npc.name} has nothing new to say.`];
+                dialogueStore.startDialogue(fallback, npc.name);
             }
             updatedNpc.swordRank++;
             messageStore.addMessage(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`, ['World', 'NPC']);
             toastStore.success(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`);
             updatedPlayer = checkQuestTriggers(updatedPlayer);
-        } else {
-            const dialogue = rankData.post_completion_dialogue || [`${npc.name} has nothing new to say.`];
-            dialogueStore.startDialogue(dialogue, npc.name);
+            return { updatedNpc, updatedPlayer };
         }
-        return { updatedNpc, updatedPlayer };
     },
 
     FAILED: (npc, player, globalNpcs, rankData, quest) => {
@@ -451,7 +565,7 @@ export function fulfillGiftingOption(npc: NPC, player: Player, option: GiftingOp
     updatedNpc.affinity += option.value;
     // messageStore.addMessage(`[${updatedNpc.name}]: ${option.dialogue[0]}`, ['NPC']);
     dialogueStore.startDialogue(option.dialogue, npc.name);
-    
+
     if (updatedNpc.affinity >= 10 && updatedNpc.heartState !== 'READY_FOR_RANK_UP') {
         updatedNpc.heartState = 'READY_FOR_RANK_UP';
         toastStore.info(`You should talk to ${updatedNpc.name}.`);

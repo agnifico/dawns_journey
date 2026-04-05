@@ -98,8 +98,8 @@
             "mapId": "dragon_island",
             "requiredTag": "sylvie_sword_1_complete",
             "phase": "Duskfall",
-            "x": -1,
-            "y": -1
+            "x": 13,
+            "y": 11
         }
     ],
     "swordRanks": [
@@ -152,6 +152,7 @@
             "questId": "sylvie_sword_2",
             "title": "Heart of the Forest",
             "description": "Sylvie will teach you further about the game: Resources, and Gifting.",
+            "refusable": true,
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_1_complete"

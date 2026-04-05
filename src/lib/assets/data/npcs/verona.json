@@ -11,9 +11,11 @@
         "/images/characters/verona/4.png",
         "/images/characters/verona/5.png"
     ],
-    "hidden": false, "isCombatant": true,
+    "hidden": false,
+    "isCombatant": true,
     "types": [
-        "Earth", "Light"
+        "Earth",
+        "Light"
     ],
     "baseStats": {
         "hp": 100,
@@ -39,6 +41,183 @@
     "swordRankMaxedDialogue": [],
     "allRanksMaxedDialogue": [],
     "battleAftermathsBySwordRank": [],
-    "swordRanks": [],
+    "swordRanks": [
+        {
+            "questId": "verona_sword_1",
+            "title": "The Swamp Walker",
+            "description": "A solo ranger is moving through the murky swamp. She seems to know more about this island than she should.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "pink_sarong_acquired"
+            },
+            "stages": [
+                {
+                    "objective": "Find Verona in the murky swamp",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "unavailable_dialogue": [
+                        "She's deeper in the swamp. Keep going."
+                    ],
+                    "intro_dialogue": [
+                        "You found your way through.",
+                        "Most people don't bother with the swamp.",
+                        "I'm Verona. I've been on Ashenfall for about three weeks.",
+                        "Following something. Don't have a better word for it yet.",
+                        "You pulled a sword out of the ground near the beach settlement, didn't you.",
+                        "I heard about it.",
+                        "I've been looking at the sites on this island for two weeks.",
+                        "None of them moved for me.",
+                        "Walk with me."
+                    ],
+                    "success_dialogue": [
+                        "This island sits on top of something old.",
+                        "A lot of places do — places where powerful things happened, or gathered, or chose to be.",
+                        "Ashenfall has more of these sites than anywhere I've been.",
+                        "Whatever was buried here, there was a lot of it.",
+                        "And it's waking up.",
+                        "The swords are how it wakes up.",
+                        "You're how it wakes up.",
+                        "I don't know why yet. But I want to find out.",
+                        "Stay accessible. I'll have more when I've worked through it."
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "verona_sword_1_complete"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "verona_sword_2",
+            "title": "Xochi",
+            "description": "Verona has been carrying a sword she found on her travels. She doesn't know what it is. She's about to find out.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "verona_sword_1_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Return to Verona in the swamp",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "unavailable_dialogue": [
+                        "I'm still working through something.",
+                        "Come back in a bit."
+                    ],
+                    "intro_dialogue": [
+                        "I've been carrying this sword for eight months.",
+                        "Found it in the jungle, two maps east of here.",
+                        "It was just — there. In the ground. Glowing faintly.",
+                        "I pulled it without thinking.",
+                        "It's been humming since I got to Ashenfall.",
+                        "Louder the last few days.",
+                        "I think I need to actually — hold it. Properly. Not just carry it.",
+                        "Will you stay? In case something happens."
+                    ],
+                    "success_dialogue": [
+                        "...",
+                        "Oh.",
+                        "Oh that's —",
+                        "I can feel the ground.",
+                        "Not just under my feet. All of it. The roots. The water table. The thing that grows.",
+                        "I've always been good with plants. With earth. With knowing where to step.",
+                        "I thought that was just — skill. Experience.",
+                        "It's not, is it.",
+                        "This sword was mine the whole time.",
+                        "I just hadn't held it right yet.",
+                        "Her name is Xochi.",
+                        "I don't know how I know that.",
+                        "I just do."
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "verona_sword_2_complete"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "xochi_event_witnessed"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "verona_sword_3",
+            "title": "What the Tree Holds",
+            "description": "Verona has something for the player. And something to say about the Dragon Shrine before they get there.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "verona_sword_2_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Speak with Verona",
+                    "requirement": {
+                        "type": "dialogue"
+                    },
+                    "unavailable_dialogue": [
+                        "Almost. Give me a day.",
+                        "I want to get this right before I say it."
+                    ],
+                    "intro_dialogue": [
+                        "I have something for you.",
+                        "And something to tell you first."
+                    ],
+                    "success_dialogue": [
+                        "There's a shrine in the mountains. Dragon Shrine, people call it.",
+                        "There's a tree there. Dragonblood Tree. Older than anything else standing on this island.",
+                        "It's a stabilising force — the island's substrate runs through it the way water runs through roots.",
+                        "If it gets cut down, the island doesn't collapse. But it destabilises.",
+                        "The sword sites get more volatile. The discharge patches spread.",
+                        "Whoever's up there might ask you to cut it.",
+                        "I'm not telling you what to do.",
+                        "I'm telling you what it is so you know what you're deciding.",
+                        "The tree will grow back. The question is what happens in between.",
+                        "Now.",
+                        "This is for you.",
+                        "It'll get you through the swamp paths and up toward the shrine.",
+                        "Go carefully. There's someone up there worth meeting.",
+                        "And someone worth watching carefully."
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "item",
+                            "itemId": "spiked_choker",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "verona_sword_3_complete"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "spiked_choker_acquired"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "verona_dragonblood_tree"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
     "heartRanks": []
 }

@@ -280,6 +280,7 @@ export interface Player {
     levelPoints: number;
     cropsHarvested: number;
     factions: Record<string, { score: number; rank: number; }>;
+    watchedScenes?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -305,6 +306,7 @@ export type RequirementCondition =
     | { type: 'stat_check'; stat: keyof Player['baseStats']; value: number }
     | { type: 'element_check'; element: string; value: number }
     | { type: 'element_exploration_level_check'; element: string; level: number }
+    | { type: 'watch_scene'; sceneId: string }
     | { type: 'dialogue' };
 
 /**
@@ -321,11 +323,12 @@ export type Requirement =
 export type Reward =
     | { type: 'item'; itemId: string; quantity: number; }
     | { type: 'tag'; tagId: string; }
-    | { type: 'remove_tag'; tagId: string; }                                    
+    | { type: 'remove_tag'; tagId: string; }
     | { type: 'change_reputation'; faction: 'solis_saints' | 'shadowhand'; amount: number; }
     | { type: 'faction_score'; factionId: string; amount: number; }
     | { type: 'complete_quest_stage'; questId: string; }
     | { type: 'world_resonance'; amount: number }
+    | { type: 'tag_conditional'; tag: string; rewards: Reward[] }
     | { type: 'fail_quest'; questId: string; };
 
 export type GameEffect =
@@ -354,14 +357,26 @@ export interface GiftingOption {
     dialogue: string[];
 }
 
+export interface ConditionalDialogue {
+    default: string[];
+    branches: {
+        requiredTag: string;
+        lines: string[];
+    }[];
+}
+
+
 export interface QuestStage {
     objective: string;
     requirement: Requirement;
-    intro_dialogue?: string[];                                                   // NEW: shown when stage first becomes active
+    intro_dialogue?: string[];      // NEW: shown when stage first becomes active
     reminder_dialogue?: string[];
-    success_dialogue?: string[];
+    success_dialogue?: string[] | ConditionalDialogue;
     success_rewards?: Reward[];
     unavailable_dialogue?: string[];
+    refusable?: boolean;
+    refuse_dialogue?: string[];
+    refuse_effects?: any[];       // same shape as success_rewards, fires on refuse
 }
 
 export type QuestState = 'LOCKED' | 'AVAILABLE' | 'ACTIVE' | 'COMPLETED' | 'FAILED' | 'REPORT_PENDING';
@@ -432,7 +447,7 @@ export interface EventAction {
     responseMessage?: string;
     requirement?: Requirement;                                                   // NEW: hide/disable action if not met
 }
-export {};
+export { };
 
 export interface LocationEvent {
     id: string;

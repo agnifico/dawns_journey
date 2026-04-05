@@ -4,6 +4,7 @@
     "profileImage": "/images/characters/cygwin/cygwin_avatar.png",
     "image": "/images/characters/cygwin/cygwin0.png",
     "title": "Commander of the Southern Front",
+    "spriteGif": "/images/cygwin.gif",
     "galleryImages": [
         "/images/characters/cygwin/cygwin0.png",
         "/images/characters/cygwin/cygwin1.png",
@@ -16,8 +17,12 @@
     ],
     "description": "Commander of the Solis Saints' southern operations. She made herself into what her people needed. She has not stopped.",
     "faction": "solis_saints",
-    "hidden": false, "isCombatant": true,
-    "types": ["Fire", "Earth"],
+    "hidden": false,
+    "isCombatant": true,
+    "types": [
+        "Fire",
+        "Earth"
+    ],
     "baseStats": {
         "hp": 500,
         "maxHp": 500,
@@ -39,13 +44,33 @@
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
     "statGrowth": [],
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 60,
+            "y": 29
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "cygwin_sr1_complete",
+            "x": 40,
+            "y": 59
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "cygwin_sword_3_complete",
+            "x": 48,
+            "y": 46
+        }
+    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
             "aftermaths": [
                 {
                     "outcome": "lose",
-                    "value": 2,
+                    "value": 3,
                     "dialogue": [
                         "You held your ground longer than most.",
                         "That's worth something.",
@@ -54,7 +79,7 @@
                 },
                 {
                     "outcome": "win",
-                    "value": 4,
+                    "value": 0,
                     "dialogue": [
                         "Hm.",
                         "That was clean.",
@@ -63,68 +88,139 @@
                     ]
                 }
             ]
+        },
+        {
+            "rank": 2,
+            "aftermaths": [
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "Groundbreaker held.",
+                        "Good.",
+                        "You're still standing.",
+                        "Also good.",
+                        "Come back when you're ready to try again."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": 0,
+                    "dialogue": [
+                        ".",
+                        "..",
+                        "You beat Groundbreaker.",
+                        "I need to think about what that means.",
+                        "Come back. I want to talk."
+                    ]
+                }
+            ]
         }
     ],
     "swordRanks": [
         {
             "questId": "cygwin_sword_1",
-            "title": "The Decrepit Spire",
-            "description": "Commander Cygwin needs an old spire activated. She has her reasons, and she'll share them if you earn it.",
+            "title": "The Extractor",
+            "description": "Cygwin needs repairs done on the red extractor. She has a manual. She also has a very specific idea of how this should go.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "can_assist_cygwin"
+                "tag": "met_cygwin"
             },
             "stages": [
                 {
                     "objective": "Speak with Cygwin",
-                    "requirement": { "type": "dialogue" },
+                    "requirement": {
+                        "type": "dialogue"
+                    },
                     "unavailable_dialogue": [
-                        "I'm busy.",
-                        "Come back when I'm not looking at this map."
+                        "The extractor's acting up again.",
+                        "Come back when you have a moment — I have a task."
                     ],
                     "intro_dialogue": [
-                        "Guinevere sent you.",
-                        "Good. I have something that needs doing and my hands are full.",
-                        "There's an old spire in the southern forest — predates the Saints by a long time.",
-                        "We need it active as part of the platform network.",
-                        "It's not complicated. But it needs someone I can trust to do it quietly.",
-                        "Guinevere says I can trust you.",
-                        "That's enough for me."
+                        "The red extractor is running erratic.",
+                        "Interference from the substrate shift — same root cause as everything else.",
+                        "It needs wood, metal, and stone to stabilise the housing.",
+                        "Here."
                     ],
-                    "reminder_dialogue": [
-                        "Southern forest. Old spire.",
-                        "Take your time, but not too much of it."
+                    "success_dialogue": [
+                        "Five wood. Three metal. Three stone.",
+                        "I'm not asking you to build anything.",
+                        "The materials go into the maintenance panel on the side.",
+                        "I'll talk you through it.",
+                        "Claudia tried once. She made it worse.",
+                        "Don't tell her I said that."
                     ],
                     "success_rewards": [
-                        { "type": "tag", "tagId": "cygwin_ready_for_f2" }
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_extractor_briefed"
+                        }
                     ]
                 },
                 {
-                    "objective": "Activate the Decrepit Spire",
+                    "objective": "Bring Cygwin the repair materials",
+                    "requirement": {
+                        "operator": "AND",
+                        "conditions": [
+                            {
+                                "type": "give_item",
+                                "itemId": "wood",
+                                "quantity": 5
+                            },
+                            {
+                                "type": "give_item",
+                                "itemId": "metal",
+                                "quantity": 3
+                            },
+                            {
+                                "type": "give_item",
+                                "itemId": "stone",
+                                "quantity": 3
+                            }
+                        ]
+                    },
+                    "reminder_dialogue": [
+                        "Five wood, three metal, three stone.",
+                        "The extractor is still running rough.",
+                        "Take your time — but not too much of it."
+                    ]
+                },
+                {
+                    "objective": "Check the red extractor",
                     "requirement": {
                         "type": "finish_location_event",
-                        "eventId": "F2",
+                        "eventId": "red_extractor",
                         "timing": "future"
                     },
                     "reminder_dialogue": [
-                        "The spire is still waiting.",
-                        "Southern forest. You'll feel the pull when you're close."
+                        "The extractor. Panel's open.",
+                        "You'll see where the materials go."
                     ],
                     "success_dialogue": [
-                        "Platform network is stabilising.",
-                        "Good work.",
-                        "You want to know why that spire specifically?",
-                        "My people used to use structures like that.",
-                        "Different purpose. Same principle — drawing from what's already in the earth, not forcing something new into it.",
-                        "The Saints' method is cruder.",
-                        "It works. But it's cruder.",
-                        "I've been trying to suggest adjustments.",
-                        "It's a process.",
-                        "Come back. I want to show you something."
+                        "Stable.",
+                        "The interference started three weeks ago.",
+                        "Same time the substrate energy readings started shifting.",
+                        "Claudia thinks it's coincidence.",
+                        "She is wrong.",
+                        "The swords resurfacing — whatever they are — they're connected to the substrate instability.",
+                        "I've been correlating the data.",
+                        "I'm going to say it to Gwen when I have enough certainty.",
+                        "I'm telling you now because you pulled one of them.",
+                        "You should probably know what you're holding."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
-                        { "type": "tag", "tagId": "cygwin_sword_1_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_sr1_complete"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_sword_1_complete"
+                        }
                     ]
                 }
             ]
@@ -132,230 +228,155 @@
         {
             "questId": "cygwin_sword_2",
             "title": "What the Earth Remembers",
-            "description": "Cygwin wants to show you something about the southern forest. About what was here before.",
+            "description": "Cygwin has been thinking about what she told you. She wants to say the rest of it.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "cygwin_sword_1_complete"
             },
             "stages": [
                 {
-                    "objective": "Follow Cygwin into the southern forest",
+                    "objective": "Speak with Cygwin",
                     "requirement": {
-                        "type": "finish_location_event",
-                        "eventId": "cygwin_southern_forest_walk"
+                        "type": "dialogue"
                     },
                     "unavailable_dialogue": [
-                        "Southern forest. Come find me when you're ready.",
-                        "I'll be at the old marker stones."
+                        "I'm still working out how to say this.",
+                        "Come back soon."
                     ],
                     "intro_dialogue": [
-                        "Walk with me.",
-                        "I want to show you something before the platform work changes it."
+                        "I've been thinking about what I told you.",
+                        "About the correlation.",
+                        "There's more."
                     ],
                     "success_dialogue": [
-                        "My people have a word for this.",
-                        "For ground that remembers what lived and died on it.",
-                        "The southern forest is full of it.",
-                        "The platforms haven't reached this far yet.",
-                        "When they do —",
-                        "The leakage will change the soil composition. The older root systems will struggle.",
-                        "I know this because I read the projections.",
-                        "I know this because I grew up walking ground like this.",
-                        "I made a promise to Guinevere. To the Saints. To my people.",
-                        "That promise requires the platforms.",
-                        "I'm not second-guessing the promise.",
-                        "But I wanted someone else to see this before it changes.",
-                        "Claudia would have cried.",
-                        "You seem like you could hold it.",
-                        "I was right."
+                        "Where I come from, we have a concept.",
+                        "The ground remembers.",
+                        "Not metaphorically.",
+                        "Literally — the composition of the soil changes based on what happened on it.",
+                        "What lived and died. What was built and burned.",
+                        "I grew up reading ground the way some people read texts.",
+                        "The ground here is like nothing I've encountered.",
+                        "The nucleation sites — where the swords are emerging — the substrate around them is ancient.",
+                        "Pre-Concordat. Pre-human settlement.",
+                        "Something massive happened here, a long time ago.",
+                        "The swords are the residue.",
+                        "I don't know what they were before.",
+                        "I intend to find out.",
+                        "Gabriella wants a report.",
+                        "I'm going to give her one.",
+                        "A carefully edited one.",
+                        "Come back. I want to show you something.",
+                        "When we're both ready."
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 8 },
-                        { "type": "tag", "tagId": "cygwin_sword_2_complete" }
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_sword_2_complete"
+                        }
                     ]
                 }
             ]
         },
         {
             "questId": "cygwin_sword_3",
-            "title": "The Promised Warrior",
-            "description": "Cygwin tells you about where she came from. She doesn't do this often.",
+            "title": "Groundbreaker",
+            "description": "Cygwin found something in the southern mountain. She pulled it. She wants a worthy opponent to test it on.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "cygwin_sword_2_complete"
             },
             "stages": [
                 {
-                    "objective": "Speak with Cygwin",
-                    "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": [
-                        "Give me a moment.",
-                        "Some things need the right time to say."
-                    ],
-                    "intro_dialogue": [
-                        "I want to tell you something.",
-                        "Sit down."
-                    ],
-                    "success_dialogue": [
-                        "Where I come from, some children are marked early.",
-                        "Not chosen. Marked.",
-                        "It means the community looks at you and says — this one will carry something for all of us.",
-                        "I was marked when I was nine.",
-                        "My mother cried.",
-                        "Not because she was sad. Because she was proud and scared at the same time.",
-                        "I grew up knowing that my strength was not for me.",
-                        "Which sounds heavy.",
-                        "It wasn't, mostly. It was just — true.",
-                        "When the Saints came with their relief work, I saw what organised resources could do.",
-                        "And I thought — if I give them myself, fully, without reservation —",
-                        "They give my people a future.",
-                        "Not survival. A future.",
-                        "Bonnie thinks this was too much to give.",
-                        "She's not wrong.",
-                        "She's also not the one who made the promise.",
-                        "I don't regret it.",
-                        "I want to be clear about that.",
-                        "I just wanted you to know what it cost.",
-                        "You're the kind of person it's worth being honest with."
-                    ],
-                    "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "cygwin_sword_3_complete" }
-                    ]
-                }
-            ]
-        },
-        {
-            "questId": "cygwin_sword_4",
-            "title": "Other Cygwins",
-            "description": "Cygwin has news from home. The investment is working. She's not sure how to feel about it.",
-            "startRequirement": {
-                "type": "have_tag",
-                "tag": "cygwin_sword_3_complete"
-            },
-            "stages": [
-                {
-                    "objective": "Speak with Cygwin",
-                    "requirement": { "type": "dialogue" },
-                    "unavailable_dialogue": [
-                        "I got a message from home.",
-                        "Give me a moment with it.",
-                        "Come back soon."
-                    ],
-                    "intro_dialogue": [
-                        "News from home.",
-                        "Come in."
-                    ],
-                    "success_dialogue": [
-                        "There's a girl.",
-                        "Eleven years old. My village.",
-                        "Her name is Sera.",
-                        "The investment has been running long enough that there's a school now.",
-                        "A real one. With teachers who came specifically.",
-                        "Sera is — they say she's exceptional.",
-                        "Better than I was at her age.",
-                        "Faster. Smarter. And she has access to things I never had.",
-                        "My mother wrote to tell me.",
-                        "She said — 'this is why you went'.",
-                        "I read it six times.",
-                        "Claudia found me on the seventh and I had to pretend I had something in my eye.",
-                        "She didn't believe me.",
-                        "She brought chocolates.",
-                        "She always brings chocolates.",
-                        "I don't know what I would do without her.",
-                        "Or Guinevere.",
-                        "Or — well.",
-                        "You've become part of that list.",
-                        "I don't say that lightly.",
-                        "I don't say most things lightly."
-                    ],
-                    "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "cygwin_sword_4_complete" }
-                    ]
-                }
-            ]
-        },
-        {
-            "variants": [
-                {
-                    "questId": "cygwin_sword_5_saints",
-                    "title": "The Grey Path",
-                    "description": "You sided with the Saints. Cygwin has something to say about choices.",
-                    "startRequirement": {
-                        "operator": "AND",
-                        "conditions": [
-                            { "type": "have_tag", "tag": "cygwin_sword_4_complete" },
-                            { "type": "have_tag", "tag": "sided_with_solis_saints" }
-                        ]
+                    "objective": "Find Cygwin at the empty sword site",
+                    "requirement": {
+                        "type": "finish_location_event",
+                        "eventId": "empty_sword_site_cygwin",
+                        "timing": "future"
                     },
-                    "stages": [
+                    "unavailable_dialogue": [
+                        "Come find me at the southern mountain site.",
+                        "You'll know it.",
+                        "The ground is different where a sword has been pulled.",
+                        "Quieter."
+                    ],
+                    "reminder_dialogue": [
+                        "Southern mountain. The site is marked by the stone formation.",
+                        "I'll be there."
+                    ],
+                    "success_dialogue": [
+                        "You found it.",
+                        "The site.",
+                        "I pulled Groundbreaker four days ago.",
+                        "It was the heaviest thing I've ever lifted.",
+                        "Not physically.",
+                        "It felt like picking up something that had been put down a very long time ago by someone who wasn't ready.",
+                        "I've been carrying it since.",
+                        "I want to know what it can do.",
+                        "More specifically — I want to know what you can do against it.",
+                        "You're the only person on this island worth testing it on.",
+                        "Don't take that lightly.",
+                        "I don't say things lightly."
+                    ],
+                    "success_rewards": [
                         {
-                            "objective": "Speak with Cygwin",
-                            "requirement": { "type": "dialogue" },
-                            "success_dialogue": [
-                                "You chose the Saints.",
-                                "I want to tell you what that means to me.",
-                                "Not as a Saint. As someone who made the same choice.",
-                                "The grey path isn't noble.",
-                                "It's just the one where you look at all the costs and decide the outcome is worth them.",
-                                "Some days I'm more sure of that than others.",
-                                "Today I'm sure.",
-                                "Because of Sera.",
-                                "Because of Guinevere.",
-                                "Because of Claudia turning up with chocolates at every single wrong moment.",
-                                "Because you stood at the Altar and made a call that wasn't easy.",
-                                "That matters.",
-                                "You matter.",
-                                "I don't say that to many people.",
-                                "You're one of them now."
-                            ],
-                            "success_rewards": [
-                                { "type": "world_resonance", "amount": 12 },
-                                { "type": "tag", "tagId": "cygwin_sword_5_complete" }
-                            ]
+                            "type": "tag",
+                            "tagId": "cygwin_fight_ready"
                         }
                     ]
                 },
                 {
-                    "questId": "cygwin_sword_5_shadowhand",
-                    "title": "Different Math",
-                    "description": "You sided against the Saints. Cygwin wants to understand.",
-                    "startRequirement": {
-                        "operator": "AND",
-                        "conditions": [
-                            { "type": "have_tag", "tag": "cygwin_sword_4_complete" },
-                            { "type": "have_tag", "tag": "sided_with_shadowhand" }
+                    "objective": "Fight Cygwin — she wants to test Groundbreaker",
+                    "requirement": {
+                        "type": "fight_npc",
+                        "npcId": "cygwin",
+                        "quantity": 1
+                    },
+                    "reminder_dialogue": [
+                        "I'm ready when you are.",
+                        "Don't hold back.",
+                        "Groundbreaker will know if you do."
+                    ],
+                    "success_dialogue": {
+                        "default": [
+                            "Good fight.",
+                            "Groundbreaker is satisfied.",
+                            "So am I.",
+                            "Come find me when things start moving — Gwen will want everyone in the same place.",
+                            "You've earned your place in that room.",
+                            "I don't say that to many people."
+                        ],
+                        "branches": [
+                            {
+                                "requiredTag": "watch_won_combat",
+                                "lines": [
+                                    "You beat Groundbreaker.",
+                                    ".",
+                                    "I'll need some time with that.",
+                                    "Come find me when things start moving.",
+                                    "Gwen will want everyone she trusts in the same place.",
+                                    "You belong in that room.",
+                                    "I was certain of that before.",
+                                    "I'm more certain now."
+                                ]
+                            }
                         ]
                     },
-                    "stages": [
+                    "success_rewards": [
                         {
-                            "objective": "Speak with Cygwin",
-                            "requirement": { "type": "dialogue" },
-                            "success_dialogue": [
-                                "You chose differently.",
-                                "I'm not angry.",
-                                "I want to understand.",
-                                "Not to argue. I've made my choice. I'm not reconsidering.",
-                                "I just — I think about the math.",
-                                "My math says: this path, this cost, this outcome.",
-                                "Your math said something different at the Altar.",
-                                "Tell me what.",
-                                "...",
-                                "Yeah.",
-                                "Yeah, I can see that.",
-                                "I still think you were wrong.",
-                                "But I can see how you got there.",
-                                "That's rare.",
-                                "Most people I disagree with, I can't see the road they took.",
-                                "You're still in my list.",
-                                "The short one.",
-                                "Don't make me regret it."
-                            ],
-                            "success_rewards": [
-                                { "type": "world_resonance", "amount": 10 },
-                                { "type": "tag", "tagId": "cygwin_sword_5_complete" }
-                            ]
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_sword_3_complete"
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_sr1_complete"
                         }
                     ]
                 }
@@ -375,8 +396,14 @@
                 "With me those are the same thing."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "cygwin_heart_rank_1_unlocked" },
-                { "type": "world_resonance", "amount": 8 }
+                {
+                    "type": "tag",
+                    "tagId": "cygwin_heart_rank_1_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 8
+                }
             ],
             "giftingOptions": [
                 {
@@ -462,8 +489,14 @@
                 "Consider this yours."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "cygwin_heart_rank_2_unlocked" },
-                { "type": "world_resonance", "amount": 10 }
+                {
+                    "type": "tag",
+                    "tagId": "cygwin_heart_rank_2_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 10
+                }
             ],
             "giftingOptions": [
                 {
@@ -552,8 +585,14 @@
                 "Keep doing that."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "cygwin_heart_rank_3_unlocked" },
-                { "type": "world_resonance", "amount": 12 }
+                {
+                    "type": "tag",
+                    "tagId": "cygwin_heart_rank_3_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 12
+                }
             ],
             "giftingOptions": [
                 {
@@ -653,8 +692,14 @@
                 "Don't make me wrong about that."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "cygwin_heart_rank_4_unlocked" },
-                { "type": "world_resonance", "amount": 15 }
+                {
+                    "type": "tag",
+                    "tagId": "cygwin_heart_rank_4_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 15
+                }
             ],
             "giftingOptions": [
                 {
@@ -751,8 +796,14 @@
                 "Don't make me wrong."
             ],
             "rank_up_rewards": [
-                { "type": "tag", "tagId": "cygwin_heart_rank_5_unlocked" },
-                { "type": "world_resonance", "amount": 20 }
+                {
+                    "type": "tag",
+                    "tagId": "cygwin_heart_rank_5_unlocked"
+                },
+                {
+                    "type": "world_resonance",
+                    "amount": 20
+                }
             ],
             "giftingOptions": [
                 {

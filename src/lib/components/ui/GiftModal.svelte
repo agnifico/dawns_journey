@@ -52,11 +52,12 @@
 							<li class="gifting-option">
 								<div class="item-info">
 									<img src={itemDetails?.image} alt={itemDetails?.name} class="item-icon" />
-									<span>
-										{itemDetails?.name} x {option.quantity}
-										<br />
+									<div class="details">
+										<p class="item-name">
+											{itemDetails?.name} <span>x{option.quantity}</span>
+										</p>
 										<small>+ {option.value} Affinity</small>
-									</span>
+									</div>
 								</div>
 								<button
 									class="give-button"
@@ -93,15 +94,12 @@
 		z-index: 100;
 	}
 	.modal {
-		background-color: var(--color-secondary);
-		border: 3px solid var(--color-primary);
 		border-radius: 8px;
-		width: 90%;
-		max-width: 400px;
+		width: 100%;
+		max-width: 600px;
 		display: flex;
 		flex-direction: column;
 		box-shadow: #00000056 0 -6px 0 6px inset;
-
 		background-color: var(--surface-2);
 		border-radius: 18px;
 		border: 6px solid #00000056;
@@ -111,32 +109,34 @@
 		color: var(--color-text);
 	}
 	.modal-header {
-		padding: 0.75rem 1rem;
+		/* padding: 0.75rem 1rem; */
 		border-bottom: 1px solid #444;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		/* border: 1px solid wheat; */
+		padding-inline: 0.75rem;
 	}
 	.modal-header h3 {
 		margin: 0;
-        font-family: 'Silkscreen';
-        display: flex;
-        flex-direction: column;
-        font-size: .75rem;
-        margin: 0;
-        padding: 0;
-        span {
-            font-family: 'DePixel';
-            /* font-weight: bold; */
-            color: var(--color-primary);
-            font-size: 1.3rem;
-        }
-	}
-	.modal-body {
-		padding: 1rem;
+		font-family: 'Silkscreen';
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		font-size: 0.75rem;
+		margin: 0;
+		padding: 0;
+		span {
+			font-family: 'DePixel';
+			/* font-weight: bold; */
+			color: var(--color-primary);
+			font-size: 1.3rem;
+		}
+	}
+	.modal-body {
+		padding-inline: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		/* gap: 1rem; */
 	}
 	.gifting-options-list {
 		list-style: none;
@@ -144,6 +144,8 @@
 		margin: 0;
 		display: flex;
 		flex-direction: column;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 0.75rem;
 	}
 	.gifting-option {
@@ -161,13 +163,21 @@
 		gap: 0.75rem;
 	}
 	.item-icon {
-		width: 50px;
-		height: 50px;
+		width: 48px;
+		height: 48px;
 		object-fit: contain;
 	}
-	.item-info span {
+	.details {
 		color: var(--orange);
 		font-size: 1rem;
+		gap: 1rem;
+		span {
+			font-size: .75rem;
+			color: rgba(255, 255, 255, 0.3);
+		}
+	}
+	.item-name {
+		gap: 2rem;
 	}
 	.item-info small {
 		font-size: 0.75rem;

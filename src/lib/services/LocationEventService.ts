@@ -35,6 +35,8 @@ import { effectHandlers } from './LocationEventEffectHandlers';
 import { questStore } from '$lib/stores/questStore';
 import { npcStore } from '$lib/stores/npcStore';
 import { toastStore } from '$lib/stores/toastStore';
+import { resolveText } from '$lib/utils/textUtils';
+import { playerName } from '$lib/stores/playerStore';
 
 // ---------------------------------------------------------------------------
 // Main entry point
@@ -54,11 +56,12 @@ export function triggerLocationEvent(event: LocationEvent) {
         }
     }
 
-    const lines = normaliseLines(event.stepOnMessage);
-    const afterLines = normaliseLines(event.message);
+    const name = get(playerName);
+    const lines = resolveText(normaliseLines(event.stepOnMessage), name);
+    const afterLines = resolveText(normaliseLines(event.message), name);
     const hasDialogue = lines.length > 0;
-    const hasEffects  = (event.effects ?? []).length > 0;
-    const hasActions  = (event.actions ?? []).length > 0;
+    const hasEffects = (event.effects ?? []).length > 0;
+    const hasActions = (event.actions ?? []).length > 0;
 
     // After effects fire, show the aftermath message as dialogue (if any)
     const afterEffects = afterLines.length > 0
@@ -83,8 +86,13 @@ export function triggerLocationEvent(event: LocationEvent) {
 // ---------------------------------------------------------------------------
 
 export function triggerEventAction(event: LocationEvent, actionIndex: number) {
+
     const action = event.actions?.[actionIndex];
     if (!action) return;
+
+    const name = get(playerName);
+    const responseLines = resolveText(normaliseLines(action.responseMessage), name);
+    const afterLines = resolveText(normaliseLines(event.message), name);
 
     const player = get(playerStore);
     const globalNpcs = get(npcStore).globalNpcs;
@@ -96,9 +104,6 @@ export function triggerEventAction(event: LocationEvent, actionIndex: number) {
             return;
         }
     }
-
-    const responseLines = normaliseLines(action.responseMessage);
-    const afterLines = normaliseLines(event.message);
 
     // After action effects fire, show the event's aftermath message as dialogue
     const afterEffects = afterLines.length > 0

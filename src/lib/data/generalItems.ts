@@ -181,7 +181,7 @@ export const generalItems: Item[] = [
         image: "/general/fish.png",
         type: "general",
         effects: [{ hp: 100 }, { auraShield: 100 }],
-        flags: ['stackable',],
+        flags: ['stackable', "legendary"],
     },
     {
         id: "forza_mead",

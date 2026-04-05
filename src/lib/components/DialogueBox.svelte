@@ -1,23 +1,62 @@
 <script lang="ts">
-	import { dialogueStore } from '$lib/stores/dialogueStore';
+    import { dialogueStore } from '$lib/stores/dialogueStore';
+    import { playerStore } from '$lib/stores/playerStore';
+    import SceneChoices from '$lib/components/SceneChoices.svelte';
     import { fly } from 'svelte/transition';
 
     let lastAdvanceTime = 0;
 
-    // Single advance handler used by both keyboard and click.
-    // 80ms debounce prevents keydown + click firing together
-    // and skipping two slides (the "second-to-last slide" bug).
     function handleAdvance() {
         const now = Date.now();
         if (now - lastAdvanceTime < 80) return;
+        // Don't advance if current line is a choice — player must pick
+        const current = $dialogueStore.flatLines?.[$dialogueStore.currentIndex];
+        if (current?.isChoice) return;
         lastAdvanceTime = now;
         dialogueStore.advanceDialogue();
+    }
+
+    // Resolve active speaker for the current line
+    $: currentFlat  = $dialogueStore.flatLines?.[$dialogueStore.currentIndex] ?? null;
+    $: isChoiceLine = currentFlat?.isChoice === true;
+
+    $: activeSpeaker      = currentFlat?.speaker      ?? $dialogueStore.speaker      ?? null;
+    $: activeSpeakerImage = currentFlat?.speakerImage ?? $dialogueStore.speakerImage ?? null;
+    $: isPlayer = activeSpeaker === 'You' || activeSpeaker === 'Player';
+
+    function handleChoice(option) {
+        const tags = $playerStore.worldTags ?? [];
+
+        // Apply tag if specified
+        if (option.tag && !tags.includes(option.tag)) {
+            playerStore.update(p => ({
+                ...p,
+                worldTags: [...(p.worldTags ?? []), option.tag]
+            }));
+        }
+
+        dialogueStore.resolveChoice(option, $playerStore.worldTags ?? []);
     }
 </script>
 
 <svelte:window
     on:keydown={(e) => {
-        if ($dialogueStore.isOpen && (e.key === 'z' || e.key === 'Z' || e.key === 'Enter')) {
+        if (!$dialogueStore.isOpen) return;
+
+        // Choice hotkeys
+        if (isChoiceLine && currentFlat?.choices) {
+            const keymap = ['z', 'x', 'c', 'v'];
+            const idx = keymap.indexOf(e.key.toLowerCase());
+            if (idx !== -1 && currentFlat.choices[idx]) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleChoice(currentFlat.choices[idx]);
+                return;
+            }
+        }
+
+        // Normal advance
+        if (e.key === 'z' || e.key === 'Z' || e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
             handleAdvance();
@@ -26,17 +65,49 @@
 />
 
 {#if $dialogueStore.isOpen}
-    <div class="dialogue-overlay" on:click={handleAdvance} transition:fly={{ y: 50, duration: 200 }}>
-        <div class="dialogue-box">
-            {#if $dialogueStore.speaker}
-                <div class="speaker-name">{$dialogueStore.speaker}</div>
+    <div
+        class="dialogue-overlay"
+        class:player-speaking={isPlayer}
+        on:click={handleAdvance}
+        transition:fly={{ y: 50, duration: 200 }}
+    >
+        <div class="dialogue-box" class:is-choice={isChoiceLine}>
+
+            <!-- Speaker nameplate + avatar -->
+            {#if activeSpeaker}
+                <div class="speaker-row" class:flipped={isPlayer}>
+                    {#if activeSpeakerImage}
+                        <img
+                            class="speaker-avatar"
+                            src={activeSpeakerImage}
+                            alt={activeSpeaker}
+                        />
+                    {/if}
+                    <div class="speaker-name">{activeSpeaker}</div>
+                </div>
             {/if}
-            <p class="dialogue-text">
-                {$dialogueStore.lines[$dialogueStore.currentIndex]}
-            </p>
-            <div class="continue-prompt">
-                <span>Z ►</span>
-            </div>
+
+            {#if isChoiceLine && currentFlat?.choices}
+                <!-- Choice mode: show prompt (if any) then buttons -->
+                {#if currentFlat.text}
+                    <p class="dialogue-text prompt-text">{currentFlat.text}</p>
+                {/if}
+                <div class="choices-wrapper">
+                    <SceneChoices
+                        choices={currentFlat.choices}
+                        onChoose={handleChoice}
+                    />
+                </div>
+            {:else}
+                <!-- Normal line mode -->
+                <p class="dialogue-text">
+                    {currentFlat?.text ?? ''}
+                </p>
+                <div class="continue-prompt">
+                    <span>Z ►</span>
+                </div>
+            {/if}
+
         </div>
     </div>
 {/if}
@@ -53,12 +124,17 @@
         font-smooth: never;
     }
 
+    .dialogue-overlay.player-speaking {
+        left: 20%;
+    }
+
     .dialogue-box {
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 0.85);
         border: 2px solid var(--color-border);
         border-radius: 8px;
         color: white;
         padding: 1.5rem;
+        padding-top: 1.8rem;
         padding-bottom: 3rem;
         font-family: var(--font-family-pixel);
         font-size: 1.2rem;
@@ -67,23 +143,65 @@
         position: relative;
     }
 
-    .speaker-name {
+    /* Choice mode: don't need the extra bottom padding for Z► */
+    .dialogue-box.is-choice {
+        padding-bottom: 1.5rem;
+        cursor: default;
+    }
+
+    /* ── Speaker row ── */
+    .speaker-row {
         position: absolute;
-        top: -1.2rem;
+        top: -1.4rem;
         left: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .speaker-row.flipped {
+        left: auto;
+        right: 1rem;
+        flex-direction: row-reverse;
+    }
+
+    .speaker-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+        object-fit: cover;
+        image-rendering: pixelated;
+        background-color: var(--surface-2);
+        flex-shrink: 0;
+    }
+
+    .speaker-name {
         background-color: var(--color-primary);
         color: var(--color-secondary);
-        padding: 0.3rem 1rem;
+        padding: 0.3rem 0.8rem;
         border-radius: 5px;
         font-size: 1.1rem;
         border: 2px solid var(--color-border);
+        white-space: nowrap;
     }
 
+    /* ── Text ── */
     .dialogue-text {
         margin: 0;
         margin-right: 1rem;
     }
 
+    .prompt-text {
+        margin-bottom: 0.75rem;
+        opacity: 0.85;
+    }
+
+    .choices-wrapper {
+        margin-top: 0.5rem;
+    }
+
+    /* ── Continue prompt ── */
     .continue-prompt {
         position: absolute;
         bottom: 0.8rem;
@@ -94,6 +212,6 @@
 
     @keyframes blink {
         0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
+        50%       { opacity: 0.3; }
     }
 </style>

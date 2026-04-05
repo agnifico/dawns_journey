@@ -140,7 +140,7 @@ function addItem(
     quantity: number
 ) {
     const isSpecial = type === 'item_received'
-        && (item.type === 'weapon' || item.type === 'relic')
+        && (item.type === 'weapon' || item.type === 'relic' || item.type === 'general')
         && (item.flags?.includes('legendary') || item.flags?.includes('special'));
     schedule({
         id: nextId++,

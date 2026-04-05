@@ -126,8 +126,9 @@
 		backdrop-filter: blur(2px);
 		z-index: 10;
 		box-sizing: border-box;
+		width: 100%;
 	}
-
+	
 	.widget-header {
 		display: flex;
 		justify-content: space-between;
@@ -138,7 +139,7 @@
 		/* border-bottom: 1px solid var(--surface-1); */
 		color: var(--color-text);
 	}
-
+	
 	.toggle-button {
 		background: none;
 		border: 1px solid var(--color-text-muted);
@@ -149,25 +150,25 @@
 		line-height: 1;
 		padding: 0;
 	}
-
+	
 	.widget-body {
 		/* padding: 0.5rem; */
+		width: 100%;
 	}
-
+	
 	.widget-body ul {
 		/* padding-left: 0rem; */
 		list-style: '- ';
 		list-style-position: inside;
 		padding: 0;
 		margin: 0;
-		padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+		width: 100%;
 	}
-
+	
 	.quest {
 		position: relative;
 		/* margin-bottom: 0.75rem; */
 		height: fit-content;
-		/* border: 1px solid white; */
 		/* background-color: var(--surface-2); */
 		background-color: rgba(0, 0, 0, 0.4);
 	}

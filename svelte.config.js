@@ -1,6 +1,6 @@
 import adapter from '@sveltejs/adapter-vercel';
 
-const npcIds = ['akari', 'claudia', 'cygwin', 'guinevere', 'aoife', 'hela', 'marjane', 'nyx', 'sylvie', 'veres'];
+const npcIds = ['verona', 'claudia', 'cygwin', 'guinevere', 'aoife', 'hela', 'marjane', 'nyx', 'sylvie', 'veres'];
 const characterJournalEntries = npcIds.map(id => `/journal/character/${id}`);
 
 const helpSlugs = [
