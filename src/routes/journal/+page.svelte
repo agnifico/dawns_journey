@@ -71,24 +71,26 @@
 	.journal-page {
 		max-width: 960px;
 		margin: 0 auto;
+		background-color: rgb(26, 26, 26);
 	}
 
 	/* ── Header ── */
 	.journal-header {
 		text-align: center;
 		margin-bottom: 2rem;
+		padding-top: 1rem;
 	}
 
 	.eyebrow {
-		font-size: 0.55rem;
+		font-size: 0.75rem;
 		letter-spacing: 5px;
-		color: #7a5a20;
+		color: #9b752d;
 		text-transform: uppercase;
 		margin: 0 0 0.4rem;
 	}
 
 	.journal-title {
-		font-size: 1.6rem;
+		font-size: 2rem;
 		color: #e8b96a;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;

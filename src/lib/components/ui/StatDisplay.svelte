@@ -1,4 +1,5 @@
 <script lang="ts">
+// FOR COMBAT DISPLAY BTW
 	export let label: string;
 	export let current: number;
 	export let initial: number | undefined = undefined;

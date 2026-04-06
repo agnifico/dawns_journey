@@ -7,20 +7,30 @@
 	export let baseValue: number | undefined = undefined;
 	export let view: 'short' | 'full' | 'mini' = 'short';
 
-	// Reactive — updates whenever statId changes
-	$: statDef = statDefinitions[statId] ?? {
-		id: statId,
-		name: statId,
-		abbr: statId.substring(0, 3).toUpperCase(),
-		description: 'No description available.',
-		color: '#c8a96e'
-	} satisfies StatDefinition;
+	// hpCost reuses the hp icon but has its own label
+	$: iconId = statId === 'hpCost' ? 'hp' : statId;
+
+	$: statDef =
+		statId === 'hpCost'
+			? ({
+					id: 'hpCost',
+					name: 'HP Cost',
+					abbr: 'HP Cost',
+					description: 'HP lost when fighting this enemy.',
+					color: '#c86060'
+				} satisfies StatDefinition)
+			: (statDefinitions[statId] ??
+				({
+					id: statId,
+					name: statId,
+					abbr: statId.substring(0, 3).toUpperCase(),
+					description: 'No description available.',
+					color: '#c8a96e'
+				} satisfies StatDefinition));
 
 	$: isPercent = statId === 'critChance' || statId === 'critDamage';
 
-	$: displayValue = isPercent
-		? `${(Number(value) * 100).toFixed(0)}%`
-		: String(value);
+	$: displayValue = isPercent ? `${(Number(value) * 100).toFixed(0)}%` : String(value);
 
 	$: bonus = (() => {
 		if (baseValue === undefined || typeof value !== 'number') return undefined;
@@ -37,11 +47,7 @@
 	title={statDef.description}
 >
 	{#key statId}
-		<img
-			src={`/game_icons/${statId}.png`}
-			alt={statDef.name}
-			class="stat-icon"
-		/>
+		<img src={`/game_icons/${iconId}.png`} alt={statDef.name} class="stat-icon" />
 	{/key}
 	<span class="stat-name" style="color: {statDef.color}">
 		{view === 'full' ? statDef.name : statDef.abbr}
@@ -67,7 +73,7 @@
 		padding: 4px 8px;
 		border-radius: 4px;
 		background-color: #252018;
-		border: 1px solid rgba(200,169,110,0.08);
+		border: 1px solid rgba(200, 169, 110, 0.08);
 	}
 
 	.stat-icon {
@@ -100,8 +106,12 @@
 		font-weight: 400;
 	}
 
-	.bonus.buff   { color: #50c870; }
-	.bonus.debuff { color: #e05050; }
+	.bonus.buff {
+		color: #50c870;
+	}
+	.bonus.debuff {
+		color: #e05050;
+	}
 
 	/* ── Full view — long stat name ── */
 	.view-full .stat-icon {
@@ -112,7 +122,7 @@
 	/* ── Mini view ── */
 	.view-mini {
 		padding: 2px 5px;
-		background-color: rgba(0,0,0,0.42);
+		background-color: rgba(0, 0, 0, 0.42);
 		border-color: transparent;
 		gap: 0;
 	}
