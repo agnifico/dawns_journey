@@ -1,51 +1,29 @@
 <script lang="ts">
-    import type { FarmPlot, Prerequisite, TechNode } from '$lib/types';
+    import type { FarmPlot } from '$lib/types';
     import { playerStore } from '$lib/stores/playerStore';
     import { skillTreeStore } from '$lib/stores/skillTreeStore';
     import * as FarmingService from '$lib/services/FarmingService';
     import { derived } from 'svelte/store';
-    
+
     export let plot: FarmPlot;
-    
-    // Get ALL tech that COULD be applied to this plot (unlocked + meets requirements)
+
     const applicableTech = derived([playerStore, skillTreeStore], ([$playerStore, $skillTreeStore]) => {
         const techNodes = Array.from($skillTreeStore.techNodes.values());
-        const filtered = techNodes.filter(node => {
-            // Only consider tech nodes that are buildable on a plot
-            if (!node.id.startsWith('tech_')) {
-                return false;
-            }
-            // Check if player has unlocked the tech globally
-            if (!$playerStore.unlockedTech.includes(node.id)) {
-                return false;
-            }
-            // Check applicableTo requirements
+        return techNodes.filter((node) => {
+            if (!node.id.startsWith('tech_')) return false;
+            if (!$playerStore.unlockedTech.includes(node.id)) return false;
             if (node.applicableTo) {
-                if (node.applicableTo.environments) {
-                    if (!node.applicableTo.environments.includes(plot.environment)) {
-                        return false;
-                    }
-                }
-                if (node.applicableTo.tech) {
-                    if (!node.applicableTo.tech.every(requiredTech => plot.appliedTech.includes(requiredTech))) {
-                        return false;
-                    }
-                }
+                if (node.applicableTo.environments && !node.applicableTo.environments.includes(plot.environment)) return false;
+                if (node.applicableTo.tech && !node.applicableTo.tech.every((t: string) => plot.appliedTech.includes(t))) return false;
             } else {
-                return false; 
+                return false;
             }
             return true;
         });
-        return filtered;
     });
-    
-    function handleTechClick(techId: string, event: Event) {
-        event.preventDefault();
-        
-        const isApplied = plot.appliedTech.includes(techId);
-        
-        // Only apply if not already applied
-        if (!isApplied && plot.id) {
+
+    function handleToggle(techId: string) {
+        if (!plot.appliedTech.includes(techId) && plot.id) {
             FarmingService.applyTechToPlot(plot.id, techId);
         }
     }
@@ -53,129 +31,120 @@
 
 <div class="plot-actions">
     {#if $applicableTech.length > 0}
-        <div class="tech-grid">
+        <div class="tech-list">
             {#each $applicableTech as tech (tech.id)}
                 {@const isApplied = plot.appliedTech.includes(tech.id)}
-                <label class="tech-option" class:applied={isApplied}>
-                    <input 
-                        type="checkbox" 
-                        checked={isApplied}
-                        disabled={isApplied}
-                        on:click={(e) => handleTechClick(tech.id, e)}
-                    />
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div
+                    class="tech-row"
+                    class:applied={isApplied}
+                    on:click={() => handleToggle(tech.id)}
+                    role="button"
+                    tabindex="0"
+                >
                     <span class="tech-name">{tech.name}</span>
-                    {#if isApplied}
-                        <span class="applied-badge">✓</span>
-                    {/if}
-                </label>
+                    <div class="toggle-track" class:on={isApplied}>
+                        <div class="toggle-knob" />
+                    </div>
+                </div>
             {/each}
         </div>
     {:else}
-        <p class="no-tech-message">No tech available for this plot.</p>
+        <p class="no-tech">No tech available for this plot.</p>
     {/if}
 </div>
 
 <style>
-    .plot-actions {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        /* border: 1px solid salmon; */
-        margin: 0 auto;
-        scrollbar-width: none;
+    .plot-actions { width: 100%; }
+
+    .tech-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
-    
-    .tech-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        /* gap: 0.5rem; */
-    }
-    
-    .tech-option {
-        position: relative;
+
+    .tech-row {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.25rem;
-        background-color: transparent;
-        border: none;
+        justify-content: space-between;
+        padding: 8px 10px;
+        background: #2a3e2a;
+        border: 2px solid #1a2e1a;
+        border-radius: 8px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        box-shadow: #000 0 -3px 0 0 inset;
+        transition: background 0.15s;
         user-select: none;
     }
-    
-    .tech-option:hover:not(.applied) {
-        background: #e9ecef;
-        border-color: #adb5bd;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        color: black;
-        .tech-name {
-            color: black;
-        }
+
+    .tech-row:hover:not(.applied) {
+        background: #354a35;
     }
-    
-    .tech-option.applied {
-        background: #e9ecef;
-        border-color: #6c757d;
-        cursor: not-allowed;
-        opacity: 0.7;
+
+    .tech-row.applied {
+        cursor: default;
+        background: #1e3020;
+        border-color: #2a5030;
     }
-    
-    .tech-option input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-        flex-shrink: 0;
-        accent-color: #28a745;
-    }
-    
-    .tech-option.applied input[type="checkbox"] {
-        cursor: not-allowed;
-    }
-    
+
     .tech-name {
-        flex: 1;
-        font-weight: 500;
-        color: #ffffff;
-        transition: all 0.3s ease;
+        font-family: var(--font-family-pixel);
+        font-size: 0.7rem;
+        color: #b0c8b0;
+        text-transform: capitalize;
+        letter-spacing: 0.04em;
     }
-    
-    .tech-option.applied .tech-name {
-        color: #6c757d;
-        text-decoration: line-through;
+
+    .tech-row.applied .tech-name {
+        color: #6aaa7a;
     }
-    
-    .applied-badge {
-        width: 20px;
+
+    /* ── Sliding toggle ── */
+    .toggle-track {
+        position: relative;
+        width: 38px;
         height: 20px;
-        background: #28a745;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
+        border-radius: 10px;
+        background: #1a2a1a;
+        border: 2px solid #0a1a0a;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
         flex-shrink: 0;
     }
-    
-    .no-tech-message {
-        text-align: center;
-        padding: 2rem;
-        color: #6c757d;
-        font-style: italic;
+
+    .toggle-track.on {
+        background: #256830;
+        border-color: #3a8a4a;
+        box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.3),
+            0 0 8px rgba(74, 222, 128, 0.3);
     }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .tech-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 0.5rem;
-        }
-        
-        .tech-option {
-            padding: 0.5rem;
-        }
+
+    .toggle-knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #5a7a5a;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1), background 0.25s;
+    }
+
+    .toggle-track.on .toggle-knob {
+        transform: translateX(18px);
+        background: #90e890;
+        box-shadow: 0 0 5px rgba(144, 232, 144, 0.7), 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .no-tech {
+        font-family: var(--font-family-pixel);
+        font-size: 0.7rem;
+        color: #6a7a6a;
+        font-style: italic;
+        text-align: center;
+        padding: 0.75rem 0;
     }
 </style>

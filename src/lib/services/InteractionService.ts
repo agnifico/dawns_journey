@@ -15,6 +15,7 @@ import { triggerLocationEvent } from '$lib/services/LocationEventService';
 import { resolveNpcPosition } from '$lib/services/MapService';
 import { game } from '$lib/game/game';
 import { toastStore } from '$lib/stores/toastStore';
+import { checkRequirement } from './QuestService';
 
 const INTERACTIVE = new Set(['npc', 'resource', 'event', 'teleport']);
 
@@ -97,9 +98,9 @@ export async function checkForTileInteraction(): Promise<boolean> {
                     console.warn(`No event definition for eventId: "${mapObject.eventId}" at (${mapObject.x}, ${mapObject.y}). Add to locationEventDefinitions to activate.`);
                     break;
                 }
-
+            
                 const hasBeenCompleted = (player.locationEventHistory?.[eventData.id] || 0) > 0;
-
+            
                 if (hasBeenCompleted && !eventData.reusable) {
                     showEvent('location_event', eventData.afterImage || eventData.image, {
                         ...eventData,
@@ -109,7 +110,35 @@ export async function checkForTileInteraction(): Promise<boolean> {
                     });
                     return true;
                 }
-
+            
+                if (eventData.requirement) {
+                    const globalNpcs = get(npcStore).globalNpcs;
+                    const { met } = checkRequirement(
+                        eventData.requirement,
+                        player,
+                        null,
+                        globalNpcs,
+                        true
+                    );
+            
+                    if (!met) {
+                        const lockedMsg = eventData.requirementNotMetMessage
+                            ?? 'Something stops you from going further.';
+                        const lockedEvent = {
+                            ...eventData,
+                            stepOnMessage: lockedMsg,
+                            message: lockedMsg,
+                            actions: [],
+                            effects: [],
+                            requirement: undefined
+                        };
+                        showEvent('location_event', eventData.image, lockedEvent);
+                        triggerLocationEvent(lockedEvent);
+                        return true;
+                    }
+                }
+            
+                // ← these two lines were missing from your version
                 showEvent('location_event', eventData.image, eventData);
                 triggerLocationEvent(eventData);
                 return true;

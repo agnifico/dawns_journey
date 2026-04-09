@@ -4,6 +4,7 @@
 	import CharactersChapter from './CharactersChapter.svelte';
 	import EnemiesChapter from './EnemiesChapter.svelte';
 	import ItemsChapter from './ItemsChapter.svelte';
+	import AchievementsChapter from './AchievementsChapter.svelte';
 
 	type Tab = 'characters' | 'enemies' | 'items';
 
@@ -62,7 +63,7 @@
 		{:else if activeTab === 'enemies'}
 			<EnemiesChapter />
 		{:else if activeTab === 'items'}
-			<ItemsChapter />
+			<AchievementsChapter />
 		{/if}
 	</div>
 </div>

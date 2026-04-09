@@ -44,6 +44,13 @@
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
     "statGrowth": [],
+    "drops": [
+        { "itemId": "mountain_breaker", "chance": 0.33, "quantity": 1 },
+        { "itemId": "red_bar", "chance": 0.75, "quantity": 4 },
+        { "itemId": "earth_bar", "chance": 0.75, "quantity": 4 },
+        { "itemId": "emerald", "chance": 1, "quantity": 6 },
+        { "itemId": "ruby", "chance": 1, "quantity": 6 }
+    ],
     "mapPositions": [
         {
             "mapId": "dragon_island",
@@ -119,13 +126,13 @@
     ],
     "swordRanks": [
         {
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_1_complete"
+            },
             "questId": "cygwin_sword_1",
             "title": "The Extractor",
             "description": "Cygwin needs repairs done on the red extractor. She has a manual. She also has a very specific idea of how this should go.",
-            "startRequirement": {
-                "type": "have_tag",
-                "tag": "met_cygwin"
-            },
             "stages": [
                 {
                     "objective": "Speak with Cygwin",
@@ -160,29 +167,20 @@
                 {
                     "objective": "Bring Cygwin the repair materials",
                     "requirement": {
-                        "operator": "AND",
-                        "conditions": [
-                            {
-                                "type": "give_item",
-                                "itemId": "wood",
-                                "quantity": 5
-                            },
-                            {
-                                "type": "give_item",
-                                "itemId": "metal",
-                                "quantity": 3
-                            },
-                            {
-                                "type": "give_item",
-                                "itemId": "stone",
-                                "quantity": 3
-                            }
-                        ]
+                        "type": "give_item",
+                        "itemId": "cigarettes",
+                        "quantity": 1
                     },
                     "reminder_dialogue": [
-                        "Five wood, three metal, three stone.",
-                        "The extractor is still running rough.",
-                        "Take your time — but not too much of it."
+                        "30 wood, 20 stone. That's what we'll need to fix the damaged parts of the Extractor.",
+                        "And a pack of smokes. That's just for me. You can get it from the Shop.",
+                        "Go get those. Take your time."
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "tag",
+                            "tagId": "cygwin_extractor_clearance"
+                        }
                     ]
                 },
                 {
@@ -211,7 +209,7 @@
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 8
+                            "amount": 10
                         },
                         {
                             "type": "tag",

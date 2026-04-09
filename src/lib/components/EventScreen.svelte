@@ -299,8 +299,8 @@
 		justify-content: center;
 		align-items: center;
 		color: white;
-		/* min-height: 200px; */
-		/* max-width: 400px; */
+		min-height: 200px;
+		min-width: 300px;
 		box-sizing: border-box;
 		overflow: hidden;
 		gap: 1rem;
@@ -308,6 +308,8 @@
 		/* border-radius: 12px; */
 		/* overflow: hidden; */
 		/* border-radius: 12px; */
+		background-size: contain;
+		background-position: bottom center;
 	}
 	.encounter-result {
 		margin-top: 0.6rem;

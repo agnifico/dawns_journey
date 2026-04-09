@@ -51,7 +51,8 @@
 
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
-			applyProfile(selectedProfileId);
+			// applyProfile(selectedProfileId);
+			applyProfile('fresh');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
 			playerStore.update((p) => ({ ...p, isInitialized: true, position: {x: 25, y: 30} }));

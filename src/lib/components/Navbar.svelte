@@ -42,6 +42,9 @@
         <button class="icon-button" on:click={() => goto('/journal')} title="Journal">
             <img src="/game_icons/journal.png" alt="Journal" />
         </button>
+        <button class="icon-button" on:click={() => goto('/help')} title="Help">
+            <img src="/game_icons/help.png" alt="Help" />
+        </button>
         <button class="icon-button" on:click={() => goto('/shop')} title="Shop">
             <img src="/game_icons/shop.png" alt="Shop" />
         </button>
@@ -101,6 +104,10 @@
             <button class="icon-button" on:click={() => navigate('/journal')} title="Journal">
                 <img src="/game_icons/journal.png" alt="Journal" />
                 <span>Journal</span>
+            </button>
+            <button class="icon-button" on:click={() => navigate('/help')} title="Help">
+                <img src="/game_icons/help.png" alt="Help" />
+                <span>Help</span>
             </button>
             <button class="icon-button" on:click={() => navigate('/shop')} title="Shop">
                 <img src="/game_icons/shop.png" alt="Shop" />

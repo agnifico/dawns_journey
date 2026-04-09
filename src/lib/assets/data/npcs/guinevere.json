@@ -2,10 +2,9 @@
     "id": "guinevere",
     "name": "Guinevere",
     "profileImage": "/images/characters/guinevere/guinevere_avatar.png",
-    "image": "/images/characters/guinevere/guinevere1.png",
+    "image": "/images/characters/guinevere/guinevere0.png",
     "title": "Commander of the Solis Saints",
     "galleryImages": [
-        "/images/characters/guinevere/guinevere0.png",
         "/images/characters/guinevere/guinevere1.png",
         "/images/characters/guinevere/guinevere2.png",
         "/images/characters/guinevere/guinevere3.png",
@@ -20,6 +19,14 @@
     "types": [
         "Light",
         "Dark"
+    ],
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 55,
+            "y": 45
+        }
     ],
     "baseStats": {
         "hp": 700,
@@ -245,10 +252,11 @@
                     ]
                 },
                 {
-                    "objective": "Retrieve heartwood from the Dragonblood Tree — or don't",
+                    "objective": "Retrieve heartwood from the Dragonblood Tree — or leave it standing",
                     "requirement": {
-                        "type": "have_tag",
-                        "tag": "verona_dragonblood_tree"
+                        "type": "give_item",
+                        "itemId": "dragonblood_heartwood",
+                        "quantity": 1
                     },
                     "refusable": true,
                     "refuse_dialogue": [
@@ -261,6 +269,21 @@
                         "I won't pretend I'm not disappointed.",
                         "But I won't pretend you made the wrong call either.",
                         "Come back. We're not done."
+                    ],
+                    "refuse_rewards": [
+                        {
+                            "type": "tag",
+                            "tagId": "guinevere_sword_2_complete"
+                        },
+                        {
+                            "type": "faction_score",
+                            "factionId": "forest_watchers",
+                            "amount": 15
+                        },
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
+                        }
                     ],
                     "intro_dialogue": [
                         "The tree is waiting.",
@@ -287,30 +310,26 @@
                     ],
                     "success_rewards": [
                         {
-                            "type": "world_resonance",
-                            "amount": 8
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_2_complete"
-                        },
-                        {
                             "type": "tag",
                             "tagId": "tree_cut"
-                        }
-                    ],
-                    "refuse_rewards": [
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
                         },
                         {
                             "type": "tag",
                             "tagId": "guinevere_sword_2_complete"
                         },
                         {
-                            "type": "tag",
-                            "tagId": "tree_spared"
+                            "type": "faction_score",
+                            "factionId": "the_coalition",
+                            "amount": 15
+                        },
+                        {
+                            "type": "faction_score",
+                            "factionId": "golden_concordat",
+                            "amount": 5
+                        },
+                        {
+                            "type": "world_resonance",
+                            "amount": 8
                         }
                     ]
                 }
@@ -318,11 +337,42 @@
         },
         {
             "questId": "guinevere_sword_3",
+            "title": "By the Waterfall",
+            "description": "Claudia organized something. Everyone is there.",
+            "startRequirement": {
+                "operator": "AND",
+                "conditions": [
+                    { "type": "have_tag", "tag": "claudia_sword_3_complete" },
+                    { "type": "have_tag", "tag": "cygwin_sword_3_complete" },
+                    { "type": "have_tag", "tag": "guinevere_sword_2_complete" }
+                ]
+            },
+            "stages": [
+                {
+                    "objective": "Meet everyone at the waterfall",
+                    "requirement": { "type": "watch_scene", "sceneId": "waterfall_group_scene" },
+                    "unavailable_dialogue": [
+                        "Claudia has been organizing something.",
+                        "Come find us at the waterfall when you're ready.",
+                        "Everyone will be there."
+                    ],
+                    "success_rewards": [
+                        { "type": "tag", "tagId": "group_moment_complete" },
+                        { "type": "tag", "tagId": "claudia_departed" },
+                        { "type": "tag", "tagId": "cygwin_departed" },
+                        { "type": "tag", "tagId": "guinevere_sword_3_complete" },
+                        { "type": "world_resonance", "amount": 10 }
+                    ]
+                }
+            ]
+        },
+        {
+            "questId": "guinevere_sword_4",
             "title": "Her Majesty's Watch",
             "description": "Guinevere needs something retrieved. She's prepared to negotiate — on her terms.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "guinevere_sword_2_complete"
+                "tag": "guinevere_sword_3_complete"
             },
             "stages": [
                 {
@@ -370,9 +420,21 @@
                     "requirement": {
                         "operator": "OR",
                         "conditions": [
-                            { "type": "give_item", "itemId": "her_majesty_watch", "quantity": 1 },
-                            { "type": "win_against_npc", "npcId": "guinevere", "quantity": 1 },
-                            { "type": "lose_to_npc", "npcId": "guinevere", "quantity": 1 }
+                            {
+                                "type": "give_item",
+                                "itemId": "her_majesty_watch",
+                                "quantity": 1
+                            },
+                            {
+                                "type": "win_against_npc",
+                                "npcId": "guinevere",
+                                "quantity": 1
+                            },
+                            {
+                                "type": "lose_to_npc",
+                                "npcId": "guinevere",
+                                "quantity": 1
+                            }
                         ]
                     },
                     "reminder_dialogue": [
@@ -416,9 +478,19 @@
                         ]
                     },
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 10 },
-                        { "type": "tag", "tagId": "guinevere_sword_3_complete" },
-                        { "type": "item", "itemId": "searouser", "quantity": 1 }
+                        {
+                            "type": "world_resonance",
+                            "amount": 10
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "guinevere_sword_3_complete"
+                        },
+                        {
+                            "type": "item",
+                            "itemId": "searouser",
+                            "quantity": 1
+                        }
                     ]
                 }
             ]

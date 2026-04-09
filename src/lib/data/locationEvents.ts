@@ -58,13 +58,13 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             effects: [{ type: 'SWAP_ITEM', takeItemId: 'empty_energy_orb', takeQuantity: 1, giveItemId: 'dragon_energy_orb', giveQuantity: 1 }]
         }],
     },
-    teleport_to_cathedral: {
-        id: 'teleport_to_cathedral',
-        name: 'Teleporter to Cathedral',
+    boat_to_cathedral: {
+        id: 'boat_to_cathedral',
+        name: 'A Boat',
         image: '/locations/shrine.png',
-        shortDesc: 'A strange portal humming with energy.',
-        stepOnMessage: 'You found a teleporter to the Cathedral.',
-        message: 'Do you want to travel to the Cathedral?',
+        shortDesc: 'A boat with a route charted for the Shimmering Isles - Home of The Golden Concordat.',
+        stepOnMessage: 'This is the boat Cygwin and Claudia might have used to get to this island. It will lead to their home base.',
+        message: 'Do you want to travel to the Cathedral in The Shimmering Isles?',
         actions: [{ text: 'Travel', effects: [{ type: 'switch_map', mapId: 'cathedral', x: 14, y: 31 }] }],
         reusable: true
     },
@@ -122,7 +122,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A waterlogged chest washed up from somewhere deeper.',
         stepOnMessage: 'A heavy chest sits at the waterline, barnacled and salt-stained.',
         message: 'The contents are waterlogged but intact. Someone stashed this deliberately.',
-        effects: [{ type: 'give_item', itemId: 'fish', quantity: 5 }, { type: 'give_item', itemId: 'coral_reef', quantity: 3 }, { type: 'give_item', itemId: 'sapphire', quantity: 1 }],
+        actions: [{ text: 'Open the chest', effects: [{ type: 'give_item', itemId: 'red_wine', quantity: 3 }, { type: 'give_item', itemId: 'white_wine', quantity: 3 }, { type: 'give_item', itemId: 'forza_mead', quantity: 5 }, { type: 'give_item', itemId: 'lube', quantity: 1 }, { type: 'add_tag', tag: 'found_swamp_chest' }] }],
         afterDescription: 'A salt-stained empty chest. You took what was worth taking.',
         reusable: false
     },
@@ -286,32 +286,6 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     },
 
     // ─── Dragon Empire lore ───────────────────────────────────────────────────────
-
-    dragonblood_tree: {
-        id: 'dragonblood_tree',
-        name: 'Dragonblood Tree',
-        image: '/locations/dragonblood_tree.png',
-        shortDesc: 'A tree that blooms in all seasons, fed by something deep beneath the earth.',
-        stepOnMessage: "The tree ahead is impossible — lush and blooming in the middle of the mountain rock, untouched by the cold.",
-        message: [
-            "Up close, the bark is warm. Not warm like sunlight — warm like something alive underneath.",
-            "The roots go down deeper than they should. Reaching for something.",
-            "The Dragon Empire planted these across the island as living markers — places where the earth's energy ran close to the surface.",
-            "They called them Breath Points. The dragons believed the island itself was a living thing, and these trees were where it exhaled.",
-            "This one is still breathing.",
-        ],
-        actions: [
-            {
-                text: 'Rest beneath the tree',
-                effects: [
-                    { type: 'RESTORE_HP', value: 300 },
-                    { type: 'RESTORE_AURA', value: 50 },
-                    { type: 'add_tag', tag: 'visited_dragonblood_tree' }
-                ]
-            }
-        ],
-        reusable: true
-    },
     ruined_quarters: {
         id: 'ruined_quarters',
         name: 'Ruined Quarters',
@@ -441,24 +415,25 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: "A Saints-built machine drilling into the island's energy substrate.",
         stepOnMessage: "The machine hums at a frequency that sits just wrong in your teeth.",
         message: [
-            "The Extractor is Claudia's design — you can tell from the handwriting on the maintenance panel.",
-            "It's pulling something up from deep below the surface. Not oil. Not water.",
+            "The Extractor is pulling something up from deep below the surface. Not oil. Not water.",
             "The readings on the display are in a unit you don't recognise.",
-            "The machine is working exactly as intended.",
+            "Parts of the machine have gone through some wear and tear.",
+            "And yet, the machine is working exactly as intended.",
             "That's what worries you.",
         ],
-        requirement: { type: 'have_tag', tag: 'can_interact_extractor' },
-        requirementNotMetMessage: "The machine is running. You don't have clearance to interfere with it yet.",
+        requirementNotMetMessage: "The machine is running, but seems partially damaged. You don't have clearance to interfere with it yet.",
         actions: [
             {
-                text: 'Read the output data',
+                text: 'Fix the damaged parts',
+                requirement: { type: 'have_tag', tag: 'cygwin_extractor_clearance' },
                 effects: [
                     { type: 'add_tag', tag: 'red_extractor_read' },
-                    { type: 'give_item', itemId: 'azurite', quantity: 1 }
+                    { type: 'TAKE_ITEM', itemId: 'wood', quantity: 30 },
+                    { type: 'TAKE_ITEM', itemId: 'stone', quantity: 20 }
                 ]
             }
         ],
-        afterDescription: "The Red Extractor continues to hum. You know what it's pulling up now.",
+        afterDescription: "The Red Extractor continues to hum louder. You know what it's pulling up now. Some form of primal, magical energy.",
         reusable: false
     },
     underground_well1: {
@@ -474,10 +449,10 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             "Cygwin's notes, pinned to the side of the casing, read: 'Output stable. Resonance bleed: 0.3%. Within tolerance. For now.'",
             "'For now' is underlined twice.",
         ],
-        requirement: { type: 'have_tag', tag: 'cygwin_ready_for_f2' },
         requirementNotMetMessage: "A bore shaft drops into the dark. You have no business here yet.",
         actions: [
             {
+                requirement: { type: 'have_tag', tag: 'underground_wells_clearance1' },
                 text: "Read Cygwin's field notes",
                 effects: [
                     { type: 'add_tag', tag: 'underground_well1_read' },
@@ -502,11 +477,11 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             "Claudia's notes, pinned to the side of the casing, read: 'Output stable. Resonance bleed: 0.3%. Within tolerance. For now.'",
             "'For now' is underlined twice.",
         ],
-        requirement: { type: 'have_tag', tag: 'cygwin_ready_for_f2' },
         requirementNotMetMessage: "A bore shaft drops into the dark. You have no business here yet.",
         actions: [
             {
                 text: "Read Claudia's field notes",
+                requirement: { type: 'have_tag', tag: 'underground_wells_clearance2' },
                 effects: [
                     { type: 'add_tag', tag: 'underground_well1_read' },
                     { type: 'give_item', itemId: 'stone', quantity: 2 }
@@ -569,18 +544,19 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             "On the table, a note in Claudia's handwriting: 'We'll be back by Duskfall. Don't go anywhere.'",
             "Cygwin has added, underneath, in much smaller writing: 'Please.'",
         ],
-        requirement: {
-            operator: 'AND',
-            conditions: [
-                { type: 'npc_rank', npcId: 'claudia', rankType: 'sword', value: 5 },
-                { type: 'npc_rank', npcId: 'claudia', rankType: 'heart', value: 3 },
-                { type: 'npc_rank', npcId: 'cygwin', rankType: 'sword', value: 5 },
-                { type: 'npc_rank', npcId: 'cygwin', rankType: 'heart', value: 3 }
-            ]
-        },
+        
         requirementNotMetMessage: "The tent flap is tied shut. Not for you. Not yet.",
         actions: [
             {
+                requirement: {
+                    operator: 'AND',
+                    conditions: [
+                        { type: 'npc_rank', npcId: 'claudia', rankType: 'sword', value: 5 },
+                        { type: 'npc_rank', npcId: 'claudia', rankType: 'heart', value: 3 },
+                        { type: 'npc_rank', npcId: 'cygwin', rankType: 'sword', value: 5 },
+                        { type: 'npc_rank', npcId: 'cygwin', rankType: 'heart', value: 3 }
+                    ]
+                },
                 text: 'Stay',
                 effects: [
                     { type: 'RESTORE_HP', value: 9999 },
@@ -623,43 +599,117 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
 
     empty_sword_site_claudia: {
         id: 'empty_sword_site_claudia',
-        name: 'The Eastern Bank',
-        image: '/locations/legendary_sword.png',
-        shortDesc: 'A shallow depression in the riverbank. Something was here.',
-        stepOnMessage: 'The ground here is disturbed. Not by digging — by emergence.',
-        message: [
-            'A slight depression in the earth. The grass around it grew back wrong — too fast, too green, slightly luminous at the edges.',
-            'This is a sword site. Was a sword site.',
-            'Someone pulled what was here already.',
-            'There are boot prints. Small. Precise.',
-            'And a Coalition insignia scratched into a nearby stone — not hidden, just left.',
-            "Like a signature. Like: I was here first.",
+        name: 'Empty Sword Site',
+        image: '/locations/empty_site.png',
+        shortDesc: 'Something was pulled from the earth here. Recently.',
+        stepOnMessage: [
+            'The ground here is disturbed.',
+            'Not by weather. Not by animals.',
+            'Something was drawn upward from this spot.',
+            'The earth around it is scorched in a perfect circle.',
+            'Whatever was here — it\'s gone.'
         ],
-        afterDescription: 'An empty depression in the riverbank. The Coalition was here before you.',
-        reusable: false
+        message: [
+            'You\'ve seen this before.',
+            'The same scorch pattern. The same upward displacement.',
+            'This is a nucleation site.',
+            'Someone pulled a sword from this ground.',
+            'Recently — the earth hasn\'t fully closed over the wound yet.',
+            'You think about Claudia.',
+            'The way she talks about the extraction work.',
+            'The way she doesn\'t quite meet your eyes when she does.'
+        ],
+        requirement: {
+            type: 'have_tag',
+            tag: 'claudia_sword_1_complete'
+        },
+        requirementNotMetMessage: [
+            'The ground here is disturbed.',
+            'Not by weather. Not by animals.',
+            'Something was drawn upward from this spot.',
+            'The earth around it is scorched in a perfect circle.',
+            'Whatever was here — it\'s gone.'
+        ],
+        reusable: false,
+        afterDescription: 'An empty nucleation site. Claudia was here first.',
+        actions: [
+            {
+                text: 'Investigate',
+                requirement: {
+                    type: 'have_tag',
+                    tag: 'claudia_sword_1_complete'
+                },
+                effects: [
+                    { type: 'add_tag', tag: 'found_claudia_sword_site' }
+                ],
+                responseMessage: [
+                    'The scorch mark is cold now.',
+                    'Whatever resonance was here has moved on.',
+                    'Moved on — or been moved.',
+                    'You file this away.',
+                    'A conversation worth having, when the time is right.'
+                ]
+            }
+        ]
     },
- 
+
     empty_sword_site_cygwin: {
         id: 'empty_sword_site_cygwin',
-        name: 'The High Pass',
-        image: '/locations/legendary_sword.png',
-        shortDesc: 'A ring of flattened stone near the mountain path. The air still hums.',
-        stepOnMessage: 'The stone underfoot feels different here. Like something passed through it recently.',
-        message: [
-            'A ring of stone, slightly flattened, the way ground looks after something immensely heavy sat in it for a very long time.',
-            'The sword is gone.',
-            'The site still hums — faint, residual, the way a struck bell continues to sound after the hammer lifts.',
-            'Someone stood here and pulled whatever this was free.',
-            'The disturbance in the stone is recent. Days, not weeks.',
-            'There are no footprints.',
-            'Whoever came here knew exactly where to step.',
+        name: 'Empty Sword Site',
+        image: '/locations/empty_site.png',
+        shortDesc: 'The rock here is cracked. Something was pulled free.',
+        stepOnMessage: [
+            'The stone here is split.',
+            'Not by erosion. The crack runs straight down — deliberate.',
+            'Something was embedded deep in this rock.',
+            'And then someone took it.'
         ],
-        afterDescription: 'A ring of flattened stone. Whatever was here is gone.',
-        reusable: false
+        message: [
+            'You crouch and run your hand along the crack.',
+            'The edges are clean. Precise.',
+            'The same pattern as the other sites.',
+            'But this one goes deeper.',
+            'Whatever was held here had been here longer.',
+            'You think about Cygwin.',
+            'The way she talks about the ground remembering things.',
+            'She wasn\'t speaking abstractly.'
+        ],
+        requirement: {
+            type: 'have_tag',
+            tag: 'cygwin_sword_1_complete'
+        },
+        requirementNotMetMessage: [
+            'The stone here is split.',
+            'Not by erosion. The crack runs straight down — deliberate.',
+            'Something was embedded deep in this rock.',
+            'And then someone took it.'
+        ],
+        reusable: false,
+        afterDescription: 'An empty nucleation site. Cygwin was here first.',
+        actions: [
+            {
+                text: 'Investigate',
+                requirement: {
+                    type: 'have_tag',
+                    tag: 'cygwin_sword_1_complete'
+                },
+                effects: [
+                    { type: 'add_tag', tag: 'found_cygwin_sword_site' }
+                ],
+                responseMessage: [
+                    'The split rock is cold.',
+                    'No residual energy. Whatever was here is long gone.',
+                    'Gone, and being used.',
+                    'You wonder what Cygwin is planning.',
+                    'You suspect she already has an answer.',
+                    'You suspect she always does.'
+                ]
+            }
+        ]
     },
- 
+
     // ─── Claudia SR2 — Platform inspection ───────────────────────────────────
- 
+
     platform_inspection: {
         id: 'platform_inspection',
         name: 'The Extraction Platform',
@@ -677,9 +727,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'The extraction platform. Three degrees off true. You know what that means now.',
         reusable: false
     },
- 
+
     // ─── Claudia SR3 — Mistweaver site ───────────────────────────────────────
- 
+
     mistweaver_site: {
         id: 'mistweaver_site',
         name: 'The River Fork',
@@ -700,9 +750,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'A bank of silt at the river fork. The impression where the sword rested is still there.',
         reusable: false
     },
- 
+
     // ─── Cygwin SR2 — Substrate mapping walk ─────────────────────────────────
- 
+
     substrate_mapping_site: {
         id: 'substrate_mapping_site',
         name: 'The Southern Resonance Point',
@@ -722,9 +772,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: "A resonance point Cygwin has been tracking. The reading on the stake is still rising.",
         reusable: false
     },
- 
+
     // ─── Cygwin SR3 — Groundbreaker site ─────────────────────────────────────
- 
+
     groundbreaker_site: {
         id: 'groundbreaker_site',
         name: 'The Stone Circle',
@@ -745,12 +795,12 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'A circle of standing stones with a clean slot at the centre where the sword rested.',
         reusable: false
     },
- 
+
     // ─── Gwen SR1 — Ruined Quarters (extended, replaces existing) ────────────
     // Note: ruined_quarters already exists in locationEvents.ts as a lore event.
     // This version is gated by gwen_sr1_started and gives research_materials.
     // Recommend renaming this gwen_ruined_quarters to avoid collision.
- 
+
     gwen_ruined_quarters: {
         id: 'gwen_ruined_quarters',
         name: 'Ruined Quarters — Research Survey',
@@ -774,9 +824,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'The inner chamber of the ruins. Your rubbings are done. The wall inscription stays in your memory.',
         reusable: false
     },
- 
+
     // ─── Gwen SR2 — Her Majesty's Watch site ─────────────────────────────────
- 
+
     her_majestys_watch_site: {
         id: 'her_majestys_watch_site',
         name: 'The Shrine Sanctum',
@@ -801,14 +851,14 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'The shrine sanctum. The floor where the Watch stood is unmarked. It left no impression.',
         reusable: false
     },
- 
+
     // ─── Dragonblood Tree — choice version (replaces existing rest-only version) ──
     // Note: dragonblood_tree already exists as a reusable rest point.
     // This version fires when gwen_tree_quest_started is set.
     // Recommend handling via requirement so existing event stays for casual visitors.
- 
-    dragonblood_tree_choice: {
-        id: 'dragonblood_tree_choice',
+
+    dragonblood_tree: {
+        id: 'dragonblood_tree',
         name: 'Dragonblood Tree',
         image: '/locations/dragonblood_tree.png',
         shortDesc: 'Gwen wants the heartwood. Verona has something to say about that.',
@@ -822,32 +872,34 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
             '"The tree grows back. The question is what happens in between."',
             '"I\'m not here to make the choice for you."',
         ],
-        requirement: { type: 'have_tag', tag: 'gwen_tree_quest_started' },
+        requirement: { type: 'have_tag', tag: 'guinevere_sword_2_started' },
         requirementNotMetMessage: 'The tree stands. You can rest beneath it.',
         actions: [
             {
                 text: 'Cut the tree for Guinevere',
-                requirement: { type: 'have_tag', tag: 'woodcutting_level_5' },
+                // requirement: { type: 'have_tag', tag: 'woodcutting_level_1' },
                 effects: [
-                    { type: 'give_item', itemId: 'dragonblood_wood', quantity: 1 },
+                    { type: 'give_item', itemId: 'dragonblood_heartwood', quantity: 1 },
                     { type: 'add_tag', tag: 'tree_cut' },
-                    { type: 'add_tag', tag: 'substrate_destabilised' }
+                    { type: 'add_tag', tag: 'substrate_destabilised' },
+                    { type: 'add_tag', tag: 'verona_dragonblood_tree' }
                 ],
                 responseMessage: "The heartwood is deep red, warm to the touch. The pulse in the ground stutters — then resumes, slower."
             },
             {
                 text: 'Leave the tree standing',
                 effects: [
-                    { type: 'add_tag', tag: 'tree_spared' }
+                    { type: 'add_tag', tag: 'tree_spared' },
+                    { type: 'add_tag', tag: 'verona_dragonblood_tree' }
                 ],
                 responseMessage: "You step back. The tree stands. The pulse continues, steady. Verona exhales beside you."
             }
         ],
         reusable: false
     },
- 
+
     // ─── Glacier — Frostfall site ─────────────────────────────────────────────
- 
+
     frostfall_site: {
         id: 'frostfall_site',
         name: 'The Glacier Shelf',
@@ -872,9 +924,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'A glacier shelf with a clean crack running through it where the ice released the sword.',
         reusable: false
     },
- 
+
     // ─── Warm Spring ──────────────────────────────────────────────────────────
- 
+
     warm_spring: {
         id: 'warm_spring',
         name: 'The Warm Spring',
@@ -903,9 +955,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         ],
         reusable: true
     },
- 
+
     // ─── Discharge sites — Hela SR1 ───────────────────────────────────────────
- 
+
     discharge_site_1: {
         id: 'discharge_site_1',
         name: 'The Burned Patch',
@@ -923,7 +975,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'A circle of scorched earth. Still warm. Hela knows about this one now.',
         reusable: false
     },
- 
+
     discharge_site_2: {
         id: 'discharge_site_2',
         name: 'The Second Scar',
@@ -941,9 +993,9 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: 'A cracked scar in the earth. Newer than the first. The substrate is deteriorating.',
         reusable: false
     },
- 
+
     // ─── Faraway Archipelago — Dawnbringer ────────────────────────────────────
- 
+
     dawnbringer_site: {
         id: 'dawnbringer_site',
         name: 'The Farthest Shore',
@@ -970,5 +1022,5 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         afterDescription: "The waterline where Dawnbringer rested. The sand has settled back as if it was never disturbed.",
         reusable: false
     },
-    
+
 };

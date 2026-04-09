@@ -10,45 +10,47 @@ export interface DialogueChoice {
 // ── Scene line types ──────────────────────────────────────────────────────────
 
 export interface SceneTextLine {
-    type?: 'line';                    // default, can be omitted
+    type?: 'line';
     speaker: string;
     speakerImage?: string | null;
+    speakerElements?: string[];       // NPC element types e.g. ['Fire', 'Dark']
     line: string;
-    requiredTag?: string;             // only show if player HAS this tag
-    requiredTagAbsent?: string;       // only show if player does NOT have this tag
+    requiredTag?: string;
+    requiredTagAbsent?: string;
 }
 
 export interface SceneChoiceLine {
     type: 'choice';
-    speaker?: string;                 // usually 'You' — shown as nameplate
+    speaker?: string;
     speakerImage?: string | null;
-    prompt?: string;                  // optional line shown above the choices
+    speakerElements?: string[];
+    prompt?: string;
     choices: SceneChoiceOption[];
 }
 
 export interface SceneChoiceOption {
     text: string;
-    tag?: string;                     // tag to set when chosen (added to worldTags)
-    continues?: SceneLine[];          // lines to append after this choice
+    tag?: string;
+    continues?: SceneLine[];
 }
 
 export type SceneLine = SceneTextLine | SceneChoiceLine;
 
-// ── Internal flat line (post-processing) ─────────────────────────────────────
-// Scenes are flattened into this format before being stored.
-// Choice lines become a special marker that DialogueBox detects.
+// ── Internal flat line ────────────────────────────────────────────────────────
 
 interface FlatLine {
     text: string;
     speaker: string | null;
     speakerImage: string | null;
+    speakerElements: string[];
     isChoice: false;
 }
 
 interface FlatChoiceLine {
-    text: string;                     // prompt text (may be empty)
+    text: string;
     speaker: string | null;
     speakerImage: string | null;
+    speakerElements: string[];
     isChoice: true;
     choices: SceneChoiceOption[];
 }
@@ -61,11 +63,11 @@ interface DialogueStore {
     isOpen: boolean;
     flatLines: AnyFlatLine[];
     currentIndex: number;
-    // Legacy fields — kept for backward compat with startDialogue callers
     lines: string[];
     lineSpeakers: ({ speaker: string; speakerImage: string | null } | null)[];
     speaker: string | null;
     speakerImage: string | null;
+    speakerElements: string[];
     justClosed: boolean;
     choices: DialogueChoice[];
     selectedChoice: number;
@@ -84,22 +86,25 @@ function filterConditionalLines(lines: SceneLine[], playerTags: string[]): Scene
     });
 }
 
-function flattenSceneLines(lines: SceneLine[], playerName: string): AnyFlatLine[] {
+function flattenSceneLines(lines: SceneLine[], name: string): AnyFlatLine[] {
     const result: AnyFlatLine[] = [];
     for (const line of lines) {
         if (line.type === 'choice') {
             result.push({
-                text: line.prompt ? resolveText(line.prompt, playerName) : '',
+                text: line.prompt ? resolveText(line.prompt, name) : '',
                 speaker: line.speaker ?? 'You',
                 speakerImage: line.speakerImage ?? null,
+                speakerElements: line.speakerElements ?? [],
                 isChoice: true,
                 choices: line.choices,
             });
         } else {
+            const tl = line as SceneTextLine;
             result.push({
-                text: resolveText((line as SceneTextLine).line, playerName),
-                speaker: (line as SceneTextLine).speaker,
-                speakerImage: (line as SceneTextLine).speakerImage ?? null,
+                text: resolveText(tl.line, name),
+                speaker: tl.speaker,
+                speakerImage: tl.speakerImage ?? null,
+                speakerElements: tl.speakerElements ?? [],
                 isChoice: false,
             });
         }
@@ -118,19 +123,19 @@ function createDialogueStore() {
         lineSpeakers: [],
         speaker: null,
         speakerImage: null,
+        speakerElements: [],
         justClosed: false,
         choices: [],
         selectedChoice: 0,
         onComplete: undefined,
     });
 
-    // ── Single-NPC dialogue (unchanged API) ───────────────────────────────────
-
     function startDialogue(
         lines: string[],
         speaker: string,
         onComplete?: () => void,
-        speakerImage?: string | null
+        speakerImage?: string | null,
+        speakerElements?: string[]
     ) {
         const name = get(playerName);
         const resolvedLines = resolveText(lines, name);
@@ -140,6 +145,7 @@ function createDialogueStore() {
             text,
             speaker: resolvedSpeaker,
             speakerImage: speakerImage ?? null,
+            speakerElements: speakerElements ?? [],
             isChoice: false,
         }));
 
@@ -148,11 +154,11 @@ function createDialogueStore() {
             isOpen: true,
             flatLines,
             currentIndex: 0,
-            // legacy
             lines: resolvedLines,
             lineSpeakers: resolvedLines.map(() => null),
             speaker: resolvedSpeaker,
             speakerImage: speakerImage ?? null,
+            speakerElements: speakerElements ?? [],
             justClosed: false,
             choices: [],
             selectedChoice: 0,
@@ -160,19 +166,13 @@ function createDialogueStore() {
         }));
     }
 
-    // ── Multi-speaker scene ───────────────────────────────────────────────────
-
     function startScene(
         sceneLines: SceneLine[],
         playerTags: string[],
         onComplete?: () => void
     ) {
         const name = get(playerName);
-
-        // 1. Filter conditional lines
         const filtered = filterConditionalLines(sceneLines, playerTags);
-
-        // 2. Flatten into AnyFlatLine[]
         const flatLines = flattenSceneLines(filtered, name);
 
         update(s => ({
@@ -184,14 +184,13 @@ function createDialogueStore() {
             lineSpeakers: flatLines.map(l => l.speaker ? { speaker: l.speaker, speakerImage: l.speakerImage } : null),
             speaker: null,
             speakerImage: null,
+            speakerElements: [],
             justClosed: false,
             choices: [],
             selectedChoice: 0,
             onComplete,
         }));
     }
-
-    // ── Choice resolution (called by DialogueBox when player picks an option) ─
 
     function resolveChoice(option: SceneChoiceOption, playerTags: string[]) {
         const name = get(playerName);
@@ -200,7 +199,6 @@ function createDialogueStore() {
             let newFlatLines = [...s.flatLines];
             const currentIndex = s.currentIndex;
 
-            // Insert continuation lines right after the current choice line
             if (option.continues && option.continues.length > 0) {
                 const filtered = filterConditionalLines(option.continues, playerTags);
                 const newFlat = flattenSceneLines(filtered, name);
@@ -218,11 +216,8 @@ function createDialogueStore() {
             };
         });
 
-        // Advance past the choice line to the first continuation line
         advanceDialogue();
     }
-
-    // ── Shared ────────────────────────────────────────────────────────────────
 
     function setChoices(choices: DialogueChoice[]) {
         update(s => ({ ...s, isOpen: true, choices, selectedChoice: 0 }));
@@ -250,6 +245,7 @@ function createDialogueStore() {
                     lineSpeakers: [],
                     speaker: null,
                     speakerImage: null,
+                    speakerElements: [],
                     justClosed: true,
                     choices: [],
                     selectedChoice: 0,
@@ -271,6 +267,7 @@ function createDialogueStore() {
             lineSpeakers: [],
             speaker: null,
             speakerImage: null,
+            speakerElements: [],
             justClosed: false,
             choices: [],
             selectedChoice: 0,

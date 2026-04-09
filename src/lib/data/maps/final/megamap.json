@@ -1,9 +1,8 @@
 {
-  "width": 68,
-  "height": 101,
-  "image": "/maps/NEW_WORLD.png",
-  "defaultRegion": "arrival_plain",
-  "defaultLandscape": "pleasure_island",
+  "width": 40,
+  "height": 30,
+  "image": "/maps/megamap.png",
+  "defaultRegion": "arrival_plains",
   "regions": [
     {
       "x": 32,
@@ -5568,6 +5567,10 @@
       "parentId": "multi-111"
     }
   ],
+  "playerStart": {
+    "x": 0,
+    "y": 0
+  },
   "landscapes": [
     {
       "x": -59,
@@ -8797,10 +8800,6 @@
       "landscape": "unknown_islands"
     }
   ],
-  "playerStart": {
-    "x": 25,
-    "y": 30
-  },
   "enemyEncounterChance": 0.3,
   "itemFindingChance": 0.3
 }

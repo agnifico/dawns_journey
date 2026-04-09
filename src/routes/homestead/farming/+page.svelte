@@ -11,44 +11,34 @@
 	import { tick } from 'svelte';
 	import FarmingCodex from '$lib/components/codex/FarmingCodex.svelte';
 	import CompostPage from '$lib/components/compost/CompostPage.svelte';
-	import Notification from "$lib/components/Notification.svelte";
+	import Notification from '$lib/components/Notification.svelte';
 
+	// TODO: Season system — wire season into crop growth bonuses, season transitions, and UI.
+	// The selectedSeason / handleSaveSeason below are dev-only overrides.
 	let selectedSeason: Season;
 	$: selectedSeason = $seasonStore;
-	let showCodex = false;
-	let showCompost = false;
 
-	const availableEnvironments = derived(playerStore, ($playerStore) => {
-		const environments = [
-			{ id: 'env_open_field', name: 'Open Field', unlocked: true }, // Always unlocked
-			{
-				id: 'env_greenhouse',
-				name: 'Greenhouse',
-				unlocked: $playerStore.unlockedTech.includes('env_greenhouse')
-			},
-			{
-				id: 'env_forest_floor',
-				name: 'Forest Floor',
-				unlocked: $playerStore.unlockedTech.includes('env_forest_floor')
-			}
-		];
-		return environments;
-	});
+	let showCodex   = false;
+	let showCompost = false;
+	let showDevTools = false;
+
+	const availableEnvironments = derived(playerStore, ($playerStore) => [
+		{ id: 'env_open_field',  name: 'Open Field',   unlocked: true },
+		{ id: 'env_greenhouse',  name: 'Greenhouse',   unlocked: $playerStore.unlockedTech.includes('env_greenhouse') },
+		{ id: 'env_forest_floor', name: 'Forest Floor', unlocked: $playerStore.unlockedTech.includes('env_forest_floor') },
+	]);
 
 	const plotsInCurrentEnvironment = derived(
 		[playerStore, currentEnvironment],
-		([$playerStore, $currentEnvironment]) => {
-			return $playerStore.homestead.farmPlots.filter(
+		([$playerStore, $currentEnvironment]) =>
+			$playerStore.homestead.farmPlots.filter(
 				(plot) =>
 					plot.environment === $currentEnvironment &&
 					$playerStore.farmingLevel >= plot.requiredLevel
-			);
-		}
+			)
 	);
 
-	function handleSaveSeason() {
-		seasonStore.setSeason(selectedSeason);
-	}
+	function handleSaveSeason() { seasonStore.setSeason(selectedSeason); }
 
 	function handleLevelTest(event: Event) {
 		const isChecked = (event.target as HTMLInputElement).checked;
@@ -56,26 +46,21 @@
 	}
 
 	function selectEnvironment(envId: HomesteadEnvironment) {
-		currentEnvironment.set(envId); // Update the store
-		selectedPlotId.set(null); // Deselect any plot when changing environment
+		currentEnvironment.set(envId);
+		selectedPlotId.set(null);
 	}
 
 	$: showBottomHalf =
 		$currentEnvironment === 'env_greenhouse' || $currentEnvironment === 'env_forest_floor';
 
-	// Bind the checkbox state to the player's level
 	let isLevel99: boolean;
 	$: isLevel99 = $playerStore.farmingLevel > 1;
 
-	// Scrolling logic
 	$: if ($selectedPlotId !== null) {
-		// This code runs whenever selectedPlotId changes
 		const scrollToPlot = async () => {
-			await tick(); // Wait for the DOM to update
+			await tick();
 			const element = document.getElementById(`plot-wrapper-${$selectedPlotId}`);
-			if (element) {
-				element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			}
+			if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		};
 		scrollToPlot();
 	}
@@ -83,6 +68,8 @@
 
 <div class="farming-area-container">
 	<div class="top-half">
+
+		<!-- Map viewport -->
 		<div class="map-info-container">
 			<div class="map-viewport">
 				<img
@@ -94,41 +81,30 @@
 				<MapGrid />
 			</div>
 		</div>
+
+		<!-- Dashboard -->
 		<div class="dashboard">
 
-			<div class="season-controls">
-				<div class="season-dropdown">
-					<select bind:value={selectedSeason}>
-						<option value="Spring">Spring</option>
-						<option value="Summer">Summer</option>
-						<option value="Autumn">Autumn</option>
-						<option value="Winter">Winter</option>
-					</select>
-					<button on:click={handleSaveSeason}
-						><img src="/game_icons/confirm.png" alt="" srcset="" /></button
-					>
-				</div>
-				<strong>It's {$seasonStore}!</strong>
+			<!-- Season banner -->
+			<div class="season-banner">
+				<span class="season-label">It's</span>
+				<strong class="season-name">{$seasonStore}</strong>
 			</div>
 
-			<div class="controls">
-				<button on:click={() => FarmingService.refreshHomestead()} class="refresh">
-					<!-- Refresh Crops -->
-					<img src="/game_icons/refresh.svg" alt="" srcset="" />
+			<!-- Primary actions -->
+			<div class="action-tray">
+				<button class="forge-btn" on:click={() => (showCompost = true)}>Compost</button>
+				<button class="forge-btn" on:click={() => (showCodex = true)}>Farming Codex</button>
+				<button class="refresh-btn" on:click={() => FarmingService.refreshHomestead()} title="Refresh crops">
+					<img src="/game_icons/refresh.svg" alt="Refresh" />
 				</button>
-				<div class="tray1">
-					<button class="green-btn" on:click={() => (showCompost = true)}>Compost</button>
-					<button class="green-btn" on:click={() => (showCodex = true)}>Farming Codex</button>
-				</div>
-				<label>
-					<input type="checkbox" on:change={handleLevelTest} bind:checked={isLevel99} />
-					Farming: Lv99
-				</label>
 			</div>
 
+			<!-- Environment tabs -->
 			<div class="environment-tabs">
 				{#each $availableEnvironments as env}
 					<button
+						class="env-tab"
 						class:active={$currentEnvironment === env.id}
 						disabled={!env.unlocked}
 						on:click={() => selectEnvironment(env.id)}
@@ -137,8 +113,38 @@
 					</button>
 				{/each}
 			</div>
+
+			<!-- Dev tools (collapsed by default) -->
+			<div class="dev-tools">
+				<button class="dev-toggle" on:click={() => (showDevTools = !showDevTools)}>
+					<span>DEV</span>
+					<span class="dev-chevron" class:open={showDevTools}>›</span>
+				</button>
+				{#if showDevTools}
+					<div class="dev-panel">
+						<label class="dev-row">
+							<input type="checkbox" on:change={handleLevelTest} bind:checked={isLevel99} />
+							<span>Farming Lv99</span>
+						</label>
+						<!-- TODO: Season system — replace with proper season mechanic -->
+						<div class="dev-row season-row">
+							<select bind:value={selectedSeason}>
+								<option value="Spring">Spring</option>
+								<option value="Summer">Summer</option>
+								<option value="Autumn">Autumn</option>
+								<option value="Winter">Winter</option>
+							</select>
+							<button class="dev-confirm" on:click={handleSaveSeason}>✓</button>
+						</div>
+						<span class="dev-note">// season system pending</span>
+					</div>
+				{/if}
+			</div>
+
 		</div>
 	</div>
+
+	<!-- Plots grid -->
 	<div class="plots-grid">
 		{#each $plotsInCurrentEnvironment as plot (plot.id)}
 			<div id="plot-wrapper-{plot.mapObjectId}">
@@ -147,184 +153,37 @@
 		{/each}
 	</div>
 
-	{#if showCodex}
-		<FarmingCodex on:close={() => (showCodex = false)} />
-	{/if}
-
-	{#if showCompost}
-		<CompostPage on:close={() => (showCompost = false)} />
-	{/if}
+	{#if showCodex}   <FarmingCodex on:close={() => (showCodex = false)} />   {/if}
+	{#if showCompost} <CompostPage  on:close={() => (showCompost = false)} /> {/if}
 	<Notification />
 </div>
 
 <style>
+	/* ── Page ── */
 	.farming-area-container {
-		/* padding: 2rem; */
 		width: 100%;
 		min-height: 100%;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem; /* Reduced gap */
+		gap: 1rem;
 		background-color: #1d6962;
 		color: white;
-		font-family: sans-serif;
-		/* border: 1px solid white; */
+		font-family: var(--font-family-pixel, monospace);
 	}
 
 	.top-half {
 		display: flex;
+		align-items: stretch;
 	}
 
-	.dashboard {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		background-color: rgba(0, 0, 0, 0.2);
-		/* padding: 1rem; */
-		border-radius: 8px;
-		margin: 1rem;
-		/* padding-top: 1rem; */
-		button img {
-			width: 20px;
-			height: 20px;
-		}
-	}
-
-	.controls {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-		/* justify-content: space-between; */
-		/* margin: 0; */
-		/* padding: 1rem; */
-		/* background-color: #777; */
-		/* padding-inline: 1rem; */
-	}
-	.tray1 {
-		padding: .5rem;
-	}
-	.green-btn {
-		color: #9baaa4;
-		padding: 0;
-		box-sizing: border-box;
-		border: 3px solid var(--color-secondary);
-		/* border: none; */
-		font-family: var(--font-family-pixel);
-		box-sizing: border-box;
-		height: fit-content;
-		padding: 0.5rem;
-		font-family: var(--font-family-pixel);
-		border-radius: 0.5rem;
-		box-shadow: #313131 0 -6px 0 0px inset;
-		background-color: #435e52;
-		transition: .1s all ease-in;
-		&:hover {
-			box-shadow: #313131 0 -6px 0px -4px inset;
-			color: #ffffff;
-			transform: translateY(-2px);
-		}
-		&:active {
-			transform: translateY(0px);
-			color: #9baaa4;
-		}
-	}
-	.refresh {
-		margin: 1rem;
-		flex-grow: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: .5rem;
-		margin: 1rem;
-		border-radius: 0;
-		border: none;
-		background-color: #5e948f;
-		transition: .1s all ease-in-out;
-		img {
-			filter: invert();
-			scale: 1;
-		}
-		&:hover {
-			background-color: #40ada2;
-			img {
-				scale: 1.3;
-				transform: rotateZ(45deg);
-			}
-		}
-	}
-
-	.season-controls {
-		width: 100%;
-		display: flex;
-		flex-direction: row-reverse;
-		align-items: center;
-		gap: 0.25rem;
-		background-color: rgba(0, 0, 0, 0.3);
-		padding: 0.5rem;
-		box-sizing: border-box;
-		button {
-			border: none;
-			background-color: transparent;
-			margin-right: auto;
-			&:hover {
-				filter: brightness(1.3);
-				cursor: pointer;
-			}
-		}
-		strong {
-			font-family: var(--font-family-pixel);
-			font-weight: 400;
-		}
-
-		select {
-			background-color: rgb(210, 210, 210);
-			border-radius: 0;
-			border: 3px solid white;
-			font-family: var(--font-family-pixel);
-		}
-	}
-
-	.season-dropdown {
-		display: flex;
-		gap: 4px;
-		margin-left: auto;
-	}
-
-	.environment-tabs {
-		display: flex;
-		/* gap: 0.5rem; */
-		margin-top: auto;
-	}
-
-	.environment-tabs button {
-		padding: 0.5rem 1rem;
-		background-color: #555;
-		color: white;
-		border: none;
-		cursor: pointer;
-	}
-
-	.environment-tabs button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.environment-tabs button.active {
-		background-color: #777;
-	}
-
+	/* ── Map ── */
 	.map-info-container {
 		position: relative;
 		display: flex;
-		gap: 2rem;
-		/* width: 100%; */
 		flex-grow: 1;
 		min-height: 0;
-		/* border: 1px solid white; */
 	}
-
 	.map-viewport {
 		width: 100%;
 		max-width: 600px;
@@ -334,29 +193,229 @@
 		border: 4px solid #6d403b;
 		border-radius: 8px;
 		max-height: 300px;
-		scale: 1;
 	}
-
 	.map {
 		width: 100%;
 		height: auto;
 		image-rendering: pixelated;
 		transition: transform 0.5s ease-in-out;
-		transform: translateY(0); /* Default position */
+		transform: translateY(0);
+	}
+	.map.pan-down { transform: translateY(-50%); }
+
+	/* ── Dashboard ── */
+	.dashboard {
+		display: flex;
+		flex-direction: column;
+		background-color: rgba(0, 0, 0, 0.22);
+		border-radius: 8px;
+		margin: 0.75rem;
+		overflow: hidden;
+		min-width: 200px;
 	}
 
-	.map.pan-down {
-		transform: translateY(-50%); /* Move map up to show bottom half */
+	/* Season banner */
+	.season-banner {
+		display: flex;
+		align-items: baseline;
+		gap: 5px;
+		padding: 8px 12px;
+		background: rgba(0, 0, 0, 0.3);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+	.season-label {
+		font-size: 0.6rem;
+		color: #7aaa8a;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.season-name {
+		font-size: 0.85rem;
+		font-weight: 400;
+		color: #e0f0e0;
+		letter-spacing: 0.06em;
 	}
 
+	/* Primary action tray */
+	.action-tray {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 10px;
+		flex-grow: 1;
+	}
+
+	/* Forge buttons */
+	.forge-btn {
+		color: #9baaa4;
+		box-sizing: border-box;
+		border: 3px solid var(--color-secondary, #5a8a6a);
+		font-family: var(--font-family-pixel);
+		font-size: 0.7rem;
+		padding: 0.45rem 0.75rem 0.7rem;
+		border-radius: 0.5rem;
+		box-shadow: #313131 0 -6px 0 0 inset;
+		background-color: #435e52;
+		cursor: pointer;
+		transition: 0.1s all ease-in;
+	}
+	.forge-btn:hover {
+		box-shadow: #313131 0 -2px 0 0 inset;
+		color: #ffffff;
+		transform: translateY(2px);
+	}
+	.forge-btn:active {
+		transform: translateY(3px);
+		box-shadow: none;
+	}
+
+	/* Refresh */
+	.refresh-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.4rem;
+		border-radius: 6px;
+		border: 2px solid rgba(0, 0, 0, 0.3);
+		background-color: #5e948f;
+		box-shadow: rgba(0,0,0,0.35) 0 -3px 0 0 inset;
+		cursor: pointer;
+		transition: 0.15s all ease-in-out;
+	}
+	.refresh-btn img {
+		width: 18px;
+		height: 18px;
+		filter: invert();
+		transition: transform 0.3s ease;
+	}
+	.refresh-btn:hover {
+		background-color: #40ada2;
+	}
+	.refresh-btn:hover img {
+		transform: rotate(90deg);
+	}
+
+	/* ── Environment tabs ── */
+	.environment-tabs {
+		display: flex;
+		border-top: 1px solid rgba(0, 0, 0, 0.25);
+	}
+	.env-tab {
+		flex: 1;
+		padding: 8px 4px 11px;
+		font-family: var(--font-family-pixel);
+		font-size: 0.6rem;
+		letter-spacing: 0.04em;
+		color: #7aaa8a;
+		background: rgba(0, 0, 0, 0.2);
+		border: none;
+		border-right: 1px solid rgba(0, 0, 0, 0.2);
+		cursor: pointer;
+		box-shadow: rgba(0,0,0,0.4) 0 -4px 0 0 inset;
+		transition: 0.1s all ease-in;
+	}
+	.env-tab:last-child { border-right: none; }
+	.env-tab:hover:not(:disabled):not(.active) {
+		background: rgba(0, 0, 0, 0.1);
+		color: #c0e0c0;
+		padding-bottom: 8px;
+		box-shadow: rgba(0,0,0,0.4) 0 -1px 0 0 inset;
+	}
+	.env-tab.active {
+		background: #3a5a48;
+		color: #e0f0e0;
+		padding-bottom: 8px;
+		box-shadow: rgba(0,0,0,0.3) 0 -1px 0 0 inset;
+		cursor: default;
+	}
+	.env-tab:disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
+	}
+
+	/* ── Dev tools ── */
+	.dev-tools {
+		border-top: 1px solid rgba(255, 255, 255, 0.04);
+	}
+	.dev-toggle {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 5px 10px;
+		background: rgba(0, 0, 0, 0.3);
+		border: none;
+		cursor: pointer;
+		font-family: var(--font-family-pixel);
+		font-size: 0.55rem;
+		color: #4a6a4a;
+		letter-spacing: 0.15em;
+		transition: color 0.15s;
+	}
+	.dev-toggle:hover { color: #7a9a7a; }
+
+	.dev-chevron {
+		font-size: 1rem;
+		line-height: 1;
+		transition: transform 0.2s;
+	}
+	.dev-chevron.open { transform: rotate(90deg); }
+
+	.dev-panel {
+		padding: 8px 10px;
+		background: rgba(0, 0, 0, 0.25);
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.dev-row {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-family-pixel);
+		font-size: 0.6rem;
+		color: #6a8a6a;
+		cursor: pointer;
+	}
+	.dev-row input[type="checkbox"] {
+		accent-color: #5a8a5a;
+		width: 13px;
+		height: 13px;
+	}
+	.season-row select {
+		flex: 1;
+		background: #1a2a1a;
+		border: 1px solid #3a5a3a;
+		border-radius: 4px;
+		color: #8aaa8a;
+		font-family: var(--font-family-pixel);
+		font-size: 0.6rem;
+		padding: 2px 4px;
+	}
+	.dev-confirm {
+		background: #2a4a2a;
+		border: 1px solid #3a6a3a;
+		border-radius: 4px;
+		color: #8aaa8a;
+		font-size: 0.7rem;
+		padding: 2px 6px;
+		cursor: pointer;
+	}
+	.dev-confirm:hover { background: #3a5a3a; color: #c0e0c0; }
+	.dev-note {
+		font-size: 0.48rem;
+		color: #3a5a3a;
+		font-style: italic;
+		letter-spacing: 0.06em;
+	}
+
+	/* ── Plots grid ── */
 	.plots-grid {
 		flex-grow: 1;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
 		gap: 1rem;
 		padding: 1rem;
-		background-color: rgba(0, 0, 0, 0.1);
-		background-color: #5b7d6d;
-		/* overflow-y: auto; */
+		background-color: #4e7062;
 	}
 </style>

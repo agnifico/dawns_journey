@@ -44,6 +44,13 @@
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
     "statGrowth": [],
+    "drops": [
+        { "itemId": "frostfall", "chance": 0.33, "quantity": 1 },
+        { "itemId": "water_bar", "chance": 0.75, "quantity": 4 },
+        { "itemId": "wind_bar", "chance": 0.75, "quantity": 4 },
+        { "itemId": "sapphire", "chance": 1, "quantity": 6 },
+        { "itemId": "turquoise", "chance": 1, "quantity": 6 }
+    ],
     "mapPositions": [
         {
             "mapId": "dragon_island",
@@ -70,19 +77,20 @@
             "aftermaths": [
                 {
                     "outcome": "lose",
-                    "value": 2,
+                    "value": 0,
                     "dialogue": [
                         "Oh, don't look so miserable about it.",
-                        "You did well. Come back when you want to try again."
+                        "You did well. Come back when you want to try again.",
+                        "I respect the strong."
                     ]
                 },
                 {
                     "outcome": "win",
-                    "value": -2,
+                    "value": 2,
                     "dialogue": [
-                        "Okay THAT was impressive.",
+                        "Okay, THAT was impressive!",
                         "...",
-                        "Don't tell Cygwin I said that."
+                        "Don't tell Cygwin I said that. Or that I lost."
                     ]
                 }
             ]
@@ -115,24 +123,20 @@
     ],
     "swordRanks": [
         {
-            "questId": "claudia_sword_1",
-            "title": "The Wells",
-            "description": "Claudia won't go down the wells herself. She's completely unapologetic about this. She'd like you to go instead.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "met_claudia"
+                "tag": "sylvie_sword_1_complete"
             },
+            "questId": "claudia_sword_",
+            "title": "The Wells",
+            "description": "Claudia won't go down the wells herself. She's completely unapologetic about this. She'd like you to go instead.",
             "stages": [
                 {
                     "objective": "Speak with Claudia",
                     "requirement": {
                         "type": "dialogue"
                     },
-                    "unavailable_dialogue": [
-                        "Oh! There you are.",
-                        "I have a thing. Come here."
-                    ],
-                    "intro_dialogue": [
+                    "success_dialogue": [
                         "So.",
                         "I have two underground wells that need their resonance readings checked.",
                         "And I am not going down there.",
@@ -145,7 +149,7 @@
                     "success_rewards": [
                         {
                             "type": "tag",
-                            "tagId": "claudia_wells_started"
+                            "tagId": "underground_wells_clearance1"
                         }
                     ]
                 },
@@ -157,9 +161,15 @@
                         "timing": "future"
                     },
                     "reminder_dialogue": [
-                        "First well. It's the one with the blue marker.",
+                        "First well. It's the one to the west.",
                         "You'll know it when you see it.",
-                        "I'll be here. Not going anywhere near those wells."
+                        "I'll be here. Not going anywhere closer those wells."
+                    ],
+                    "success_rewards": [
+                        {
+                            "type": "tag",
+                            "tagId": "underground_wells_clearance2"
+                        }
                     ]
                 },
                 {
@@ -170,7 +180,8 @@
                         "timing": "future"
                     },
                     "reminder_dialogue": [
-                        "Second well now. Red marker.",
+                        "Second well now. The other one is to the south.",
+                        "You might meet Cygwin on your way there.",
                         "Almost done — I appreciate this more than I'm making it look."
                     ],
                     "success_dialogue": [
@@ -183,7 +194,7 @@
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 8
+                            "amount": 10
                         },
                         {
                             "type": "tag",
@@ -242,7 +253,7 @@
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 8
+                            "amount": 5
                         },
                         {
                             "type": "tag",
@@ -340,15 +351,11 @@
                     "success_rewards": [
                         {
                             "type": "world_resonance",
-                            "amount": 10
+                            "amount": 20
                         },
                         {
                             "type": "tag",
                             "tagId": "claudia_sword_3_complete"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "claudia_sr1_complete"
                         }
                     ]
                 }

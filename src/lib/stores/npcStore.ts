@@ -77,6 +77,7 @@ function createNpcStore() {
         update(state => ({ ...state, globalNpcs, npcsInitialized: true }));
     }
 
+
     function interactTalk(npcId: string) {
         const player = get(playerStore);
         const storeState = get({ subscribe });
@@ -85,6 +86,18 @@ function createNpcStore() {
 
         const { updatedNpc, updatedPlayer } = NpcService.handleTalk(npc, player, storeState.globalNpcs);
 
+        playerStore.set(updatedPlayer);
+        update(state => ({ ...state, globalNpcs: { ...state.globalNpcs, [npcId]: updatedNpc } }));
+    }
+
+    function interactRefuse(npcId: string) {
+        const player = get(playerStore);
+        const storeState = get({ subscribe });
+        const npc = storeState.globalNpcs[npcId];
+        if (!npc) return;
+    
+        const { updatedNpc, updatedPlayer } = NpcService.handleRefuse(npc, player, storeState.globalNpcs);
+    
         playerStore.set(updatedPlayer);
         update(state => ({ ...state, globalNpcs: { ...state.globalNpcs, [npcId]: updatedNpc } }));
     }
@@ -150,6 +163,7 @@ function createNpcStore() {
         fulfillGiftingOption,
         applyCombatAftermath,
         loadNpcs,
+        interactRefuse,
         set
     };
 }

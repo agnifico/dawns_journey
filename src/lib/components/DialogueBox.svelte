@@ -2,6 +2,7 @@
     import { dialogueStore } from '$lib/stores/dialogueStore';
     import { playerStore } from '$lib/stores/playerStore';
     import SceneChoices from '$lib/components/SceneChoices.svelte';
+    import { elementBgs, elementColors } from '$lib/data/statDefinitions';
     import { fly } from 'svelte/transition';
 
     let lastAdvanceTime = 0;
@@ -9,32 +10,35 @@
     function handleAdvance() {
         const now = Date.now();
         if (now - lastAdvanceTime < 80) return;
-        // Don't advance if current line is a choice — player must pick
         const current = $dialogueStore.flatLines?.[$dialogueStore.currentIndex];
         if (current?.isChoice) return;
         lastAdvanceTime = now;
         dialogueStore.advanceDialogue();
     }
 
-    // Resolve active speaker for the current line
-    $: currentFlat  = $dialogueStore.flatLines?.[$dialogueStore.currentIndex] ?? null;
-    $: isChoiceLine = currentFlat?.isChoice === true;
-
-    $: activeSpeaker      = currentFlat?.speaker      ?? $dialogueStore.speaker      ?? null;
+    $: currentFlat       = $dialogueStore.flatLines?.[$dialogueStore.currentIndex] ?? null;
+    $: isChoiceLine      = currentFlat?.isChoice === true;
+    $: activeSpeaker     = currentFlat?.speaker      ?? $dialogueStore.speaker      ?? null;
     $: activeSpeakerImage = currentFlat?.speakerImage ?? $dialogueStore.speakerImage ?? null;
-    $: isPlayer = activeSpeaker === 'You' || activeSpeaker === 'Player';
+    $: activeElements    = currentFlat?.speakerElements ?? $dialogueStore.speakerElements ?? [];
+    $: isPlayer          = activeSpeaker === 'You' || activeSpeaker === 'Player';
+
+    // Element colour derivation — falls back to default if no elements
+    $: primaryElement   = activeElements[0]?.toLowerCase() ?? null;
+    $: secondaryElement = activeElements[1]?.toLowerCase() ?? null;
+
+    $: nameplateColor  = primaryElement  ? elementColors[primaryElement]  : 'var(--color-secondary)';
+    $: nameplateBg     = primaryElement  ? elementBgs[primaryElement]     : 'var(--color-primary)';
+    $: avatarBorder    = secondaryElement ? elementColors[secondaryElement] : nameplateColor;
 
     function handleChoice(option) {
         const tags = $playerStore.worldTags ?? [];
-
-        // Apply tag if specified
         if (option.tag && !tags.includes(option.tag)) {
             playerStore.update(p => ({
                 ...p,
                 worldTags: [...(p.worldTags ?? []), option.tag]
             }));
         }
-
         dialogueStore.resolveChoice(option, $playerStore.worldTags ?? []);
     }
 </script>
@@ -43,7 +47,6 @@
     on:keydown={(e) => {
         if (!$dialogueStore.isOpen) return;
 
-        // Choice hotkeys
         if (isChoiceLine && currentFlat?.choices) {
             const keymap = ['z', 'x', 'c', 'v'];
             const idx = keymap.indexOf(e.key.toLowerCase());
@@ -55,7 +58,6 @@
             }
         }
 
-        // Normal advance
         if (e.key === 'z' || e.key === 'Z' || e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
@@ -71,8 +73,13 @@
         on:click={handleAdvance}
         transition:fly={{ y: 50, duration: 200 }}
     >
-        <div class="dialogue-box" class:is-choice={isChoiceLine}>
-
+        <div
+            class="dialogue-box"
+            class:is-choice={isChoiceLine}
+            style:--nameplate-color={nameplateColor}
+            style:--nameplate-bg={nameplateBg}
+            style:--avatar-border={avatarBorder}
+        >
             <!-- Speaker nameplate + avatar -->
             {#if activeSpeaker}
                 <div class="speaker-row" class:flipped={isPlayer}>
@@ -88,26 +95,16 @@
             {/if}
 
             {#if isChoiceLine && currentFlat?.choices}
-                <!-- Choice mode: show prompt (if any) then buttons -->
                 {#if currentFlat.text}
                     <p class="dialogue-text prompt-text">{currentFlat.text}</p>
                 {/if}
                 <div class="choices-wrapper">
-                    <SceneChoices
-                        choices={currentFlat.choices}
-                        onChoose={handleChoice}
-                    />
+                    <SceneChoices choices={currentFlat.choices} onChoose={handleChoice} />
                 </div>
             {:else}
-                <!-- Normal line mode -->
-                <p class="dialogue-text">
-                    {currentFlat?.text ?? ''}
-                </p>
-                <div class="continue-prompt">
-                    <span>Z ►</span>
-                </div>
+                <p class="dialogue-text">{currentFlat?.text ?? ''}</p>
+                <div class="continue-prompt"><span>Z ►</span></div>
             {/if}
-
         </div>
     </div>
 {/if}
@@ -130,7 +127,7 @@
 
     .dialogue-box {
         background-color: rgba(0, 0, 0, 0.85);
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--nameplate-bg, var(--color-border));
         border-radius: 8px;
         color: white;
         padding: 1.5rem;
@@ -141,9 +138,9 @@
         line-height: 1.5;
         cursor: pointer;
         position: relative;
+        transition: border-color 0.2s ease;
     }
 
-    /* Choice mode: don't need the extra bottom padding for Z► */
     .dialogue-box.is-choice {
         padding-bottom: 1.5rem;
         cursor: default;
@@ -169,21 +166,23 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--avatar-border, var(--color-border));
         object-fit: cover;
         image-rendering: pixelated;
         background-color: var(--surface-2);
         flex-shrink: 0;
+        transition: border-color 0.2s ease;
     }
 
     .speaker-name {
-        background-color: var(--color-primary);
-        color: var(--color-secondary);
+        background-color: var(--nameplate-bg, var(--color-primary));
+        color: var(--nameplate-color, var(--color-secondary));
         padding: 0.3rem 0.8rem;
         border-radius: 5px;
         font-size: 1.1rem;
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--nameplate-color, var(--color-border));
         white-space: nowrap;
+        transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     /* ── Text ── */

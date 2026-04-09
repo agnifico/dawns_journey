@@ -1,39 +1,30 @@
 import type { LandscapeDefinition } from '../types';
 
 export const landscapeDefinitions: { [key: string]: LandscapeDefinition } = {
-    off_land: {
-        id: 'off_land',
-        name: 'Off Land',
-        image: '/locations/off_land.jpg',
+    // Existing regions
+    pleasure_island: {
+        id: 'pleasure_island',
+        name: 'Pleasure Island',
+        rainLevel: 2,
+        image: '/locations/pleasure_island.jpg',
     },
-    offshore: {
-        id: 'offshore',
-        name: 'Offshore',
-        image: '/locations/offshore.jpg',
+    pleasure_island_waters: {
+        id: 'pleasure_island_waters',
+        name: 'Pleasure Island Waters',
+        image: '/locations/pleasure_island_waters.jpg',
     },
-    top_coast: {
-        id: 'top_coast',
-        name: 'Top Coast',
-        image: '/locations/top_coast.jpg',
+    north_land: {
+        id: 'north_land',
+        name: 'North Land',
+        image: '/locations/north_land.jpg',
     },
-    middle_coast: {
-        id: 'middle_coast',
-        name: 'Middle Coast',
-        image: '/locations/middle_coast.jpg',
+    forest1: {
+        id: 'forest1',
+        name: 'Forest',
+        image: '/locations/forest1.jpg',
     },
-    south_coast: {
-        id: 'south_coast',
-        name: 'South Coast',
-        image: '/locations/south_coast.jpg',
-        rainLevel: 1,
-    },
-    south_lands: {
-        id: 'south_lands',
-        name: 'South Lands',
-        image: '/locations/south_lands.jpg',
-    },
-    mountain: {
-        id: 'mountain',
+    veres_hill: {
+        id: 'veres_hill',
         name: 'Mountain',
         image: '/locations/mountain.jpg',
     },
@@ -42,76 +33,37 @@ export const landscapeDefinitions: { [key: string]: LandscapeDefinition } = {
         name: 'Mountain Forest',
         image: '/locations/mountain_forest.jpg',
     },
-    mountain_forest_coast: {
-        id: 'mountain_forest_coast',
-        name: 'Mountain Forest Coast',
-        image: '/locations/mountain_forest_coast.jpg',
+    south_land: {
+        id: 'south_land',
+        name: 'South Land',
+        image: '/locations/south_land.jpg',
     },
-    north_lands: {
-        id: 'north_lands',
-        name: 'North Lands',
-        image: '/locations/north_lands.jpg',
+    south_coast: {
+        id: 'south_coast',
+        name: 'South Coast',
+        rainLevel: 2,
+        image: '/locations/south_coast.jpg',
     },
-    pleasure_island: {
-        id: 'pleasure_island',
-        name: 'Pleasure Island',
-        image: '/locations/pleasure_island.jpg',
+    southern_sea: {
+        id: 'southern_sea',
+        name: 'Southern Sea',
+        image: '/locations/southern_sea.jpg',
+    },
+    western_sea: {
+        id: 'western_sea',
+        name: 'Western Sea',
+        image: '/locations/western_sea.jpg',
+    },
+    marjana_trench: {
+        id: 'marjana_trench',
+        name: 'Marjana Trench',
+        image: '/locations/marjana_trench.jpg',
     },
     deserted_island: {
         id: 'deserted_island',
         name: 'Deserted Island',
         image: '/locations/deserted_island.jpg',
     },
-    ship: {
-        id: 'ship',
-        name: 'Ship',
-        image: '/locations/ship.jpg',
-    },
-    frozen_peak: {
-        id: 'frozen_peak',
-        name: 'Frozen Peak',
-        image: '/locations/frozen_peak.jpg',
-    },
-    trench: {
-        id: 'trench',
-        name: 'Trench',
-        image: '/locations/trench.jpg',
-        rainLevel: 4,
-    },
-    southern_sea: {
-        id: 'southern_sea',
-        name: 'Southern Sea',
-        image: '/locations/southern_sea.jpg',
-        rainLevel: 4,
-    },
-    calm_waters: {
-        id: 'calm_waters',
-        name: 'Calm Waters',
-        image: '/locations/calm_waters.jpg',
-    },
-    western_sea: {
-        id: 'western_sea',
-        name: 'Western Sea',
-        image: '/locations/western_sea.jpg',
-        rainLevel: 3,
-    },
-    eastern_waters: {
-        id: 'eastern_waters',
-        name: 'Eastern Waters',
-        image: '/locations/eastern_waters.jpg',
-        rainLevel: 2,
-    },
-    lagoon: {
-        id: 'lagoon',
-        name: 'Lagoon',
-        image: '/locations/lagoon.jpg',
-    },
-    church: {
-        id: 'church',
-        name: 'Church',
-        image: '/locations/church.jpg',
-    },
-
     bridge: {
         id: 'bridge',
         name: 'Bridge',
@@ -119,7 +71,7 @@ export const landscapeDefinitions: { [key: string]: LandscapeDefinition } = {
     },
     agnes_garden: {
         id: 'agnes_garden',
-        name: 'Agnes\' Garden',
+        name: "Agnes' Garden",
         image: '/locations/agnes_garden.jpg',
     },
     sewers: {
@@ -172,24 +124,127 @@ export const landscapeDefinitions: { [key: string]: LandscapeDefinition } = {
         name: 'Church Wall',
         image: '/locations/church_wall.jpg',
     },
-    offshore_cliff: {
-        id: 'offshore_cliff',
-        name: 'Offshore Cliff',
-        image: '/locations/offshore_cliff.jpg',
+
+    // New regions
+    arrival_plains: {
+        id: 'arrival_plains',
+        name: 'Arrival Plains',
+        image: '/locations/arrival_plains.jpg',
     },
-    mountain_coast: {
-        id: 'mountain_coast',
-        name: 'Mountain Coast',
-        image: '/locations/mountain_coast.jpg',
+    north_beach: {
+        id: 'north_beach',
+        name: 'North Beach',
+        image: '/locations/north_beach.jpg',
     },
-    gwens_island: {
-        id: 'gwens_island',
-        name: 'Gwen\'s Island',
-        image: '/locations/gwens_island.jpg',
+    shallow_water: {
+        id: 'shallow_water',
+        name: 'Shallow Water',
+        image: '/locations/north_beach.jpg',
     },
-    marjana_trench: {
-        id: 'marjana_trench',
-        name: 'Marjana Trench',
-        image: '/locations/marjana_trench.jpg',
-    }
+    waterfall: {
+        id: 'waterfall',
+        name: 'Waterfall',
+        image: '/locations/waterfall.jpg',
+    },
+    dragon_shrine_grounds: {
+        id: 'dragon_shrine_grounds',
+        name: "Dragon's Shrine Grounds",
+        image: '/locations/dragon_shrine_grounds.jpg',
+    },
+    unknown_hills: {
+        id: 'unknown_hills',
+        name: 'Unknown Hills',
+        image: '/locations/unknown_hills.jpg',
+    },
+    unknown_islands: {
+        id: 'unknown_islands',
+        name: 'Unknown Islands',
+        image: '/locations/unknown_islands.jpg',
+    },
+    mountain_forest2: {
+        id: 'mountain_forest2',
+        name: 'Waterfall Forest',
+        image: '/locations/waterfall2.jpg',
+    },
+    mountain_east: {
+        id: 'mountain_east',
+        name: '???',
+        image: '/locations/south_coast.jpg',
+    },
+    murky_water: {
+        id: 'murky_water',
+        name: 'Murky Swamp',
+        image: '/locations/murky_swamp.jpg',
+    },
+    eastern_sea: {
+        id: 'eastern_sea',
+        name: 'Eastern Sea',
+        rainLevel: 2,
+        image: '/locations/eastern_sea.jpg',
+    },
+    northeastern_sea: {
+        id: 'northeastern_sea',
+        name: 'Northeastern Sea',
+        rainLevel: 3,
+        image: '/locations/northeastern_sea.jpg',
+    },
+    northeast: {
+        id: 'northeast',
+        name: 'Northeastern Region',
+        image: '/locations/northeast.jpg',
+    },
+    southeastern_sea: {
+        id: 'southeastern_sea',
+        name: 'Southeastern Sea',
+        rainLevel: 4,
+        image: '/locations/southeastern_sea.jpg',
+    },
+    cold_waters: {
+        id: 'cold_waters',
+        name: 'Cold Waters',
+        rainLevel: 2,
+        image: '/locations/cold_waters.jpg',
+    },
+    stormy_water: {
+        id: 'stormy_water',
+        name: 'North Sea',
+        rainLevel: 1,
+        image: '/locations/north_sea.jpg',
+    },
+    icy_coast_south: {
+        id: 'icy_coast_south',
+        name: 'Icy Southern Coast',
+        rainLevel: 2,
+        image: '/locations/glacier_bottom.jpg',
+    },
+    icy_mountain: {
+        id: 'icy_mountain',
+        name: 'Icy Mountain',
+        image: '/locations/icy_mountain.jpg',
+    },
+    icy_mountain_top: {
+        id: 'icy_mountain_top',
+        name: 'Icy Mountain Peak',
+        image: '/locations/icy_mountain.jpg',
+    },
+    glacier_bottom: {
+        id: 'glacier_bottom',
+        name: 'Glacier — Lower Shelf',
+        image: '/locations/glacier_bottom.jpg',
+    },
+    glacier_top: {
+        id: 'glacier_top',
+        name: 'Glacier — Upper Shelf',
+        image: '/locations/glacier_top.jpg',
+    },
+    ice_spring: {
+        id: 'ice_spring',
+        name: 'Ice Spring',
+        image: '/locations/ice_spring.jpg',
+    },
+    ice_spring_island: {
+        id: 'ice_spring_island',
+        name: 'Ice Spring Island',
+        image: '/locations/ice_spring_island.jpg',
+    },
 };

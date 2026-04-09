@@ -81,13 +81,15 @@
 		transform: translateX(-50%);
 		background: rgba(0, 0, 0, 0.78);
 		color: #fff;
-		font-size: 10px;
+		font-size: 1rem;
 		font-family: monospace;
 		white-space: nowrap;
-		padding: 2px 7px;
+		padding: 4px 8px;
 		border-radius: 4px;
 		pointer-events: none;
 		z-index: 100;
-		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: -0.5px;
 	}
 </style>

@@ -1,5 +1,6 @@
 import { writable, derived } from 'svelte/store';
 import type { MapData, Position, LandscapeData, ExplorationRequirement } from '$lib/types';
+import { landscapeDefinitions } from "$lib/data/landscapeDefinitions";
 
 export interface RegionNotificationData {
 	regionName: string;
@@ -107,7 +108,6 @@ export const landscapeImage = derived([mapStore, currentMapData], ([$mapStore, $
 			break;
 		}
 	}
-
 	const landscapeId = currentLandscape || $currentMapData.defaultLandscape;
-	return landscapeId ? `/locations/${landscapeId}.jpg` : '';
+	return landscapeId ? landscapeDefinitions[currentLandscape]?.image : '';
 });

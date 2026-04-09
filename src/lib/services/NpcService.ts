@@ -50,6 +50,8 @@ function handleRewards(player: Player, rewards: Reward[]): Player {
             newPlayer.worldResonance = (newPlayer.worldResonance ?? 0) + reward.amount;
             toastStore.success(`World Resonance +${reward.amount}`);
             messageStore.addMessage(`+${reward.amount} World Resonance.`, ['World']);
+        } else if (reward.type === 'faction_score') {
+            increaseFactionScore(reward.factionId, reward.amount);
         } else if (reward.type === 'tag') {
             if (!newPlayer.worldTags.includes(reward.tagId)) {
                 newPlayer.worldTags.push(reward.tagId);
@@ -543,6 +545,55 @@ export function handleTalk(npc: NPC, player: Player, globalNpcs: Record<string, 
     const handler = questStateHandlers[quest.state];
     if (handler) {
         return handler(updatedNpc, updatedPlayer, globalNpcs, rankData, quest);
+    }
+
+    return { updatedNpc, updatedPlayer };
+}
+
+// ---------------------------------------------------------------------------
+// handleRefuse — For quests that can be "Refused" via the Choice Menu
+// ---------------------------------------------------------------------------
+
+
+export function handleRefuse(
+    npc: NPC,
+    player: Player,
+    globalNpcs: Record<string, NPC>
+): { updatedNpc: NPC; updatedPlayer: Player } {
+    let updatedNpc = { ...npc };
+    let updatedPlayer = { ...player };
+
+    const rankData = resolveActiveRankData(updatedNpc, updatedPlayer, globalNpcs);
+    if (!rankData) return { updatedNpc, updatedPlayer };
+
+    const allQuests = get(questStore).quests;
+    const quest = allQuests[rankData.questId];
+    if (!quest || quest.state !== 'ACTIVE') return { updatedNpc, updatedPlayer };
+
+    const stage = rankData.stages[quest.currentStage];
+    if (!stage?.refusable) return { updatedNpc, updatedPlayer };
+
+    // Play refuse dialogue
+    const refuseDialogue = stage.refuse_dialogue ?? [`${npc.name} watches you go.`];
+    dialogueStore.startDialogue(refuseDialogue, npc.name);
+
+    // Fire refuse_rewards if present
+    if (stage.refuse_rewards) {
+        updatedPlayer = handleRewards(updatedPlayer, stage.refuse_rewards);
+    }
+
+    // Advance or complete the quest — same logic as any other stage completion
+    if (quest.currentStage >= rankData.stages.length - 1) {
+        questStore.setQuestState(quest.id, 'COMPLETED');
+        updatedNpc.swordRank++;
+        messageStore.addMessage(
+            `Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`,
+            ['World', 'NPC']
+        );
+        toastStore.success(`Your Sword Rank with ${updatedNpc.name} is now ${updatedNpc.swordRank}.`);
+        updatedPlayer = checkQuestTriggers(updatedPlayer);
+    } else {
+        questStore.advanceQuestStage(quest.id);
     }
 
     return { updatedNpc, updatedPlayer };

@@ -32,7 +32,7 @@
 					{#if isUnlocked}
 						<span class="icon-check">✦</span>
 					{:else}
-						<span class="icon-lock">○</span>
+						<span class="icon-lock">✦</span>
 					{/if}
 				</div>
 
@@ -147,12 +147,12 @@
 
 	.icon-check {
 		color: #c9973a;
-		font-size: 0.9rem;
+		font-size: 1rem;
 	}
 
 	.icon-lock {
-		color: #3d2810;
-		font-size: 0.9rem;
+		color: #c9973a;
+		font-size: 1rem;
 	}
 
 	/* ── Body ── */
@@ -162,23 +162,32 @@
 	}
 
 	.ach-name {
-		font-size: 0.65rem;
-		letter-spacing: 0.06em;
-		color: #e8d4a8;
+		font-size: 1rem;
+		font-family: "Lexend";
+		letter-spacing: -0.03em;
+		color: #c74848;
 		text-transform: uppercase;
+		font-weight: 600;
 		margin-bottom: 3px;
 	}
 
 	.ach-desc {
-		font-size: 0.68rem;
-		color: #5a3a18;
+		font-size: 0.75rem;
+		color: #c59b6f;
 		font-style: italic;
 		line-height: 1.45;
 		margin-bottom: 0.4rem;
 	}
 
 	.ach-item.unlocked .ach-desc {
-		color: #7a5a38;
+		color: #c59b6f;
+	}
+
+	.ach-item.unlocked .ach-name {
+		color: #5b8e56;
+	}
+	.ach-item.unlocked .icon-check {
+		color: #5b8e56;
 	}
 
 	/* ── Tier pips ── */
@@ -216,10 +225,10 @@
 	}
 
 	.status-text {
-		font-size: 0.55rem;
+		font-size: 0.75rem;
 		letter-spacing: 1px;
 		text-transform: uppercase;
-		color: #3d2810;
+		color: #9a7448;
 	}
 
 	.status-text.status-done {

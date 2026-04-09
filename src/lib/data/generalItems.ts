@@ -181,7 +181,7 @@ export const generalItems: Item[] = [
         image: "/general/fish.png",
         type: "general",
         effects: [{ hp: 100 }, { auraShield: 100 }],
-        flags: ['stackable', "legendary"],
+        flags: ['stackable',],
     },
     {
         id: "forza_mead",
@@ -319,6 +319,15 @@ export const generalItems: Item[] = [
         image: "/general/wood.png",
         type: "general",
         flags: ['stackable',],
+        instanceId: ''
+    },
+    {
+        id: "dragonblood_heartwood",
+        name: "dragonblood_heartwood",
+        description: "Magical wood.",
+        image: "/general/wood.png",
+        type: "general",
+        flags: ['stackable', "legendary"],
         instanceId: ''
     },
     {
@@ -474,7 +483,7 @@ export const generalItems: Item[] = [
         image: "/general/cigareds.png",
         type: "general",
         price: 4800,
-        flags: ["special", "stackable"],
+        flags: ["special", "stackable", "grocery"],
     },
     {
         id: "ball_pen",

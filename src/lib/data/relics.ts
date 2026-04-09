@@ -18,6 +18,7 @@ export const relics: Item[] = [
         image: "/relics/spiked_choker.png",
         type: "relic",
         stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }],
+        exploration: [{ name: 'Dark', level: 1 }],
         flags: ["grocery", "special"],
         price: 7000,
     },

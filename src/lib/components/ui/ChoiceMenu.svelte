@@ -62,27 +62,47 @@
 
 		const req = stage.requirement;
 
-		// Deliver Item — appears when stage needs give_item and player has it
-		if (req?.type === 'give_item') {
-			const hasIt = hasItem(player.inventory, req.itemId, req.quantity ?? 1);
+		// Find a give_item condition anywhere in the requirement tree
+		function findGiveItem(r: any): any | null {
+			if (!r) return null;
+			if (r.type === 'give_item') return r;
+			if (r.conditions) {
+				for (const c of r.conditions) {
+					const found = findGiveItem(c);
+					if (found) return found;
+				}
+			}
+			return null;
+		}
+
+		const giveItemCondition = findGiveItem(req);
+		if (giveItemCondition) {
+			const hasIt = hasItem(
+				player.inventory,
+				giveItemCondition.itemId,
+				giveItemCondition.quantity ?? 1
+			);
 			if (hasIt) {
-				const item = player.inventory.find(i => i.id === req.itemId);
+				const item = player.inventory.find((i) => i.id === giveItemCondition.itemId);
 				const label = item?.name ? `DELIVER ${item.name.toUpperCase()}` : 'DELIVER ITEM';
 				return {
-					id: 'deliver', label, hotkey: 'x', variant: 'accent',
+					id: 'deliver',
+					label,
+					hotkey: 'x',
+					variant: 'accent',
 					action: () => npcStore.interactTalk(npc.id)
 				};
 			}
 		}
 
-		// Not Now — appears when stage is refusable
+		// Refusable
 		if (stage.refusable) {
 			return {
-				id: 'refuse', label: 'NOT NOW', hotkey: 'x', variant: 'default',
-				action: () => dialogueStore.startDialogue(
-					stage.refuse_dialogue ?? [`${npc.name} watches you go.`],
-					npc.name
-				)
+				id: 'refuse',
+				label: 'NOT NOW',
+				hotkey: 'x',
+				variant: 'default',
+				action: () => npcStore.interactRefuse(npc.id)
 			};
 		}
 
@@ -112,13 +132,20 @@
 
 				// ── Talk row ─────────────────────────────────────────────────
 				const talkAction: SingleAction = {
-					id: 'talk', label: 'Talk', hotkey: 'z',
+					id: 'talk',
+					label: 'Talk',
+					hotkey: 'z',
 					icon: showQuestIndicator ? '/game_icons/expression_alerted.png' : null,
 					action: () => npcStore.interactTalk(npc.id)
 				};
 
 				if (contextAction) {
-					newActions.push({ id: 'talk_row', type: 'pair', primary: talkAction, secondary: contextAction });
+					newActions.push({
+						id: 'talk_row',
+						type: 'pair',
+						primary: talkAction,
+						secondary: contextAction
+					});
 				} else {
 					newActions.push(talkAction);
 				}
@@ -126,7 +153,8 @@
 				// ── Challenge row ─────────────────────────────────────────────
 				if (canChallenge) {
 					newActions.push({
-						id: 'challenge', label: 'Challenge',
+						id: 'challenge',
+						label: 'Challenge',
 						hotkey: contextAction ? null : 'x',
 						action: () => CombatService.startCombat(npc)
 					});
@@ -135,24 +163,35 @@
 				// ── Gift / Heart rank row ─────────────────────────────────────
 				if (heartRankReady && canGift) {
 					newActions.push({
-						id: 'gift_row', type: 'pair',
+						id: 'gift_row',
+						type: 'pair',
 						primary: {
-							id: 'gift', label: 'Gift Item', hotkey: 'c',
+							id: 'gift',
+							label: 'Gift Item',
+							hotkey: 'c',
 							action: () => openGiftModal(npc.id)
 						},
 						secondary: {
-							id: 'heart_rank_up', label: '♡ Level Up', hotkey: 'v', variant: 'accent',
+							id: 'heart_rank_up',
+							label: '♡ Level Up',
+							hotkey: 'v',
+							variant: 'accent',
 							action: () => npcStore.interactTalk(npc.id)
 						}
 					});
 				} else if (heartRankReady) {
 					newActions.push({
-						id: 'heart_rank_up', label: '♡ Level Up', hotkey: 'c', variant: 'accent',
+						id: 'heart_rank_up',
+						label: '♡ Level Up',
+						hotkey: 'c',
+						variant: 'accent',
 						action: () => npcStore.interactTalk(npc.id)
 					});
 				} else if (canGift) {
 					newActions.push({
-						id: 'gift', label: 'Gift Item', hotkey: 'c',
+						id: 'gift',
+						label: 'Gift Item',
+						hotkey: 'c',
 						action: () => openGiftModal(npc.id)
 					});
 				}
@@ -163,7 +202,9 @@
 			const eventData = $eventScreen.data;
 			const availableActions = eventData.actions.filter(isActionAvailable);
 			actions = availableActions.map((act, index) => ({
-				id: `event_action_${index}`, label: act.text, hotkey: keymap[index] || null,
+				id: `event_action_${index}`,
+				label: act.text,
+				hotkey: keymap[index] || null,
 				action: () => {
 					const originalIndex = eventData.actions.indexOf(act);
 					LocationEventService.triggerEventAction(eventData, originalIndex);
@@ -175,17 +216,38 @@
 		} else if ($eventScreen.type === 'enemy' && $eventScreen.data?.isLegendary) {
 			const enemy = $eventScreen.data;
 			const fakeNpc: NPC = {
-				id: enemy.id, name: enemy.name, image: enemy.image,
-				profileImage: enemy.thumbnailImage, isCombatant: true,
-				baseStats: enemy.baseStats, swordRank: 0, heartRank: 0,
-				affinity: 0, swordState: 'NOT_STARTED', heartState: 'NOT_STARTED',
-				swordRanks: [], heartRanks: [], statGrowth: [],
-				battleAftermathsBySwordRank: [], types: enemy.types,
-				requirementSnapshot: {}, swordRankMaxedDialogue: [],
-				allRanksMaxedDialogue: [], galleryImages: [], faction: undefined,
-				swordRankMaxedDialogueIndex: 0, allRanksMaxedDialogueIndex: 0
+				id: enemy.id,
+				name: enemy.name,
+				image: enemy.image,
+				profileImage: enemy.thumbnailImage,
+				isCombatant: true,
+				baseStats: enemy.baseStats,
+				swordRank: 0,
+				heartRank: 0,
+				affinity: 0,
+				swordState: 'NOT_STARTED',
+				heartState: 'NOT_STARTED',
+				swordRanks: [],
+				heartRanks: [],
+				statGrowth: [],
+				battleAftermathsBySwordRank: [],
+				types: enemy.types,
+				requirementSnapshot: {},
+				swordRankMaxedDialogue: [],
+				allRanksMaxedDialogue: [],
+				galleryImages: [],
+				faction: undefined,
+				swordRankMaxedDialogueIndex: 0,
+				allRanksMaxedDialogueIndex: 0
 			};
-			actions = [{ id: 'challenge', label: 'Challenge', hotkey: 'x', action: () => CombatService.startCombat(fakeNpc) }];
+			actions = [
+				{
+					id: 'challenge',
+					label: 'Challenge',
+					hotkey: 'x',
+					action: () => CombatService.startCombat(fakeNpc)
+				}
+			];
 		} else {
 			actions = [];
 		}
@@ -198,11 +260,11 @@
 		if (!actions.length) return;
 
 		const key = e.key.toLowerCase();
-		const allActions: SingleAction[] = actions.flatMap(a =>
+		const allActions: SingleAction[] = actions.flatMap((a) =>
 			'type' in a && a.type === 'pair' ? [a.primary, a.secondary] : [a as SingleAction]
 		);
 
-		const match = allActions.find(a => a.hotkey === key);
+		const match = allActions.find((a) => a.hotkey === key);
 		if (match) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -231,10 +293,16 @@
 						disabled={$dialogueStore.isOpen || $dialogueStore.justClosed}
 					>
 						<div class="action-label">
-							{#if action.primary.icon}<img src={action.primary.icon} alt="icon" class="icon" />{/if}
+							{#if action.primary.icon}<img
+									src={action.primary.icon}
+									alt="icon"
+									class="icon"
+								/>{/if}
 							<span>{action.primary.label}</span>
 						</div>
-						{#if action.primary.hotkey}<span class="hotkey">[{action.primary.hotkey.toUpperCase()}]</span>{/if}
+						{#if action.primary.hotkey}<span class="hotkey"
+								>[{action.primary.hotkey.toUpperCase()}]</span
+							>{/if}
 					</button>
 					<button
 						class="pair-btn"
@@ -244,10 +312,16 @@
 						disabled={$dialogueStore.isOpen || $dialogueStore.justClosed}
 					>
 						<div class="action-label">
-							{#if action.secondary.icon}<img src={action.secondary.icon} alt="icon" class="icon" />{/if}
+							{#if action.secondary.icon}<img
+									src={action.secondary.icon}
+									alt="icon"
+									class="icon"
+								/>{/if}
 							<span>{action.secondary.label}</span>
 						</div>
-						{#if action.secondary.hotkey}<span class="hotkey">[{action.secondary.hotkey.toUpperCase()}]</span>{/if}
+						{#if action.secondary.hotkey}<span class="hotkey"
+								>[{action.secondary.hotkey.toUpperCase()}]</span
+							>{/if}
 					</button>
 				</li>
 			{:else}
@@ -317,8 +391,12 @@
 		background-color: #51bfc1;
 		border-color: #09625b;
 		color: #343a40;
-		.hotkey { color: #343a40; }
-		.action-label { color: #343a40; }
+		.hotkey {
+			color: #343a40;
+		}
+		.action-label {
+			color: #343a40;
+		}
 	}
 	button:disabled {
 		color: #666;
@@ -334,8 +412,12 @@
 	button.accent:focus {
 		background-color: var(--color-primary);
 		color: #111;
-		.hotkey { color: #111; }
-		.action-label { color: #111; }
+		.hotkey {
+			color: #111;
+		}
+		.action-label {
+			color: #111;
+		}
 	}
 	button.warning {
 		background-color: color-mix(in srgb, #e07a5f 25%, var(--surface-3));
@@ -346,8 +428,12 @@
 	button.warning:focus {
 		background-color: #e07a5f;
 		color: #111;
-		.hotkey { color: #111; }
-		.action-label { color: #111; }
+		.hotkey {
+			color: #111;
+		}
+		.action-label {
+			color: #111;
+		}
 	}
 	.action-label {
 		display: flex;

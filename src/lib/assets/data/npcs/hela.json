@@ -62,6 +62,26 @@
             }
         }
     ],
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 8,
+            "y": 11
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "found_swamp_chest",
+            "x": 20,
+            "y": 56
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "hela_campfire_done",
+            "x": 20,
+            "y": 30
+        }
+    ],
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -180,12 +200,12 @@
                     ],
                     "success_dialogue": [
                         "There we go.",
-                        "You know, in Hell I have twelve dedicated cooks. Twelve.",
-                        "And yet here I am, on a rock in the middle of the ocean, eating a sandwich someone else fetched for me.",
-                        "I'm choosing to find this charming."
+                        "Look, the Queen of Hell is the embodiment of all 7 sins.",
+                        "I especially lean into the Gluttony aspect.",
+                        "I had a legion of cooks in Hell. Guess you'll do here. Thanks ^_^"
                     ],
                     "success_rewards": [
-                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "world_resonance", "amount": 10 },
                         { "type": "tag", "tagId": "hela_sword_2_complete" },
                         { "type": "item", "itemId": "argentum" , "amount": 1500 }
                     ]
@@ -202,7 +222,7 @@
             },
             "stages": [
                 {
-                    "objective": "Rest by the campfire",
+                    "objective": "Meet by the campfire",
                     "requirement": {
                         "type": "finish_location_event",
                         "eventId": "campfire"
@@ -212,23 +232,32 @@
                     ],
                     "intro_dialogue": [
                         "You work too hard. I can tell. It's exhausting to watch.",
-                        "There's a campfire somewhere on this island. Go sit by it. Think about nothing for five minutes.",
-                        "Consider it a royal decree."
+                        "But if that's so, meet me by the campfire across the water.",
+                        "Consider it a royal decree.",
+                        "I could use a companion for my Journey, {playerName}."
                     ],
                     "reminder_dialogue": [
-                        "The campfire. Go. I'll still be here judging you when you get back."
+                        "The campfire. Go, rest up. I'll still be here judging you for working too hard when you get back."
                     ],
                     "success_dialogue": [
                         "Better. You have slightly less of a hunted look about you.",
-                        "Now. I sensed something earlier — a stash nearby. Abandoned. Smells like someone left in a hurry.",
-                        "Go find it."
+                        "Now. Ahead of us is a swamp, so no way I am going there.",
+                        "But something important is hidden there. I know for sure.",
+                        "Go find it.",
+                        "Here's something to help you get there."
+                    ],
+                    "success_rewards": [
+                        { "type": "item", "itemId": "argentum", "quantity": 2000 },
+                        { "type": "item", "itemId": "spiked_choker", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "tag", "tagId": "hela_campfire_done" }
                     ]
                 },
                 {
-                    "objective": "Find the abandoned stash at (18, 3)",
+                    "objective": "Find the abandoned stash at (11, 55)",
                     "requirement": {
                         "type": "finish_location_event",
-                        "eventId": "treasure_chest"
+                        "eventId": "big_chest1"
                     },
                     "reminder_dialogue": [
                         "There's an abandoned shack with something interesting in it. My nose for vice is infallible.",
@@ -244,7 +273,7 @@
                     "requirement": {
                         "type": "give_item",
                         "itemId": "forza_mead",
-                        "quantity": 1
+                        "quantity": 5
                     },
                     "reminder_dialogue": [
                         "I can feel you holding the mead. It's unsettling. Just give it to me."

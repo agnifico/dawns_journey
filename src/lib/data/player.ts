@@ -48,6 +48,11 @@ export const player: Player = {
     isMoving: false,
     profile: {
         avatar: '/images/characters/player1.png',
+        name: 'Wanderer',
+        id: 'mage',
+        initialInventory: [],
+        equippedWeapons: [],
+        equippedRelics: []
     },
     baseStats: {
         hp: 100,

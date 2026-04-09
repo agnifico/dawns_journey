@@ -60,27 +60,6 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         enemies: [{ id: 'punching_tortoise', chance: 0.8 }, { id: 'white_wyvern', chance: 0.2 }],
         items: [{ id: 'fish', chance: 0.8 }, { id: 'coral_reef', chance: 0.2 }]
     },
-    eastern_waters: {
-        id: 'eastern_waters',
-        name: 'Eastern Waters',
-        gates: [{ element: 'Water', level: 1 }, { element: 'Wind', level: 1 }],
-        enemies: [{ id: 'aquamech_shark', chance: 0.4 }, { id: 'water_spirit_beast', chance: 0.3 }, { id: 'inkjet_ray', chance: 0.3 }],
-        items: [{ id: 'fish', chance: 0.9 }, { id: 'azurite', chance: 0.1 }]
-    },
-    wingtail_bay: {
-        id: 'wingtail_bay',
-        name: 'Wingtail Bay',
-        gates: [{ element: 'Water', level: 1 }, { element: 'Wind', level: 1 }],
-        enemies: [{ id: 'toxolotl', chance: 0.4 }, { id: 'aquamech_shark', chance: 0.4 }, { id: 'white_wyvern', chance: 0.2 }],
-        items: [{ id: 'fish', chance: 0.8 }, { id: 'coral_reef', chance: 0.2 }]
-    },
-    gwens_island: {
-        id: 'gwens_island',
-        name: "Gwen's Island",
-        gates: null,
-        enemies: [{ id: 'solis_sentinel', chance: 1.0 }],
-        items: [{ id: 'citrine', chance: 0.5 }, { id: 'gold', chance: 0.5 }]
-    },
     southern_sea: {
         id: 'southern_sea',
         name: 'Southern Sea',
@@ -109,24 +88,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         enemies: [{ id: 'greenhorn', chance: 1.0 }],
         items: [{ id: 'four_leaf_clover', chance: 0.05 }, { id: 'meat', chance: 0.95 }]
     },
-    legendary_1: {
-        id: 'legendary_1', name: 'hidden area',
-        gates: [{ element: 'Earth', level: 2 }],
-        enemyChance: 1, itemChance: 0,
-        enemies: [{ id: 'archangel_one', chance: 0.1 }], items: []
-    },
-    legendary_2: {
-        id: 'legendary_2', name: 'hidden area',
-        gates: [{ element: 'Water', level: 2 }],
-        enemyChance: 1, itemChance: 0,
-        enemies: [{ id: 'bob', chance: 0.1 }], items: []
-    },
-    legendary_3: {
-        id: 'legendary_3', name: 'hidden area',
-        gates: [{ element: 'Water', level: 3 }],
-        enemyChance: 1, itemChance: 0,
-        enemies: [{ id: 'wilhemina', chance: 0.1 }], items: []
-    },
+
     bridge: { id: 'bridge', name: 'Bridge', gates: null, enemies: [], items: [] },
     agnes_garden: { id: 'agnes_garden', name: "Agnes' Garden", gates: null, enemies: [], items: [] },
     sewers: { id: 'sewers', name: 'Sewers', gates: null, enemies: [{ id: 'toxolotl', chance: 1.0 }], items: [] },
@@ -147,8 +109,8 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         id: 'arrival_plains',
         name: 'Arrival Plains',
         gates: null,
-        enemies: [{ id: 'greenhorn', chance: 0.75 }, { id: 'woodmech_bear', chance: 0.25 }],
-        items: [{ id: 'tomato', chance: 0.25 }, { id: 'onion', chance: 0.25 }, { id: 'meat', chance: 0.25 }, { id: 'stone', chance: 0.25 }]
+        enemies: [{ id: 'greenhorn', chance: 0.65 }, { id: 'woodmech_bear', chance: 0.35 }],
+        items: [{ id: 'tomato', chance: 0.2 }, { id: 'onion', chance: 0.2 }, { id: 'meat', chance: 0.2 },]
     },
     north_beach: {
         id: 'north_beach',
@@ -175,7 +137,7 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         id: 'dragon_shrine_grounds',
         name: "Dragon's Shrine Grounds",
         gates: [{ element: 'Earth', level: 1 }],
-        enemies: [{ id: 'biceon', chance: 0.5 }, { id: 'rock_lion', chance: 0.5 }],
+        enemies: [{ id: 'white_wyvern', chance: 0.5 }, { id: 'rock_lion', chance: 0.4 }],
         items: [{ id: 'dragon_fang', chance: 0.4 }, { id: 'stone', chance: 0.4 }, { id: 'four_leaf_clover', chance: 0.2 }]
     },
     unknown_hills: {
@@ -195,21 +157,21 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
     mountain_forest2: {
         // Deeper mountain forest — harder than mountain_forest
         id: 'mountain_forest2',
-        name: 'Deep Mountain Forest',
+        name: 'Waterfall Forest',
         gates: [{ element: 'Earth', level: 2 }, { element: 'Wind', level: 1 }],
         enemies: [{ id: 'biceon', chance: 0.4 }, { id: 'forest_prowler', chance: 0.3 }, { id: 'mountain_basilisk', chance: 0.3 }],
         items: [{ id: 'wood', chance: 0.5 }, { id: 'blueberries', chance: 0.3 }, { id: 'island_herb', chance: 0.2 }]
     },
     mountain_east: {
         id: 'mountain_east',
-        name: 'Eastern Mountain',
-        gates: [{ element: 'Earth', level: 2 }, { element: 'Wind', level: 2 }],
-        enemies: [{ id: 'biceon', chance: 0.6 }, { id: 'white_wyvern', chance: 0.4 }],
-        items: [{ id: 'stone', chance: 0.4 }, { id: 'cuprum', chance: 0.4 }, { id: 'ruby', chance: 0.2 }]
+        name: '???',
+        gates: [{ element: 'Earth', level: 2 }],
+        enemyChance: 1, itemChance: 0,
+        enemies: [{ id: 'archangel_one', chance: 0.1 }], items: []
     },
     murky_water: {
         id: 'murky_water',
-        name: 'Murky Water',
+        name: 'Murky Swamp',
         gates: [{ element: 'Water', level: 1 }, { element: 'Dark', level: 1 }],
         enemies: [{ id: 'toxolotl', chance: 0.5 }, { id: 'inkjet_ray', chance: 0.5 }],
         items: [{ id: 'fish', chance: 0.6 }, { id: 'coral_reef', chance: 0.3 }, { id: 'azurite', chance: 0.1 }]
@@ -227,13 +189,13 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         id: 'northeastern_sea',
         name: 'Northeastern Sea',
         gates: [{ element: 'Water', level: 2 }, { element: 'Wind', level: 1 }],
-        enemies: [{ id: 'aquamech_shark', chance: 0.4 }, { id: 'vanguard_siren', chance: 0.3 }, { id: 'shark_soldier', chance: 0.3 }],
+        enemies: [{ id: 'bob', chance: 0.1 },{ id: 'aquamech_shark', chance: 0.3 }, { id: 'vanguard_siren', chance: 0.3 }, { id: 'shark_soldier', chance: 0.3 }],
         items: [{ id: 'fish', chance: 0.7 }, { id: 'sapphire', chance: 0.2 }, { id: 'turquoise', chance: 0.1 }]
     },
     northeast: {
         // Labelled 'northeast' in the Tiled data
         id: 'northeast',
-        name: 'Northeast',
+        name: 'Northeastern Region',
         gates: null,
         enemies: [{ id: 'punching_tortoise', chance: 0.5 }, { id: 'greenhorn', chance: 0.5 }],
         items: [{ id: 'fish', chance: 0.6 }, { id: 'feather', chance: 0.3 }, { id: 'four_leaf_clover', chance: 0.1 }]
@@ -242,14 +204,14 @@ export const regionDefinitions: { [key: string]: RegionDefinition } = {
         id: 'southeastern_sea',
         name: 'Southeastern Sea',
         gates: [{ element: 'Water', level: 2 }, { element: 'Wind', level: 2 }],
-        enemies: [{ id: 'shark_soldier', chance: 0.5 }, { id: 'vanguard_siren', chance: 0.3 }, { id: 'coral_eyes', chance: 0.2 }],
+        enemies: [{ id: 'wilhemina', chance: 0.1 }, { id: 'shark_soldier', chance: 0.4 }, { id: 'vanguard_siren', chance: 0.4 }, { id: 'coral_eyes', chance: 0.1 }],
         items: [{ id: 'fish', chance: 0.6 }, { id: 'coral_reef', chance: 0.3 }, { id: 'sapphire', chance: 0.1 }]
     },
     cold_waters: {
         id: 'cold_waters',
         name: 'Cold Waters',
         gates: [{ element: 'Water', level: 2 }, { element: 'Wind', level: 2 }],
-        enemies: [{ id: 'shark_soldier', chance: 0.4 }, { id: 'vanguard_siren', chance: 0.4 }, { id: 'water_spirit_beast', chance: 0.2 }],
+        enemies: [{ id: 'wilhemina', chance: 0.1 }, { id: 'shark_soldier', chance: 0.3 }, { id: 'vanguard_siren', chance: 0.4 }, { id: 'water_spirit_beast', chance: 0.2 }],
         items: [{ id: 'fish', chance: 0.5 }, { id: 'sapphire', chance: 0.3 }, { id: 'azurite', chance: 0.2 }]
     },
     stormy_water: {

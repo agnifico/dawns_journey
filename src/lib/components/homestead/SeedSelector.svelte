@@ -2,80 +2,57 @@
 	import type { FarmPlot as FarmPlotType } from '$lib/types';
 	import { playerStore } from '$lib/stores/playerStore';
 	import { cropDefinitions } from '$lib/data/cropDefinitions';
-	import { derived, writable } from 'svelte/store';
-	import { getAllItems, getItemById, countInventoryItem } from '$lib/services/InventoryService';
+	import { derived } from 'svelte/store';
+	import { getItemById, countInventoryItem } from '$lib/services/InventoryService';
 
 	export let plot: FarmPlotType;
-	export let useCompost: boolean;
 	export let selectedSeedId: string | null = null;
 
-	const _useCompost = writable(useCompost);
-	$: _useCompost.set(useCompost);
-
-	const allItems = getAllItems();
-
-	// Reactive list of seeds with plantability — updates when inventory or useCompost changes
-	const allPossibleSeedsWithPlantability = derived(
-		[playerStore, _useCompost],
-		([$playerStore, $currentUseCompost]) => {
-			return Object.values(cropDefinitions).map((def) => {
-				const itemDetails = getItemById(def.seedItemId);
-				// In the instanced system, count instances rather than reading .amount
-				const amount = countInventoryItem($playerStore.inventory, def.seedItemId);
-				const plantCheck = canPlant(def.seedItemId, $playerStore, $currentUseCompost);
-
+	const allPossibleSeedsWithPlantability = derived(playerStore, ($playerStore) => {
+		return Object.values(cropDefinitions)
+			.map((def) => {
+				const yieldItem  = getItemById(def.yields);
+				const amount     = countInventoryItem($playerStore.inventory, def.seedItemId);
+				const plantCheck = canPlant(def.seedItemId, $playerStore);
 				return {
-					itemId: def.seedItemId,
+					itemId:      def.seedItemId,
+					cropName:    def.name.replace(' Plant', '').replace(' Seed', ''),
 					amount,
-					details: itemDetails,
-					canPlant: plantCheck.can,
-					reason: plantCheck.reason
+					yieldItem,
+					canPlant:    plantCheck.can,
+					reason:      plantCheck.reason,
+					idealSeason: def.idealSeason,
 				};
-			});
-		}
-	);
+			})
+			.filter((s) => s.canPlant); // Only show crops the player can actually plant here
+	});
 
-	function canPlant(
-		seedItemId: string,
-		player: any,
-		currentUseCompost: boolean
-	): { can: boolean; reason: string } {
+	function canPlant(seedItemId: string, player: any): { can: boolean; reason: string } {
 		const cropDef = Object.values(cropDefinitions).find((c) => c.seedItemId === seedItemId);
-
 		if (!cropDef) return { can: false, reason: 'Crop data not found.' };
-		if (!plot) return { can: false, reason: 'No plot selected.' };
+		if (!plot)    return { can: false, reason: 'No plot selected.' };
 
-		// Check Environment
+		// Farming level gate
+		if (player.farmingLevel < cropDef.unlockLevel) {
+			return { can: false, reason: `Requires Farming Lv${cropDef.unlockLevel}` };
+		}
+
+		// Environment check
 		if (!cropDef.requiredEnvironment.includes(plot.environment)) {
-			const requiredEnvNames = cropDef.requiredEnvironment
-				.map((e) => e.replace('env_', '').replace('_', ' '))
-				.join(' or ');
-			return { can: false, reason: `Requires: ${requiredEnvNames}` };
+			return { can: false, reason: 'Wrong environment' };
 		}
 
-		// Check Plot Tech
-		const hasAllTech = cropDef.requiredTechs.every((tech) => {
-			if (tech === 'tech_compost_bin') {
-				return currentUseCompost;
-			}
-			return plot.appliedTech.includes(tech);
-		});
+		// Required plot techs (excluding compost — handled separately)
+		// TODO: Re-wire compost check once compost system is redesigned
+		const hasAllTech = cropDef.requiredTechs
+			.filter((t) => t !== 'tech_compost_bin')
+			.every((tech) => plot.appliedTech.includes(tech));
 		if (!hasAllTech) {
-			const requiredTechNames = cropDef.requiredTechs
-				.map((t) => t.replace('tech_', '').replace('_', ' '))
+			const names = cropDef.requiredTechs
+				.filter((t) => t !== 'tech_compost_bin')
+				.map((t) => t.replace('tech_', '').replace(/_/g, ' '))
 				.join(', ');
-			return { can: false, reason: `Requires: ${requiredTechNames}` };
-		}
-
-		// Check Global Upgrades (unlockedTech)
-		const hasAllUpgrades = (cropDef.requiredTechs || []).every((upgrade) =>
-			player.unlockedTech.includes(upgrade)
-		);
-		if (!hasAllUpgrades) {
-			const requiredUpgradeNames = (cropDef.requiredTechs || [])
-				.map((u) => u.replace('upgrade_', '').replace('_', ' '))
-				.join(', ');
-			return { can: false, reason: `Requires Global Upgrade: ${requiredUpgradeNames}` };
+			return { can: false, reason: `Requires: ${names}` };
 		}
 
 		return { can: true, reason: '' };
@@ -83,79 +60,149 @@
 </script>
 
 <div class="seed-selector">
-	<div class="seed-list">
-		{#each $allPossibleSeedsWithPlantability as seed (seed.itemId)}
-			{#if seed.canPlant}
-				{#if seed.details}
-					{@const hasSeeds = seed.amount > 0}
-					<button
-						class="seed-item"
-						class:selected={selectedSeedId === seed.itemId}
-						class:disabled={!hasSeeds}
-						title={hasSeeds ? seed.details.name : 'You have no seeds of this type.'}
-						on:click={() => {
-							if (hasSeeds) selectedSeedId = seed.itemId;
-						}}
-						disabled={!hasSeeds}
-					>
-						<img src={seed.details.image} alt={seed.details.name} />
-						<span>{seed.details.name.replace(' Seed', '')} (x{seed.amount})</span>
-					</button>
-				{/if}
-			{/if}
-		{:else}
-			<p>No seeds available for this plot.</p>
-		{/each}
-	</div>
+	{#if $allPossibleSeedsWithPlantability.length === 0}
+		<p class="no-seeds">No crops available for this plot.</p>
+	{:else}
+		<div class="seed-grid">
+			{#each $allPossibleSeedsWithPlantability as seed (seed.itemId)}
+				{@const hasSeeds = seed.amount > 0}
+				<button
+					class="seed-card"
+					class:selected={selectedSeedId === seed.itemId}
+					class:no-stock={!hasSeeds}
+					disabled={!hasSeeds}
+					title={hasSeeds ? seed.cropName : 'No seeds in inventory'}
+					on:click={() => { if (hasSeeds) selectedSeedId = seed.itemId; }}
+				>
+					<div class="seed-img-wrap">
+						{#if seed.yieldItem}
+							<img src={seed.yieldItem.image} alt={seed.cropName} />
+						{:else}
+							<span class="seed-fallback">?</span>
+						{/if}
+					</div>
+					<span class="seed-name">{seed.cropName}</span>
+					<span class="seed-count" class:zero={!hasSeeds}>×{seed.amount}</span>
+					{#if seed.idealSeason}
+						<span class="season-dot" title="Ideal: {seed.idealSeason}">{seed.idealSeason[0]}</span>
+					{/if}
+				</button>
+			{/each}
+		</div>
+	{/if}
 </div>
 
 <style>
 	.seed-selector {
 		width: 100%;
 	}
-	h4 {
-        margin: 0 0 0.5rem 0;
+
+	.no-seeds {
+		font-family: var(--font-family-pixel);
+		font-size: 0.7rem;
+		color: #6a8a74;
 		text-align: center;
+		padding: 1.5rem 0;
+		font-style: italic;
 	}
-	.seed-list {
-        display: grid;
-		max-height: 60px;
+
+	.seed-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+		gap: 6px;
+		max-height: 200px;
 		overflow-y: auto;
-        padding: .25rem .5rem;
-        grid-template-columns: 1fr 1fr;
-        gap: .25rem;
+		padding: 2px;
+		scrollbar-width: thin;
+		scrollbar-color: #2a3e2a transparent;
 	}
-	.seed-item {
-        display: flex;
+
+	.seed-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
 		align-items: center;
-		gap: 0.5rem;
-		background-color: #444;
-		border: 1px solid #666;
-		border-radius: 4px;
+		gap: 4px;
+		padding: 8px 6px 6px;
+		background-color: #2a3e2a;
+		border: 2px solid #1a2e1a;
+		border-radius: 8px;
 		cursor: pointer;
-		color: white;
-		text-align: left;
+		font-family: var(--font-family-pixel);
+		box-shadow: #000 0 -3px 0 0 inset;
+		transition: 0.1s all ease-in;
 	}
-	.seed-item:hover {
-		background-color: #555;
+
+	.seed-card:hover:not(:disabled) {
+		background-color: #354a35;
+		border-color: var(--color-secondary, #5a9a6a);
+		transform: translateY(-1px);
+		box-shadow: #000 0 -5px 0 0 inset;
 	}
-	.seed-item.selected {
-		border-color: yellow;
+
+	.seed-card:active:not(:disabled) {
+		transform: translateY(1px);
+		box-shadow: #000 0 -1px 0 0 inset;
 	}
-	.seed-item.disabled {
-		opacity: 0.5;
+
+	.seed-card.selected {
+		border-color: #f0d060;
+		background-color: #3a5030;
+		box-shadow: #000 0 -3px 0 0 inset, 0 0 8px rgba(240, 208, 96, 0.35);
+	}
+
+	.seed-card.no-stock {
+		opacity: 0.38;
 		cursor: not-allowed;
-		border-color: #666;
 	}
-	.seed-item.disabled:hover {
-		background-color: #444;
+
+	.seed-img-wrap {
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
-	.seed-item img {
-        position: relative;
-		width: 24px;
-		height: 24px;
+
+	.seed-img-wrap img {
+		width: 32px;
+		height: 32px;
 		image-rendering: pixelated;
+		object-fit: contain;
 	}
-    span {
-    }
+
+	.seed-fallback {
+		font-size: 1.1rem;
+		color: #6a8a74;
+	}
+
+	.seed-name {
+		font-size: 0.5rem;
+		text-align: center;
+		line-height: 1.3;
+		color: #b0c8b0;
+		text-transform: capitalize;
+		word-break: break-word;
+	}
+
+	.seed-count {
+		font-size: 0.6rem;
+		color: #80c880;
+	}
+	.seed-count.zero { color: #6a5a5a; }
+
+	/* Ideal season dot — top-right corner badge */
+	.season-dot {
+		position: absolute;
+		top: 3px;
+		right: 4px;
+		font-size: 0.45rem;
+		color: #1a1008;
+		background: linear-gradient(135deg, #f0d060, #c88020);
+		border-radius: 2px;
+		padding: 1px 3px;
+		letter-spacing: 0.05em;
+		font-family: var(--font-family-pixel);
+		box-shadow: 0 1px 0 #7a4a08;
+	}
 </style>

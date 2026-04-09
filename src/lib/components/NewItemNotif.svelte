@@ -84,9 +84,9 @@
                         </div>
                     </div>
                 {:else}
-                    <div class="notif-icon">
+                    <!-- <div class="notif-icon">
                         <img src="/game_icons/{itemActionIcons[n.type]}" alt="" />
-                    </div>
+                    </div> -->
                     <div class="notif-body">
                         <img src={n.item.image} alt="" class="item-img" />
                         <!-- <span class="notif-name">{n.item.name}</span> -->
@@ -162,6 +162,7 @@
         flex-direction: row-reverse;
 		gap: 4px;
 		z-index: 1000;
+        /* flex-wrap: wrap; */
         /* background-color: #1a1200a2; */
         /* padding-inline: 2rem; */
 	}
@@ -172,13 +173,14 @@
         align-items: center;
         gap: 0.4rem;
         background-color: var(--surface-3, #1e1e1e);
-        border: 1.5px solid #555;
+        /* border: 1.5px solid #555; */
+        background-color: #0000009e;
         border-left-width: 3px;     /* accent on left edge */
         border-radius: 6px;
         padding: 0.3rem 0.6rem 0.3rem 0.4rem;
         /* min-width: 160px; */
         max-width: 220px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        /* box-shadow: 0 4px 16px rgba(0,0,0,0.5); */
     }
 
     /* Legendary / special — full loot card */
@@ -301,7 +303,7 @@
 
     .notif-label {
         font-family: var(--font-family-pixel, monospace);
-        font-size: 0.42rem;
+        font-size: 0.5rem;
         letter-spacing: 0.12em;
         color: #facc15;
         flex-shrink: 0;
@@ -309,7 +311,7 @@
 
     .notif-name {
         font-family: var(--font-family-pixel, monospace);
-        font-size: 0.5rem;
+        font-size: 0.75rem;
         color: #eee;
         white-space: nowrap;
         overflow: hidden;
@@ -319,7 +321,7 @@
 
     .notif-qty {
         font-family: var(--font-family-pixel, monospace);
-        font-size: 0.48rem;
+        font-size: 0.75rem;
         color: var(--text-muted, #888);
         flex-shrink: 0;
     }
