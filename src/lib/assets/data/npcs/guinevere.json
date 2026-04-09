@@ -26,6 +26,12 @@
             "default": true,
             "x": 55,
             "y": 45
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "guinevere_sword_2_complete",
+            "x": 48,
+            "y": 46
         }
     ],
     "baseStats": {

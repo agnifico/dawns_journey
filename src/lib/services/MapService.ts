@@ -96,19 +96,20 @@ export function resolveNpcPosition(
         p.requiredTag === undefined || hasTag(p.requiredTag);
 
     // Priority 1: tag + phase both match
-    const tagAndPhase = candidates.find(
+    // Priority 1: tag + phase both match — last match wins (most recent story state)
+    const tagAndPhase = candidates.findLast(
         p => p.requiredTag !== undefined && phaseMatches(p) && hasTag(p.requiredTag)
     );
     if (tagAndPhase) return { x: tagAndPhase.x, y: tagAndPhase.y };
 
-    // Priority 2: tag matches, no phase restriction
-    const tagOnly = candidates.find(
+    // Priority 2: tag matches, no phase restriction — last match wins
+    const tagOnly = candidates.findLast(
         p => p.requiredTag !== undefined && p.phase === undefined && hasTag(p.requiredTag)
     );
     if (tagOnly) return { x: tagOnly.x, y: tagOnly.y };
 
-    // Priority 3: phase matches, no tag restriction
-    const phaseOnly = candidates.find(
+    // Priority 3: phase matches, no tag restriction — last match wins
+    const phaseOnly = candidates.findLast(
         p => p.requiredTag === undefined && phaseMatches(p)
     );
     if (phaseOnly) return { x: phaseOnly.x, y: phaseOnly.y };
