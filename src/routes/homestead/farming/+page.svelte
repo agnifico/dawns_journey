@@ -18,14 +18,22 @@
 	let selectedSeason: Season;
 	$: selectedSeason = $seasonStore;
 
-	let showCodex   = false;
+	let showCodex = false;
 	let showCompost = false;
 	let showDevTools = false;
 
 	const availableEnvironments = derived(playerStore, ($playerStore) => [
-		{ id: 'env_open_field',  name: 'Open Field',   unlocked: true },
-		{ id: 'env_greenhouse',  name: 'Greenhouse',   unlocked: $playerStore.unlockedTech.includes('env_greenhouse') },
-		{ id: 'env_forest_floor', name: 'Forest Floor', unlocked: $playerStore.unlockedTech.includes('env_forest_floor') },
+		{ id: 'env_open_field', name: 'Open Field', unlocked: true },
+		{
+			id: 'env_greenhouse',
+			name: 'Greenhouse',
+			unlocked: $playerStore.unlockedTech.includes('env_greenhouse')
+		},
+		{
+			id: 'env_forest_floor',
+			name: 'Forest Floor',
+			unlocked: $playerStore.unlockedTech.includes('env_forest_floor')
+		}
 	]);
 
 	const plotsInCurrentEnvironment = derived(
@@ -38,7 +46,9 @@
 			)
 	);
 
-	function handleSaveSeason() { seasonStore.setSeason(selectedSeason); }
+	function handleSaveSeason() {
+		seasonStore.setSeason(selectedSeason);
+	}
 
 	function handleLevelTest(event: Event) {
 		const isChecked = (event.target as HTMLInputElement).checked;
@@ -68,7 +78,6 @@
 
 <div class="farming-area-container">
 	<div class="top-half">
-
 		<!-- Map viewport -->
 		<div class="map-info-container">
 			<div class="map-viewport">
@@ -84,7 +93,6 @@
 
 		<!-- Dashboard -->
 		<div class="dashboard">
-
 			<!-- Season banner -->
 			<div class="season-banner">
 				<span class="season-label">It's</span>
@@ -95,7 +103,14 @@
 			<div class="action-tray">
 				<button class="forge-btn" on:click={() => (showCompost = true)}>Compost</button>
 				<button class="forge-btn" on:click={() => (showCodex = true)}>Farming Codex</button>
-				<button class="refresh-btn" on:click={() => FarmingService.refreshHomestead()} title="Refresh crops">
+				<button class="forge-btn harvest-btn" on:click={() => FarmingService.harvestAll()}>
+					Harvest All
+				</button>
+				<button
+					class="refresh-btn"
+					on:click={() => FarmingService.refreshHomestead()}
+					title="Refresh crops"
+				>
 					<img src="/game_icons/refresh.svg" alt="Refresh" />
 				</button>
 			</div>
@@ -136,11 +151,14 @@
 							</select>
 							<button class="dev-confirm" on:click={handleSaveSeason}>✓</button>
 						</div>
+						<span class="dev-note">
+							// costs 1 Time Point · needs thunders_blessing // Time Points: {$playerStore.timePoints ??
+								0}
+						</span>
 						<span class="dev-note">// season system pending</span>
 					</div>
 				{/if}
 			</div>
-
 		</div>
 	</div>
 
@@ -153,8 +171,12 @@
 		{/each}
 	</div>
 
-	{#if showCodex}   <FarmingCodex on:close={() => (showCodex = false)} />   {/if}
-	{#if showCompost} <CompostPage  on:close={() => (showCompost = false)} /> {/if}
+	{#if showCodex}
+		<FarmingCodex on:close={() => (showCodex = false)} />
+	{/if}
+	{#if showCompost}
+		<CompostPage on:close={() => (showCompost = false)} />
+	{/if}
 	<Notification />
 </div>
 
@@ -201,7 +223,9 @@
 		transition: transform 0.5s ease-in-out;
 		transform: translateY(0);
 	}
-	.map.pan-down { transform: translateY(-50%); }
+	.map.pan-down {
+		transform: translateY(-50%);
+	}
 
 	/* ── Dashboard ── */
 	.dashboard {
@@ -269,6 +293,15 @@
 		box-shadow: none;
 	}
 
+	.harvest-btn {
+		background-color: color-mix(in srgb, #6d9e5a 40%, var(--surface-3, #2a2a2a));
+		color: #b8e0a0;
+	}
+	.harvest-btn:hover {
+		background-color: #6d9e5a;
+		color: #111;
+	}
+
 	/* Refresh */
 	.refresh-btn {
 		display: flex;
@@ -278,7 +311,7 @@
 		border-radius: 6px;
 		border: 2px solid rgba(0, 0, 0, 0.3);
 		background-color: #5e948f;
-		box-shadow: rgba(0,0,0,0.35) 0 -3px 0 0 inset;
+		box-shadow: rgba(0, 0, 0, 0.35) 0 -3px 0 0 inset;
 		cursor: pointer;
 		transition: 0.15s all ease-in-out;
 	}
@@ -311,21 +344,23 @@
 		border: none;
 		border-right: 1px solid rgba(0, 0, 0, 0.2);
 		cursor: pointer;
-		box-shadow: rgba(0,0,0,0.4) 0 -4px 0 0 inset;
+		box-shadow: rgba(0, 0, 0, 0.4) 0 -4px 0 0 inset;
 		transition: 0.1s all ease-in;
 	}
-	.env-tab:last-child { border-right: none; }
+	.env-tab:last-child {
+		border-right: none;
+	}
 	.env-tab:hover:not(:disabled):not(.active) {
 		background: rgba(0, 0, 0, 0.1);
 		color: #c0e0c0;
 		padding-bottom: 8px;
-		box-shadow: rgba(0,0,0,0.4) 0 -1px 0 0 inset;
+		box-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0 0 inset;
 	}
 	.env-tab.active {
 		background: #3a5a48;
 		color: #e0f0e0;
 		padding-bottom: 8px;
-		box-shadow: rgba(0,0,0,0.3) 0 -1px 0 0 inset;
+		box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0 inset;
 		cursor: default;
 	}
 	.env-tab:disabled {
@@ -352,14 +387,18 @@
 		letter-spacing: 0.15em;
 		transition: color 0.15s;
 	}
-	.dev-toggle:hover { color: #7a9a7a; }
+	.dev-toggle:hover {
+		color: #7a9a7a;
+	}
 
 	.dev-chevron {
 		font-size: 1rem;
 		line-height: 1;
 		transition: transform 0.2s;
 	}
-	.dev-chevron.open { transform: rotate(90deg); }
+	.dev-chevron.open {
+		transform: rotate(90deg);
+	}
 
 	.dev-panel {
 		padding: 8px 10px;
@@ -377,7 +416,7 @@
 		color: #6a8a6a;
 		cursor: pointer;
 	}
-	.dev-row input[type="checkbox"] {
+	.dev-row input[type='checkbox'] {
 		accent-color: #5a8a5a;
 		width: 13px;
 		height: 13px;
@@ -401,7 +440,10 @@
 		padding: 2px 6px;
 		cursor: pointer;
 	}
-	.dev-confirm:hover { background: #3a5a3a; color: #c0e0c0; }
+	.dev-confirm:hover {
+		background: #3a5a3a;
+		color: #c0e0c0;
+	}
 	.dev-note {
 		font-size: 0.48rem;
 		color: #3a5a3a;

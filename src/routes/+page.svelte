@@ -14,27 +14,27 @@
 	import NpcViewer from '$lib/components/NpcViewer.svelte';
 	import { hideNavbar } from '$lib/stores/uiStore';
 
+	// Kept for future use
 	const groupImages = [
-		{ src: '/images/characters/group/g0.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g1.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g2.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g3.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g4.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g5.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g6.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g7.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g8.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g9.png', alt: 'Main Characters' },
+		{ src: '/images/characters/group/g0.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g1.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g2.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g3.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g4.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g5.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g6.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g7.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g8.png',  alt: 'Main Characters' },
+		{ src: '/images/characters/group/g9.png',  alt: 'Main Characters' },
 		{ src: '/images/characters/group/g10.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g11.png', alt: 'Main Characters' },
 		{ src: '/images/characters/group/g12.png', alt: 'Main Characters' },
-		{ src: '/images/characters/group/g13.png', alt: 'Main Characters' }
+		{ src: '/images/characters/group/g13.png', alt: 'Main Characters' },
 	];
-	const slideshowImages = [...groupImages];
 
 	let availableMaps: { id: string; name: string }[] = [];
-	let selectedMapId: string = '';
-	let selectedProfileId: string = 'fresh';
+	let selectedMapId   = '';
+	let selectedProfileId = 'fresh';
 
 	onMount(() => {
 		const mapModules = import.meta.glob('$lib/data/maps/final/*.json');
@@ -42,7 +42,7 @@
 			const fileName = path.split('/').pop()?.replace('.json', '') || '';
 			return { id: fileName, name: fileName.replace(/_/g, ' ') };
 		});
-		if (availableMaps.find((map) => map.id === 'dragon_island')) {
+		if (availableMaps.find((m) => m.id === 'dragon_island')) {
 			selectedMapId = 'dragon_island';
 		} else if (availableMaps.length > 0) {
 			selectedMapId = availableMaps[0].id;
@@ -50,12 +50,8 @@
 		loadMapData(get(mapStore).currentMapId);
 	});
 
-	// onMount(() => hideNavbar.set(true));
-	// onDestroy(() => hideNavbar.set(false));
-
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
-			// applyProfile(selectedProfileId);
 			applyProfile('fresh');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
@@ -74,134 +70,131 @@
 		}
 	}
 
-	function continueGame() {
-		goto('/map');
-	}
+	function continueGame() { goto('/map'); }
 </script>
 
-<main class="new-player-view" class:initialized={$playerStore.isInitialized}>
-	<!-- ============================================================
-	     DESKTOP LAYOUT (unchanged)
-	     ============================================================ -->
-	<div class="overlay desktop-only">
-		<div class="grid-container">
-			<div class="grid-box div1">
-				<!-- <h1>Dawn's <br />Journey</h1> -->
-				<img class="logo" src="/dj_logo.svg" alt="" srcset="" />
-				<p>A serverless, no database browser based game.</p>
-				<p class="tagline">
-					Fully unlockable. Fully completable. A game with a start and an end — because there's
-					genuine peace in that, and we've forgotten what it feels like.
-				</p>
-			</div>
-			<div class="grid-box div2">
-				<NpcViewer />
-			</div>
-			<div class="grid-box div5">
-				<ImageSlideshow images={slideshowImages} />
-			</div>
-			<div class="grid-box div4">
-				<div class="video-container">
-					<div class="video-aspect-ratio">
-						<video autoplay muted loop playsinline class="gameplay-video">
-							<source src="/videos/video_v1.mp4" type="video/mp4" />
-							Your browser does not support the video tag.
-						</video>
-					</div>
+<main class="home" class:initialized={$playerStore.isInitialized}>
+
+	<!-- ================================================================
+	     DESKTOP LAYOUT
+	     ================================================================ -->
+	<div class="desktop-only desktop-root">
+
+		<!-- Topography backdrop — two copies tiled, animating slowly left -->
+		<div class="topo-backdrop" aria-hidden="true">
+			<img src="/topography.svg" alt="" class="topo-tile" />
+			<img src="/topography.svg" alt="" class="topo-tile" />
+		</div>
+		<!-- Scrim over topo to keep it very subtle -->
+		<div class="topo-scrim" aria-hidden="true" />
+
+		<!-- Three-column layout -->
+		<div class="d-layout">
+
+			<!-- ── LEFT: Logo + tagline + CTAs ── -->
+			<div class="d-left">
+				<img class="d-logo" src="/dj_logo.svg" alt="Dawn's Journey" />
+
+				<div class="d-tagline-block">
+					<p class="d-tagline-main">A serverless, no database browser based game.</p>
+					<p class="d-tagline-sub">
+						Fully unlockable. Fully completable. A game with a start and an end —
+						because there's genuine peace in that, and we've forgotten what it feels like.
+					</p>
 				</div>
-			</div>
-			<div class="grid-box div6">
-				{#if $playerStore.isInitialized}
-					<button class="start-game-button" on:click={continueGame}>Continue Game</button>
-				{:else}
-					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}
-						>New Game</button
-					>
-					<button
-						class="start-game-button exh-mode-btn"
-						on:click={exhibitionModeStart}
-						disabled={!selectedMapId}
-					>
-						Exhibition Mode
-						<p>
-							Start with everything unlocked, allowing you to freely look around all parts of this
-							game.
-						</p>
-					</button>
-				{/if}
-			</div>
-			<div class="grid-box div7">
-				<h3>Game Actions</h3>
-				<div class="game-actions">
+
+				<div class="d-cta-stack">
 					{#if $playerStore.isInitialized}
-						<button on:click={() => goto('/arena')}>Arena</button>
-						<button on:click={() => goto('/homestead/workshop')}>Workshop</button>
-						<button on:click={() => goto('/homestead/farming')}>Farming</button>
-						<button on:click={() => goto('/journal')}>Journal</button>
-						<button on:click={() => goto('/shop')}>Shop</button>
-						<button on:click={() => goto('/inventory')}>Inventory</button>
-						<!-- <br /> -->
-						<button on:click={SaveLoadService.saveGame} class="save">Save Game</button>
-						<button on:click={SaveLoadService.loadGame}>Load Game</button>
-						<button on:click={SaveLoadService.clearSave} class="danger">Delete Save</button>
-						<button on:click={() => goto('/settings')}>Settings</button>
-						<button on:click={() => goto('/secret')}>Vault</button>
+						<button class="d-btn primary" on:click={continueGame}>▶ Continue Game</button>
+						<div class="d-game-actions">
+							<button on:click={() => goto('/arena')}>Arena</button>
+							<button on:click={() => goto('/homestead/workshop')}>Workshop</button>
+							<button on:click={() => goto('/homestead/farming')}>Farming</button>
+							<button on:click={() => goto('/journal')}>Journal</button>
+							<button on:click={() => goto('/shop')}>Shop</button>
+							<button on:click={() => goto('/inventory')}>Inventory</button>
+							<button on:click={() => goto('/settings')}>Settings</button>
+							<button on:click={() => goto('/secret')}>Vault</button>
+						</div>
+						<div class="d-save-row">
+							<button class="d-save save"   on:click={SaveLoadService.saveGame}>Save</button>
+							<button class="d-save"          on:click={SaveLoadService.loadGame}>Load</button>
+							<button class="d-save danger"  on:click={SaveLoadService.clearSave}>Delete</button>
+						</div>
 					{:else}
-						<button on:click={SaveLoadService.loadGame}>Load Game</button>
+						<button class="d-btn primary" on:click={startNewGame} disabled={!selectedMapId}>
+							▶ New Game
+						</button>
+						<button class="d-btn secondary" on:click={exhibitionModeStart} disabled={!selectedMapId}>
+							Exhibition Mode
+						</button>
+						<p class="d-exh-note">Start with everything unlocked to freely explore the game.</p>
 					{/if}
 				</div>
+
+				<div class="d-studio">
+					<img class="d-studio-logo" src="/Logo_Main.svg" alt="jxnesforge studio" />
+					<a href="https://www.junesforge.com/" target="_blank" class="d-studio-link">
+						jxnesforge studio
+					</a>
+					<div class="spacer"></div>
+					<a href="/devsnote" target="_blank" class="d-studio-link">
+						/ why i built this 
+					</a>
+					<a href="/devsnote2" target="_blank" class="d-studio-link">
+						/ my journey
+					</a>
+				</div>
 			</div>
-			<div class="grid-box div8">
-				<img class="banner" src="/Logo_Main.svg" alt="" srcset="" />
-				<a href="https://www.junesforge.com/" target="_blank"> jxnesforge studio </a>
+
+			<!-- ── CENTRE: Portrait video ── -->
+			<div class="d-centre">
+				<div class="d-video-frame">
+					<video autoplay muted loop playsinline controls class="d-video">
+						<source src="/videos/video_v1.mp4" type="video/mp4" />
+					</video>
+					<span class="corner tl" aria-hidden="true" />
+					<span class="corner tr" aria-hidden="true" />
+					<span class="corner bl" aria-hidden="true" />
+					<span class="corner br" aria-hidden="true" />
+				</div>
 			</div>
+
+			<!-- ── RIGHT: NPC viewer ── -->
+			<div class="d-right">
+				<div class="d-npc-card">
+					<NpcViewer />
+				</div>
+			</div>
+
 		</div>
 	</div>
 
-	<!-- ============================================================
-	     MOBILE LAYOUT
-	     ============================================================ -->
+	<!-- ================================================================
+	     MOBILE LAYOUT (unchanged)
+	     ================================================================ -->
 	<div class="mobile-only mobile-root">
-		<!-- SECTION 1: Hero — full bleed slideshow + title + primary CTA -->
 		<section class="m-section m-hero">
-			<!-- Slideshow bleeds as background -->
 			<div class="m-hero-bg">
-				<!-- <ImageSlideshow images={slideshowImages} /> -->
 				<div class="video-aspect-ratio video-m">
 					<video autoplay muted loop playsinline class="gameplay-video">
 						<source src="/videos/video_v1.mp4" type="video/mp4" />
-						Your browser does not support the video tag.
 					</video>
 				</div>
 			</div>
-			<!-- Gradient scrim so text is readable -->
 			<div class="m-hero-scrim"></div>
-
 			<div class="m-hero-content">
-				<!-- <div class="m-title-block">
-					<h1>Dawn's<br />Journey</h1>
-					<img class="logo" src="/dj_logo.svg" alt="" srcset="" />
-					<p>A serverless browser RPG.</p>
-				</div> -->
-
 				{#if $playerStore.isInitialized}
-					<button class="m-cta-primary" on:click={continueGame}> ▶ Continue Game </button>
-					<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}> Load Save </button>
+					<button class="m-cta-primary" on:click={continueGame}>▶ Continue Game</button>
+					<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}>Load Save</button>
 				{:else}
 					<div class="m-new-game-block">
-						<!-- Profile selector: horizontal scroll row -->
 						<span class="m-section-label">Starting Mode:</span>
 						<div class="m-profile-row">
 							{#each profiles as profile (profile.id)}
 								<label class="m-radio-label" class:selected={selectedProfileId === profile.id}>
-									<!-- <img src={profile.avatar} alt={profile.name} /> -->
 									<span>{profile.name}</span>
-									<input
-										type="radio"
-										name="m-profile-select"
-										value={profile.id}
-										bind:group={selectedProfileId}
-									/>
+									<input type="radio" name="m-profile-select" value={profile.id} bind:group={selectedProfileId} />
 								</label>
 							{/each}
 						</div>
@@ -214,38 +207,30 @@
 					</div>
 				{/if}
 			</div>
-
-			<!-- Scroll hint -->
 			<div class="m-scroll-hint">↓</div>
 		</section>
 
-		<!-- SECTION 2: Game Actions -->
 		{#if $playerStore.isInitialized}
 			<section class="m-section m-actions">
 				<p class="m-section-label">Game Actions</p>
 				<div class="m-actions-grid">
 					<button class="m-action-btn" on:click={() => goto('/map')}>🗺 Map</button>
 					<button class="m-action-btn" on:click={() => goto('/arena')}>⚔ Arena</button>
-					<button class="m-action-btn" on:click={() => goto('/homestead/workshop')}
-						>🔨 Workshop</button
-					>
-					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}
-						>🌱 Farming</button
-					>
+					<button class="m-action-btn" on:click={() => goto('/homestead/workshop')}>🔨 Workshop</button>
+					<button class="m-action-btn" on:click={() => goto('/homestead/farming')}>🌱 Farming</button>
 					<button class="m-action-btn" on:click={() => goto('/journal')}>📖 Journal</button>
 					<button class="m-action-btn" on:click={() => goto('/shop')}>🏪 Shop</button>
 					<button class="m-action-btn" on:click={() => goto('/settings')}>⚙ Settings</button>
 					<button class="m-action-btn" on:click={() => goto('/secret')}>🔒 Vault</button>
 				</div>
 				<div class="m-save-row">
-					<button class="m-save-btn save" on:click={SaveLoadService.saveGame}>💾 Save Game</button>
-					<button class="m-save-btn" on:click={SaveLoadService.loadGame}>📂 Load</button>
-					<button class="m-save-btn danger" on:click={SaveLoadService.clearSave}>🗑 Delete</button>
+					<button class="m-save-btn save"   on:click={SaveLoadService.saveGame}>💾 Save</button>
+					<button class="m-save-btn"          on:click={SaveLoadService.loadGame}>📂 Load</button>
+					<button class="m-save-btn danger"  on:click={SaveLoadService.clearSave}>🗑 Delete</button>
 				</div>
 			</section>
 		{/if}
 
-		<!-- SECTION 3: Characters -->
 		<section class="m-section m-characters">
 			<p class="m-section-label">Characters</p>
 			<div class="m-npc-wrapper">
@@ -256,687 +241,461 @@
 </main>
 
 <style>
-	/* ============================================================
+	/* ================================================================
 	   SHARED
-	   ============================================================ */
-	.new-player-view {
+	   ================================================================ */
+	.home {
 		position: relative;
 		width: 100%;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		color: var(--color-text);
+		background: #0e0e0e;
 		overflow: hidden;
-		background-color: #141414;
-	}
-	a {
-		text-decoration: 0;
-		color: unset;
 	}
 
-	/* ============================================================
-	   DESKTOP (unchanged)
-	   ============================================================ */
-	.mobile-only {
-		display: none;
+	/* ================================================================
+	   DESKTOP
+	   ================================================================ */
+	.desktop-only { display: flex; }
+	.mobile-only  { display: none; }
+
+	@media (max-width: 768px) {
+		.desktop-only { display: none; }
+		.mobile-only  { display: block; }
 	}
-	.desktop-only {
-		display: flex;
+
+	.desktop-root {
+		position: relative;
 		width: 100%;
 		height: 100%;
+		flex-direction: column;
+		overflow: hidden;
 	}
 
-	.overlay {
+	/* ── Topography backdrop ── */
+	.topo-backdrop {
 		position: absolute;
 		inset: 0;
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		color: white;
-		width: 100%;
-		height: 100%;
-	}
-
-	.grid-container {
-		position: relative;
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		grid-template-rows: repeat(5, 1fr);
-		gap: 1rem;
-		width: 90%;
-		height: 90%;
+		flex-direction: row;
+		/* Two tiles side by side, animate translateX by -50% to scroll one full width */
+		animation: topoScroll 90s linear infinite;
+		pointer-events: none;
 		z-index: 0;
-	}
-
-	.grid-box {
-		background-color: var(--color-surface-2);
-		border-radius: 18px;
-		border: 3px solid #00000056;
-		box-shadow: #00000056 0 -6px 0 0px inset;
-		padding: 1.5rem;
-		font-family: var(--font-family-pixel);
-		color: var(--color-text);
-		box-sizing: border-box;
-		width: 100%;
+		/* Make the pair wide enough that the seam is never visible */
+		width: 200%;
 		height: 100%;
 	}
 
-	.grid-box h1 {
-		font-family: 'DePixel', monospace;
-		letter-spacing: -0.5rem;
-		text-transform: uppercase;
-		font-weight: 600;
-		color: #e9d9ca;
-		margin: 0;
-		padding: 0;
-		margin-bottom: 2rem;
-		font-size: 4rem;
-		text-align: right;
-		line-height: 4.5rem;
+	.topo-tile {
+		width: 50%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		/* Very subtle — map vibe without distraction */
+		opacity: 0.055;
+		filter: invert(1) sepia(0.3) hue-rotate(60deg);
+		flex-shrink: 0;
 	}
 
-	.grid-box p {
-		font-size: 1em;
+	@keyframes topoScroll {
+		from { transform: translateX(0); }
+		to   { transform: translateX(-50%); }
 	}
 
-	.grid-box h3 {
-		font-family: var(--font-family-pixel);
-		margin-top: 0;
-		margin-bottom: 1rem;
-		font-size: 1.2em;
+	/* Directional scrim: darker at edges, clearest in the video centre */
+	.topo-scrim {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background:
+			radial-gradient(ellipse 60% 80% at 50% 50%, transparent 0%, rgba(14,14,14,0.5) 100%),
+			linear-gradient(to right,
+				rgba(14,14,14,0.88) 0%,
+				rgba(14,14,14,0.3)  25%,
+				rgba(14,14,14,0.1)  50%,
+				rgba(14,14,14,0.3)  75%,
+				rgba(14,14,14,0.88) 100%
+			),
+			linear-gradient(to bottom,
+				rgba(14,14,14,0.7) 0%,
+				transparent 12%,
+				transparent 88%,
+				rgba(14,14,14,0.7) 100%
+			);
+		pointer-events: none;
 	}
 
-	.profile-selector {
-		display: flex;
-		/* flex-direction: column; */
-		flex-wrap: wrap;
-		gap: 10px;
-	}
-
-	.radio-label {
-		border-radius: 5px;
-		background-color: #333;
-		color: #fff;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		/* flex-direction: column; */
-		transition: 0.2s ease-in all;
-		padding: 0.5rem;
-		width: fit-content;
-	}
-	.radio-label img {
-		filter: saturate(0);
-		height: 50px;
-		width: 50px;
-	}
-	.radio-label:hover img {
-		filter: saturate(0) brightness(1.1);
-	}
-	.radio-label.selected {
-		background-color: hsla(0, 0%, 100%, 0.5);
-	}
-	.radio-label.selected img {
-		filter: saturate(1);
-	}
-	.radio-label.selected p {
-		color: #222;
-	}
-	.radio-label input[type='radio'] {
-		display: none;
-	}
-
-	.avatar {
+	/* ── Three-column grid ── */
+	.d-layout {
 		position: relative;
-		max-width: 120px;
-		max-height: 120px;
-		margin-right: 0.5rem;
-		image-rendering: auto;
+		z-index: 2;
+		width: 100%;
+		height: 100%;
+		display: grid;
+		grid-template-columns: 1fr minmax(0, 320px) 1fr;
+		gap: 0;
+		align-items: center;
+		padding: 2rem 2.5rem;
+		box-sizing: border-box;
+		max-width: 1400px;
+		margin: 0 auto;
 	}
 
-	.game-actions {
-		width: 100%;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	/* ── LEFT ── */
+	.d-left {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding-right: 2.5rem;
+		height: 100%;
+		justify-content: center;
+	}
+
+	.d-logo {
+		width: min(280px, 100%);
+		height: auto;
+	}
+
+	.d-tagline-block {
+		display: flex;
+		flex-direction: column;
 		gap: 0.5rem;
 	}
-	.game-actions button {
-		font-family: var(--font-family-pixel);
-		background-color: var(--color-secondary);
-		color: var(--text-white);
-		border: none;
-		padding: 0.5rem 1rem;
+
+	.d-tagline-main {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.85rem;
+		color: #c8b89a;
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	.d-tagline-sub {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		color: #6a5a44;
+		margin: 0;
+		line-height: 1.7;
+	}
+
+	.d-cta-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.d-btn {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.9rem;
+		letter-spacing: 0.06em;
+		border-radius: 8px;
+		cursor: pointer;
+		padding: 0.75rem 1.25rem 1rem;
+		border: 2px solid transparent;
+		box-shadow: rgba(0,0,0,0.5) 0 -4px 0 0 inset;
+		transition: 0.12s all ease-in;
+		width: 100%;
+	}
+	.d-btn:hover:not(:disabled) { padding-bottom: 0.75rem; box-shadow: rgba(0,0,0,0.5) 0 -1px 0 0 inset; }
+	.d-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; padding-bottom: 0.75rem; }
+	.d-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+	.d-btn.primary   { background: #435e52; color: #e9d9ca; border-color: rgba(0,0,0,0.35); }
+	.d-btn.primary:hover:not(:disabled) { background: #4e6e60; }
+	.d-btn.secondary {
+		background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.55);
+		border-color: rgba(255,255,255,0.09); box-shadow: rgba(0,0,0,0.4) 0 -3px 0 0 inset;
+		font-size: 0.8rem;
+	}
+	.d-btn.secondary:hover:not(:disabled) { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+
+	.d-exh-note {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		color: #3a3a2a;
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	.d-game-actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 5px;
+	}
+	.d-game-actions button {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		background: rgba(255,255,255,0.04);
+		color: rgba(255,255,255,0.5);
+		border: 1px solid rgba(255,255,255,0.07);
 		border-radius: 6px;
+		padding: 0.5rem 0.75rem 0.7rem;
+		cursor: pointer;
+		box-shadow: rgba(0,0,0,0.4) 0 -2px 0 0 inset;
+		transition: 0.1s all ease-in;
+		text-align: left;
+	}
+	.d-game-actions button:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); padding-bottom: 0.5rem; box-shadow: none; }
+	.d-game-actions button:active { transform: translateY(1px); }
+
+	.d-save-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 5px; }
+	.d-save {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		background: rgba(255,255,255,0.04);
+		color: rgba(255,255,255,0.4);
+		border: 1px solid rgba(255,255,255,0.06);
+		border-radius: 6px;
+		padding: 0.45rem 0.5rem 0.65rem;
+		cursor: pointer;
+		box-shadow: rgba(0,0,0,0.4) 0 -2px 0 0 inset;
+		transition: 0.1s all ease-in;
+	}
+	.d-save.save   { background: rgba(67,94,82,0.35); color: #8acc8a; border-color: rgba(67,94,82,0.35); }
+	.d-save.danger { color: #c07070; }
+	.d-save:hover  { background: rgba(255,255,255,0.08); color: #fff; }
+	.d-save.save:hover { background: rgba(67,94,82,0.55); }
+	.d-save.danger:hover { background: rgba(160,50,50,0.3); color: #f09090; }
+	.d-save:active { transform: translateY(1px); box-shadow: none; }
+
+	.d-studio { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 0.5rem; }
+	.d-studio-logo { width: 28px; height: 28px; opacity: 0.4; }
+	.d-studio-link { font-family: var(--font-family-pixel, monospace); font-size: 0.75rem; color: #3a3a2a; text-decoration: none; transition: color 0.15s; }
+	.d-studio-link:hover { color: #8a7a5a; }
+	.spacer {
+		flex-grow: 1;
+	}
+
+	/* ── CENTRE: Video ── */
+	.d-centre {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 1.5rem 0.5rem;
+		box-sizing: border-box;
+	}
+
+	.d-video-frame {
+		position: relative;
+		width: 100%;
+		max-width: 300px;
+		border-radius: 16px;
+		overflow: hidden;
+		border: 2px solid rgba(200,169,110,0.2);
+		box-shadow:
+			0 0 0 1px rgba(0,0,0,0.6),
+			0 0 40px rgba(200,169,110,0.06),
+			0 24px 60px rgba(0,0,0,0.7),
+			rgba(0,0,0,0.5) 0 -6px 0 0 inset;
+	}
+
+	.d-video {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: calc(100vh - 6rem);
+		object-fit: contain;
+		background: #000;
+	}
+
+	.corner {
+		position: absolute;
+		width: 14px;
+		height: 14px;
+		border-color: rgba(200,169,110,0.55);
+		border-style: solid;
+		pointer-events: none;
+		z-index: 2;
+	}
+	.corner.tl { top: 6px;    left: 6px;  border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
+	.corner.tr { top: 6px;    right: 6px; border-width: 2px 2px 0 0; border-radius: 0 2px 0 0; }
+	.corner.bl { bottom: 6px; left: 6px;  border-width: 0 0 2px 2px; border-radius: 0 0 0 2px; }
+	.corner.br { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
+
+	/* ── RIGHT: NPC card ── */
+	.d-right {
+		display: flex;
+		flex-direction: column;
+		padding-left: 2.5rem;
+		height: 100%;
+		justify-content: center;
+	}
+
+	/* The card is now borderless — NpcViewer handles its own visual design */
+	.d-npc-card {
+		width: 100%;
+		/* Fill available height between top/bottom padding of d-layout */
+		height: calc(100vh - 4rem);
+		max-height: 620px;
+		min-height: 360px;
+		overflow: hidden;
+	}
+
+	/* ================================================================
+	   MOBILE (unchanged)
+	   ================================================================ */
+	.mobile-root {
+		height: 100%;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.m-section {
+		min-height: 100svh;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.m-hero { overflow: hidden; }
+
+	.m-hero-bg { position: absolute; inset: 0; z-index: 0; }
+
+	.video-aspect-ratio { width: 100%; height: 100%; }
+
+	.video-aspect-ratio.video-m,
+	.gameplay-video {
+		width: 100% !important;
+		height: 100% !important;
+		border: none !important;
+		object-fit: cover !important;
+	}
+
+	.m-hero-scrim {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 40%, rgba(20,20,20,0.85) 70%, rgba(20,20,20,0.97) 100%);
+	}
+
+	.m-hero-content {
+		position: relative;
+		z-index: 2;
+		padding: 2rem 1.5rem 5rem;
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.m-new-game-block { display: flex; flex-direction: column; gap: 0.75rem; }
+
+	.m-section-label {
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+		color: #cd804d;
+		margin: 0;
+	}
+
+	.m-profile-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+	.m-profile-row::-webkit-scrollbar { display: none; }
+	.m-profile-desc { font-family: var(--font-family-pixel); font-size: 0.75rem; }
+
+	.m-radio-label {
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 5px;
+		padding: 8px;
+		border-radius: 10px;
+		background: rgba(255,255,255,0.07);
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition: all 0.18s ease;
+	}
+	.m-radio-label span { font-family: var(--font-family-pixel); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+	.m-radio-label input { display: none; }
+	.m-radio-label.selected { background: rgba(205,128,77,0.25); border-color: #cd804d; }
+	.m-radio-label.selected span { color: #cd804d; }
+
+	.m-cta-primary {
+		font-family: var(--font-family-pixel);
+		font-size: 1rem;
+		background-color: #435e52;
+		color: #e9d9ca;
+		border: none;
+		border-radius: 10px;
+		padding: 1rem 1.5rem;
+		cursor: pointer;
+		width: 100%;
+		box-shadow: #00000056 0 -4px 0 3px inset, 0 4px 20px rgba(0,0,0,0.4);
+		transition: 150ms all ease-in-out;
+		letter-spacing: 0.05em;
+	}
+	.m-cta-primary:active { transform: translateY(3px); box-shadow: #00000056 0 -1px 0 2px inset; }
+	.m-cta-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+	.m-cta-secondary {
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		background: rgba(255,255,255,0.07);
+		color: rgba(255,255,255,0.6);
+		border: 1px solid rgba(255,255,255,0.12);
+		border-radius: 8px;
+		padding: 0.6rem 1rem;
+		cursor: pointer;
+		width: 100%;
+		transition: 150ms all ease-in-out;
+	}
+	.m-cta-secondary:active { background: rgba(255,255,255,0.12); }
+
+	.m-scroll-hint {
+		position: absolute;
+		bottom: 1.5rem;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 2;
+		font-size: 1.2rem;
+		color: rgba(255,255,255,0.3);
+		animation: bounce 2s ease-in-out infinite;
+	}
+	@keyframes bounce {
+		0%, 100% { transform: translateX(-50%) translateY(0); }
+		50%       { transform: translateX(-50%) translateY(6px); }
+	}
+
+	.m-actions { min-height: 100svh; background-color: #1a1a1a; padding: 3rem 1.5rem 2rem; display: flex; flex-direction: column; gap: 1.25rem; justify-content: center; }
+	.m-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+
+	.m-action-btn {
+		font-family: var(--font-family-pixel);
+		font-size: 0.75rem;
+		background-color: var(--color-secondary, #3a3a3a);
+		color: var(--text-white, #fff);
+		border: none;
+		border-radius: 10px;
+		padding: 1rem 0.75rem;
 		cursor: pointer;
 		box-shadow: #00000056 0 -3px 0 3px inset;
 		transition: 150ms all ease-in-out;
+		text-align: left;
+		min-height: 52px;
 	}
-	.game-actions button:hover {
-		transform: translateY(1px);
-		box-shadow: #00000056 0 -2px 0 2px inset;
-	}
-	.game-actions button.danger:hover {
-		background-color: #c53030;
-	}
-	.game-actions button.save {
-		background-color: #435e52;
-		grid-column: span 2 / span 1;
-	}
+	.m-action-btn:active { transform: translateY(2px); box-shadow: #00000056 0 -1px 0 2px inset; }
 
-	.start-game-button {
-		box-sizing: border-box;
-		/* height: 100px; */
-		flex-grow: 1;
-		padding: 1rem;
+	.m-save-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.6rem; }
+	.m-save-btn {
 		font-family: var(--font-family-pixel);
-		font-size: 1.8rem;
-		color: #e9d9ca;
-		background-color: #435e52;
-		border-radius: 18px;
-		border: 3px solid #00000056;
-		box-shadow: #00000056 0 -6px 0 0px inset;
-		transition: 0.1s all ease-in;
-	}
-	.start-game-button:hover {
-		transform: translateY(2px);
-		filter: brightness(1.4) contrast(1.5);
-		box-shadow:
-			#00000056 0 -6px 0px -4px inset,
-			color-mix(in srgb, #00000056 50%, #435e52 50%) 0px -2px 0 0px;
-		/* background-color: var(--color-accent); */
-	}
-	.exh-mode-btn {
-		p {
-			color: #cd804d;
-			font-size: 0.75rem;
-			visibility: hidden;
-			opacity: 0;
-			transition: 0.1s all ease;
-		}
-		font-size: 1rem;
-		width: 25%;
-		/* flex-grow: 0; */
-		overflow: hidden;
-		&:hover {
-			text-align: left;
-			padding-top: 1.5rem;
-			width: 100%;
-			background-color: #2e2e2e;
-			color: #e9d9ca;
-			box-shadow:
-				#00000056 0 -6px 0px -4px inset,
-				color-mix(in srgb, #00000056 50%, #2e2e2e 50%) 0px -2px 0 0px;
-			P {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-	}
-
-	.banner {
-		height: 100px;
-		image-rendering: auto;
-		/* filter: saturate(0) contrast(0) brightness(0); */
-	}
-
-	.banner-m {
-		width: 100%;
-		height: 50%;
-		object-fit: contain;
-		image-rendering: auto;
-	}
-
-	.logo {
-		height: 100%;
-		/* width: 100%; */
-		margin-bottom: auto;
-		filter: brightness(1) contrast(1.2);
-		padding-bottom: 1rem;
-	}
-
-	.div1 {
-		grid-column: span 2 / span 2;
-		grid-row: span 2 / span 2;
-		/* background-color: #435e52; */
+		font-size: 0.75rem;
+		background-color: var(--color-secondary, #3a3a3a);
+		color: var(--text-white, #fff);
 		border: none;
-		box-shadow: none;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
-		p {
-			text-align: right;
-		}
-		p.tagline {
-			padding-top: 0.5rem;
-			width: 80%;
-			color: var(--orange);
-			font-size: 0.75rem;
-		}
+		border-radius: 8px;
+		padding: 0.75rem 0.5rem;
+		cursor: pointer;
+		box-shadow: #00000056 0 -2px 0 2px inset;
+		transition: 150ms all ease-in-out;
 	}
-	.div2 {
-		grid-column: span 2 / span 2;
-		grid-row: span 2 / span 2;
-		grid-column-start: 3;
-		background-color: #2e2e2e;
-	}
-	.div4 {
-		/* grid-row: span 3 / span 3; */
-		grid-column-start: 5;
-		background-color: #e9d9ca;
-		/* background-color: #e9d9ca; */
-		color: #cd804d;
-		padding: 0;
-		object-fit: contain;
-		/* border: none; */
-		height: fit-content;
-		overflow: hidden;
-	}
-	.div5 {
-		grid-column: span 2 / span 2;
-		grid-row: span 3 / span 3;
-		grid-row-start: 3;
-		background-color: #cd804d;
-		padding: 0.5rem;
-		padding-bottom: 1rem;
-		overflow: hidden;
-	}
-	.div6 {
-		padding: 0;
-		position: relative;
-		grid-column: span 2 / span 2;
-		grid-column-start: 3;
-		grid-row-start: 3;
-		/* grid-row: span 2 / span ; */
-		/* overflow: hidden; */
-		display: flex;
-		gap: 1rem;
-		background-color: transparent;
-		border: none;
-		border-radius: 0;
-		box-shadow: none;
-		justify-content: space-between;
-	}
-	.div7 {
-		grid-column: span 2 / span 2;
-		grid-row: span 2 / span 2;
-		grid-column-start: 3;
-		grid-row-start: 4;
+	.m-save-btn.save { background-color: #435e52; }
+	.m-save-btn.danger:active { background-color: #c53030; }
+	.m-save-btn:active { transform: translateY(2px); }
 
-		color: #222;
-		/* overflow: scroll; */
-		background-color: #cd804d;
-		display: flex;
-		flex-direction: column;
-		/* justify-content: center; */
-		align-items: center;
-		p {
-			font-family: 'Lexend';
-			text-align: left;
-			font-size: 1.1rem;
-		}
-	}
-	.div8 {
-		/* grid-row: span 2 / span 2; */
-		grid-column-start: 5;
-		grid-row-end: 6;
-		/* height: fit-content; */
-		/* background-color: #2e2e2e; */
-		/* border: none; */
-		box-shadow: none;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.gameplay-video {
-		width: 100%;
-		height: 100%;
-		object-fit: cover; /* Ensures the video fills the 1080x1920 area */
-		display: block;
-		background-position: bottom center;
-	}
-
-	.video-aspect-ratio {
-		aspect-ratio: 9 / 16;
-		width: auto;
-		height: 100%; /* Fixes height and lets width scale to 9:16 */
-		/* background: #000; */
-		/* border: 4px solid #333; */
-		/* border-radius: 20px; */
-		overflow: hidden;
-		/* box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); */
-	}
-
-	
-	/* ============================================================
-	MOBILE
-	============================================================ */
-	@media (max-width: 768px) {
-		.desktop-only {
-			display: none !important;
-		}
-		.mobile-only {
-			display: flex;
-		}
-		
-		/* On very short mobile screens, we ensure it doesn't overflow */
-		.video-aspect-ratio {
-			height: 20vh;
-		}
-
-		.new-player-view {
-			overflow-y: auto;
-			align-items: stretch;
-			justify-content: flex-start;
-		}
-
-		/* ---- Root ---- */
-		.mobile-root {
-			flex-direction: column;
-			width: 100%;
-			min-height: 100%;
-			overflow-y: auto;
-			scroll-snap-type: y mandatory;
-			-webkit-overflow-scrolling: touch;
-		}
-
-		/* ---- Sections ---- */
-		.m-section {
-			scroll-snap-align: start;
-			flex-shrink: 0;
-			box-sizing: border-box;
-			width: 100%;
-		}
-
-		/* ---- HERO ---- */
-		.m-hero {
-			position: relative;
-			min-height: 100svh;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-end;
-			overflow: hidden;
-		}
-
-		/* Slideshow fills entire hero */
-		.m-hero-bg {
-			position: absolute;
-			inset: 0;
-			z-index: 0;
-		}
-
-		/* Strip slideshow of any internal padding/border for full bleed */
-		.m-hero-bg :global(*) {
-			width: 100% !important;
-			height: 100% !important;
-			border-radius: 0 !important;
-			border: none !important;
-			object-fit: cover !important;
-		}
-
-		/* Gradient scrim — heavy at bottom where text sits */
-		.m-hero-scrim {
-			position: absolute;
-			inset: 0;
-			z-index: 1;
-			background: linear-gradient(
-				to bottom,
-				rgba(0, 0, 0, 0.1) 0%,
-				rgba(0, 0, 0, 0.2) 40%,
-				rgba(20, 20, 20, 0.85) 70%,
-				rgba(20, 20, 20, 0.97) 100%
-			);
-		}
-
-		.m-hero-content {
-			position: relative;
-			z-index: 2;
-			padding: 2rem 1.5rem 5rem;
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-		}
-
-		.m-title-block h1 {
-			font-family: 'Lexend', monospace;
-			font-size: 3.2rem;
-			font-weight: 700;
-			text-transform: uppercase;
-			line-height: 1;
-			color: #e9d9ca;
-			margin: 0 0 0.25rem;
-			text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
-		}
-
-		.m-title-block p {
-			font-family: var(--font-family-pixel);
-			font-size: 0.7rem;
-			color: rgba(255, 255, 255, 0.5);
-			margin: 0;
-			letter-spacing: 0.05em;
-			text-align: center;
-		}
-
-		/* Profile selector — horizontal scroll */
-		.m-new-game-block {
-			display: flex;
-			flex-direction: column;
-			gap: 0.75rem;
-		}
-
-		.m-section-label {
-			font-family: var(--font-family-pixel);
-			font-size: 0.6rem;
-			letter-spacing: 0.15em;
-			text-transform: uppercase;
-			color: #cd804d;
-			margin: 0;
-		}
-
-		.m-profile-row {
-			display: flex;
-			gap: 10px;
-			overflow-x: auto;
-			padding-bottom: 4px;
-			-webkit-overflow-scrolling: touch;
-			scrollbar-width: none;
-		}
-		.m-profile-desc {
-			font-family: var(--font-family-pixel);
-			font-size: 0.75rem;
-		}
-		.m-profile-row::-webkit-scrollbar {
-			display: none;
-		}
-
-		.m-radio-label {
-			flex-shrink: 0;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 5px;
-			padding: 8px;
-			border-radius: 10px;
-			background: rgba(255, 255, 255, 0.07);
-			border: 2px solid transparent;
-			cursor: pointer;
-			transition: all 0.18s ease;
-		}
-		.m-radio-label img {
-			width: 72px;
-			height: 72px;
-			object-fit: cover;
-			border-radius: 6px;
-			filter: saturate(0) brightness(0.8);
-		}
-		.m-radio-label span {
-			font-family: var(--font-family-pixel);
-			font-size: 0.6rem;
-			color: rgba(255, 255, 255, 0.5);
-		}
-		.m-radio-label input {
-			display: none;
-		}
-		.m-radio-label.selected {
-			background: rgba(205, 128, 77, 0.25);
-			border-color: #cd804d;
-		}
-		.m-radio-label.selected img {
-			filter: saturate(1) brightness(1);
-		}
-		.m-radio-label.selected span {
-			color: #cd804d;
-		}
-
-		/* CTAs */
-		.m-cta-primary {
-			font-family: var(--font-family-pixel);
-			font-size: 1rem;
-			background-color: #435e52;
-			color: #e9d9ca;
-			border: none;
-			border-radius: 10px;
-			padding: 1rem 1.5rem;
-			cursor: pointer;
-			width: 100%;
-			box-shadow:
-				#00000056 0 -4px 0 3px inset,
-				0 4px 20px rgba(0, 0, 0, 0.4);
-			transition: 150ms all ease-in-out;
-			letter-spacing: 0.05em;
-		}
-		.m-cta-primary:active {
-			transform: translateY(3px);
-			box-shadow: #00000056 0 -1px 0 2px inset;
-		}
-		.m-cta-primary:disabled {
-			opacity: 0.4;
-			cursor: not-allowed;
-		}
-
-		.m-cta-secondary {
-			font-family: var(--font-family-pixel);
-			font-size: 0.75rem;
-			background: rgba(255, 255, 255, 0.07);
-			color: rgba(255, 255, 255, 0.6);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			border-radius: 8px;
-			padding: 0.6rem 1rem;
-			cursor: pointer;
-			width: 100%;
-			transition: 150ms all ease-in-out;
-		}
-		.m-cta-secondary:active {
-			background: rgba(255, 255, 255, 0.12);
-		}
-
-		/* Scroll hint */
-		.m-scroll-hint {
-			position: absolute;
-			bottom: 1.5rem;
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: 2;
-			font-size: 1.2rem;
-			color: rgba(255, 255, 255, 0.3);
-			animation: bounce 2s ease-in-out infinite;
-		}
-
-		@keyframes bounce {
-			0%,
-			100% {
-				transform: translateX(-50%) translateY(0);
-			}
-			50% {
-				transform: translateX(-50%) translateY(6px);
-			}
-		}
-
-		/* ---- ACTIONS ---- */
-		.m-actions {
-			min-height: 100svh;
-			background-color: #1a1a1a;
-			padding: 3rem 1.5rem 2rem;
-			display: flex;
-			flex-direction: column;
-			gap: 1.25rem;
-			justify-content: center;
-		}
-
-		.m-actions-grid {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 0.6rem;
-		}
-
-		.m-action-btn {
-			font-family: var(--font-family-pixel);
-			font-size: 0.75rem;
-			background-color: var(--color-secondary, #3a3a3a);
-			color: var(--text-white, #fff);
-			border: none;
-			border-radius: 10px;
-			padding: 1rem 0.75rem;
-			cursor: pointer;
-			box-shadow: #00000056 0 -3px 0 3px inset;
-			transition: 150ms all ease-in-out;
-			text-align: left;
-			min-height: 52px;
-		}
-		.m-action-btn:active {
-			transform: translateY(2px);
-			box-shadow: #00000056 0 -1px 0 2px inset;
-		}
-
-		.m-save-row {
-			display: grid;
-			grid-template-columns: 2fr 1fr 1fr;
-			gap: 0.6rem;
-		}
-
-		.m-save-btn {
-			font-family: var(--font-family-pixel);
-			font-size: 0.65rem;
-			background-color: var(--color-secondary, #3a3a3a);
-			color: var(--text-white, #fff);
-			border: none;
-			border-radius: 8px;
-			padding: 0.75rem 0.5rem;
-			cursor: pointer;
-			box-shadow: #00000056 0 -2px 0 2px inset;
-			transition: 150ms all ease-in-out;
-		}
-		.m-save-btn.save {
-			background-color: #435e52;
-		}
-		.m-save-btn.danger:active {
-			background-color: #c53030;
-		}
-		.m-save-btn:active {
-			transform: translateY(2px);
-		}
-
-		/* ---- CHARACTERS ---- */
-		.m-characters {
-			min-height: 40svh;
-			background-color: #141414;
-			padding: 2rem 1.5rem 3rem;
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-		}
-
-		.m-npc-wrapper {
-			flex: 1;
-			min-height: 160px;
-			background-color: #2e2e2e;
-			border-radius: 14px;
-			border: 3px solid #00000056;
-			box-shadow: #00000056 0 -4px 0 0 inset;
-			overflow: hidden;
-		}
-	}
+	.m-characters { min-height: 40svh; background-color: #141414; padding: 2rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 1rem; }
+	.m-npc-wrapper { flex: 1; min-height: 160px; background-color: #2e2e2e; border-radius: 14px; border: 3px solid #00000056; box-shadow: #00000056 0 -4px 0 0 inset; overflow: hidden; }
 </style>

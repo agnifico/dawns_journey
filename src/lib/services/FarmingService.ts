@@ -126,6 +126,15 @@ export function plantCrop(plotId: string, plantId: string, useCompost: boolean) 
         };
 
         plot.crop = newCrop;
+
+        // Auto irrigation: if player has tech_irrigation, satisfy watering
+        // requirement immediately on plant so the crop never blocks on water.
+        if (newPlayer.unlockedTech.includes('tech_irrigation')) {
+            plot.crop.wateredCount = plantDef.wateringRequirementValue;
+            plot.crop.lastWateredTimestamp = Date.now();
+            messageStore.addMessage(`The ${plantDef.name} was automatically watered.`, ['World']);
+        }
+
         messageStore.addMessage(`You planted a ${plantDef.name}.`, ['World']);
         toastStore.success(`You planted a ${plantDef.name}.`);
         newPlayer.skills = gainExperience(newPlayer, FARMING_SKILL_ID, 5).skills;
@@ -189,10 +198,16 @@ export function harvestCrop(plotId: string) {
             return player;
         }
 
+
         let totalYieldMultiplier = 1;
         const currentSeason = get(seasonStore);
+
+        if (newPlayer.unlockedTech.includes('decree_of_verdis')) {
+            totalYieldMultiplier *= 3;
+        }
+
         if (plantDef.idealSeason === currentSeason) {
-            totalYieldMultiplier = plantDef.idealSeasonYieldMultiplier;
+            totalYieldMultiplier *= plantDef.idealSeasonYieldMultiplier;
             messageStore.addMessage(`Bonus yield for harvesting in the ideal season!`, ['World']);
             toastStore.success(`Bonus yield for harvesting in the ideal season!`);
         }
@@ -357,4 +372,64 @@ export function applyTechToPlot(plotId: string, techId: string) {
 
         return newPlayer;
     });
+}
+
+export function harvestAll() {
+    playerStore.update(player => {
+        let newPlayer = { ...player };
+        let harvested = 0;
+
+        newPlayer.homestead.farmPlots.forEach(plot => {
+            if (!plot.crop) return;
+            const plantDef = cropDefinitions[plot.crop.plantId];
+            if (!plantDef) return;
+            if (plot.crop.currentGrowthStage < plantDef.growthStages.length - 1) return;
+
+            // Same logic as harvestCrop but inline so we can batch the playerStore update
+            let totalYieldMultiplier = 1;
+            const currentSeason = get(seasonStore);
+
+            // decree_of_verdis: permanent 3x yield multiplier
+            if (newPlayer.unlockedTech.includes('decree_of_verdis')) {
+                totalYieldMultiplier *= 3;
+            }
+
+            if (plantDef.idealSeason === currentSeason) {
+                totalYieldMultiplier *= plantDef.idealSeasonYieldMultiplier;
+            }
+
+            const amount = Math.floor(plantDef.yieldsAmount * totalYieldMultiplier);
+            const yieldedItem = getItemById(plantDef.yields);
+            if (yieldedItem) {
+                newPlayer = addItems(newPlayer, plantDef.yields, amount, false);
+                notificationStore.add('item_received', yieldedItem, amount);
+            }
+
+            if (plantDef.leavesYield > 0) {
+                const leavesItem = getItemById('leaves');
+                if (leavesItem) {
+                    newPlayer = addItems(newPlayer, 'leaves', plantDef.leavesYield, false);
+                    notificationStore.add('item_received', leavesItem, plantDef.leavesYield);
+                }
+            }
+
+            newPlayer.skills = gainExperience(newPlayer, FARMING_SKILL_ID, plantDef.xpYield).skills;
+            newPlayer.cropsHarvested = (newPlayer.cropsHarvested ?? 0) + 1;
+            plot.crop = null;
+            harvested++;
+        });
+
+        if (harvested > 0) {
+            messageStore.addMessage(`Harvested ${harvested} crop${harvested > 1 ? 's' : ''}.`, ['World']);
+            toastStore.success(`Harvested ${harvested} crops!`);
+        } else {
+            toastStore.info('No crops ready to harvest.');
+        }
+
+        return newPlayer;
+    });
+}
+
+export function refreshHomestead() {
+    syncHomestead();
 }

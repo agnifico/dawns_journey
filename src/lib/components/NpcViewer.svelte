@@ -8,7 +8,6 @@
 	let npcIds: string[] = [];
 	let currentIndex = 0;
 	let currentNpc: NPC | null = null;
-	let prevNpc: NPC | null = null;
 	let transitioning = false;
 	let direction: 'left' | 'right' = 'right';
 
@@ -25,7 +24,6 @@
 		if (transitioning) return;
 		direction = dir;
 		transitioning = true;
-		prevNpc = currentNpc;
 
 		if (dir === 'right') {
 			currentIndex = (currentIndex + 1) % npcIds.length;
@@ -35,52 +33,44 @@
 
 		currentNpc = await getNpcData(npcIds[currentIndex]);
 
-		// Let CSS animation play
 		setTimeout(() => {
 			transitioning = false;
-			prevNpc = null;
-		}, 320);
+		}, 340);
 	}
 </script>
 
 <div class="viewer">
 	{#if currentNpc}
-		<!-- Index pill -->
-		<!-- <div class="index-pill">
-			{currentIndex + 1} / {npcIds.length}
-		</div> -->
-
-		<!-- Portrait side -->
+		<!-- Full-bleed character art — bleeds upward, clipped on right side -->
 		<div
-			class="portrait-side"
+			class="art-layer"
 			class:slide-in={transitioning}
 			class:from-right={direction === 'right'}
 			class:from-left={direction === 'left'}
 		>
-			<div class="portrait-frame">
-				<img src={currentNpc.profileImage} alt={currentNpc.name} />
-				<div class="portrait-gloss"></div>
-			</div>
+			<img src={currentNpc.profileImage} alt={currentNpc.name} class="art-img" />
+			<!-- Fade gradient: transparent at top, solid at bottom-right -->
+			<div class="art-fade" />
 		</div>
 
-		<!-- Info side -->
+		<!-- Content layer: sits on top of the art -->
 		<div
-			class="info-side"
+			class="content-layer"
 			class:slide-in={transitioning}
 			class:from-right={direction === 'right'}
 			class:from-left={direction === 'left'}
 		>
-			<div class="name-block">
-				<h2 class="name">{currentNpc.name}</h2>
-				<p class="label">Characters you'll meet</p>
-				<div class="name-underline"></div>
-			</div>
+			<!-- Eyebrow -->
+			<p class="eyebrow">Characters you'll meet</p>
 
-			<p class="description">
-				{currentNpc.description || ''}
-				<!-- {currentNpc.swordRanks[0]?.description || currentNpc.description || ''} -->
-			</p>
+			<!-- Name — large, bleeding over art -->
+			<h2 class="npc-name">{currentNpc.name}</h2>
+			<div class="name-rule" />
 
+			<!-- Description -->
+			<p class="npc-desc">{currentNpc.description || ''}</p>
+
+			<!-- Rank chips -->
 			<div class="rank-row">
 				<div class="rank-chip">
 					<img src="/game_icons/sword_rank.png" alt="sword" />
@@ -90,27 +80,19 @@
 					<img src="/game_icons/heart_rank.png" alt="heart" />
 					<span>Rank {currentNpc.heartRank}</span>
 				</div>
-				<!-- <div class="element-row">
-					{#each currentNpc.types as element}
-						<ElementTag {element} size="mini" />
-					{/each}
-				</div> -->
 			</div>
 		</div>
 
-		<!-- Navigation -->
+		<!-- Navigation — pinned to bottom -->
 		<div class="nav-row">
-			<button class="nav-btn" on:click={() => navigate('left')} disabled={transitioning}>
-				◀
-			</button>
+			<button class="nav-btn" on:click={() => navigate('left')} disabled={transitioning}>◀</button>
 			<div class="pip-row">
 				{#each npcIds as _, i}
-					<div class="pip" class:active={i === currentIndex}></div>
+					<div class="pip" class:active={i === currentIndex} />
 				{/each}
 			</div>
-			<button class="nav-btn" on:click={() => navigate('right')} disabled={transitioning}>
-				▶
-			</button>
+			<button class="nav-btn" on:click={() => navigate('right')} disabled={transitioning}>▶</button
+			>
 		</div>
 	{:else}
 		<div class="loading">Loading...</div>
@@ -118,217 +100,182 @@
 </div>
 
 <style>
+	/* ── Root: stack everything via position ── */
 	.viewer {
 		position: relative;
-		display: grid;
-		grid-template-columns: auto 1fr;
-		grid-template-rows: 1fr auto;
-		gap: 0.75rem 1rem;
-		height: 100%;
 		width: 100%;
-		/* padding: 0.75rem; */
-		box-sizing: border-box;
+		height: 100%;
+		min-height: 360px;
 		overflow: hidden;
-		/* border: 1px solid white; */
-	}
-
-	/* ---- Index pill ---- */
-	.index-pill {
-		position: absolute;
-		top: 0.5rem;
-		right: 0.75rem;
-		font-family: var(--font-family-pixel);
-		font-size: 0.6rem;
-		color: var(--color-secondary, #888);
-		background: rgba(0, 0, 0, 0.2);
-		padding: 3px 6px;
-		border-radius: 99px;
-		letter-spacing: 0.05rem;
-		z-index: 2;
-		display: flex;
-	}
-
-	/* ---- Portrait ---- */
-	.portrait-side {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 0.4rem;
-		grid-row: 1;
-		grid-column: 1;
+		background-color: transparent;
 	}
 
-	.portrait-frame {
-		position: relative;
-		width: 140px;
-		height: 140px;
-		border-radius: 10px;
-		overflow: hidden;
-		border: 3px solid var(--color-secondary, #8b6f5e);
-		box-shadow:
-			0 0 0 1px rgba(255, 255, 255, 0.08),
-			0 4px 20px rgba(0, 0, 0, 0.5),
-			inset 0 1px 0 rgba(255, 255, 255, 0.15);
-		flex-shrink: 0;
-		border-radius: 20px;
-		margin-bottom: .5rem;
+	/* ── Art layer: fills the top ~70% of the card ── */
+	.art-layer {
+		position: absolute;
+		/* Extend slightly above the card so the top of the art bleeds upward */
+		top: -10%;
+		/* Right-aligned: art sits on the right side, text on the left */
+		right: -5%;
+		width: 75%;
+		height: 85%;
+		z-index: 1;
+		pointer-events: none;
+		background-color: transparent;
 	}
 
-	.portrait-frame img {
+	.art-img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		object-position: top center;
 		image-rendering: auto;
 		display: block;
+		/* Diagonal clip: full on the right, feathers to nothing on the left */
+		clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 0% 100%);
 	}
 
-	/* Subtle gloss overlay */
-	.portrait-gloss {
+	/* Gradient that melts the art into the background at the bottom + left */
+	.art-fade {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, transparent 50%);
+		background: linear-gradient(
+			to top,
+			rgba(14, 14, 14, 1) 0%,
+			rgba(14, 14, 14, 0.5) 25%,
+			transparent 55%
+		);
 		pointer-events: none;
 	}
 
-	.element-row {
-		display: flex;
-		gap: 4px;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	/* ---- Info ---- */
-	.info-side {
-		grid-row: 1;
-		grid-column: 2;
+	/* ── Content layer: text sits on top, left-aligned ── */
+	.content-layer {
+		position: relative;
+		z-index: 2;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
-		min-width: 0;
-		margin-bottom: .5rem;
+		padding: 1rem 1rem 0.5rem;
+		/* Push content toward the bottom so it overlaps the art's lower half */
+		margin-top: auto;
+		/* But also give some top space so the art shows above */
+		padding-top: 52%;
 	}
 
-	.name-block {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-	}
-
-	.label {
-		font-family: var(--font-family-pixel);
-		font-size: 0.55rem;
-		letter-spacing: 0.15em;
-		color: var(--color-primary, #a98467);
+	.eyebrow {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: rgba(169, 132, 103, 0.7);
 		margin: 0;
-		opacity: 0.8;
 	}
 
-	.name {
-		font-family: var(--font-family-pixel, 'Silkscreen');
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: var(--color-accent, #fff);
-		color: #e9d9ca;
+	.npc-name {
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 1.6rem;
+		font-weight: 400;
+		color: #f0e8d8;
 		margin: 0;
-		padding: 0;
-		/* line-height: 1.5rem; */
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		text-align: center;
+		line-height: 1.1;
+		letter-spacing: 0.04em;
+		/* Text shadow to ensure readability against the art */
+		text-shadow:
+			0 2px 20px rgba(0, 0, 0, 0.9),
+			0 0 40px rgba(0, 0, 0, 0.7);
 	}
 
-	.name-underline {
+	.name-rule {
+		width: 48px;
 		height: 2px;
-		width: 100%;
-		background: linear-gradient(to right, var(--color-primary, #a98467), transparent);
-		margin-top: 0.5rem;
+		background: linear-gradient(to right, #a98467, transparent);
 		border-radius: 1px;
+		margin-top: 0.1rem;
 	}
 
-	.description {
+	.npc-desc {
 		font-family: monospace;
-		font-size: 0.72rem;
-		color: var(--color-primary);
-		/* line-height: 1.5; */
+		font-size: 0.8rem;
+		color: rgba(169, 132, 103, 0.85);
 		margin: 0;
-		padding: 0;
-		/* clamp to 3 lines */
+		line-height: 1.55;
+		/* Clamp to 3 lines */
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		/* text-align: left; */
+		text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
 	}
 
 	.rank-row {
 		display: flex;
 		gap: 0.5rem;
-		margin-top: auto;
+		margin-top: 0.25rem;
 	}
 
 	.rank-chip {
 		display: flex;
 		align-items: center;
 		gap: 4px;
-		background: rgba(0, 0, 0, 0.5);
-		border: 1px solid rgba(255, 255, 255, 0.3);
+		background: rgba(0, 0, 0, 0.55);
+		border: 1px solid rgba(255, 255, 255, 0.12);
 		border-radius: 4px;
-		padding: 2px 6px;
-		font-family: var(--font-family-pixel);
-		font-size: 0.6rem;
-		color: #ccc;
+		padding: 3px 8px;
+		font-family: var(--font-family-pixel, monospace);
+		font-size: 0.75rem;
+		color: #aaa;
+		backdrop-filter: blur(4px);
 	}
 
 	.rank-chip img {
-		width: 12px;
-		height: 12px;
+		width: 14px;
+		height: 14px;
 		image-rendering: pixelated;
 	}
 
-	/* ---- Nav row ---- */
+	/* ── Navigation: pinned to bottom ── */
 	.nav-row {
 		position: relative;
-		bottom: 0.5rem;
-		grid-column: 1 / -1;
-		grid-row: 2;
+		z-index: 3;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		gap: 0.5rem;
-		/* border: 1px solid black; */
+		padding: 0.6rem 1rem 0.75rem;
+		background: linear-gradient(to top, rgba(14, 14, 14, 0.9) 0%, transparent 100%);
+		margin-top: auto;
 	}
 
 	.nav-btn {
-		background-color: var(--surface-1);
-		border: 3px solid var(--color-secondary, #8b6f5e);
-		color: white;
-		font-size: 0.9rem;
-		width: 32px;
-		height: 32px;
+		background: rgba(0, 0, 0, 0.4);
+		border: 2px solid rgba(139, 111, 94, 0.4);
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.8rem;
+		width: 30px;
+		height: 30px;
 		border-radius: 6px;
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		box-shadow:
-			inset 0 20px 20px -10px rgba(255, 255, 255, 0.08),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.15),
-			0 3px 0 var(--surface-2),
-			0 3px 6px rgba(0, 0, 0, 0.3);
+		box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.4);
 		transition: 120ms all ease-in-out;
+		backdrop-filter: blur(4px);
 		-webkit-tap-highlight-color: transparent;
 	}
-
-	.nav-btn:active:not(:disabled) {
-		transform: translateY(3px);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-			0 0 0 var(--surface-2);
+	.nav-btn:hover:not(:disabled) {
+		border-color: rgba(169, 132, 103, 0.7);
+		color: #fff;
 	}
-
+	.nav-btn:active:not(:disabled) {
+		transform: translateY(2px);
+		box-shadow: none;
+	}
 	.nav-btn:disabled {
-		opacity: 0.4;
+		opacity: 0.3;
 		cursor: default;
 	}
 
@@ -341,37 +288,34 @@
 	}
 
 	.pip {
-		width: 6px;
-		height: 6px;
+		width: 5px;
+		height: 5px;
 		border-radius: 50%;
-		background: #8a6449;
+		background: rgba(138, 100, 73, 0.5);
 		transition:
 			background 0.2s,
 			transform 0.2s;
 	}
-
 	.pip.active {
-		background: transparent;
-		border: 1px solid black;
-		transform: scale(1.4);
+		background: #a98467;
+		transform: scale(1.5);
 	}
 
-	/* ---- Slide transition ---- */
+	/* ── Slide transitions ── */
 	@keyframes slideInRight {
 		from {
 			opacity: 0;
-			transform: translateX(18px);
+			transform: translateX(22px);
 		}
 		to {
 			opacity: 1;
 			transform: translateX(0);
 		}
 	}
-
 	@keyframes slideInLeft {
 		from {
 			opacity: 0;
-			transform: translateX(-18px);
+			transform: translateX(-22px);
 		}
 		to {
 			opacity: 1;
@@ -380,21 +324,20 @@
 	}
 
 	.slide-in.from-right {
-		animation: slideInRight 0.3s ease forwards;
+		animation: slideInRight 0.32s ease forwards;
 	}
-
 	.slide-in.from-left {
-		animation: slideInLeft 0.3s ease forwards;
+		animation: slideInLeft 0.32s ease forwards;
 	}
 
-	/* ---- Loading ---- */
+	/* ── Loading ── */
 	.loading {
-		grid-column: 1 / -1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-family: var(--font-family-pixel);
+		height: 100%;
+		font-family: var(--font-family-pixel, monospace);
 		font-size: 0.75rem;
-		color: #666;
+		color: #555;
 	}
 </style>

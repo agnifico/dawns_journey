@@ -26,7 +26,7 @@
 	<div class="navbar-left">
 		<!-- <a href="/" class="brand">Dawn's Journey</a> -->
 		<a href="/">
-			<img class="logo" src="/dawns_journey_logo_v2.svg" alt="" srcset="" />
+			<img class="logo" src="/dawns_journey_logo_v4.svg" alt="" srcset="" />
 		</a>
 		<!-- <div class="nav-stat-bars">
             <StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
@@ -199,7 +199,7 @@
 		justify-content: space-between;
 		align-items: center;
 		background-color: var(--color-secondary);
-		padding: 1rem 1rem;
+		padding: .5rem .5rem;
 		color: white;
 		border-bottom: 4px solid #00000056;
 		z-index: 100;
@@ -207,8 +207,12 @@
 
 	.logo {
 		/* width: 100%; */
-		height: 30px;
-		padding-block: 0.25rem;
+		height: 36px;
+		padding-block: 10px 4px;
+		transition: filter .2s ease-in;
+		&:hover {
+			filter: hue-rotate(120deg) contrast(1.3) saturate(1.5);
+		}
 	}
 
 	.navbar-left {

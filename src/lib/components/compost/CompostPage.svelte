@@ -10,256 +10,456 @@
     let now = Date.now();
     let timer: any;
 
-    const leavesInInventory = derived(playerStore, ($player) => {
-        return $player.inventory.find(i => i.itemId === 'leaves')?.amount || 0;
-    });
+    const leavesInInventory = derived(playerStore, ($player) =>
+        $player.inventory.find(i => i.id === 'leaves')?.amount ?? 0
+    );
 
-    const compostQueue = derived(playerStore, ($player) => {
-        return $player.homestead.compostQueue.map(task => {
-            const elapsed = now - task.startTime;
+    const compostQueue = derived(playerStore, ($player) =>
+        $player.homestead.compostQueue.map(task => {
+            const elapsed   = now - task.startTime;
             const remaining = Math.max(0, task.duration - elapsed);
-            const progress = Math.min(100, (elapsed / task.duration) * 100);
+            const progress  = Math.min(100, (elapsed / task.duration) * 100);
             return { ...task, remaining, progress };
-        });
-    });
+        })
+    );
 
-    function adjustLeaves(amount: number) {
-        const newValue = leavesToCommit + amount;
-        if (newValue >= 0 && newValue <= $leavesInInventory) {
-            leavesToCommit = newValue;
-        }
+    function adjust(amount: number) {
+        const next = leavesToCommit + amount;
+        if (next >= 0 && next <= $leavesInInventory) leavesToCommit = next;
     }
 
-    function handleStartComposting() {
+    function handleStart() {
         if (leavesToCommit > 0) {
             startComposting(leavesToCommit);
             leavesToCommit = 0;
         }
     }
 
-    function formatDuration(ms: number): string {
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    function fmt(ms: number): string {
+        const s = Math.floor(ms / 1000);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
     }
 
-    onMount(() => {
-        timer = setInterval(() => {
-            now = Date.now();
-        }, 1000);
-    });
+    $: compostOut = Math.floor(leavesToCommit / 5);
+    $: canStart   = leavesToCommit > 0 && leavesToCommit % 5 === 0;
 
-    onDestroy(() => {
-        clearInterval(timer);
-    });
-
+    onMount(()   => { timer = setInterval(() => { now = Date.now(); }, 1000); });
+    onDestroy(() => { clearInterval(timer); });
 </script>
 
-<div class="codex-overlay">
-    <div class="codex-modal">
-        <header class="codex-header">
-            <h2>Compost Manager</h2>
-            <button class="close-button" on:click={() => dispatch('close')}>&times;</button>
+<div class="overlay">
+    <div class="modal">
+        <header class="modal-header">
+            <h2 class="modal-title">Compost Manager</h2>
+            <button class="close-btn" on:click={() => dispatch('close')}>✕</button>
         </header>
-        
-        <div class="codex-content">
-            <div class="compost-maker">
-                <h3>Add to Compost</h3>
-                <div class="resource-display">
-                    Available Leaves: <span class="resource-count">{$leavesInInventory}</span>
-                </div>
-                <div class="selector">
-                    <button on:click={() => adjustLeaves(-5)} disabled={leavesToCommit < 5}>-5</button>
-                    <button on:click={() => adjustLeaves(-1)} disabled={leavesToCommit < 1}>-</button>
-                    <span class="commit-amount">{leavesToCommit}</span>
-                    <button on:click={() => adjustLeaves(1)} disabled={leavesToCommit >= $leavesInInventory}>+</button>
-                    <button on:click={() => adjustLeaves(5)} disabled={leavesToCommit + 5 > $leavesInInventory}>+5</button>
-                </div>
-                <button 
-                    class="start-button" 
-                    on:click={handleStartComposting} 
-                    disabled={leavesToCommit === 0 || leavesToCommit % 5 !== 0}
-                >
-                    Start Composting ({leavesToCommit / 5} Compost)
-                </button>
-            </div>
 
-            <div class="compost-queue">
-                <h3>Active Queue</h3>
-                {#if $compostQueue.length > 0}
-                    <ul>
-                        {#each $compostQueue as task (task.id)}
-                            <li class="task-item">
-                                <span class="task-info">Producing {task.compostToProduce} Compost</span>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: {task.progress}%"></div>
-                                </div>
-                                <span class="task-timer">{formatDuration(task.remaining)}</span>
-                                <button class="claim-button" disabled={task.remaining > 0} on:click={() => claimCompost(task.id)}>Claim</button>
-                            </li>
-                        {/each}
-                    </ul>
-                {:else}
-                    <p class="empty-queue">No active composting tasks.</p>
+        <div class="modal-content">
+
+            <!-- Input section -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-title">Add to Compost</span>
+                    <div class="leaves-count">
+                        <img src="/general/leaves.png" alt="Leaves" class="leaf-icon" />
+                        <span class="leaves-num">{$leavesInInventory}</span>
+                        <!-- <span class="leaves-label">leaves available</span> -->
+                    </div>
+                </div>
+
+                <!-- Stepper -->
+                <div class="stepper-row">
+                    <button class="step-btn" on:click={() => adjust(-5)}  disabled={leavesToCommit < 5}>−5</button>
+                    <button class="step-btn" on:click={() => adjust(-1)}  disabled={leavesToCommit < 1}>−</button>
+
+                    <div class="commit-display">
+                        <span class="commit-num">{leavesToCommit}</span>
+                        <span class="commit-label">leaves</span>
+                    </div>
+
+                    <button class="step-btn" on:click={() => adjust(1)}   disabled={leavesToCommit >= $leavesInInventory}>+</button>
+                    <button class="step-btn" on:click={() => adjust(5)}   disabled={leavesToCommit + 5 > $leavesInInventory}>+5</button>
+                </div>
+
+                <!-- Output preview -->
+                {#if leavesToCommit > 0}
+                    <div class="preview-row">
+                        <span class="preview-eq">{leavesToCommit} leaves → </span>
+                        <span class="preview-out" class:invalid={leavesToCommit % 5 !== 0}>
+                            {#if leavesToCommit % 5 === 0}
+                                {compostOut} Compost
+                            {:else}
+                                needs multiple of 5
+                            {/if}
+                        </span>
+                    </div>
                 {/if}
-            </div>
+
+                <button class="start-btn" disabled={!canStart} on:click={handleStart}>
+                    Start Composting
+                </button>
+            </section>
+
+            <!-- Queue section -->
+            <section class="section">
+                <div class="section-header">
+                    <span class="section-title">Active Queue</span>
+                    {#if $compostQueue.length > 0}
+                        <span class="queue-count">{$compostQueue.length} task{$compostQueue.length > 1 ? 's' : ''}</span>
+                    {/if}
+                </div>
+
+                {#if $compostQueue.length > 0}
+                    <div class="queue-list">
+                        {#each $compostQueue as task (task.id)}
+                            {@const done = task.remaining === 0}
+                            <div class="task-row" class:done>
+                                <div class="task-left">
+                                    <span class="task-name">🌱 {task.compostToProduce} Compost</span>
+                                    <div class="task-bar-wrap">
+                                        <div class="task-bar-track">
+                                            <div class="task-bar-fill" class:done style="width: {task.progress}%" />
+                                        </div>
+                                        <span class="task-timer">{done ? 'Ready' : fmt(task.remaining)}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    class="claim-btn"
+                                    class:ready={done}
+                                    disabled={!done}
+                                    on:click={() => claimCompost(task.id)}
+                                >Claim</button>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="empty-msg">No active composting tasks.</p>
+                {/if}
+            </section>
+
         </div>
     </div>
 </div>
 
 <style>
-    /* Using the same overlay and modal styles as FarmingCodex for consistency */
-    .codex-overlay {
+    /* ── Overlay + modal ── */
+    .overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
+        inset: 0;
+        background: rgba(0,0,0,0.75);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1000;
     }
 
-    .codex-modal {
+    .modal {
         width: 90%;
-        max-width: 600px; /* Smaller modal for this feature */
-        height: auto;
+        max-width: 520px;
         max-height: 90vh;
-        background-color: #2b2b2b;
-        border: 2px solid #6d403b;
-        border-radius: 10px;
+        background: #1e2a20;
+        border: 3px solid #3a5a3a;
+        border-radius: 12px;
+        box-shadow:
+            0 0 0 1px #0a1a0a,
+            rgba(0,0,0,0.6) 0 -8px 0 0 inset,
+            0 24px 60px rgba(0,0,0,0.7);
         display: flex;
         flex-direction: column;
-        color: white;
-        font-family: sans-serif;
-    }
-
-    .codex-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        border-bottom: 2px solid #6d403b;
-    }
-
-    .codex-header h2 {
-        margin: 0;
-        color: #61dafb;
-    }
-
-    .close-button {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 2rem;
-        line-height: 1;
-        cursor: pointer;
-    }
-
-    .codex-content {
-        padding: 1.5rem;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .compost-maker {
-        background-color: rgba(0,0,0,0.2);
-        padding: 1rem;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .resource-display {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
-    }
-    .resource-count {
-        font-weight: bold;
-        color: #81c784;
-    }
-
-    .selector {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .selector button {
-        padding: 0.5rem 1rem;
-    }
-
-    .commit-amount {
-        font-size: 1.5rem;
-        font-weight: bold;
-        min-width: 50px;
-        text-align: center;
-    }
-
-    .start-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 1.1rem;
-        width: 100%;
-    }
-
-    .compost-queue {
-        flex-grow: 1;
-    }
-
-    .compost-queue h3 {
-        border-bottom: 1px solid #444;
-        padding-bottom: 0.5rem;
-    }
-
-    .compost-queue ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .task-item {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        align-items: center;
-        gap: 1rem;
-        background-color: rgba(0,0,0,0.2);
-        padding: 1rem;
-        border-radius: 5px;
-    }
-
-    .progress-bar-container {
-        height: 10px;
-        width: 100%;
-        background-color: #555;
-        border-radius: 5px;
+        font-family: var(--font-family-pixel, monospace);
+        color: #d0e8d0;
         overflow: hidden;
     }
 
-    .progress-bar {
-        height: 100%;
-        background-color: #4caf50;
+    /* Header */
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.9rem 1.25rem;
+        background: rgba(0,0,0,0.3);
+        border-bottom: 2px solid #2a4a2a;
+        flex-shrink: 0;
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #8acc8a;
+    }
+
+    .close-btn {
+        background: rgba(0,0,0,0.25);
+        border: 2px solid #3a5a3a;
+        border-radius: 6px;
+        color: #7aaa7a;
+        font-size: 0.85rem;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: rgba(0,0,0,0.5) 0 -3px 0 0 inset;
+        transition: 0.1s all ease-in;
+    }
+    .close-btn:hover { background: rgba(180,60,60,0.25); border-color: #8a3a3a; color: #ffaaaa; }
+    .close-btn:active { transform: translateY(2px); box-shadow: none; }
+
+    /* Content */
+    .modal-content {
+        overflow-y: auto;
+        padding: 1rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        scrollbar-width: thin;
+        scrollbar-color: #2a4a2a transparent;
+    }
+
+    /* Section */
+    .section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        background: rgba(0,0,0,0.18);
+        border: 1px solid #2a4a2a;
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: rgba(0,0,0,0.4) 0 -3px 0 0 inset;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .section-title {
+        font-size: 0.85rem;
+        color: #8acc8a;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    /* Leaves count */
+    .leaves-count {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .leaf-icon {
+        width: 32px;
+        height: 32px;
+        image-rendering: pixelated;
+    }
+    .leaves-num {
+        font-size: 1.3rem;
+        color: #80d880;
+    }
+    .leaves-label {
+        font-size: 0.75rem;
+        color: #4a6a4a;
+    }
+
+    /* Stepper */
+    .stepper-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .step-btn {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.85rem;
+        padding: 6px 12px 10px;
         border-radius: 5px;
+        border: 2px solid #2a4a2a;
+        background: #253525;
+        color: #8aaa8a;
+        cursor: pointer;
+        box-shadow: rgba(0,0,0,0.5) 0 -4px 0 0 inset;
+        transition: 0.1s all ease-in;
+        min-width: 38px;
+    }
+    .step-btn:hover:not(:disabled) {
+        background: #2e4a2e;
+        color: #c0e8c0;
+        padding-bottom: 6px;
+        box-shadow: rgba(0,0,0,0.5) 0 -1px 0 0 inset;
+    }
+    .step-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; padding-bottom: 6px; }
+    .step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .commit-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 60px;
+    }
+    .commit-num {
+        font-size: 1.4rem;
+        color: #d0e8d0;
+        line-height: 1;
+    }
+    .commit-label {
+        font-size: 0.75rem;
+        color: #4a6a4a;
+        margin-top: 2px;
+    }
+
+    /* Preview */
+    .preview-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 0.85rem;
+    }
+    .preview-eq    { color: #5a7a5a; }
+    .preview-out   { color: #80d880; }
+    .preview-out.invalid { color: #c06060; }
+
+    /* Start button */
+    .start-btn {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.85rem;
+        padding: 9px 1.5rem 13px;
+        border-radius: 6px;
+        border: 2px solid #3a6a2a;
+        background: #2a4a1a;
+        color: #a0d860;
+        cursor: pointer;
+        box-shadow: rgba(0,0,0,0.5) 0 -4px 0 0 inset;
+        transition: 0.1s all ease-in;
+        width: 100%;
+        letter-spacing: 0.06em;
+    }
+    .start-btn:hover:not(:disabled) {
+        background: #355a22;
+        color: #c0f070;
+        padding-bottom: 9px;
+        box-shadow: rgba(0,0,0,0.5) 0 -1px 0 0 inset;
+    }
+    .start-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; padding-bottom: 9px; }
+    .start-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* Queue */
+    .queue-count {
+        font-size: 0.75rem;
+        color: #5a7a5a;
+        letter-spacing: 0.06em;
+    }
+
+    .queue-list {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .task-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0,0,0,0.2);
+        border: 1px solid #2a3a2a;
+        border-radius: 6px;
+        padding: 8px 10px;
+        box-shadow: rgba(0,0,0,0.35) 0 -2px 0 0 inset;
+        transition: border-color 0.2s;
+    }
+    .task-row.done { border-color: #3a6a3a; }
+
+    .task-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        min-width: 0;
+    }
+
+    .task-name {
+        font-size: 0.85rem;
+        color: #a0c8a0;
+    }
+
+    .task-bar-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .task-bar-track {
+        flex: 1;
+        height: 12px;
+        background: #c1c1c1;
+        border-radius: 3px;
+        border: 2px solid #000;
+        box-shadow: rgba(0,0,0,0.5) 0 -2px 0 0 inset;
+        overflow: hidden;
+    }
+
+    .task-bar-fill {
+        height: 100%;
+        background: linear-gradient(225deg, #166383 0%, #399e80 40%, #74d496 100%);
+        box-shadow: rgba(0,0,0,0.4) 0 -1px 0 0 inset;
         transition: width 0.5s linear;
     }
 
-    .task-timer {
-        font-family: monospace;
-        font-size: 1rem;
+    .task-bar-fill.done {
+        background: linear-gradient(90deg, #c88020, #f0d060);
     }
 
-    .empty-queue {
-        color: #888;
+    .task-timer {
+        font-size: 0.75rem;
+        color: #6a8a6a;
+        white-space: nowrap;
+        min-width: 52px;
+        text-align: right;
+    }
+
+    /* Claim button */
+    .claim-btn {
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.75rem;
+        padding: 5px 10px 8px;
+        border-radius: 4px;
+        border: 2px solid #253525;
+        background: #1a2a1a;
+        color: #4a6a4a;
+        cursor: not-allowed;
+        box-shadow: rgba(0,0,0,0.5) 0 -3px 0 0 inset;
+        transition: 0.1s all ease-in;
+        flex-shrink: 0;
+    }
+    .claim-btn.ready {
+        cursor: pointer;
+        background: linear-gradient(180deg, #e8b840 0%, #a06010 100%);
+        border-color: #6a3a05;
+        color: #1a0e00;
+        box-shadow: rgba(0,0,0,0.5) 0 -3px 0 0 inset, inset 0 1px 0 rgba(255,240,160,0.3);
+    }
+    .claim-btn.ready:hover {
+        filter: brightness(1.12);
+        padding-bottom: 5px;
+        box-shadow: rgba(0,0,0,0.5) 0 -1px 0 0 inset;
+    }
+    .claim-btn.ready:active { transform: translateY(2px); box-shadow: none; padding-bottom: 5px; }
+
+    /* Empty state */
+    .empty-msg {
+        font-size: 0.85rem;
+        color: #3a5a3a;
         text-align: center;
-        margin-top: 2rem;
+        font-style: italic;
+        padding: 0.5rem 0;
     }
 </style>

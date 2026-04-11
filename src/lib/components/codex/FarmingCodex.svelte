@@ -4,28 +4,33 @@
     import UpgradeTree from './UpgradeTree.svelte';
 
     const dispatch = createEventDispatcher();
-
     let activeTab: 'almanac' | 'skill_tree' = 'almanac';
 </script>
 
 <div class="codex-overlay">
     <div class="codex-modal">
         <header class="codex-header">
-            <h2>Farming Codex</h2>
-            <button class="close-button" on:click={() => dispatch('close')}>&times;</button>
+            <h2 class="codex-title">Farming Codex</h2>
+            <button class="close-btn" on:click={() => dispatch('close')}>✕</button>
         </header>
+
         <div class="codex-tabs">
-            <button class:active={activeTab === 'almanac'} on:click={() => activeTab = 'almanac'}>
-                Crop Almanac
-            </button>
-            <button class:active={activeTab === 'skill_tree'} on:click={() => activeTab = 'skill_tree'}>
-                Skill Tree
-            </button>
+            <button
+                class="tab-btn"
+                class:active={activeTab === 'almanac'}
+                on:click={() => activeTab = 'almanac'}
+            >Crop Almanac</button>
+            <button
+                class="tab-btn"
+                class:active={activeTab === 'skill_tree'}
+                on:click={() => activeTab = 'skill_tree'}
+            >Skill Tree</button>
         </div>
+
         <div class="codex-content">
             {#if activeTab === 'almanac'}
                 <CropAlmanac />
-            {:else if activeTab === 'skill_tree'}
+            {:else}
                 <UpgradeTree />
             {/if}
         </div>
@@ -35,11 +40,8 @@
 <style>
     .codex-overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -50,70 +52,101 @@
         width: 90%;
         max-width: 1000px;
         height: 90vh;
-        background-color: #2b2b2b;
-        border: 2px solid #6d403b;
-        border-radius: 10px;
+        background: #1e2a20;
+        border: 3px solid #3a5a3a;
+        border-radius: 12px;
+        box-shadow:
+            0 0 0 1px #0a1a0a,
+            rgba(0,0,0,0.6) 0 -8px 0 0 inset,
+            0 24px 60px rgba(0, 0, 0, 0.7);
         display: flex;
         flex-direction: column;
-        color: white;
-        font-family: sans-serif;
+        color: #d0e8d0;
+        font-family: var(--font-family-pixel, monospace);
+        overflow: hidden;
     }
 
+    /* Header */
     .codex-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem;
-        border-bottom: 2px solid #6d403b;
+        padding: 0.9rem 1.25rem;
+        background: rgba(0, 0, 0, 0.3);
+        border-bottom: 2px solid #2a4a2a;
+        flex-shrink: 0;
     }
 
-    .codex-header h2 {
+    .codex-title {
         margin: 0;
-        color: #61dafb;
+        font-size: 1rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #8acc8a;
+        font-weight: 400;
     }
 
-    .close-button {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 2rem;
-        line-height: 1;
+    .close-btn {
+        background: rgba(0,0,0,0.25);
+        border: 2px solid #3a5a3a;
+        border-radius: 6px;
+        color: #7aaa7a;
+        font-size: 0.85rem;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
+        box-shadow: rgba(0,0,0,0.5) 0 -3px 0 0 inset;
+        transition: 0.1s all ease-in;
+        line-height: 1;
     }
+    .close-btn:hover { background: rgba(180,60,60,0.25); border-color: #8a3a3a; color: #ffaaaa; }
+    .close-btn:active { transform: translateY(2px); box-shadow: none; }
 
+    /* Tabs */
     .codex-tabs {
         display: flex;
-        border-bottom: 1px solid #444;
+        flex-shrink: 0;
+        border-bottom: 2px solid #2a4a2a;
     }
 
-    .codex-tabs button {
-        flex-grow: 1;
-        padding: 1rem;
-        background-color: #333;
+    .tab-btn {
+        flex: 1;
+        padding: 0.75rem 1rem 0.9rem;
+        font-family: var(--font-family-pixel, monospace);
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+        color: #6a8a6a;
+        background: rgba(0,0,0,0.2);
         border: none;
-        color: white;
-        font-size: 1.1rem;
-        cursor: pointer;
         border-bottom: 3px solid transparent;
+        cursor: pointer;
+        box-shadow: rgba(0,0,0,0.4) 0 -4px 0 0 inset;
+        transition: 0.1s all ease-in;
+        padding-bottom: 0px;
+    }
+    .tab-btn:hover:not(.active) {
+        color: #a0c8a0;
+        background: rgba(0,0,0,0.1);
+        padding-bottom: 0.75rem;
+        box-shadow: rgba(0,0,0,0.4) 0 -4px 0 0 inset;
+    }
+    .tab-btn.active {
+        color: #c0e8c0;
+        background: #1e2a20;
+        border-bottom-color: #5aaa5a;
+        padding-bottom: 0.75rem;
+        box-shadow: none;
+        cursor: default;
     }
 
-    .codex-tabs button.active {
-        background-color: #444;
-        border-bottom-color: #61dafb;
-    }
-
+    /* Content */
     .codex-content {
-        flex-grow: 1;
-        padding: 1rem;
+        flex: 1;
         overflow-y: auto;
-    }
-
-    .placeholder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        font-size: 1.5rem;
-        color: #888;
+        scrollbar-width: thin;
+        scrollbar-color: #2a4a2a transparent;
     }
 </style>
