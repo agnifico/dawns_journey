@@ -9,11 +9,18 @@
 	import { gatherResource } from '$lib/services/InteractionService';
 	import { checkRequirement, resolveActiveRankData } from '$lib/services/QuestService';
 	import { hasItem } from '$lib/services/InventoryService';
+	import { toastStore } from '$lib/stores/toastStore';
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
 	import type { NPC } from '$lib/types';
 
 	export let flex: 'row' | 'column' = 'column';
+
+	// ── Hotkey layout ─────────────────────────────────────────────────────────
+	// Z = Talk / Interact
+	// X = Challenge (combat)
+	// C = Context (Deliver, Refuse, etc.)
+	// V = Gift Item / Heart Level Up
 
 	const keymap = ['z', 'x', 'c', 'v', 'b'];
 
@@ -24,6 +31,7 @@
 		icon?: string | null;
 		action: () => void;
 		variant?: 'default' | 'accent' | 'warning';
+		dimmed?: boolean; // visible but visually de-emphasised (player lacks item)
 	};
 
 	type PairedAction = {
@@ -38,7 +46,7 @@
 	let actions: ActionItem[] = [];
 	let npc: NPC | null = null;
 
-	// ── Helpers ──────────────────────────────────────────────────────────────────
+	// ── Helpers ───────────────────────────────────────────────────────────────
 
 	function isActionAvailable(action: any): boolean {
 		if (!action.requirement) return true;
@@ -48,150 +56,155 @@
 		return met;
 	}
 
-	function resolveContextAction(npc: NPC): SingleAction | null {
-		const player = get(playerStore);
-		const globalNpcs = get(npcStore).globalNpcs;
-		const rankData = resolveActiveRankData(npc, player, globalNpcs);
-		if (!rankData) return null;
-
-		const quest = get(questStore).quests[rankData.questId];
-		if (!quest || quest.state !== 'ACTIVE') return null;
-
-		const stage = rankData.stages[quest.currentStage];
-		if (!stage) return null;
-
-		const req = stage.requirement;
-
-		// Find a give_item condition anywhere in the requirement tree
-		function findGiveItem(r: any): any | null {
-			if (!r) return null;
-			if (r.type === 'give_item') return r;
-			if (r.conditions) {
-				for (const c of r.conditions) {
-					const found = findGiveItem(c);
-					if (found) return found;
-				}
-			}
-			return null;
-		}
-
-		const giveItemCondition = findGiveItem(req);
-		if (giveItemCondition) {
-			const hasIt = hasItem(
-				player.inventory,
-				giveItemCondition.itemId,
-				giveItemCondition.quantity ?? 1
-			);
-			if (hasIt) {
-				const item = player.inventory.find((i) => i.id === giveItemCondition.itemId);
-				const label = item?.name ? `DELIVER ${item.name.toUpperCase()}` : 'DELIVER ITEM';
-				return {
-					id: 'deliver',
-					label,
-					hotkey: 'x',
-					variant: 'accent',
-					action: () => npcStore.interactTalk(npc.id)
-				};
+	// Walks requirement tree to find first give_item condition
+	function findGiveItem(r: any): any | null {
+		if (!r) return null;
+		if (r.type === 'give_item') return r;
+		if (r.conditions) {
+			for (const c of r.conditions) {
+				const found = findGiveItem(c);
+				if (found) return found;
 			}
 		}
-
-		// Refusable
-		if (stage.refusable) {
-			return {
-				id: 'refuse',
-				label: 'NOT NOW',
-				hotkey: 'x',
-				variant: 'default',
-				action: () => npcStore.interactRefuse(npc.id)
-			};
-		}
-
 		return null;
 	}
 
-	// ── Reactive action builder ───────────────────────────────────────────────────
-	// NOTE: disabled state is intentionally NOT stored on action objects.
-	// It is computed at render time directly from $dialogueStore so buttons
-	// re-enable the instant dialogue closes — no stale state.
+	/**
+	 * Resolves context actions for the current quest stage.
+	 * Returns up to TWO actions: [deliver?, refuse?]
+	 *
+	 * Deliver always shows when a give_item condition exists — dimmed if player
+	 * lacks the item, active if they have it.
+	 * Refuse shows when stage.refusable is true.
+	 * Both can be present simultaneously (e.g. Gwen SR2).
+	 */
+	function resolveContextActions(npc: NPC): SingleAction[] {
+		const player = get(playerStore);
+		const globalNpcs = get(npcStore).globalNpcs;
+		const rankData = resolveActiveRankData(npc, player, globalNpcs);
+		if (!rankData) return [];
 
+		const quest = get(questStore).quests[rankData.questId];
+		if (!quest || quest.state !== 'ACTIVE') return [];
+
+		const stage = rankData.stages[quest.currentStage];
+		if (!stage) return [];
+
+		const result: SingleAction[] = [];
+		const giveItemCondition = findGiveItem(stage.requirement);
+
+		// ── Deliver ──────────────────────────────────────────────────────────
+		if (giveItemCondition) {
+			const hasIt = hasItem(player.inventory, giveItemCondition.itemId, giveItemCondition.quantity ?? 1);
+			const item = player.inventory.find(i => i.id === giveItemCondition.itemId);
+			const itemName = item?.name ?? giveItemCondition.itemId;
+			const label = `GIVE ${itemName.toUpperCase()}`;
+
+			result.push({
+				id: 'deliver',
+				label,
+				hotkey: 'c',
+				variant: 'accent',
+				dimmed: !hasIt,
+				action: () => {
+					if (!hasIt) {
+						toastStore.warning(`You need ${giveItemCondition.quantity ?? 1}x ${itemName}.`);
+						return;
+					}
+					npcStore.interactTalk(npc.id);
+				}
+			});
+		}
+
+		// ── Refuse ────────────────────────────────────────────────────────────
+		if (stage.refusable) {
+			result.push({
+				id: 'refuse',
+				label: 'NOT NOW',
+				hotkey: result.length > 0 ? 'v' : 'c', // 'v' if deliver took 'c'
+				variant: 'default',
+				action: () => npcStore.interactRefuse(npc.id)
+			});
+		}
+
+		return result;
+	}
+
+	// ── Reactive action builder ───────────────────────────────────────────────
 	$: {
 		npc = null;
 		if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
 			npc = $npcStore.globalNpcs[$eventScreen.data.npcId];
 			if (npc) {
 				const canChallenge = npc.isCombatant;
-				const canGift = npc.heartRanks[npc.heartRank]?.giftingOptions?.length > 0;
+
+				// Gift always visible when gifting options exist, regardless of heart rank
+				const canGift = npc.heartRanks[npc.heartRank]?.giftingOptions?.length > 0
+					|| (npc.heartRank >= npc.heartRanks.length && npc.heartRanks.length > 0);
 				const heartRankReady = npc.heartState === 'READY_FOR_RANK_UP';
 
 				const activeRankData = resolveActiveRankData(npc, $playerStore, $npcStore.globalNpcs);
 				const quest = activeRankData ? $questStore.quests[activeRankData.questId] : null;
 				const showQuestIndicator = heartRankReady || (quest && quest.state === 'AVAILABLE');
 
-				const contextAction = resolveContextAction(npc);
+				const contextActions = resolveContextActions(npc);
 				const newActions: ActionItem[] = [];
 
-				// ── Talk row ─────────────────────────────────────────────────
+				// ── Talk [Z] ──────────────────────────────────────────────────
 				const talkAction: SingleAction = {
-					id: 'talk',
-					label: 'Talk',
-					hotkey: 'z',
+					id: 'talk', label: 'Talk', hotkey: 'z',
 					icon: showQuestIndicator ? '/game_icons/expression_alerted.png' : null,
 					action: () => npcStore.interactTalk(npc.id)
 				};
+				newActions.push(talkAction);
 
-				if (contextAction) {
-					newActions.push({
-						id: 'talk_row',
-						type: 'pair',
-						primary: talkAction,
-						secondary: contextAction
-					});
-				} else {
-					newActions.push(talkAction);
-				}
-
-				// ── Challenge row ─────────────────────────────────────────────
+				// ── Challenge [X] ─────────────────────────────────────────────
 				if (canChallenge) {
 					newActions.push({
-						id: 'challenge',
-						label: 'Challenge',
-						hotkey: contextAction ? null : 'x',
+						id: 'challenge', label: 'Challenge', hotkey: 'x',
 						action: () => CombatService.startCombat(npc)
 					});
 				}
 
-				// ── Gift / Heart rank row ─────────────────────────────────────
+				// ── Context actions [C] / [C+V] ───────────────────────────────
+				// 0 context actions: nothing
+				// 1 context action:  single row [C]
+				// 2 context actions: paired row [C] | [V]
+				if (contextActions.length === 1) {
+					newActions.push(contextActions[0]);
+				} else if (contextActions.length === 2) {
+					newActions.push({
+						id: 'context_row', type: 'pair',
+						primary: contextActions[0],
+						secondary: contextActions[1]
+					});
+				}
+
+				// ── Gift / Heart rank [V] ─────────────────────────────────────
+				// Gift hotkey is 'v' when no context actions, otherwise suppressed
+				// (context actions already used 'c' and 'v')
+				const giftHotkey = contextActions.length === 0 ? 'v' : null;
+
 				if (heartRankReady && canGift) {
 					newActions.push({
-						id: 'gift_row',
-						type: 'pair',
+						id: 'gift_row', type: 'pair',
 						primary: {
-							id: 'gift',
-							label: 'Gift Item',
-							hotkey: 'c',
+							id: 'gift', label: 'Gift Item', hotkey: giftHotkey,
 							action: () => openGiftModal(npc.id)
 						},
 						secondary: {
-							id: 'heart_rank_up',
-							label: '♡ Level Up',
-							hotkey: 'v',
-							variant: 'accent',
+							id: 'heart_rank_up', label: '♡ Level Up', hotkey: null, variant: 'accent',
 							action: () => npcStore.interactTalk(npc.id)
 						}
 					});
 				} else if (heartRankReady) {
 					newActions.push({
-						id: 'heart_rank_up',
-						label: '♡ Level Up',
-						hotkey: 'c',
-						variant: 'accent',
+						id: 'heart_rank_up', label: '♡ Level Up', hotkey: giftHotkey, variant: 'accent',
 						action: () => npcStore.interactTalk(npc.id)
 					});
 				} else if (canGift) {
 					newActions.push({
-						id: 'gift',
-						label: 'Gift Item',
-						hotkey: 'c',
+						id: 'gift', label: 'Gift Item', hotkey: giftHotkey,
 						action: () => openGiftModal(npc.id)
 					});
 				}
@@ -202,9 +215,7 @@
 			const eventData = $eventScreen.data;
 			const availableActions = eventData.actions.filter(isActionAvailable);
 			actions = availableActions.map((act, index) => ({
-				id: `event_action_${index}`,
-				label: act.text,
-				hotkey: keymap[index] || null,
+				id: `event_action_${index}`, label: act.text, hotkey: keymap[index] || null,
 				action: () => {
 					const originalIndex = eventData.actions.indexOf(act);
 					LocationEventService.triggerEventAction(eventData, originalIndex);
@@ -216,55 +227,33 @@
 		} else if ($eventScreen.type === 'enemy' && $eventScreen.data?.isLegendary) {
 			const enemy = $eventScreen.data;
 			const fakeNpc: NPC = {
-				id: enemy.id,
-				name: enemy.name,
-				image: enemy.image,
-				profileImage: enemy.thumbnailImage,
-				isCombatant: true,
-				baseStats: enemy.baseStats,
-				swordRank: 0,
-				heartRank: 0,
-				affinity: 0,
-				swordState: 'NOT_STARTED',
-				heartState: 'NOT_STARTED',
-				swordRanks: [],
-				heartRanks: [],
-				statGrowth: [],
-				battleAftermathsBySwordRank: [],
-				types: enemy.types,
-				requirementSnapshot: {},
-				swordRankMaxedDialogue: [],
-				allRanksMaxedDialogue: [],
-				galleryImages: [],
-				faction: undefined,
-				swordRankMaxedDialogueIndex: 0,
-				allRanksMaxedDialogueIndex: 0
+				id: enemy.id, name: enemy.name, image: enemy.image,
+				profileImage: enemy.thumbnailImage, isCombatant: true,
+				baseStats: enemy.baseStats, swordRank: 0, heartRank: 0,
+				affinity: 0, swordState: 'NOT_STARTED', heartState: 'NOT_STARTED',
+				swordRanks: [], heartRanks: [], statGrowth: [],
+				battleAftermathsBySwordRank: [], types: enemy.types,
+				requirementSnapshot: {}, swordRankMaxedDialogue: [],
+				allRanksMaxedDialogue: [], galleryImages: [], faction: undefined,
+				swordRankMaxedDialogueIndex: 0, allRanksMaxedDialogueIndex: 0
 			};
-			actions = [
-				{
-					id: 'challenge',
-					label: 'Challenge',
-					hotkey: 'x',
-					action: () => CombatService.startCombat(fakeNpc)
-				}
-			];
+			actions = [{ id: 'challenge', label: 'Challenge', hotkey: 'x', action: () => CombatService.startCombat(fakeNpc) }];
 		} else {
 			actions = [];
 		}
 	}
 
-	// ── Keyboard handler ──────────────────────────────────────────────────────────
-	// The top-level guard replaces per-action disabled checks entirely.
+	// ── Keyboard handler ──────────────────────────────────────────────────────
 	const handleKeydown = (e: KeyboardEvent) => {
 		if ($dialogueStore.isOpen || $dialogueStore.justClosed) return;
 		if (!actions.length) return;
 
 		const key = e.key.toLowerCase();
-		const allActions: SingleAction[] = actions.flatMap((a) =>
+		const allActions: SingleAction[] = actions.flatMap(a =>
 			'type' in a && a.type === 'pair' ? [a.primary, a.secondary] : [a as SingleAction]
 		);
 
-		const match = allActions.find((a) => a.hotkey === key);
+		const match = allActions.find(a => a.hotkey === key);
 		if (match) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -289,39 +278,29 @@
 						class="pair-btn"
 						class:accent={action.primary.variant === 'accent'}
 						class:warning={action.primary.variant === 'warning'}
+						class:dimmed={'dimmed' in action.primary && action.primary.dimmed}
 						on:click={action.primary.action}
 						disabled={$dialogueStore.isOpen || $dialogueStore.justClosed}
 					>
 						<div class="action-label">
-							{#if action.primary.icon}<img
-									src={action.primary.icon}
-									alt="icon"
-									class="icon"
-								/>{/if}
+							{#if action.primary.icon}<img src={action.primary.icon} alt="icon" class="icon" />{/if}
 							<span>{action.primary.label}</span>
 						</div>
-						{#if action.primary.hotkey}<span class="hotkey"
-								>[{action.primary.hotkey.toUpperCase()}]</span
-							>{/if}
+						{#if action.primary.hotkey}<span class="hotkey">[{action.primary.hotkey.toUpperCase()}]</span>{/if}
 					</button>
 					<button
 						class="pair-btn"
 						class:accent={action.secondary.variant === 'accent'}
 						class:warning={action.secondary.variant === 'warning'}
+						class:dimmed={'dimmed' in action.secondary && action.secondary.dimmed}
 						on:click={action.secondary.action}
 						disabled={$dialogueStore.isOpen || $dialogueStore.justClosed}
 					>
 						<div class="action-label">
-							{#if action.secondary.icon}<img
-									src={action.secondary.icon}
-									alt="icon"
-									class="icon"
-								/>{/if}
+							{#if action.secondary.icon}<img src={action.secondary.icon} alt="icon" class="icon" />{/if}
 							<span>{action.secondary.label}</span>
 						</div>
-						{#if action.secondary.hotkey}<span class="hotkey"
-								>[{action.secondary.hotkey.toUpperCase()}]</span
-							>{/if}
+						{#if action.secondary.hotkey}<span class="hotkey">[{action.secondary.hotkey.toUpperCase()}]</span>{/if}
 					</button>
 				</li>
 			{:else}
@@ -330,6 +309,7 @@
 					<button
 						class:accent={'variant' in a && a.variant === 'accent'}
 						class:warning={'variant' in a && a.variant === 'warning'}
+						class:dimmed={'dimmed' in a && a.dimmed}
 						on:click={a.action}
 						disabled={$dialogueStore.isOpen || $dialogueStore.justClosed}
 					>
@@ -391,17 +371,24 @@
 		background-color: #51bfc1;
 		border-color: #09625b;
 		color: #343a40;
-		.hotkey {
-			color: #343a40;
-		}
-		.action-label {
-			color: #343a40;
-		}
+		.hotkey { color: #343a40; }
+		.action-label { color: #343a40; }
 	}
 	button:disabled {
 		color: #666;
 		background-color: #1a1a1a;
 		cursor: not-allowed;
+	}
+	/* Dimmed — button visible but player lacks the item */
+	button.dimmed {
+		opacity: 0.45;
+		cursor: pointer;
+	}
+	button.dimmed:hover,
+	button.dimmed:focus {
+		opacity: 0.7;
+		background-color: var(--surface-3);
+		color: var(--text-header);
 	}
 	button.accent {
 		background-color: color-mix(in srgb, var(--color-primary) 30%, var(--surface-3));
@@ -412,12 +399,8 @@
 	button.accent:focus {
 		background-color: var(--color-primary);
 		color: #111;
-		.hotkey {
-			color: #111;
-		}
-		.action-label {
-			color: #111;
-		}
+		.hotkey { color: #111; }
+		.action-label { color: #111; }
 	}
 	button.warning {
 		background-color: color-mix(in srgb, #e07a5f 25%, var(--surface-3));
@@ -428,12 +411,8 @@
 	button.warning:focus {
 		background-color: #e07a5f;
 		color: #111;
-		.hotkey {
-			color: #111;
-		}
-		.action-label {
-			color: #111;
-		}
+		.hotkey { color: #111; }
+		.action-label { color: #111; }
 	}
 	.action-label {
 		display: flex;

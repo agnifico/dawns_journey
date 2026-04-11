@@ -15,8 +15,8 @@ import {
 import { revolut } from '$lib/stores/timeStore';
 import { increaseFactionScore } from './FactionService';
 import { toastStore } from '$lib/stores/toastStore';
-import { notificationStore } from '$lib/stores/notificationStore';
-import { npcStore } from '$lib/stores/npcStore';
+// import { notificationStore } from '$lib/stores/notificationStore';
+// import { npcStore } from '$lib/stores/npcStore';
 import { scenes } from '$lib/data/scenes';
 
 
@@ -36,6 +36,37 @@ function resolveSuccessDialogue(
     }
     return dialogue.default;
 }
+
+function splitRewards(rewards: Reward[]): { immediate: Reward[]; deferred: Reward[] } {
+    const immediate: Reward[] = [];
+    const deferred: Reward[] = [];
+    for (const r of rewards) {
+        if (r.type === 'tag') {
+            deferred.push(r);
+        } else {
+            immediate.push(r);
+        }
+    }
+    return { immediate, deferred };
+}
+
+/**
+ * Applies deferred rewards (tags only) via a playerStore.update.
+ * Called from dialogueStore onComplete callbacks.
+ */
+function applyDeferredRewards(rewards: Reward[]): void {
+    if (!rewards.length) return;
+    playerStore.update(p => {
+        let newP = { ...p };
+        for (const r of rewards) {
+            if (r.type === 'tag' && !newP.worldTags.includes(r.tagId)) {
+                newP.worldTags = [...newP.worldTags, r.tagId];
+            }
+        }
+        return checkQuestTriggers(newP);
+    });
+}
+
 
 // ---------------------------------------------------------------------------
 // Reward handler
@@ -224,14 +255,13 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
 
             // Check if already watched — treat like a completed dialogue stage
             if ((updatedPlayer.watchedScenes ?? []).includes(sceneId)) {
-                // Scene already watched — fall through to success handling below
-                // (identical to how 'dialogue' stages work when re-talked)
                 const resolvedSuccess = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
+                const { immediate: immC, deferred: defC } = splitRewards(stage.success_rewards ?? []);
+                if (immC.length) updatedPlayer = handleRewards(updatedPlayer, immC);
                 if (resolvedSuccess.length) {
-                    dialogueStore.startDialogue(resolvedSuccess, npc.name);
-                }
-                if (stage.success_rewards) {
-                    updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+                    dialogueStore.startDialogue(resolvedSuccess, npc.name, () => applyDeferredRewards(defC));
+                } else {
+                    applyDeferredRewards(defC);
                 }
                 if (currentStageIndex >= rankData.stages.length - 1) {
                     questStore.setQuestState(quest.id, 'COMPLETED');
@@ -292,13 +322,15 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                         if (currentNpcState) {
                             // Manually increment swordRank since we can't call interactTalk
                             // from within itself cleanly
-                            npcStore.update(s => ({
-                                ...s,
-                                globalNpcs: {
-                                    ...s.globalNpcs,
-                                    [npc.id]: { ...currentNpcState, swordRank: currentNpcState.swordRank + 1 }
-                                }
-                            }));
+                            import('$lib/stores/npcStore').then(({ npcStore }) => {
+                                npcStore.update(s => ({
+                                    ...s,
+                                    globalNpcs: {
+                                        ...s.globalNpcs,
+                                        [npc.id]: { ...currentNpcState, swordRank: currentNpcState.swordRank + 1 }
+                                    }
+                                }));
+                            });
                             messageStore.addMessage(
                                 `Your Sword Rank with ${npc.name} is now ${currentNpcState.swordRank + 1}.`,
                                 ['World', 'NPC']
@@ -316,11 +348,12 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
 
         if (stage.requirement.type === 'dialogue') {
             const resolvedSuccess = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
+            const { immediate: immA, deferred: defA } = splitRewards(stage.success_rewards ?? []);
+            if (immA.length) updatedPlayer = handleRewards(updatedPlayer, immA);
             if (resolvedSuccess.length) {
-                dialogueStore.startDialogue(resolvedSuccess, npc.name);
-            }
-            if (stage.success_rewards) {
-                updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
+                dialogueStore.startDialogue(resolvedSuccess, npc.name, () => applyDeferredRewards(defA));
+            } else {
+                applyDeferredRewards(defA);
             }
 
             if (currentStageIndex >= rankData.stages.length - 1) {
@@ -345,9 +378,8 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
         if (met) {
             updatedPlayer = postCheckActions.reduce((p, action) => action(p), updatedPlayer);
 
-            if (stage.success_rewards) {
-                updatedPlayer = handleRewards(updatedPlayer, stage.success_rewards);
-            }
+            const { immediate: immB, deferred: defB } = splitRewards(stage.success_rewards ?? []);
+            if (immB.length) updatedPlayer = handleRewards(updatedPlayer, immB);
 
             let finalDialogue = resolveSuccessDialogue(stage.success_dialogue, updatedPlayer.worldTags);
             if (currentStageIndex < rankData.stages.length - 1) {
@@ -357,7 +389,9 @@ const questStateHandlers: Record<string, QuestStateHandler> = {
                 }
             }
             if (finalDialogue.length > 0) {
-                dialogueStore.startDialogue(finalDialogue, npc.name);
+                dialogueStore.startDialogue(finalDialogue, npc.name, () => applyDeferredRewards(defB));
+            } else {
+                applyDeferredRewards(defB);
             }
 
             if (currentStageIndex >= rankData.stages.length - 1) {
@@ -574,13 +608,11 @@ export function handleRefuse(
     if (!stage?.refusable) return { updatedNpc, updatedPlayer };
 
     // Play refuse dialogue
+    const { immediate: immR, deferred: defR } = splitRewards(stage.refuse_rewards ?? []);
+    if (immR.length) updatedPlayer = handleRewards(updatedPlayer, immR);
     const refuseDialogue = stage.refuse_dialogue ?? [`${npc.name} watches you go.`];
-    dialogueStore.startDialogue(refuseDialogue, npc.name);
+    dialogueStore.startDialogue(refuseDialogue, npc.name, () => applyDeferredRewards(defR));
 
-    // Fire refuse_rewards if present
-    if (stage.refuse_rewards) {
-        updatedPlayer = handleRewards(updatedPlayer, stage.refuse_rewards);
-    }
 
     // Advance or complete the quest — same logic as any other stage completion
     if (quest.currentStage >= rankData.stages.length - 1) {

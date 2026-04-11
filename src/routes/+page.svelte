@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import { playerStore } from '$lib/stores/playerStore';
@@ -12,6 +12,7 @@
 	import { applyProfile } from '$lib/services/ProfileService';
 	import player from '$lib/data/player';
 	import NpcViewer from '$lib/components/NpcViewer.svelte';
+	import { hideNavbar } from '$lib/stores/uiStore';
 
 	const groupImages = [
 		{ src: '/images/characters/group/g0.png', alt: 'Main Characters' },
@@ -49,13 +50,16 @@
 		loadMapData(get(mapStore).currentMapId);
 	});
 
+	// onMount(() => hideNavbar.set(true));
+	// onDestroy(() => hideNavbar.set(false));
+
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
 			// applyProfile(selectedProfileId);
 			applyProfile('fresh');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true, position: {x: 25, y: 30} }));
+			playerStore.update((p) => ({ ...p, isInitialized: true, position: { x: 25, y: 30 } }));
 			goto('/map');
 		}
 	}
@@ -65,7 +69,7 @@
 			applyProfile('mage');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true, position: {x: 25, y: 30} } ));
+			playerStore.update((p) => ({ ...p, isInitialized: true, position: { x: 25, y: 30 } }));
 			goto('/map');
 		}
 	}
@@ -83,8 +87,12 @@
 		<div class="grid-container">
 			<div class="grid-box div1">
 				<!-- <h1>Dawn's <br />Journey</h1> -->
-				<img class="logo" src="/dj_logo.svg" alt="" srcset="">
+				<img class="logo" src="/dj_logo.svg" alt="" srcset="" />
 				<p>A serverless, no database browser based game.</p>
+				<p class="tagline">
+					Fully unlockable. Fully completable. A game with a start and an end — because there's
+					genuine peace in that, and we've forgotten what it feels like.
+				</p>
 			</div>
 			<div class="grid-box div2">
 				<NpcViewer />
@@ -93,6 +101,36 @@
 				<ImageSlideshow images={slideshowImages} />
 			</div>
 			<div class="grid-box div4">
+				<div class="video-container">
+					<div class="video-aspect-ratio">
+						<video autoplay muted loop playsinline class="gameplay-video">
+							<source src="/videos/video_v1.mp4" type="video/mp4" />
+							Your browser does not support the video tag.
+						</video>
+					</div>
+				</div>
+			</div>
+			<div class="grid-box div6">
+				{#if $playerStore.isInitialized}
+					<button class="start-game-button" on:click={continueGame}>Continue Game</button>
+				{:else}
+					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}
+						>New Game</button
+					>
+					<button
+						class="start-game-button exh-mode-btn"
+						on:click={exhibitionModeStart}
+						disabled={!selectedMapId}
+					>
+						Exhibition Mode
+						<p>
+							Start with everything unlocked, allowing you to freely look around all parts of this
+							game.
+						</p>
+					</button>
+				{/if}
+			</div>
+			<div class="grid-box div7">
 				<h3>Game Actions</h3>
 				<div class="game-actions">
 					{#if $playerStore.isInitialized}
@@ -113,32 +151,6 @@
 					{/if}
 				</div>
 			</div>
-			<div class="grid-box div6">
-				{#if $playerStore.isInitialized}
-					<button class="start-game-button" on:click={continueGame}>Continue Game</button>
-				{:else}
-					<button class="start-game-button" on:click={startNewGame} disabled={!selectedMapId}
-						>New Game</button
-					>
-					<button
-						class="start-game-button exh-mode-btn"
-						on:click={exhibitionModeStart}
-						disabled={!selectedMapId}
-					>
-						Exhibition Mode
-						<p>
-							Start with everything unlocked, allowing you to freely look around all parts of
-							this game.
-						</p>
-					</button>
-				{/if}
-			</div>
-			<div class="grid-box div7">
-				<p>
-					Fully unlockable. Fully completable. A game with a start and an end — because there's
-					genuine peace in that, and we've forgotten what it feels like.
-				</p>
-			</div>
 			<div class="grid-box div8">
 				<img class="banner" src="/Logo_Main.svg" alt="" srcset="" />
 				<a href="https://www.junesforge.com/" target="_blank"> jxnesforge studio </a>
@@ -154,17 +166,23 @@
 		<section class="m-section m-hero">
 			<!-- Slideshow bleeds as background -->
 			<div class="m-hero-bg">
-				<ImageSlideshow images={slideshowImages} />
+				<!-- <ImageSlideshow images={slideshowImages} /> -->
+				<div class="video-aspect-ratio video-m">
+					<video autoplay muted loop playsinline class="gameplay-video">
+						<source src="/videos/video_v1.mp4" type="video/mp4" />
+						Your browser does not support the video tag.
+					</video>
+				</div>
 			</div>
 			<!-- Gradient scrim so text is readable -->
 			<div class="m-hero-scrim"></div>
 
 			<div class="m-hero-content">
-				<div class="m-title-block">
-					<!-- <h1>Dawn's<br />Journey</h1> -->
-					<img class="logo" src="/dj_logo.svg" alt="" srcset="">
+				<!-- <div class="m-title-block">
+					<h1>Dawn's<br />Journey</h1>
+					<img class="logo" src="/dj_logo.svg" alt="" srcset="" />
 					<p>A serverless browser RPG.</p>
-				</div>
+				</div> -->
 
 				{#if $playerStore.isInitialized}
 					<button class="m-cta-primary" on:click={continueGame}> ▶ Continue Game </button>
@@ -172,11 +190,11 @@
 				{:else}
 					<div class="m-new-game-block">
 						<!-- Profile selector: horizontal scroll row -->
-						<p class="m-section-label">Choose your profile</p>
+						<span class="m-section-label">Starting Mode:</span>
 						<div class="m-profile-row">
 							{#each profiles as profile (profile.id)}
 								<label class="m-radio-label" class:selected={selectedProfileId === profile.id}>
-									<img src={profile.avatar} alt={profile.name} />
+									<!-- <img src={profile.avatar} alt={profile.name} /> -->
 									<span>{profile.name}</span>
 									<input
 										type="radio"
@@ -381,8 +399,9 @@
 	}
 
 	.game-actions {
+		width: 100%;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 		gap: 0.5rem;
 	}
 	.game-actions button {
@@ -459,23 +478,24 @@
 	}
 
 	.banner {
-		height: 80%;
-		object-fit: contain;
+		height: 100px;
 		image-rendering: auto;
 		/* filter: saturate(0) contrast(0) brightness(0); */
 	}
 
 	.banner-m {
-		/* width: 100%; */
+		width: 100%;
 		height: 50%;
 		object-fit: contain;
 		image-rendering: auto;
 	}
 
 	.logo {
-		height: 80%;
+		height: 100%;
+		/* width: 100%; */
 		margin-bottom: auto;
 		filter: brightness(1) contrast(1.2);
+		padding-bottom: 1rem;
 	}
 
 	.div1 {
@@ -487,6 +507,15 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
+		p {
+			text-align: right;
+		}
+		p.tagline {
+			padding-top: 0.5rem;
+			width: 80%;
+			color: var(--orange);
+			font-size: 0.75rem;
+		}
 	}
 	.div2 {
 		grid-column: span 2 / span 2;
@@ -495,11 +524,16 @@
 		background-color: #2e2e2e;
 	}
 	.div4 {
-		grid-row: span 3 / span 3;
+		/* grid-row: span 3 / span 3; */
 		grid-column-start: 5;
 		background-color: #e9d9ca;
 		/* background-color: #e9d9ca; */
 		color: #cd804d;
+		padding: 0;
+		object-fit: contain;
+		/* border: none; */
+		height: fit-content;
+		overflow: hidden;
 	}
 	.div5 {
 		grid-column: span 2 / span 2;
@@ -536,6 +570,7 @@
 		/* overflow: scroll; */
 		background-color: #cd804d;
 		display: flex;
+		flex-direction: column;
 		/* justify-content: center; */
 		align-items: center;
 		p {
@@ -545,23 +580,51 @@
 		}
 	}
 	.div8 {
-		grid-row: span 2 / span 2;
+		/* grid-row: span 2 / span 2; */
 		grid-column-start: 5;
-		grid-row-start: 4;
+		grid-row-end: 6;
+		/* height: fit-content; */
 		/* background-color: #2e2e2e; */
-		border: none;
+		/* border: none; */
 		box-shadow: none;
+		display: flex;
+		flex-direction: column;
 	}
 
+	.gameplay-video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* Ensures the video fills the 1080x1920 area */
+		display: block;
+		background-position: bottom center;
+	}
+
+	.video-aspect-ratio {
+		aspect-ratio: 9 / 16;
+		width: auto;
+		height: 100%; /* Fixes height and lets width scale to 9:16 */
+		/* background: #000; */
+		/* border: 4px solid #333; */
+		/* border-radius: 20px; */
+		overflow: hidden;
+		/* box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); */
+	}
+
+	
 	/* ============================================================
-	   MOBILE
-	   ============================================================ */
+	MOBILE
+	============================================================ */
 	@media (max-width: 768px) {
 		.desktop-only {
 			display: none !important;
 		}
 		.mobile-only {
 			display: flex;
+		}
+		
+		/* On very short mobile screens, we ensure it doesn't overflow */
+		.video-aspect-ratio {
+			height: 20vh;
 		}
 
 		.new-player-view {

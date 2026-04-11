@@ -45,11 +45,31 @@
     "heartState": "NOT_STARTED",
     "statGrowth": [],
     "drops": [
-        { "itemId": "mountain_breaker", "chance": 0.33, "quantity": 1 },
-        { "itemId": "red_bar", "chance": 0.75, "quantity": 4 },
-        { "itemId": "earth_bar", "chance": 0.75, "quantity": 4 },
-        { "itemId": "emerald", "chance": 1, "quantity": 6 },
-        { "itemId": "ruby", "chance": 1, "quantity": 6 }
+        {
+            "itemId": "mountain_breaker",
+            "chance": 0.33,
+            "quantity": 1
+        },
+        {
+            "itemId": "red_bar",
+            "chance": 0.75,
+            "quantity": 4
+        },
+        {
+            "itemId": "earth_bar",
+            "chance": 0.75,
+            "quantity": 4
+        },
+        {
+            "itemId": "emerald",
+            "chance": 1,
+            "quantity": 6
+        },
+        {
+            "itemId": "ruby",
+            "chance": 1,
+            "quantity": 6
+        }
     ],
     "mapPositions": [
         {
@@ -167,12 +187,27 @@
                 {
                     "objective": "Bring Cygwin the repair materials",
                     "requirement": {
-                        "type": "give_item",
-                        "itemId": "cigarettes",
-                        "quantity": 1
+                        "operator": "AND",
+                        "conditions": [
+                            {
+                                "type": "give_item",
+                                "itemId": "cigarettes",
+                                "quantity": 1
+                            },
+                            {
+                                "type": "have_item",
+                                "itemId": "stone",
+                                "quantity": 10
+                            },
+                            {
+                                "type": "have_item",
+                                "itemId": "wood",
+                                "quantity": 10
+                            }
+                        ]
                     },
                     "reminder_dialogue": [
-                        "30 wood, 20 stone. That's what we'll need to fix the damaged parts of the Extractor.",
+                        "10 wood, 10 stone. That's what we'll need to fix the damaged parts of the Extractor.",
                         "And a pack of smokes. That's just for me. You can get it from the Shop.",
                         "Go get those. Take your time."
                     ],

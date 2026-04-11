@@ -428,8 +428,8 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
                 requirement: { type: 'have_tag', tag: 'cygwin_extractor_clearance' },
                 effects: [
                     { type: 'add_tag', tag: 'red_extractor_read' },
-                    { type: 'TAKE_ITEM', itemId: 'wood', quantity: 30 },
-                    { type: 'TAKE_ITEM', itemId: 'stone', quantity: 20 }
+                    { type: 'TAKE_ITEM', itemId: 'wood', quantity: 10 },
+                    { type: 'TAKE_ITEM', itemId: 'stone', quantity: 10 }
                 ]
             }
         ],
