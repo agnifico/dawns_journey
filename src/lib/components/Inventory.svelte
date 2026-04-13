@@ -14,6 +14,7 @@
 	import { activeItem, inventoryTab, homesteadSubTab } from '$lib/stores/uiStore';
 	import InventoryFilterBar from './ui/InventoryFilterBar.svelte';
 	import { inventoryFilterStore } from '$lib/stores/inventoryFilterStore';
+	import GearPassive from './GearPassive.svelte';
 
 	const isConsumable = (item: Item) =>
 		item.type === 'general' &&
@@ -274,6 +275,16 @@ function getStatName(statId: string): string {
 					</div>
 				{/if}
 
+				{#each drawerItem.gearPassives as effect}
+						<GearPassive
+							weaponName={drawerItem.name}
+							passiveName={effect.name}
+							description={effect.description}
+							icon={drawerItem.image}
+							view='mini'
+						/>
+					{/each}
+
 				<!-- Exploration -->
 				{#if drawerItem.exploration}
 					<div class="drawer-section-label">Exploration</div>
@@ -322,6 +333,7 @@ function getStatName(statId: string): string {
 	.tabs button {
 		font-family: var(--font-family-pixel);
 		font-size: 0.75rem;
+		text-transform: uppercase;
 		box-sizing: border-box;
 		background-color: rgba(0,0,0,0.3);
 		color: var(--text-muted);
@@ -502,7 +514,7 @@ function getStatName(statId: string): string {
 
 	.drawer-name {
 		margin: 0;
-		font-family: var(--font-family-main);
+		font-family: var(--font-family-pixel);
 		font-size: 1rem;
 		font-weight: 400;
 		color: var(--text-item-name, #c8a96e);
@@ -510,10 +522,12 @@ function getStatName(statId: string): string {
 	}
 
 	.drawer-desc {
-		font-family: var(--font-family-pixel);
-		font-size: 0.65rem;
+		font-family: var(--font-family-main);
+		font-family: "Lexend";
+		font-style: italic;
+		font-size: 0.85rem;
 		color: var(--text-muted);
-		line-height: 1.5;
+		line-height: 1.2;
 	}
 
 	.drawer-section-label {
@@ -529,7 +543,7 @@ function getStatName(statId: string): string {
 	.drawer-stats {
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: 4px;
 	}
 
 	.drawer-set {

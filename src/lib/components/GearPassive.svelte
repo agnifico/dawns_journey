@@ -3,14 +3,21 @@
 	export let passiveName: string;
 	export let description: string;
 	export let icon: string;
+	export let view: 'normal' | 'mini' = 'normal';
 </script>
 
 <div class="gear-passive">
-	<div class="gp-icon">
-		<img src={icon} alt={weaponName} />
-	</div>
+	{#if view !== 'mini'}
+		<div class="gp-icon">
+			<img src={icon} alt={weaponName} />
+		</div>
+	{/if}
 	<div class="gp-body">
-		<span class="gp-weapon">{weaponName} : {passiveName}</span>
+		{#if view !== 'mini'}
+			<span class="gp-weapon">{weaponName} : {passiveName}</span>
+		{:else}
+			<span class="gp-weapon">{passiveName}</span>
+		{/if}
 		<!-- <span class="gp-name">{passiveName}</span> -->
 		<span class="gp-desc">{description}</span>
 	</div>
@@ -25,10 +32,10 @@
 		border-radius: 8px;
 		background: rgba(60, 160, 90, 0.12);
 		background: rgba(68, 68, 68, 0.12);
-        /* border: 1px solid rgba(83, 162, 105, 0.4); */
+		/* border: 1px solid rgba(83, 162, 105, 0.4); */
 		border: 1px solid rgba(60, 160, 90, 0.28);
-        box-shadow: #00000056 0 -6px 0 3px inset;
-        align-items: center;
+		box-shadow: #00000056 0 -6px 0 3px inset;
+		align-items: center;
 	}
 
 	.gp-icon {

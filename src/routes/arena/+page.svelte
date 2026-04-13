@@ -8,7 +8,9 @@
 	import AbilityTag from '$lib/components/ui/AbilityTag.svelte';
 	import Stat from '$lib/components/Stat.svelte';
 	import { abilityMode } from '$lib/stores/settingsStore';
-	import Notification from "$lib/components/Notification.svelte";
+	import Notification from '$lib/components/Notification.svelte';
+	import { elementBgs } from '$lib/data/statDefinitions';
+	import ElementTag from '$lib/components/ui/ElementTag.svelte';
 
 	let opponents: Combatant[] = [];
 	let selectedNpc: Combatant | null = null;
@@ -47,6 +49,8 @@
 </script>
 
 <div class="arena-page">
+	<div class="filter-layer"></div>
+
 	<!-- ═══════════════════════════════════ HEADER -->
 	<div class="page-header">
 		<div class="row1">
@@ -90,29 +94,28 @@
 			{#if selectedNpc}
 				<div class="detail-panel">
 					<!-- NPC identity header -->
-					<div class="detail-header">
-						<img
-							class="detail-portrait"
-							src={getNpcImagePath(selectedNpc)}
-							alt={selectedNpc.name}
-						/>
-						<div class="detail-identity">
-							<h2 class="detail-name">{selectedNpc.name}</h2>
-							{#if selectedNpc.elements?.length}
-								<div class="detail-elements">
-									{#each selectedNpc.elements as el}
-										<span class="el-tag" style="background:{el}">{el}</span>
-									{/each}
-								</div>
-							{/if}
-						</div>
-					</div>
 
 					<!-- Stats + Abilities side by side -->
 					<div class="stats-abilities">
 						<!-- Stats -->
 						<div class="section">
-							<h3 class="section-label">Stats</h3>
+							<div class="detail-header">
+								<!-- <img
+									class="detail-portrait"
+									src={getNpcImagePath(selectedNpc)}
+									alt={selectedNpc.name}
+								/> -->
+								<div class="detail-identity">
+									<h2 class="detail-name">{selectedNpc.name}</h2>
+									{#if selectedNpc.elements?.length}
+										<div class="detail-elements">
+											{#each selectedNpc.elements as el}
+												<ElementTag element={el.toLowerCase()} />
+											{/each}
+										</div>
+									{/if}
+								</div>
+							</div>
 							<div class="stats-grid">
 								<Stat statId="hp" value={selectedNpc.baseStats.hp} />
 								<Stat statId="auraShield" value={selectedNpc.baseStats.maxAuraShield} />
@@ -177,40 +180,70 @@
 <style>
 	/* ── Page shell ──────────────────────────────────────────────────────── */
 	.arena-page {
+		/* position: relative; */
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
-		padding: 1rem;
-		height: 100%;
 		box-sizing: border-box;
 		font-family: var(--font-family-pixel);
 		color: #e9d9ca;
+		height: 100%;
 		overflow: hidden;
+		/* background-color: #000000; */
+		/* background-color: rgb(27, 18, 37); */
+		background: url('/images/arenabg.png');
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	.filter-layer {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		z-index: 1;
+		background: linear-gradient(0.5turn, #000000f9, #000000cc, #000000d2, transparent);
+		pointer-events: none;
 	}
 
 	.page-header {
 		flex-shrink: 0;
+		z-index: 2;
+		padding: 1rem;
+		/* margin-top: 2rem; */
+		/* margin-left: 2rem; */
 	}
+	
+	.row1 {
+		display: flex;
+		justify-content: space-between;
+		
+	}
+
+
 	.page-title {
-		font-size: 1.6rem;
-		font-family: 'Lexend', sans-serif;
+		font-size: 2rem;
+		font-family: 'DePixel', sans-serif;
 		font-weight: 700;
-		color: #e9d9ca;
+		color: #a53326;
 		margin: 0 0 0.3rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		/* text-transform: uppercase; */
+		font-style: italic;
+		letter-spacing: -4px;
+		word-spacing: 0.15rem;
+		/* border: 1px solid white; */
 	}
 	.page-desc {
-		font-size: 0.65rem;
+		font-size: 1rem;
 		color: #888;
 		margin: 0;
 		line-height: 1.6;
+		width: 50%;
 	}
 
 	.dev-toggle {
-		position: fixed;
-		bottom: 1rem;
-		left: 1rem;
+		/* position: absolute; */
+		/* bottom: 1rem; */
+		/* left: 1rem; */
 		background: #1a1a2e;
 		border: 1px solid #e94560;
 		color: #e94560;
@@ -219,7 +252,7 @@
 		padding: 0.4rem 0.9rem;
 		border-radius: 6px;
 		cursor: pointer;
-		z-index: 9999;
+		/* z-index: 9999; */
 		&.active {
 			border: 1px solid #49bb47;
 			color: #49bb47;
@@ -228,11 +261,18 @@
 
 	/* ── Layout ──────────────────────────────────────────────────────────── */
 	.main-layout {
+		z-index: 2;
 		display: grid;
 		grid-template-columns: auto 1fr;
+		/* display: flex; */
+		/* flex-direction: column; */
 		gap: 0.75rem;
 		flex: 1;
 		min-height: 0;
+		/* backdrop-filter: blur(5px) brightness(1); */
+		padding-inline: 1rem;
+		/* border: 1px solid white; */
+		/* margin-left: 2rem; */
 	}
 
 	/* ── Roster column ───────────────────────────────────────────────────── */
@@ -240,17 +280,18 @@
 		overflow-y: auto;
 		min-height: 0;
 		/* border: 1px solid white; */
-		flex: 1;
 		box-sizing: border-box;
 		/* scrollbar-width: none; */
 	}
 
 	.roster-grid {
+		box-sizing: border-box;
 		display: grid;
+		/* grid-template-rows: repeat(auto-fill, minmax(130px, 1fr)); */
 		grid-template-columns: repeat(5, 1fr);
 		gap: 0.5rem;
-		padding-right: 1.3rem;
-		padding-bottom: 1rem;
+		padding-top: 1rem;
+		padding-right: 1rem;
 	}
 
 	/* NPC portrait card — full game button style */
@@ -269,18 +310,22 @@
 		transition: 0.1s all ease-in;
 		overflow: hidden;
 		width: 130px;
+		transition: all 0.1s ease-in-out;
+		filter: grayscale(1) brightness(0.5) sepia(0.75);
 	}
 	.npc-card:hover {
-		transform: translateY(2px);
+		filter: grayscale(0);
+		/* transform: translateY(2px); */
 		box-shadow: #00000056 0 -5px 0 -3px inset;
 		background-color: #383838;
 	}
 	.npc-card.selected {
-		background-color: #435e52;
-		border-color: #6a9880;
+		filter: grayscale(0);
+		background-color: #c25050;
+		border-color: #c19642;
 		box-shadow:
 			#00000056 0 -5px 0 0px inset,
-			0 0 0 1px #6a9880;
+			0 0 0 1px #f6cb76;
 	}
 
 	.npc-card-img-wrap {
@@ -288,6 +333,7 @@
 		aspect-ratio: 1 / 1;
 		overflow: hidden;
 		border-radius: 11px 11px 0 0;
+		border-radius: 12px;
 	}
 	.npc-card-img-wrap img {
 		width: 100%;
@@ -303,14 +349,15 @@
 
 	.npc-card-name {
 		font-size: 0.58rem;
-		color: #cd804d;
+		color: #f1ac7b;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		padding-top: 0.4rem;
 		text-align: center;
 	}
 	.npc-card.selected .npc-card-name {
-		color: #e9d9ca;
+		color: #fff5ec;
+		font-weight: 600;
 	}
 
 	/* ── Detail column ───────────────────────────────────────────────────── */
@@ -335,11 +382,11 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		background-color: #435e52;
+		background-color: #391d1d;
 		border: 3px solid #00000056;
-		box-shadow: #00000056 0 -5px 0 0px inset;
-		border-radius: 18px;
-		padding: 0.6rem 0.75rem;
+		box-shadow: #00000056 0 -3px 0 0px inset;
+		border-radius: 12px;
+		padding: 0.6rem 0.75rem calc(0.6rem + 3px);
 		flex-shrink: 0;
 	}
 	.detail-portrait {
@@ -357,13 +404,14 @@
 		gap: 0.3rem;
 	}
 	.detail-name {
-		font-family: 'Lexend', sans-serif;
+		/* font-family: 'Lexend', sans-serif; */
 		font-size: 1.1rem;
 		font-weight: 700;
 		margin: 0;
 		color: #e9d9ca;
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
+		letter-spacing: -1px;
+		font-style: italic;
 	}
 	.detail-elements {
 		display: flex;
@@ -383,12 +431,13 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 0.6rem;
-		flex: 1;
+		/* flex: 1; */
 		min-height: 0;
 	}
 
 	.section {
 		background-color: #2e2e2e;
+		background: rgba(66, 49, 33, 0.5);
 		border: 3px solid #00000056;
 		box-shadow: #00000056 0 -5px 0 0px inset;
 		border-radius: 18px;
@@ -397,6 +446,7 @@
 		flex-direction: column;
 		gap: 0.35rem;
 		min-height: 0;
+		/* height: fit-content; */
 		/* overflow: hidden; */
 	}
 
@@ -485,7 +535,7 @@
 	.battle-btn {
 		width: 100%;
 		padding: 0.75rem 1rem 1rem;
-		background-color: #435e52;
+		background-color: #7c4646;
 		color: #e9d9ca;
 		border: 3px solid #00000056;
 		box-shadow: #00000056 0 -6px 0 0px inset;
@@ -501,7 +551,7 @@
 	.battle-btn:hover {
 		transform: translateY(2px);
 		box-shadow: #00000056 0 -6px 0 -4px inset;
-		background-color: #4f7060;
+		background-color: #9c3737;
 	}
 	.battle-btn:active {
 		transform: translateY(4px);
@@ -522,7 +572,7 @@
 		.arena-page {
 			overflow-y: auto;
 			height: auto;
-			padding: 0.75rem;
+			/* padding: 0.75rem; */
 			gap: 0.6rem;
 		}
 

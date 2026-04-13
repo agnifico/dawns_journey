@@ -1,18 +1,4 @@
 <script lang="ts">
-	const inspirations = [
-		{ system: 'Skilling (Woodcutting, Cooking, Mining)', source: 'RuneScape', original: false },
-		{ system: 'Collecting Enemies · Type System', source: 'Pokémon', original: false },
-		{ system: 'Combat System', source: 'Pokémon · FallenSword', original: false },
-		{ system: 'Map Structure', source: 'FallenSword', original: false },
-		{ system: 'Weapon Design Archetypes', source: "Assassin's Creed: Odyssey", original: false },
-		{ system: 'Farming System', source: 'Stardew Valley', original: false },
-		{ system: 'Affinity / Heart Ranks', source: 'Stardew Valley · Pokémon', original: false },
-		{ system: 'Character Art Direction', source: 'Genshin Impact · Wuthering Waves', original: false },
-		{ system: 'Relics', source: 'Genshin Artifacts · WuWa Echoes (liberalised)', original: false },
-		{ system: 'Precision · Evasion · Speed', source: 'Original', original: true },
-		{ system: 'World Resonance', source: 'Original', original: true },
-		{ system: 'Time Point System (Cooking)', source: 'Original', original: true }
-	];
 </script>
 
 <div class="journey-wrap">
@@ -318,33 +304,16 @@
 		<p>
 			The anti-extraction-model thing isn't just about money, though it's also about money.
 			It's about a left-leaning frustration with what gets done to good things when the
-			incentive shifts from making something great to maximising how much you can extract
-			from the people who love it. I believe in tools being available. I believe in information
-			being accessible. I believe human creativity will always outpace what can be extracted
-			from it — that there will always be something new that doesn't follow the existing rules
-			but still makes sense. I'm not worried about AI replacing that. I'm using AI to make this.
+			incentives are misaligned. It's about building something I can actually give to someone —
+			hand it over, walk away, and trust that it still works.
 		</p>
 
 		<p>
-			The women in this game — the whole cast being women — that came from the same place as
-			everything else. I looked at what was missing and wanted to make it. Women who are
-			complicated and politically sharp and warm underneath. Women who are thick, who aren't
-			the same silhouette, who carry themselves differently. I hit walls with AI image generation
-			trying to make characters that didn't look like the default. I kept pushing. Some of it
-			worked. The characters in this game look like the characters I had in my head, not like
-			what the tool wanted to give me.
-		</p>
-
-		<p>
-			A friend suggested, during a random conversation, that the game's architecture was
-			perfectly suited to be an educational tool. A map that is a school. Regions that
-			are subjects. Characters that are teachers. There's a YouTube channel that teaches
-			ancient Greek history and geography by walking through Assassin's Creed Odyssey
-			and Origins — because Ubisoft's old research team was so thorough that the game
-			is accurate enough to teach from. That kind of thing genuinely interests me.
-			The architecture here is already AI-writable — a few JSON files can add a new
-			map, a new character, a new region. I can see a version of this that teaches.
-			I'm keeping that door open.
+			There's also the educational angle, which I keep coming back to. The whole architecture
+			is AI-writable by design — structured JSON schemas, documented systems, clean separation
+			between engine and content. A new character, a new map, a new region can all be added
+			without touching the engine. I can see a version of this that teaches. I'm keeping that
+			door open.
 		</p>
 
 		<p>
@@ -367,20 +336,9 @@
 
 		<div class="divider"><span class="diamond"></span></div>
 
-		<!-- ── Inspirations ── -->
-		<div class="inspirations">
-			<p class="insp-title">Acknowledgements &amp; Inspirations</p>
-			{#each inspirations as row}
-				<div class="insp-row">
-					<span class="insp-system">{row.system}</span>
-					<span class="insp-source" class:original={row.original}>{row.source}</span>
-				</div>
-			{/each}
-		</div>
-
 		<div class="signature">
 			<p class="sig-name">Dawn's Journey</p>
-			<p class="sig-date">Ashenfall, March 2026</p>
+			<p class="sig-date">Ashenfall, April 2026</p>
 		</div>
 
 	</div>
@@ -391,13 +349,10 @@
 		max-width: 680px;
 		margin: 0 auto;
 	}
-
-	/* ── Header ── */
 	.journey-header {
 		text-align: center;
 		margin-bottom: 3rem;
 	}
-
 	.eyebrow {
 		font-size: 0.75rem;
 		letter-spacing: 5px;
@@ -405,7 +360,6 @@
 		text-transform: uppercase;
 		margin: 0 0 0.6rem;
 	}
-
 	.journey-title {
 		font-size: 1.6rem;
 		color: #e8b96a;
@@ -413,45 +367,31 @@
 		text-transform: uppercase;
 		margin: 0 0 0.5rem;
 	}
-
 	.journey-sub {
 		color: #5a3a18;
 		font-style: italic;
 		font-size: 0.75rem;
 		margin: 0 0 1rem;
 	}
-
 	.rule {
 		width: 100px;
 		height: 1px;
 		background: linear-gradient(90deg, transparent, #7a5a20, transparent);
 		margin: 0 auto;
 	}
-
-	/* ── Body ── */
 	.body {
 		color: #c8a878;
 		font-size: 1rem;
 		line-height: 1.85;
 	}
-
-	.body p {
-		margin: 0 0 1.4em;
-	}
-
-	.body em {
-		color: #e8d4a8;
-		font-style: italic;
-	}
-
-	/* ── Chapter headings ── */
+	.body p { margin: 0 0 1.4em; }
+	.body em { color: #e8d4a8; font-style: italic; }
 	.chapter {
 		margin: 3rem 0 1.2rem;
 		display: flex;
 		align-items: baseline;
 		gap: 1rem;
 	}
-
 	.chapter-label {
 		font-size: 0.5rem;
 		letter-spacing: 4px;
@@ -461,7 +401,6 @@
 		margin: 0;
 		padding-top: 3px;
 	}
-
 	.chapter-title {
 		font-size: 1.2rem;
 		color: #c9973a;
@@ -473,8 +412,6 @@
 		padding-bottom: 0.5rem;
 		flex: 1;
 	}
-
-	/* ── Blockquote ── */
 	blockquote {
 		border-left: 3px solid #7a5a20;
 		padding: 0.75rem 0 0.75rem 1.5rem;
@@ -484,14 +421,11 @@
 		font-size: 0.95rem;
 		line-height: 1.7;
 	}
-
-	/* ── Divider ── */
 	.divider {
 		display: flex;
 		align-items: center;
 		margin: 2.5rem 0;
 	}
-
 	.divider::before,
 	.divider::after {
 		content: '';
@@ -499,7 +433,6 @@
 		height: 1px;
 		background: rgba(92, 61, 30, 0.35);
 	}
-
 	.diamond {
 		display: inline-block;
 		width: 7px;
@@ -509,67 +442,18 @@
 		margin: 0 12px;
 		flex-shrink: 0;
 	}
-
 	.closing {
 		text-align: center;
 		font-size: 1rem;
 		color: #e8d4a8;
 		margin-top: 0.5rem;
 	}
-
-	/* ── Inspirations ── */
-	.inspirations {
-		background: rgba(26, 20, 12, 0.6);
-		border: 1px solid #3d2810;
-		border-radius: 6px;
-		padding: 1.2rem 1.4rem;
-		margin-bottom: 2rem;
-	}
-
-	.insp-title {
-		font-size: 0.55rem;
-		letter-spacing: 3px;
-		color: #7a5a20;
-		text-transform: uppercase;
-		margin: 0 0 1rem;
-	}
-
-	.insp-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		border-bottom: 1px solid rgba(92, 61, 30, 0.2);
-		padding: 0.5rem 0;
-		font-size: 0.78rem;
-	}
-
-	.insp-row:last-child {
-		border-bottom: none;
-	}
-
-	.insp-system {
-		color: #7a5a38;
-		padding-right: 1rem;
-	}
-
-	.insp-source {
-		color: #c8a878;
-		font-style: italic;
-	}
-
-	.insp-source.original {
-		color: #c9973a;
-		font-style: normal;
-		font-weight: 600;
-	}
-
-	/* ── Signature ── */
 	.signature {
 		margin-top: 2rem;
 		padding-top: 1rem;
 		border-top: 1px solid rgba(92, 61, 30, 0.35);
 		text-align: right;
 	}
-
 	.sig-name {
 		font-size: 0.6rem;
 		letter-spacing: 3px;
@@ -577,7 +461,6 @@
 		text-transform: uppercase;
 		margin: 0 0 0.25rem;
 	}
-
 	.sig-date {
 		font-size: 0.75rem;
 		color: #5a3a18;

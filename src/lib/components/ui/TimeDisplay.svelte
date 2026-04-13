@@ -23,28 +23,34 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		border: none;
+		padding: 4px;
+		cursor: pointer;
+		background-color: rgba(0, 0, 0, 0.4);
+		border-radius: 3px;
 	}
 	.time-display:hover {
 		/* background-color: #ffffff; */
 		/* border-color: #777; */
 	}
 	img {
-		width: 24px;
-		height: 24px;
+		margin-block: 2px;
+		width: 20px;
+		height: 20px;
 		display: block;
 	}
-	.dawnrise {
+	.dawnrise img {
 		filter: brightness(0) saturate(100%) invert(74%) sepia(89%) saturate(335%) hue-rotate(359deg)
 			brightness(104%) contrast(95%);
             &:hover {
-              filter: invert(0);  
+              filter: invert(1);  
             }
 	}
-	.duskfall {
+	.duskfall img {
 		filter: brightness(0) saturate(100%) invert(62%) sepia(83%) saturate(1426%) hue-rotate(219deg)
 			brightness(97%) contrast(83%);
             &:hover {
-              filter: invert();  
+              filter: invert(1);  
             }
 	}
 </style>

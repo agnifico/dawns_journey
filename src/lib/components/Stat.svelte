@@ -121,8 +121,9 @@
 
 	/* ── Mini view ── */
 	.view-mini {
-		padding: 2px 5px;
-		background-color: rgba(0, 0, 0, 0.42);
+		justify-content: center;
+		padding: 3px 5px;
+		background-color: rgba(78, 78, 78, 0.42);
 		border-color: transparent;
 		gap: 0;
 	}
@@ -135,10 +136,10 @@
 
 	.view-mini .stat-name {
 		margin-right: 6px;
-		font-size: 0.65rem;
+		font-size: 0.85rem;
 	}
 
 	.view-mini .stat-value {
-		font-size: 0.75rem;
+		font-size: 0.85rem;
 	}
 </style>

@@ -73,6 +73,7 @@
 <style>
 	.page-content {
 		position: relative;
+		height: calc(100% - 50px);
 		height: 100%;
 		padding-top: 50px;
 		box-sizing: border-box;

@@ -63,9 +63,9 @@
 		<button class="icon-button" on:click={() => goto('/settings')} title="Settings">
 			<img src="/game_icons/settings.png" alt="Settings" />
 		</button>
-		<button class="icon-button" on:click={() => goto('/secret')}>
+		<!-- <button class="icon-button" on:click={() => goto('/secret')}>
 			<img src="/game_icons/black_flag.png" alt="Vault" />
-		</button>
+		</button> -->
 
 		<TimeDisplay />
 
@@ -181,10 +181,6 @@
 				<img src="/game_icons/cancel.png" alt="Delete" />
 				<span>Delete</span>
 			</button>
-			<button class="icon-button" on:click={() => goto('/secret')}>
-				<img src="/game_icons/black_flag.png" alt="Vault" />
-				<span>Vault</span>
-			</button>
 		</div>
 	</div>
 </div>
@@ -198,11 +194,13 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		background-color: var(--color-secondary);
+		/* background-color: var(--color-secondary); */
+		background: linear-gradient(to left, rgb(104, 62, 62), transparent 66%);
 		padding: .5rem .5rem;
 		color: white;
-		border-bottom: 4px solid #00000056;
+		/* border-bottom: 4px solid #00000056; */
 		z-index: 100;
+		overflow: hidden;
 	}
 
 	.logo {
@@ -238,20 +236,24 @@
 
 	.navbar-right {
 		display: flex;
-		align-items: center;
-		gap: 0.5em;
+		/* align-items: center; */
+		gap: 0.3rem;
+		overflow-x: scroll;
+		scrollbar-width: none;
+		/* background-color: #444; */
 	}
 
 	.icon-button {
 		background: none;
 		border: none;
-		padding: 8px;
+		padding: 4px;
 		cursor: pointer;
-		background-color: rgba(0, 0, 0, 0.549);
-		border-radius: 6px;
+		background-color: rgba(0, 0, 0, 0.4);
+		border-radius: 3px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		/* filter: grayscale(1); */
 	}
 
 	.icon-button:hover {
