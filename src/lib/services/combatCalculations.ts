@@ -54,7 +54,7 @@ export function calculateDamage(
     let elementalMultiplier = 1.0;
     if (attackType === 'elemental') {
         const attackerElements = activeElements;
-        const defenderElements = defender.elements || [];
+        const defenderElements = defender.types || [];
         elementalMultiplier = calculateMultiElementEffectiveness(attackerElements, defenderElements);
     }
 

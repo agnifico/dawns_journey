@@ -77,6 +77,14 @@ function slimEquipmentSlot(slot: any): SlimEquipmentSlot | null {
     return { instanceId: slot.instanceId, id: slot.id };
 }
 
+export function hasSave(): boolean {
+    if (!browser) return false;
+    return (
+        localStorage.getItem(SAVE_KEY) !== null ||
+        localStorage.getItem('dawn_journey_save_v2') !== null
+    );
+}
+
 /**
  * From the full globalNpcs map, save only the mutable runtime fields.
  * Everything else (dialogue, quest definitions, galleryImages, stats…)

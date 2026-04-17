@@ -25,12 +25,12 @@
 </script>
 
 <div class="chars-wrap">
-	<div class="chars-header">
+	<!-- <div class="chars-header">
 		<p class="chars-eyebrow">Dawn's Journey</p>
 		<h2 class="chars-title">Characters</h2>
-		<p class="chars-sub">The remarkable inhabitants of Ashenfall.</p>
+		<p class="chars-sub">Meet the cast</p>
 		<div class="rule"></div>
-	</div>
+	</div> -->
 
 	{#if npcList.length === 0}
 		<div class="empty-state">
@@ -99,9 +99,9 @@
 	}
 
 	.chars-sub {
-		color: #5a3a18;
+		color: #6b6a69;
 		font-style: italic;
-		font-size: 0.75rem;
+		font-size: 0.85rem;
 		margin: 0 0 0.8rem;
 	}
 

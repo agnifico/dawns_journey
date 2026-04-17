@@ -4,6 +4,7 @@
 	import TimeDisplay from './ui/TimeDisplay.svelte';
 	import { playerStats } from '$lib/stores/playerStore';
 	import StatBar from './ui/StatBar.svelte';
+	import { modalStore } from '$lib/stores/modalStore';
 
 	let menuOpen = false;
 
@@ -14,6 +15,19 @@
 	function navigate(path: string) {
 		goto(path);
 		menuOpen = false;
+	}
+
+	function handleSave() {
+		modalStore.confirmSave(() => SaveLoadService.saveGame());
+	}
+	function handleLoad() {
+		modalStore.confirmLoad(() => {
+			SaveLoadService.loadGame();
+			menuOpen = false;
+		});
+	}
+	function handleClearSave() {
+		modalStore.confirmClearSave(() => SaveLoadService.clearSave());
 	}
 </script>
 
@@ -72,13 +86,13 @@
 		<div class="divider"></div>
 
 		<!-- Game Actions -->
-		<button class="icon-button" on:click={SaveLoadService.saveGame} title="Save Game">
+		<button class="icon-button" on:click={handleSave} title="Save Game">
 			<img src="/game_icons/save.png" alt="Save" />
 		</button>
-		<button class="icon-button" on:click={SaveLoadService.loadGame} title="Load Game">
+		<button class="icon-button" on:click={handleLoad} title="Load Game">
 			<img src="/game_icons/load.png" alt="Load" />
 		</button>
-		<button class="icon-button danger" on:click={SaveLoadService.clearSave} title="Delete Save">
+		<button class="icon-button danger" on:click={handleClearSave} title="Delete Save">
 			<img src="/game_icons/cancel.png" alt="Delete" />
 		</button>
 	</div>
@@ -148,36 +162,15 @@
 			<TimeDisplay />
 		</div>
 		<div class="mobile-icon-grid">
-			<button
-				class="icon-button"
-				on:click={() => {
-					SaveLoadService.saveGame();
-					menuOpen = false;
-				}}
-				title="Save Game"
-			>
+			<button class="icon-button" on:click={handleSave} title="Save Game">
 				<img src="/game_icons/save.png" alt="Save" />
 				<span>Save</span>
 			</button>
-			<button
-				class="icon-button"
-				on:click={() => {
-					SaveLoadService.loadGame();
-					menuOpen = false;
-				}}
-				title="Load Game"
-			>
+			<button class="icon-button" on:click={handleLoad} title="Load Game">
 				<img src="/game_icons/load.png" alt="Load" />
 				<span>Load</span>
 			</button>
-			<button
-				class="icon-button danger"
-				on:click={() => {
-					SaveLoadService.clearSave();
-					menuOpen = false;
-				}}
-				title="Delete Save"
-			>
+			<button class="icon-button danger" on:click={handleClearSave} title="Delete Save">
 				<img src="/game_icons/cancel.png" alt="Delete" />
 				<span>Delete</span>
 			</button>
@@ -195,8 +188,8 @@
 		justify-content: space-between;
 		align-items: center;
 		/* background-color: var(--color-secondary); */
-		background: linear-gradient(to left, rgb(104, 62, 62), transparent 66%);
-		padding: .5rem .5rem;
+		background: linear-gradient(to right, rgb(104, 62, 62), transparent 66%);
+		padding: 0.5rem 0.5rem;
 		color: white;
 		/* border-bottom: 4px solid #00000056; */
 		z-index: 100;
@@ -207,7 +200,7 @@
 		/* width: 100%; */
 		height: 36px;
 		padding-block: 10px 4px;
-		transition: filter .2s ease-in;
+		transition: filter 0.2s ease-in;
 		&:hover {
 			filter: hue-rotate(120deg) contrast(1.3) saturate(1.5);
 		}

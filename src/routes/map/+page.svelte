@@ -22,6 +22,8 @@
 	import { questStore } from '$lib/stores/questStore';
 	import MapHUD from '$lib/components/ui/MapHUD.svelte';
 	import MobileLayout from '$lib/components/MobileLayout.svelte';
+	import { modalStore } from '$lib/stores/modalStore';
+	import * as SaveLoadService from '$lib/services/SaveLoadService';
 
 	let mainElement: HTMLElement;
 	let isMobile = false;
@@ -62,11 +64,25 @@
 		mediaQuery.addEventListener('change', handler);
 
 		if (!get(playerStore).isInitialized) {
+			// Always initialise NPCs and map first so the page can render
 			await npcStore.initializeGlobalNpcs();
 			validateAllData(get(questStore), get(npcStore));
 			await game.initializeGame();
 			playerStore.update((p) => ({ ...p, isInitialized: true }));
+
+			// If a save exists, prompt the player to resume rather than
+			// silently starting a blank session on hard reload
+			if (SaveLoadService.hasSave()) {
+				modalStore.showConfirm(
+					'Resume Game',
+					'A save file was found. Load your last save?',
+					() => SaveLoadService.loadGame(),
+					undefined,
+					{ confirmLabel: 'Load Save', cancelLabel: 'Start Fresh' }
+				);
+			}
 		}
+
 		mainElement.focus();
 		return () => mediaQuery.removeEventListener('change', handler);
 	});

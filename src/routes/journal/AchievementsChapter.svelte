@@ -15,11 +15,11 @@
 </script>
 
 <div class="achievements-wrap">
-	<div class="ach-header">
+	<!-- <div class="ach-header">
 		<p class="ach-eyebrow">Dawn's Journey</p>
 		<h2 class="ach-title">Achievements</h2>
 		<div class="rule"></div>
-	</div>
+	</div> -->
 
 	<div class="ach-list">
 		{#each sortedAchievements as ach}
@@ -75,7 +75,7 @@
 
 <style>
 	.achievements-wrap {
-		max-width: 760px;
+		max-width: 960px;
 		margin: 0 auto;
 	}
 
@@ -112,6 +112,8 @@
 	.ach-list {
 		display: flex;
 		flex-direction: column;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 6px;
 	}
 
@@ -120,13 +122,14 @@
 		display: flex;
 		align-items: flex-start;
 		gap: 0.75rem;
-		background: #1a1208;
+		background: #372713;
 		border: 2px solid #2a1808;
 		box-shadow: #00000056 0 -3px 0 0px inset;
 		border-radius: 8px;
 		padding: 0.75rem 1rem;
 		opacity: 0.5;
 		transition: opacity 0.15s;
+		flex: 1;
 	}
 
 	.ach-item.unlocked {

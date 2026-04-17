@@ -13,7 +13,7 @@
         "/images/characters/guinevere/guinevere6.png"
     ],
     "description": "Commander of the Solis Saints on Ashenfall. She feeds people, houses people, protects people, and is building Towers that are tearing the island apart. She sees no contradiction in this.",
-    "faction": "solis_saints",
+    "faction": "the_coalition",
     "hidden": false,
     "isCombatant": true,
     "types": [

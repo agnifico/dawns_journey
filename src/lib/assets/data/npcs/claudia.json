@@ -16,7 +16,7 @@
         "/images/characters/claudia/claudia4.png"
     ],
     "description": "Commander of the Solis Saints' eastern operations. Aristocrat by birth, soldier by choice, and the person most likely to have already planned your birthday party.",
-    "faction": "solis_saints",
+    "faction": "the_coalition",
     "hidden": false,
     "isCombatant": true,
     "types": [

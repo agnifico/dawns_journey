@@ -38,12 +38,12 @@
 </script>
 
 <div class="bestiary-wrap">
-	<div class="bestiary-header">
+	<!-- <div class="bestiary-header">
 		<p class="eyebrow">Dawn's Journey</p>
 		<h2 class="title">Bestiary</h2>
 		<p class="subtitle">The creatures of Ashenfall — catalogued as you encounter them.</p>
 		<div class="rule" />
-	</div>
+	</div> -->
 
 	<div class="enemy-list">
 		{#each sortedEnemies as enemy (enemy.id)}

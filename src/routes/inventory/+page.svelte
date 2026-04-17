@@ -5,94 +5,101 @@
     import Equipment from "$lib/components/Equipment.svelte";
     import MobileTabs from "$lib/components/MobileTabs.svelte";
     import Notification from '$lib/components/Notification.svelte';
+    import CurrencyBar from '$lib/components/ui/CurrencyBar.svelte';
 </script>
 
 <main>
+    <CurrencyBar />
+
     <div class="desktop-layout">
-        <div class="left-column">
+        <!-- Left: sticky reference column -->
+        <aside class="left-column">
             <PlayerStats />
-            <FactionDisplay />
-        </div>
+            <!-- <FactionDisplay /> -->
+        </aside>
+
+        <!-- Right: scrolling content column -->
         <div class="right-column">
             <Equipment />
             <Inventory />
         </div>
     </div>
+
+    <!-- Mobile -->
     <div class="mobile-layout">
         <MobileTabs>
             <div slot="stats">
                 <PlayerStats />
-                <FactionDisplay />
+                <!-- <FactionDisplay /> -->
             </div>
             <div slot="equipment">
                 <Equipment />
             </div>
         </MobileTabs>
-        <div class="inventory-column">
-            <Inventory />
-        </div>
+        <Inventory />
     </div>
+
     <Notification />
 </main>
 
 <style>
     main {
-        min-height: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        position: relative;
-        background-color: #1a1610;
+        background: #1a1610;
+        overflow: hidden;  /* outer page never scrolls — right col does */
     }
+
+    /* ── Currency bar is sticky, handled inside the component ── */
 
     .desktop-layout {
-        height: 100%;
-        flex-grow: 1;
+        flex: 1;
+        min-height: 0;
         display: grid;
-        grid-template-columns: 380px 1fr;
+        grid-template-columns: 480px 1fr;
         gap: 1rem;
         padding: 1rem;
-        align-items: start;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
+    /* Left column: sticky, scrolls independently if content overflows */
     .left-column {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        position: sticky;
-        top: 1rem;
-        /* border: 1px solid white; */
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #3a2a1a transparent;
     }
 
+    /* Right column: Equipment above, Inventory below. Column scrolls. */
     .right-column {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
         min-width: 0;
-        /* overflow: hidden; */
+        height: 100%;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #3a2a1a transparent;
     }
 
-    .mobile-layout {
-        display: none;
-        align-items: center;
-    }
+    .mobile-layout { display: none; }
 
     @media (max-width: 900px) {
-        .desktop-layout {
-            grid-template-columns: 1fr;
-        }
-        .left-column {
-            position: static;
-        }
+        .desktop-layout { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
-        .desktop-layout {
-            display: none;
-        }
+        .desktop-layout { display: none; }
         .mobile-layout {
             display: block;
-            background-color: #1a1610;
+            background: #1a1610;
+            overflow-y: auto;
+            flex: 1;
         }
     }
 </style>

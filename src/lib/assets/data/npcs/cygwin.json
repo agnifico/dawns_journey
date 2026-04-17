@@ -16,7 +16,7 @@
         "/images/characters/cygwin/cygwin7.png"
     ],
     "description": "Commander of the Solis Saints' southern operations. She made herself into what her people needed. She has not stopped.",
-    "faction": "solis_saints",
+    "faction": "the_coalition",
     "hidden": false,
     "isCombatant": true,
     "types": [

@@ -13,6 +13,7 @@
 	import player from '$lib/data/player';
 	import NpcViewer from '$lib/components/NpcViewer.svelte';
 	import { hideNavbar } from '$lib/stores/uiStore';
+	import { modalStore } from '$lib/stores/modalStore';
 
 	// Kept for future use
 	const groupImages = [
@@ -52,13 +53,10 @@
 	});
 
 	// onDestroy(() => hideNavbar.set(false));
-
 	async function startNewGame() {
 		if (selectedMapId && selectedProfileId) {
 			applyProfile('fresh');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
-			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true, position: { x: 25, y: 30 } }));
 			goto('/map');
 		}
 	}
@@ -67,14 +65,22 @@
 		if (selectedMapId) {
 			applyProfile('mage');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
-			await npcStore.initializeGlobalNpcs();
-			playerStore.update((p) => ({ ...p, isInitialized: true, position: { x: 25, y: 30 } }));
 			goto('/map');
 		}
 	}
 
 	function continueGame() {
 		goto('/map');
+	}
+
+	function handleSave() {
+		modalStore.confirmSave(() => SaveLoadService.saveGame());
+	}
+	function handleLoad() {
+		modalStore.confirmLoad(() => SaveLoadService.loadGame());
+	}
+	function handleClearSave() {
+		modalStore.confirmClearSave(() => SaveLoadService.clearSave());
 	}
 </script>
 
@@ -140,7 +146,7 @@
 						jxnesforge studio
 					</a>
 					<div class="spacer"></div>
-					<a href="/devsnote" class="d-studio-link">/ why i built this</a>
+					<a href="/devs-corner" class="d-studio-link">/ why i built this</a>
 					<a href="/devsnote2" class="d-studio-link">/ my journey</a>
 				</div>
 			</div>
@@ -267,9 +273,9 @@
 					<button class="m-action-btn" on:click={() => goto('/settings')}>⚙ Settings</button>
 				</div>
 				<div class="m-save-row">
-					<button class="m-save-btn save" on:click={SaveLoadService.saveGame}>💾 Save</button>
-					<button class="m-save-btn" on:click={SaveLoadService.loadGame}>📂 Load</button>
-					<button class="m-save-btn danger" on:click={SaveLoadService.clearSave}>🗑 Delete</button>
+					<button class="m-save-btn save" on:click={handleSave}>💾 Save</button>
+					<button class="m-save-btn" on:click={handleLoad}>📂 Load</button>
+					<button class="m-save-btn danger" on:click={handleClearSave}>🗑 Delete</button>
 				</div>
 			</section>
 		{/if}

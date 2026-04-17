@@ -1,5 +1,4 @@
-import type { Player, Profile } from '$lib/types';
-import { createItem, createItems } from './ItemFactory';
+import { createItem } from './ItemFactory';
 import { profiles } from '$lib/data/profiles';
 import { playerStore } from '$lib/stores/playerStore';
 import { getAllItems, addItems } from '$lib/services/InventoryService';
@@ -17,32 +16,51 @@ export function applyProfile(profileId: string) {
         // Set avatar
         newPlayer.profile.avatar = profile.avatar;
 
+        // ── Inventory ──────────────────────────────────────────────────────
+        if (profile.id === 'fresh') {
+            // New game: 10 bread to start, nothing else
+            newPlayer = addItems(newPlayer, 'bread', 10, false);
 
+        } else if (profile.id === 'mage') {
+            // Exhibition: all items × 1 so the player can explore everything
+            const allItems = getAllItems();
+            for (const item of allItems) {
+                if (item.flags.includes("stackable")) {
 
-        // Set initial inventory
-        const allItems = getAllItems();
+                    newPlayer = addItems(newPlayer, item.id, 99, false);
+                } else {
 
-        for (const item of allItems) {
-            if (item.flags?.includes('stackable')) {
-                newPlayer = addItems(newPlayer, item.id, 99, false);
-            } else {
-                newPlayer = addItems(newPlayer, item.id, 1, false);
+                    newPlayer = addItems(newPlayer, item.id, 1, false);
+                }
             }
         }
+        // Any future profiles: add cases here
 
-        // Equip weapons
-        const equippedWeapons = profile.equippedWeapons.map(weaponId => {
-            const weapon = createItem(weaponId);
-            return weapon && weapon.type === 'weapon' ? weapon : null;
-        });
-        newPlayer.equipment.weapon_slots = [...equippedWeapons, ...Array(2 - equippedWeapons.length).fill(null)];
+        // ── Weapons ────────────────────────────────────────────────────────
+        const equippedWeapons = profile.equippedWeapons
+            .map(id => {
+                const w = createItem(id);
+                return w?.type === 'weapon' ? w : null;
+            })
+            .filter(Boolean);
 
-        // Equip relics
-        const equippedRelics = profile.equippedRelics.map(relicId => {
-            const relic = createItem(relicId);
-            return relic && relic.type === 'relic' ? relic : null;
-        });
-        newPlayer.equipment.relic_slots = [...equippedRelics, ...Array(4 - equippedRelics.length).fill(null)];
+        newPlayer.equipment.weapon_slots = [
+            ...equippedWeapons,
+            ...Array(Math.max(0, 2 - equippedWeapons.length)).fill(null)
+        ];
+
+        // ── Relics ─────────────────────────────────────────────────────────
+        const equippedRelics = profile.equippedRelics
+            .map(id => {
+                const r = createItem(id);
+                return r?.type === 'relic' ? r : null;
+            })
+            .filter(Boolean);
+
+        newPlayer.equipment.relic_slots = [
+            ...equippedRelics,
+            ...Array(Math.max(0, 4 - equippedRelics.length)).fill(null)
+        ];
 
         return newPlayer;
     });

@@ -43,7 +43,7 @@ export const player: Player = {
     isInitialized: false,
     level: 1,
     xp: 0,
-    position: { x: 0, y: 0 },
+    position: { x: 10, y: 40 },
     direction: 'down',
     isMoving: false,
     profile: {
@@ -65,7 +65,7 @@ export const player: Player = {
         elementalDefence: 10,
         speed: 20,
         evasion: 20,
-        critChance: 0.1, 
+        critChance: 0.1,
         critDamage: 1.25,
         precision: 10,
     },
@@ -98,6 +98,7 @@ export const player: Player = {
     worldResonance: 0,
     cropsHarvested: 0,
     factions: {},
+    levelPoints: 0
 };
 
 export default player;

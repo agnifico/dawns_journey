@@ -70,6 +70,10 @@ export interface Ability {
     abilityType: AbilityType;
     accuracy?: number;
     effects: AnyAbilityEffect[];
+    // Add to Ability type:
+    category: 'damage' | 'heal' | 'buff' | 'debuff' | 'control' | 'utility';
+    targetType: 'self' | 'enemy' | 'both';
+    isPassive?: boolean;
 }
 
 export interface StatusEffect {
@@ -166,7 +170,7 @@ export interface Combatant {
     isPlayer: boolean;
     image: string;
     profileImage: string;
-    elements: string[];
+    types: string[];
     activeElement: string;
     abilities: Ability[];
     /**

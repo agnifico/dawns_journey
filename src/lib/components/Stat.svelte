@@ -65,6 +65,7 @@
 <style>
 	/* ── Base (short view) ── */
 	.stat-line {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 0;
@@ -74,6 +75,7 @@
 		border-radius: 4px;
 		background-color: #252018;
 		border: 1px solid rgba(200, 169, 110, 0.08);
+		overflow: hidden;
 	}
 
 	.stat-icon {
@@ -90,18 +92,31 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font-size: 1rem;
+		&:hover {
+			text-overflow: unset;
+			overflow: visible;
+		}
 	}
 
 	.stat-value {
 		display: flex;
 		flex-direction: column-reverse;
 		align-items: flex-end;
-		font-size: 0.9rem;
+		font-size: 1rem;
 		color: var(--text-primary, #e4d8be);
 		margin-left: 8px;
+		&:hover {
+			.bonus {
+				visibility: visible;
+				position: relative;
+			}
+		}
 	}
 
 	.bonus {
+		position: absolute;
+		visibility: hidden;
 		font-size: 0.6rem;
 		font-weight: 400;
 	}

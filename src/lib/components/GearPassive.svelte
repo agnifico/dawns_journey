@@ -7,14 +7,12 @@
 </script>
 
 <div class="gear-passive">
-	{#if view !== 'mini'}
 		<div class="gp-icon">
 			<img src={icon} alt={weaponName} />
 		</div>
-	{/if}
 	<div class="gp-body">
 		{#if view !== 'mini'}
-			<span class="gp-weapon">{weaponName} : {passiveName}</span>
+			<span class="gp-weapon">{passiveName}</span>
 		{:else}
 			<span class="gp-weapon">{passiveName}</span>
 		{/if}
@@ -28,7 +26,7 @@
 		display: flex;
 		align-items: flex-start;
 		gap: 12px;
-		padding: 11px 13px 17px;
+		padding: 5px 7px 11px;
 		border-radius: 8px;
 		background: rgba(60, 160, 90, 0.12);
 		background: rgba(68, 68, 68, 0.12);
@@ -41,18 +39,18 @@
 	.gp-icon {
 		width: 42px;
 		height: 42px;
-		min-width: 42px;
+		/* min-width: 42px; */
 		border-radius: 6px;
-		background: rgba(0, 0, 0, 0.3);
-		border: 1px solid rgba(60, 160, 90, 0.2);
+		/* background: rgba(0, 0, 0, 0.3); */
+		/* border: 1px solid rgba(60, 160, 90, 0.2); */
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
 	.gp-icon img {
-		width: 28px;
-		height: 28px;
+		width: 32px;
+		height: 32px;
 		image-rendering: pixelated;
 	}
 
@@ -69,7 +67,7 @@
 		font-weight: 600;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		color: rgba(60, 180, 90, 0.5);
+		color: rgb(161, 113, 45);
 	}
 
 	.gp-name {

@@ -1,19 +1,10 @@
 import type { Ability } from '$lib/types';
 import { ABILITY_MODE } from '$lib/config/abilityConfig';
 
+
 /**
  * All game abilities.
  * Effects are executed in order.
- *
- * IMPORTANT — named status ids:
- * Any ability whose effects need to be tracked by arena triggers (ENEMY_STATUS_PRESENT,
- * ENEMY_STATUS_MISSING, SELF_STATUS_PRESENT) MUST use `apply_status` with a stable `id`
- * on the statusEffect — NOT `stat_modifier`, which generates a dynamic id that can't be
- * tracked. `stat_modifier` is fine for anonymous throwaway effects nobody will ever need
- * to detect.
- *
- * maxUses is intentionally absent from Ability. Use ArenaTrigger.oneShot or
- * ArenaPhaseAbility { id, maxUses } for per-NPC limits.
  */
 export const playerAbilities: Ability[] = [
     // -------------------------------------------------------------------------
@@ -24,6 +15,8 @@ export const playerAbilities: Ability[] = [
         name: 'Basic Slash',
         description: 'A simple physical attack dealing 30% of Physical Attack.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.30 }]
     },
     {
@@ -31,6 +24,8 @@ export const playerAbilities: Ability[] = [
         name: 'Minor Heal',
         description: 'Restores HP equal to 25% of your Elemental Attack.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [{ type: 'heal', healType: 'hp', multiplier: 0.25, basedOn: 'elementalAttack', target: 'self' }]
     },
     {
@@ -38,6 +33,8 @@ export const playerAbilities: Ability[] = [
         name: 'Minor Heal 2',
         description: 'Restores HP equal to 25% of your Physical Attack.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [{ type: 'heal', healType: 'hp', multiplier: 0.25, basedOn: 'physicalAttack', target: 'self' }]
     },
     {
@@ -45,6 +42,8 @@ export const playerAbilities: Ability[] = [
         name: 'Elemental Blast',
         description: 'An elemental attack dealing 20% of Elemental Attack.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.20 }]
     },
     {
@@ -52,6 +51,8 @@ export const playerAbilities: Ability[] = [
         name: 'Elemental Smite',
         description: 'An elemental attack dealing 40% of Elemental Attack.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.40 }]
     },
     {
@@ -59,6 +60,8 @@ export const playerAbilities: Ability[] = [
         name: 'Spirit Storm',
         description: 'An elemental attack dealing 60% of Elemental Attack with 75% chance, twice.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 0.75,
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.6, hitCount: 2 }]
     },
@@ -67,6 +70,8 @@ export const playerAbilities: Ability[] = [
         name: 'Cataclysm',
         description: 'An elemental attack dealing 120% of Elemental Attack. 60% accuracy.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 0.60,
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 1.2 }]
     },
@@ -75,6 +80,8 @@ export const playerAbilities: Ability[] = [
         name: 'Cataclysm',
         description: 'An elemental attack dealing 150% of Elemental Attack.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 1,
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 1.5 }]
     },
@@ -83,6 +90,8 @@ export const playerAbilities: Ability[] = [
         name: 'Basic Poison',
         description: 'Poisons the target for 6 turns (5% max HP per turn).',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
             statusEffect: { id: 'poison', name: 'Poison', duration: 6, damagePerTurn: 0.05, category: 'poison' }
@@ -93,6 +102,8 @@ export const playerAbilities: Ability[] = [
         name: 'Rapid Strike',
         description: 'Strikes 5 times, each hit dealing 8% Physical Attack. 80% accuracy.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 0.80,
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.08, hitCount: 5 }]
     },
@@ -101,10 +112,11 @@ export const playerAbilities: Ability[] = [
         name: 'Hammer Smite',
         description: 'A devastating 70% Physical Attack blow — but stuns yourself for 2 turns.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'both',
         effects: [
             { type: 'damage', damageType: 'physical', multiplier: 0.70 },
             {
-                // Self-stun: no category — you can't be immune to your own hammer
                 type: 'apply_status', target: 'self',
                 statusEffect: { id: 'self_stun', name: 'Stunned', duration: 2, isStunned: true }
             }
@@ -115,6 +127,8 @@ export const playerAbilities: Ability[] = [
         name: 'Stun',
         description: 'Deals 10% Elemental Attack and stuns the enemy for 3 turns. 90% accuracy.',
         abilityType: 'Elemental Damage',
+        category: 'control',
+        targetType: 'enemy',
         accuracy: 0.90,
         effects: [
             { type: 'damage', damageType: 'elemental', multiplier: 0.10 },
@@ -129,6 +143,8 @@ export const playerAbilities: Ability[] = [
         name: 'Execution',
         description: 'Deals 50% Elemental Attack. If enemy HP is below 20%, deals 70% instead.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.50, condition: 'hp_below', threshold: 0.20, bonusMultiplier: 0.70
@@ -139,6 +155,8 @@ export const playerAbilities: Ability[] = [
         name: 'Shield Breaker',
         description: 'Reduces enemy Aura Shield by 25% of its max value.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{ type: 'shield_manipulate', operation: 'reduce', amount: 0.25 }]
     },
     {
@@ -146,16 +164,17 @@ export const playerAbilities: Ability[] = [
         name: 'Smokescreen',
         description: 'Deals 10% Physical Attack and reduces enemy evasion by 20 for 3 turns.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [
             { type: 'damage', damageType: 'physical', multiplier: 0.10 },
             {
-                // Named status so triggers can detect it (e.g. Minerva's punish response)
                 type: 'apply_status', target: 'enemy',
                 statusEffect: {
                     id: 'smokescreen_debuff',
                     name: 'Smokescreen',
                     duration: 3,
-                    statModifiers: { evasion: -20 }   // additive, same as before
+                    statModifiers: { evasion: -20 }
                 }
             }
         ]
@@ -165,6 +184,8 @@ export const playerAbilities: Ability[] = [
         name: 'Fury',
         description: 'Raises your Physical and Elemental Attack by 15% for 3 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -180,6 +201,8 @@ export const playerAbilities: Ability[] = [
         name: 'Fortify',
         description: 'Raises your Physical and Elemental Defence by 15% for 3 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -195,6 +218,8 @@ export const playerAbilities: Ability[] = [
         name: 'Demoralise',
         description: 'Reduces enemy Physical and Elemental Attack by 15% for 3 turns.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: {
@@ -210,6 +235,8 @@ export const playerAbilities: Ability[] = [
         name: 'Penetrate',
         description: 'Reduces enemy Physical and Elemental Defence by 15% for 3 turns.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: {
@@ -231,6 +258,8 @@ export const npcAbilities: Ability[] = [
         name: 'Iron Wall',
         description: 'Converts both Attack stats into Defence, reducing them to 20% of their value.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'stat_transfer',
             transfers: [
@@ -244,6 +273,8 @@ export const npcAbilities: Ability[] = [
         name: 'Crushing Poison',
         description: 'Inflicts a deep poison for 6 turns (8% max HP per turn).',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: { id: 'deep_poison', name: 'Deep Poison', duration: 6, damagePerTurn: 0.08, category: 'poison' }
@@ -254,6 +285,8 @@ export const npcAbilities: Ability[] = [
         name: 'War Cry',
         description: 'Stuns the enemy for 2 turns and reduces their Attack by 20% for 4 turns. 85% accuracy.',
         abilityType: 'Special',
+        category: 'control',
+        targetType: 'enemy',
         accuracy: 0.85,
         effects: [
             {
@@ -261,7 +294,6 @@ export const npcAbilities: Ability[] = [
                 statusEffect: { id: 'stunned', name: 'Stunned', duration: 2, isStunned: true, category: 'stun' }
             },
             {
-                // Named so AI could theoretically track it, though currently unused in triggers
                 type: 'apply_status', target: 'enemy',
                 statusEffect: {
                     id: 'warcry_debuff',
@@ -277,6 +309,8 @@ export const npcAbilities: Ability[] = [
         name: 'Second Wind',
         description: 'Recovers 20% of max HP.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [{ type: 'heal_percent_max_hp', target: 'self', percent: 0.20 }]
     },
     {
@@ -284,6 +318,8 @@ export const npcAbilities: Ability[] = [
         name: 'Final Resolve',
         description: 'Draws on the last reserves of strength, recovering 40% of max HP and surging Attack by 150% for 10 turns.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [
             { type: 'heal_percent_max_hp', target: 'self', percent: 0.40 },
             {
@@ -306,6 +342,8 @@ export const npcAbilities: Ability[] = [
         name: 'Reaper in the Frost',
         description: 'Converts both Defences into Attack, reducing them to 20% of their value.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'stat_transfer',
             transfers: [
@@ -319,6 +357,8 @@ export const npcAbilities: Ability[] = [
         name: 'Blizzard Surge',
         description: 'Deals 55% Elemental Attack and shatters enemy defences by 25% for 3 turns.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [
             { type: 'damage', damageType: 'elemental', multiplier: 0.55 },
             {
@@ -337,6 +377,8 @@ export const npcAbilities: Ability[] = [
         name: 'Frozen Ground',
         description: 'The battlefield freezes around Claudia, raising her Elemental Attack by 25% for 4 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -351,26 +393,31 @@ export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     // Guinevere — The Holy Commander
     // -------------------------------------------------------------------------
-    {
-        id: 'unshackled',
-        name: 'Unshackled',
-        description: 'Guinevere becomes immune to stat reductions and to the cost of transfer abilities for the rest of the fight.',
-        abilityType: 'Special',
-        effects: [{
-            type: 'apply_status', target: 'self',
-            statusEffect: {
-                id: 'unshackled',
-                name: 'Unshackled',
-                duration: 999,
-                flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction']
-            }
-        }]
-    },
+    // {
+    //     id: 'unshackled',
+    //     name: 'Unshackled',
+    //     description: 'Guinevere becomes immune to stat reductions and to the cost of transfer abilities for the rest of the fight.',
+    //     abilityType: 'Special',
+    //     category: 'utility',
+    //     targetType: 'self',
+    //     isPassive: true,
+    //     effects: [{
+    //         type: 'apply_status', target: 'self',
+    //         statusEffect: {
+    //             id: 'unshackled',
+    //             name: 'Unshackled',
+    //             duration: 999,
+    //             flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction']
+    //         }
+    //     }]
+    // },
     {
         id: 'divine_judgment',
         name: 'Divine Judgment',
         description: 'Deals 60% Elemental Attack. If the enemy is below 35% HP, deals 120% instead.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.60, condition: 'hp_below', threshold: 0.35, bonusMultiplier: 1.20
@@ -380,13 +427,16 @@ export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     // Hela — The Juggernaut
     // -------------------------------------------------------------------------
-    {
-        id: 'resurrection',
-        name: "Queen's Resurrection",
-        description: 'When Hela falls below 10% HP, she rises and restores herself to full.',
-        abilityType: 'Special',
-        effects: [{ type: 'heal_full', target: 'self' }]
-    },
+    // {
+    //     id: 'resurrection',
+    //     name: "Queen's Resurrection",
+    //     description: 'When Hela falls below 10% HP, she rises and restores herself to full.',
+    //     abilityType: 'Special',
+    //     category: 'heal',
+    //     targetType: 'self',
+    //     isPassive: true,
+    //     effects: [{ type: 'heal_full', target: 'self' }]
+    // },
     {
         id: 'abyss_poison',
         name: 'Abyssal Toxin',
@@ -402,6 +452,8 @@ export const npcAbilities: Ability[] = [
         name: 'Hellfire',
         description: 'An overwhelming elemental strike dealing 80% of Elemental Attack.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.80 }]
     },
     {
@@ -409,6 +461,8 @@ export const npcAbilities: Ability[] = [
         name: 'Armor Shatter',
         description: "Crushes the enemy's armour, reducing both Defences by 35% for 5 turns.",
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: {
@@ -424,6 +478,8 @@ export const npcAbilities: Ability[] = [
         name: "Night's Curse",
         description: 'Hela wraps herself in the dark of night, raising all Attacks and Defences by 25% for 6 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -439,6 +495,8 @@ export const npcAbilities: Ability[] = [
         name: 'Reaping Blow',
         description: 'Deals 60% Elemental Attack. If the enemy is below 25% HP, deals 150% instead.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.60, condition: 'hp_below', threshold: 0.25, bonusMultiplier: 1.50
@@ -453,6 +511,8 @@ export const npcAbilities: Ability[] = [
         name: 'Vine Whip',
         description: 'Nature lashes back — deals 35% Elemental Attack and reduces enemy Speed by 30% for 2 turns.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 0.90,
         effects: [
             { type: 'damage', damageType: 'elemental', multiplier: 0.35 },
@@ -472,6 +532,8 @@ export const npcAbilities: Ability[] = [
         name: 'Thorned Poison',
         description: 'The forest strikes back — inflicts a brutal poison for 8 turns (8% max HP per turn).',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
             statusEffect: { id: 'thorned_poison', name: 'Thorned Poison', duration: 8, damagePerTurn: 0.08, category: 'poison' }
@@ -486,6 +548,8 @@ export const npcAbilities: Ability[] = [
         name: 'Rapid Volley',
         description: 'Fires 6 shots in quick succession, each dealing 10% Physical Attack. 85% accuracy.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         accuracy: 0.55,
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.02, hitCount: 100 }]
     },
@@ -494,6 +558,8 @@ export const npcAbilities: Ability[] = [
         name: 'Powder Keg',
         description: 'A single catastrophic shot dealing 90% Physical Attack.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.90 }]
     },
     {
@@ -501,6 +567,8 @@ export const npcAbilities: Ability[] = [
         name: 'Flintlock Barrage',
         description: 'Unloads both pistols in a rapid elemental burst — 3 hits, each dealing 20% Elemental Attack.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.20, hitCount: 3 }]
     },
 
@@ -522,6 +590,8 @@ export const npcAbilities: Ability[] = [
         name: 'Seal of Tides',
         description: 'Binds the enemy with the weight of the ocean — they cannot gain stat increases for 6 turns.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: { id: 'seal_of_tides', name: 'Seal of Tides', duration: 6, flags: ['immune_to_stat_increase'] }
@@ -561,6 +631,8 @@ export const npcAbilities: Ability[] = [
         name: 'Cleanse',
         description: 'Purges all negative effects from yourself — poisons, stuns, and stat debuffs.',
         abilityType: 'Special',
+        category: 'utility',
+        targetType: 'self',
         effects: [{ type: 'cleanse', cleanse: 'negative', target: 'self' }]
     },
     {
@@ -568,6 +640,8 @@ export const npcAbilities: Ability[] = [
         name: 'Dispel',
         description: "Strips all positive effects from the enemy — buffs and ability-granted immunities. Gear passives cannot be dispelled.",
         abilityType: 'Special',
+        category: 'utility',
+        targetType: 'enemy',
         effects: [{ type: 'cleanse', cleanse: 'positive', target: 'enemy' }]
     },
     {
@@ -575,6 +649,8 @@ export const npcAbilities: Ability[] = [
         name: 'Mending Aura',
         description: 'Surrounds yourself in a healing aura, restoring 6% max HP per turn for 4 turns.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: { id: 'mending_aura', name: 'Mending Aura', duration: 4, healPerTurn: 0.06 }
@@ -585,6 +661,8 @@ export const npcAbilities: Ability[] = [
         name: 'Purifying Light',
         description: 'Cleanses all negative effects and bathes yourself in healing light, restoring 5% max HP per turn for 3 turns.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [
             { type: 'cleanse', cleanse: 'negative', target: 'self' },
             {
@@ -598,6 +676,8 @@ export const npcAbilities: Ability[] = [
         name: 'Blooddrinker',
         description: 'Deals 60% Physical Attack and heals for 40% of damage dealt.',
         abilityType: 'Physical Damage',
+        category: 'heal',
+        targetType: 'both',
         effects: [{ type: 'lifesteal', damageType: 'physical', multiplier: 0.60, healRatio: 0.40 }]
     },
     {
@@ -605,6 +685,8 @@ export const npcAbilities: Ability[] = [
         name: 'Soul Drain',
         description: 'Deals 50% Elemental Attack and heals for 50% of damage dealt.',
         abilityType: 'Elemental Damage',
+        category: 'heal',
+        targetType: 'both',
         effects: [{ type: 'lifesteal', damageType: 'elemental', multiplier: 0.50, healRatio: 0.50 }]
     },
     {
@@ -612,6 +694,8 @@ export const npcAbilities: Ability[] = [
         name: 'Last Stand',
         description: 'Deals 40% Physical Attack normally. Below 30% HP, desperation surges through — deals 160% instead.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'physical',
             baseMultiplier: 0.40, condition: 'self_hp_below', threshold: 0.30, bonusMultiplier: 1.60
@@ -622,6 +706,8 @@ export const npcAbilities: Ability[] = [
         name: 'Death Surge',
         description: 'Deals 35% Elemental Attack normally. Below 25% HP, raw survival instinct erupts — deals 200% instead.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.35, condition: 'self_hp_below', threshold: 0.25, bonusMultiplier: 2.00
@@ -632,6 +718,8 @@ export const npcAbilities: Ability[] = [
         name: 'Lock On',
         description: 'You fix your aim on the target — your next ability cannot miss and cannot be dodged.',
         abilityType: 'Special',
+        category: 'utility',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: { id: 'lock_on', name: 'Lock On', duration: 1, flags: ['guaranteed_hit'] }
@@ -646,6 +734,8 @@ export const npcAbilities: Ability[] = [
         name: 'Double Team',
         description: 'Verona blurs into afterimages, dramatically raising her evasion for 3 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -661,6 +751,8 @@ export const npcAbilities: Ability[] = [
         name: 'Shadow Strike',
         description: 'Strikes from the blind spot — deals 55% Physical Attack.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.55 }]
     },
     {
@@ -668,6 +760,8 @@ export const npcAbilities: Ability[] = [
         name: 'Feint',
         description: 'Reduces enemy precision by 30 for 4 turns, making their attacks easier to dodge.',
         abilityType: 'Special',
+        category: 'debuff',
+        targetType: 'enemy',
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: {
@@ -687,6 +781,8 @@ export const npcAbilities: Ability[] = [
         name: 'Berserker Rage',
         description: 'Raw fury builds — raises Physical and Elemental Attack by 20% for 2 turns. Stacks with itself.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self', stackBehavior: 'stack',
             statusEffect: {
@@ -706,6 +802,8 @@ export const npcAbilities: Ability[] = [
         name: 'Vital Strike',
         description: 'Deals 50% Elemental Attack normally. Above 60% HP, full vitality amplifies the blow to 130%.',
         abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.50, condition: 'hp_above', threshold: 0.60, bonusMultiplier: 1.30
@@ -716,6 +814,8 @@ export const npcAbilities: Ability[] = [
         name: 'Lifebind',
         description: 'Weaves life energy into the air, regenerating 4% max HP per turn for 4 turns.',
         abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: { id: 'lifebind', name: 'Lifebind', duration: 4, healPerTurn: 0.04 }
@@ -730,6 +830,8 @@ export const npcAbilities: Ability[] = [
         name: 'Counter Stance',
         description: 'Minerva reads the threat and braces — raises both Defences by 30% for 3 turns.',
         abilityType: 'Special',
+        category: 'buff',
+        targetType: 'self',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
@@ -745,15 +847,54 @@ export const npcAbilities: Ability[] = [
         name: 'Punishing Blow',
         description: 'A calculated strike dealing 65% Physical Attack. No frills — just consequence.',
         abilityType: 'Physical Damage',
+        category: 'damage',
+        targetType: 'enemy',
         effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.65 }]
     },
 ];
 
-export function getAbilityById(id: string): Ability | undefined {
-    return playerAbilities.find(ability => ability.id === id) || npcAbilities.find(ability => ability.id === id);
-}
+export const passiveAbilities: Ability[] = [
+    {
+        id: 'resurrection',
+        name: "Queen's Resurrection",
+        description: 'When Hela falls below 10% HP, she rises and restores herself to full.',
+        abilityType: 'Special',
+        category: 'heal',
+        targetType: 'self',
+        isPassive: true,
+        effects: [{ type: 'heal_full', target: 'self' }]
+    },
+    {
+        id: 'unshackled',
+        name: 'Unshackled',
+        description: 'Guinevere becomes immune to stat reductions and to the cost of transfer abilities for the rest of the fight.',
+        abilityType: 'Special',
+        category: 'utility',
+        targetType: 'self',
+        isPassive: true,
+        effects: [{
+            type: 'apply_status', target: 'self',
+            statusEffect: {
+                id: 'unshackled',
+                name: 'Unshackled',
+                duration: 999,
+                flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction']
+            }
+        }]
+    },
+    // Add future weapon passives here as well — poison immunity, HP drain, etc.
+    // GearPassive.svelte can then look them up by id from this array.
+];
 
+export function getAbilityById(id: string): Ability | undefined {
+    return (
+        playerAbilities.find(a => a.id === id) ||
+        npcAbilities.find(a => a.id === id) ||
+        passiveAbilities.find(a => a.id === id)
+    );
+}
+ 
 export const allAbilities: Ability[] =
     ABILITY_MODE === 'dev'
-        ? [...playerAbilities, ...npcAbilities]
+        ? [...playerAbilities, ...npcAbilities, ...passiveAbilities]
         : playerAbilities;

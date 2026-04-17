@@ -6,13 +6,13 @@
 	import ItemsChapter from './ItemsChapter.svelte';
 	import AchievementsChapter from './AchievementsChapter.svelte';
 
-	type Tab = 'characters' | 'enemies' | 'items';
+	type Tab = 'characters' | 'enemies' | 'achievements';
 
 	// Read tab from URL hash, fall back to 'characters'
 	function getTabFromHash(): Tab {
 		if (typeof window === 'undefined') return 'characters';
 		const h = window.location.hash.replace('#', '') as Tab;
-		return ['characters', 'enemies', 'items'].includes(h) ? h : 'characters';
+		return ['characters', 'enemies', 'achievements'].includes(h) ? h : 'characters';
 	}
 
 	let activeTab: Tab = getTabFromHash();
@@ -27,7 +27,7 @@
 	const tabs: { id: Tab; label: string; icon: string }[] = [
 		{ id: 'characters', label: 'Characters', icon: '👤' },
 		{ id: 'enemies',    label: 'Enemies',    icon: '💀' },
-		{ id: 'items',      label: 'Items',       icon: '📦' }
+		{ id: 'achievements',      label: 'achievements',       icon: '📦' }
 	];
 </script>
 
@@ -36,7 +36,7 @@
 	<div class="journal-header">
 		<p class="eyebrow">Dawn's Journey</p>
 		<h1 class="journal-title">Journal</h1>
-		<p class="journal-sub">A record of Ashenfall — its people, creatures, and relics.</p>
+		<!-- <p class="journal-sub">A record of Ashenfall — its people, creatures, and relics.</p> -->
 		<div class="rule"></div>
 	</div>
 
@@ -62,7 +62,7 @@
 			<CharactersChapter />
 		{:else if activeTab === 'enemies'}
 			<EnemiesChapter />
-		{:else if activeTab === 'items'}
+		{:else if activeTab === 'achievements'}
 			<AchievementsChapter />
 		{/if}
 	</div>
@@ -70,9 +70,9 @@
 
 <style>
 	.journal-page {
-		max-width: 960px;
+		/* max-width: 960px; */
 		margin: 0 auto;
-		background-color: rgb(26, 26, 26);
+		background-color: rgb(13, 13, 13);
 	}
 
 	/* ── Header ── */
@@ -99,9 +99,9 @@
 	}
 
 	.journal-sub {
-		color: #5a3a18;
+		color: #98978e;
 		font-style: italic;
-		font-size: 0.75rem;
+		font-size: 0.85rem;
 		margin: 0 0 0.8rem;
 	}
 
@@ -119,6 +119,8 @@
 		margin: 1.75rem 0 1.5rem;
 		border-bottom: 1px solid rgba(92, 61, 30, 0.3);
 		padding-bottom: 0;
+		max-width: 960px;
+		margin: 0 auto;
 	}
 
 	.tab-btn {
@@ -132,10 +134,11 @@
 		padding: 0.5rem 0.85rem 0.55rem;
 		cursor: pointer;
 		font-family: inherit;
-		font-size: 0.58rem;
-		letter-spacing: 3px;
+		font-size: 0.85rem;
+		letter-spacing: -0.5px;
 		text-transform: uppercase;
-		color: #3d2810;
+		font-family: "Lexend";
+		color: #7c5324;
 		transition:
 			color 0.12s,
 			border-color 0.12s;

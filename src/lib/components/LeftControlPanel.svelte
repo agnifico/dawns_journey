@@ -4,6 +4,7 @@
 	import { rainEnabled } from '$lib/stores/weatherStore';
 	import { goto } from '$app/navigation';
 	import * as SaveLoadService from '$lib/services/SaveLoadService';
+	import { modalStore } from '$lib/stores/modalStore';
 
 	function zoomIn() {
 		const newScale = $settingsStore.renderScale + 1;
@@ -28,6 +29,16 @@
 
 	function prevView() {
 		currentIndex = (currentIndex - 1 + views.length) % views.length;
+	}
+
+	function handleSave() {
+		modalStore.confirmSave(() => SaveLoadService.saveGame());
+	}
+	function handleLoad() {
+		modalStore.confirmLoad(() => SaveLoadService.loadGame());
+	}
+	function handleClearSave() {
+		modalStore.confirmClearSave(() => SaveLoadService.clearSave());
 	}
 </script>
 
@@ -64,13 +75,13 @@
 			<button on:click={nextView}><img src="/game_icons/arrow_right.png" alt="Next" /></button>
 		</div>
 		{#if views[currentIndex] === 'save'}
-			<button class="icon-button" on:click={SaveLoadService.saveGame} title="Save Game">
+			<button class="icon-button" on:click={handleSave} title="Save Game">
 				<img src="/game_icons/save.png" alt="Save" />
 			</button>
-			<button class="icon-button" on:click={SaveLoadService.loadGame} title="Load Game">
+			<button class="icon-button" on:click={handleLoad} title="Load Game">
 				<img src="/game_icons/load.png" alt="Load" />
 			</button>
-			<button class="icon-button danger" on:click={SaveLoadService.clearSave} title="Delete Save">
+			<button class="icon-button danger" on:click={handleClearSave} title="Delete Save">
 				<img src="/game_icons/cancel.png" alt="Delete" />
 			</button>
 		{:else if views[currentIndex] === 'toggles'}

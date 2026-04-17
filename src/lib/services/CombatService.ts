@@ -173,7 +173,7 @@ function chooseOverworldAbility(
 ): { abilityId: string; element: string } {
     let bestAbilityId = 'basic_slash';
     let bestDamage = -1;
-    let bestElement = opponent.elements?.[0] ?? 'None';
+    let bestElement = opponent.types?.[0] ?? 'None';
 
     for (const ability of opponent.abilities) {
         const damageEffect = ability.effects.find(e => e.type === 'damage');
@@ -181,7 +181,7 @@ function chooseOverworldAbility(
         const { damageType, multiplier } = damageEffect;
 
         if (damageType === 'elemental') {
-            for (const el of opponent.elements) {
+            for (const el of opponent.types) {
                 const { damage } = calculateDamage(
                     { ...opponent, elementalAttack: opponent.elementalAttack * multiplier, activeElement: el },
                     player, 'elemental', [el]

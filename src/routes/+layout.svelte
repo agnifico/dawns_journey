@@ -77,6 +77,7 @@
 		height: 100%;
 		padding-top: 50px;
 		box-sizing: border-box;
+		/* border: 1px solid white; */
 	}
 
 	.page-content.no-nav {

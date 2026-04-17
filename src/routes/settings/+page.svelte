@@ -53,23 +53,29 @@
 		<h2>Developer Mode</h2>
 		<div class="dev-actions">
 			<div class="action">
-				<p><strong>Load Post-Game Test State</strong></p>
-				<p class="description">
-					Completes all quests for Hela, Sylvie, and Veres. Equips the Vine Whip and Water Whip.
-				</p>
+				<div class="left">
+					<p><strong>Load Post-Game Test State</strong></p>
+					<p class="description">
+						Completes all quests for Hela, Sylvie, and Veres. Equips the Vine Whip and Water Whip.
+					</p>
+				</div>
 				<button class="btn btn-primary" on:click={handleLoadTestState}>Run</button>
 			</div>
 			<div class="action">
-				<p><strong>Add All Items</strong></p>
-				<p class="description">
-					Replaces your current inventory with one of every item (or 5 for general items). This is
-					irreversible.
-				</p>
+				<div class="left">
+					<p><strong>Add All Items</strong></p>
+					<p class="description">
+						Replaces your current inventory with one of every item (or 5 for general items). This is
+						irreversible.
+					</p>
+				</div>
 				<button class="btn btn-primary" on:click={handleAddAllItems}>Run</button>
 			</div>
 			<div class="action">
-				<p><strong>Apply Stat Buffs</strong></p>
-				<p class="description">Grants a massive temporary boost to combat stats for 999 steps.</p>
+				<div class="left">
+					<p><strong>Apply Stat Buffs</strong></p>
+					<p class="description">Grants a massive temporary boost to combat stats for 999 steps.</p>
+				</div>
 				<button class="btn btn-primary" on:click={handleApplyDevBuff}>Apply</button>
 			</div>
 		</div>
@@ -115,22 +121,38 @@
 	}
 	.action {
 		background-color: #2a2a3e;
-		padding: 1.5rem;
 		border-radius: 8px;
-		border: 1px solid #4a4a6a;
+		border: 1px solid #6a4a4a;
 		display: flex;
-		flex-direction: column;
+		/* flex-direction: column; */
+		justify-content: flex-start;
+		align-items: center;
+		background: rgba(26, 20, 12, 0.5);
+		height: fit-content;
+		padding: 1rem;
 	}
 	.action p {
 		margin: 0;
+		font-family: 'Silkscreen';
+		letter-spacing: -.5px;
+		word-spacing: -.7px;
+		/* text-transform: uppercase; */
+		font-size: 1.5rem;
+		padding-right: 2rem;
+	}
+	.left {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	.action strong {
-		font-size: 1.1rem;
-		color: #ffffff;
+		font-size: .85rem;
+		color: #b18e41;
+		font-family: 'DePixel';
 	}
 	.action .description {
 		font-size: 0.9rem;
-		color: #b0b0c0;
+		color: #7f7467;
 		margin-top: 0.5rem;
 		margin-bottom: 1rem;
 		flex-grow: 1;
@@ -153,6 +175,7 @@
 	.btn-primary {
 		background-color: #5e5edc;
 		color: white;
+		margin: auto 0 auto auto;
 	}
 	.btn-primary:hover {
 		background-color: #7878f0;
@@ -163,12 +186,14 @@
 		border: none;
 		padding: 8px;
 		cursor: pointer;
-		background-color: rgb(216, 68, 68);
 		padding: 0.5rem 1rem;
 		border-radius: 6px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		margin: 2rem;
+		background-color: rgb(98, 51, 51);
 	}
 
 	.icon-button img {

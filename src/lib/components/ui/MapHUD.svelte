@@ -74,7 +74,7 @@
 			title="Toggle entity highlights (H)"
 		>
 			<span class="toggle-icon">{showHighlights ? '◉' : '◎'}</span>
-			<span class="toggle-label">Points of Interest</span>
+			<span class="toggle-label">Points of Interest (H)</span>
 		</button>
 		<CoordinateDisplay />
 	</div>

@@ -12,6 +12,7 @@
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
     "hidden": false, "isCombatant": true,
+    "faction": "south_sea_empire",
     "types": ["Water"],
     "baseStats": {
         "hp": 1000,

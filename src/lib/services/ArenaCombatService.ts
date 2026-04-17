@@ -128,7 +128,7 @@ export function startArenaCombat(opponentId: string): void {
 
     // Arena NPCs may use `elements` or `types` depending on the data source —
     // fall back through both so either convention works.
-    const opponentElements: string[] = opponentData.elements ?? (opponentData as any).types ?? [];
+    const opponentElements: string[] = opponentData.types ?? (opponentData as any).types ?? [];
 
     const opponentCombatant: Combatant = {
         id: opponentData.id,
@@ -138,7 +138,7 @@ export function startArenaCombat(opponentId: string): void {
         profileImage: opponentData.profileImage,
         baseStats: opponentStats,
         ...opponentStats,
-        elements: opponentElements,
+        types: opponentElements,
         abilities: resolveAbilities(opponentData.abilityCycle),
         statusEffects: resolveNpcGearPassives(opponentData.gearPassives),
         activeElement: opponentElements[0] ?? 'None',

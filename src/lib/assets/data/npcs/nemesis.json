@@ -21,6 +21,7 @@
     "types": [
         "Water", "Fire"
     ],
+    "faction": "south_sea_empire",
     "baseStats": {
         "hp": 100,
         "maxHp": 100,

@@ -166,7 +166,6 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'A blade half-swallowed by the earth, still perfectly balanced.',
         stepOnMessage: 'Something catches the light beneath the soil. You dig — and find a sword.',
         message: "The inscription reads: 'To guard is not to rule. The first accord was made in trust, and trust is what we leave behind.'",
-        requirement: { type: 'have_tag', tag: 'found_dragon_empire_chest' },
         requirementNotMetMessage: 'Something is buried here. You sense it, but cannot reach it yet.',
         actions: [{ text: 'Revere the shrine', effects: [{ type: 'give_item', itemId: 'amaterasu', quantity: 1 }, { type: 'add_tag', tag: 'legendary_sword1_found' }] }],
 
@@ -271,7 +270,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
         shortDesc: 'The ninth blade. It was waiting for you specifically.',
         stepOnMessage: 'There is nothing remarkable about this spot. Except the sword, standing in open ground, pointing skyward.',
         message: "There is no inscription. There is a carving, though — a small dragon curled around a human figure. Both are smiling. Beneath it, in a script older than the island's current name, a single word you somehow understand: 'Welcome back.'",
-        requirement: { type: 'have_tag', tag: 'legendary_sword8_found' },
+        // requirement: { type: 'have_tag', tag: 'legendary_sword8_found' },
         requirementNotMetMessage: 'A sword stands in open ground. You reach for it — and something stops you. Eight things still need doing.',
         effects: [
             { type: 'give_item', itemId: 'dragon_fang', quantity: 5 },

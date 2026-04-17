@@ -14,11 +14,11 @@
 
 	$: activeElement = $combatStore.player?.activeElement ?? 'dark';
 	function getBGColor(): String {
-		if ($combatStore.opponent.elements.length == 1) {
+		if ($combatStore.opponent.types.length == 1) {
 			console.log($combatStore.player?.activeElement);
-			return elementBgs[$combatStore.opponent.elements[0].toLowerCase()];
+			return elementBgs[$combatStore.opponent.types[0].toLowerCase()];
 		} else {
-			let lg = `linear-gradient(-135deg, ${elementBgs[$combatStore.opponent.elements[0].toLowerCase()]}, ${elementBgs[$combatStore.opponent.elements[1].toLowerCase()]})`;
+			let lg = `linear-gradient(-135deg, ${elementBgs[$combatStore.opponent.types[0].toLowerCase()]}, ${elementBgs[$combatStore.opponent.types[1].toLowerCase()]})`;
 			console.log(lg);
 			return lg;
 		}
@@ -387,7 +387,7 @@
 						</div>
 						<!-- Elements displayed where InfusionMenu would be for opponent -->
 						<div class="opp-elements">
-							{#each $combatStore.opponent.elements as element}
+							{#each $combatStore.opponent.types as element}
 								<ElementTag {element} size="mini" />
 							{/each}
 						</div>
