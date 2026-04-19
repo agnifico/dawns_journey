@@ -1,487 +1,509 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { eventScreen, clearEvent, showMessageBox } from '$lib/stores/uiStore';
-	import { currentMapData } from '$lib/stores/mapStore';
-	import { playerStore, playerStats } from '$lib/stores/playerStore';
-	import { questStore } from '$lib/stores/questStore';
-	import { game } from '$lib/game/game';
+    import { eventScreen, showEventScreen } from '$lib/stores/uiStore';
+    import { currentMapData, landscapeImage } from '$lib/stores/mapStore';
+    import { playerStore, playerStats } from '$lib/stores/playerStore';
+    import { questStore } from '$lib/stores/questStore';
+    import { rainEnabled } from '$lib/stores/weatherStore';
 
-	import MapDisplay from '$lib/components/MapDisplay.svelte';
-	import MapHUD from '$lib/components/ui/MapHUD.svelte';
-	import MessageLog from '$lib/components/MessageLog.svelte';
-	import StatBar from '$lib/components/ui/StatBar.svelte';
-	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
-	import MobileEventCard from '$lib/components/MobileEventCard.svelte';
-	import MobileEventPanel from '$lib/components/MobileEventPanel.svelte';
-	import NewItemNotif from './NewItemNotif.svelte';
-	import WeaponWidget from '$lib/components/ui/WeaponWidget.svelte';
-	import RegionNotification from '$lib/components/RegionNotification.svelte';
-	// import Notification from './Notification.svelte';
-	// import DialogueBox from './DialogueBox.svelte';
-	import MapEventNotif from './MapEventNotif.svelte';
+    import MapDisplay from '$lib/components/MapDisplay.svelte';
+    import MessageLog from '$lib/components/MessageLog.svelte';
+    import StatBar from '$lib/components/ui/StatBar.svelte';
+    import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
+    import MobileEventCard from '$lib/components/MobileEventCard.svelte';
+    import MobileEventPanel from '$lib/components/MobileEventPanel.svelte';
+    import NewItemNotif from './NewItemNotif.svelte';
+    import WeaponWidget from '$lib/components/ui/WeaponWidget.svelte';
+    import CoordinateDisplay from '$lib/components/ui/CoordinateDisplay.svelte';
+    import TimeDisplay from '$lib/components/ui/TimeDisplay.svelte';
+    import DPad from '$lib/components/ui/DPad.svelte';
+    import MapEventNotif from './MapEventNotif.svelte';
 
-	let hasUnread = false;
+    // ── POI highlight toggle (received from parent /map page) ───────────────
+    export let showHighlights: boolean = false;
+    export let onToggleHighlight: () => void = () => {};
 
-	// --- Movement ---
-	function handleMove(dx: number, dy: number) {
-		game.movePlayer(dx, dy);
-	}
+    let hasUnread = false;
 
-	// --- Event type routing ---
-	$: isCardEvent = $eventScreen.type === 'enemy' || $eventScreen.type === 'resource';
-	$: isPanelEvent = $eventScreen.type === 'npc';
+    // ── Event type routing ─────────────────────────────────────────────────
+    $: isCardEvent  = $eventScreen.type === 'enemy' || $eventScreen.type === 'resource';
+    $: isPanelEvent = $eventScreen.type === 'npc';
 
-	// --- Drawers ---
-	let questDrawerOpen = false;
-	let logDrawerOpen = false;
+    // ── Drawers ────────────────────────────────────────────────────────────
+    let questDrawerOpen = false;
+    let logDrawerOpen   = false;
+    let scoutOpen       = false; // landscape scout view
 
-	// Quest drawer closes on card/panel events; log stays open
-	$: if (isCardEvent || isPanelEvent) questDrawerOpen = false;
+    $: if (isCardEvent || isPanelEvent) questDrawerOpen = false;
+    $: if (isCardEvent || isPanelEvent) scoutOpen = false;
 
-	// --- DPad opacity ---
-	let dpadActive = false;
-	let dpadTimer: ReturnType<typeof setTimeout>;
+    // ── DPad opacity (auto-fade when idle) ──────────────────────────────────
+    let dpadActive = false;
+    let dpadTimer: ReturnType<typeof setTimeout>;
+    function onDpadTouch() {
+        dpadActive = true;
+        clearTimeout(dpadTimer);
+        dpadTimer = setTimeout(() => (dpadActive = false), 3000);
+    }
 
-	function onDpadTouch() {
-		dpadActive = true;
-		clearTimeout(dpadTimer);
-		dpadTimer = setTimeout(() => (dpadActive = false), 3000);
-	}
-
-	// --- Nav ---
-	type Tab = 'map' | 'inventory' | 'journal' | 'shop' | 'settings';
-	let activeTab: Tab = 'map';
-
-	function navigate(path: string, tab: Tab) {
-		activeTab = tab;
-		goto(path);
-	}
-
-	$: activeQuestCount = Object.values($questStore.quests).filter(
-		(q) => q.state === 'ACTIVE' || q.state === 'REPORT_PENDING'
-	).length;
+    $: activeQuestCount = Object.values($questStore.quests).filter(
+        (q) => q.state === 'ACTIVE' || q.state === 'REPORT_PENDING'
+    ).length;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class="mobile-root"
-	on:pointerdown={() => {
-		if (dpadActive) {
-			clearTimeout(dpadTimer);
-			dpadTimer = setTimeout(() => (dpadActive = false), 2000);
-		}
-	}}
+    class="mobile-root"
+    on:pointerdown={() => {
+        if (dpadActive) {
+            clearTimeout(dpadTimer);
+            dpadTimer = setTimeout(() => (dpadActive = false), 2000);
+        }
+    }}
 >
-	<!-- ============================================================
-	     MAP AREA — always present, events float above it
-	     ============================================================ -->
-	<div class="map-area">
-		{#if $currentMapData && $playerStore.position}
-			<!-- <MapHUD /> -->
-			<!-- <Notification/> -->
-			<MapDisplay mapData={$currentMapData} player={$playerStore} />
-			<NewItemNotif/>
-			<MapEventNotif/>
-			<!-- <RegionNotification/> -->
-			<!-- <WeaponWidget/>	 -->
-			<!-- <DialogueBox /> -->
-		{:else}
-			<div class="loading">Loading map...</div>
-		{/if}
+    <!-- ════════════════════════════════════════════════════════════════
+         TOP STRIP — narrow bar directly below the (now-visible) navbar.
+         HP/Aura · POI · Event · Rain · Time · Coords · Quest count
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="top-strip">
+        <div class="hp-stack">
+            <StatBar current={$playerStats.hp}         max={$playerStats.maxHp}         color="#6a994e" />
+            <StatBar current={$playerStats.auraShield} max={$playerStats.maxAuraShield} color="#a98467" />
+        </div>
 
-		<!-- HP strip top-left -->
-		<div class="hp-strip">
-			<div class="hp-bars">
-				<StatBar current={$playerStats.hp} max={$playerStats.maxHp} color="#6a994e" />
-				<StatBar
-					current={$playerStats.auraShield}
-					max={$playerStats.maxAuraShield}
-					color="#a98467"
-				/>
-			</div>
-		</div>
+        <div class="strip-controls">
+            <button
+                class="strip-btn"
+                class:active={showHighlights}
+                on:click={onToggleHighlight}
+                title="POI"
+            >
+                <span class="g">{showHighlights ? '◉' : '◎'}</span>
+            </button>
+            <button
+                class="strip-btn"
+                class:active={$showEventScreen}
+                on:click={() => showEventScreen.update((v) => !v)}
+                title="Event"
+            >
+                <img src="/game_icons/map.png" alt="" />
+            </button>
+            <button
+                class="strip-btn"
+                class:active={$rainEnabled}
+                on:click={() => rainEnabled.set(!$rainEnabled)}
+                title="Rain"
+            >
+                <img src="/game_icons/rain.png" alt="" />
+            </button>
 
-		<!-- Quest strip top-right -->
-		{#if activeQuestCount > 0}
-			<button
-				class="quest-strip"
-				on:click={() => {
-					questDrawerOpen = !questDrawerOpen;
-				}}
-			>
-				<img src="/game_icons/expression_confused.png" alt="quest" class="quest-strip-icon" />
-				<span>{activeQuestCount} Quest{activeQuestCount > 1 ? 's' : ''}</span>
-				<span class="chevron">{questDrawerOpen ? '▼' : '▲'}</span>
-			</button>
-		{/if}
+            <TimeDisplay />
+            <CoordinateDisplay />
 
-		<!-- Floating card events (enemy, resource) — sits above map, below DPad -->
-		<MobileEventCard />
+            {#if activeQuestCount > 0}
+                <button
+                    class="strip-btn quest-pill"
+                    on:click={() => (questDrawerOpen = !questDrawerOpen)}
+                    title="Quests"
+                >
+                    <img src="/game_icons/expression_confused.png" alt="" />
+                    <span class="count">{activeQuestCount}</span>
+                </button>
+            {/if}
+        </div>
+    </div>
 
-		<!-- Panel events (npc, location) — bottom sheet -->
-		<MobileEventPanel />
+    <!-- ════════════════════════════════════════════════════════════════
+         MAP AREA — events float above
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="map-area">
+        {#if $currentMapData && $playerStore.position}
+            <MapDisplay mapData={$currentMapData} player={$playerStore} />
+            <NewItemNotif />
+            <MapEventNotif />
+        {:else}
+            <div class="loading">Loading map...</div>
+        {/if}
 
-		<!-- Quest drawer -->
-		<div class="drawer quest-drawer" class:open={questDrawerOpen}>
-			<div class="drawer-handle" on:click={() => (questDrawerOpen = false)}>
-				<span>Active Quests</span><span>▼</span>
-			</div>
-			<div class="drawer-content"><QuestTracker /></div>
-		</div>
+        <!-- Floating card events (enemy, resource) -->
+        <MobileEventCard />
 
-		<!-- Message log drawer — no backdrop, stays open until manually closed -->
-		<div class="drawer log-drawer" class:open={logDrawerOpen}>
-			<div class="drawer-handle" on:click={() => (logDrawerOpen = false)}>
-				<span>Message Log</span><span>▼</span>
-			</div>
-			<div class="drawer-content log-content"><MessageLog /></div>
-		</div>
+        <!-- Panel events (npc, location) -->
+        <MobileEventPanel />
 
-		<!-- Quest backdrop only (not log) -->
-		{#if questDrawerOpen}
-			<div
-				class="drawer-backdrop"
-				on:click={() => (questDrawerOpen = false)}
-				role="presentation"
-			></div>
-		{/if}
+        <!-- Quest drawer -->
+        <div class="drawer quest-drawer" class:open={questDrawerOpen}>
+            <div class="drawer-handle" on:click={() => (questDrawerOpen = false)}>
+                <span>Active Quests</span><span>▼</span>
+            </div>
+            <div class="drawer-content"><QuestTracker /></div>
+        </div>
 
-		<!-- DPad — highest z, opacity fades when idle -->
-		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="dpad-float" class:active={dpadActive} on:pointerdown|stopPropagation={onDpadTouch}>
-			<div class="dpad-grid">
-				<button class="dp-btn up" on:click={() => handleMove(0, -1)}>▲</button>
-				<button class="dp-btn left" on:click={() => handleMove(-1, 0)}>◀</button>
-				<button class="dp-btn right" on:click={() => handleMove(1, 0)}>▶</button>
-				<button class="dp-btn down" on:click={() => handleMove(0, 1)}>▼</button>
-			</div>
-		</div>
+        <!-- Message log drawer -->
+        <div class="drawer log-drawer" class:open={logDrawerOpen}>
+            <div class="drawer-handle" on:click={() => (logDrawerOpen = false)}>
+                <span>Message Log</span><span>▼</span>
+            </div>
+            <div class="drawer-content log-content"><MessageLog /></div>
+        </div>
 
-		<!-- Log FAB bottom-left -->
-		<button
-			class="log-fab"
-			on:click={() => {
-				logDrawerOpen = !logDrawerOpen;
-				questDrawerOpen = false;
-				hasUnread = false;
-			}}
-			title="Messages"
-		>
-			<img src="/game_icons/message.png" alt="Log" />
-			{#if hasUnread}
-				<span class="fab-dot"></span>
-			{/if}
-		</button>
-	</div>
+        {#if questDrawerOpen}
+            <div class="drawer-backdrop" on:click={() => (questDrawerOpen = false)} role="presentation"></div>
+        {/if}
 
-	<!-- ============================================================
-	     BOTTOM NAV — always visible
-	     ============================================================ -->
-	<nav class="bottom-nav">
-		<button
-			class="nav-btn"
-			class:active={activeTab === 'map'}
-			on:click={() => navigate('/map', 'map')}
-			><img src="/game_icons/map.png" alt="Map" /><span>Map</span></button
-		>
-		<button
-			class="nav-btn"
-			class:active={activeTab === 'inventory'}
-			on:click={() => navigate('/inventory', 'inventory')}
-			><img src="/game_icons/inventory.png" alt="Inventory" /><span>Bag</span></button
-		>
-		<button
-			class="nav-btn"
-			class:active={activeTab === 'journal'}
-			on:click={() => navigate('/journal', 'journal')}
-			><img src="/game_icons/journal.png" alt="Journal" /><span>Journal</span></button
-		>
-		<button
-			class="nav-btn"
-			class:active={activeTab === 'shop'}
-			on:click={() => navigate('/shop', 'shop')}
-			><img src="/game_icons/shop.png" alt="Shop" /><span>Shop</span></button
-		>
-		<button
-			class="nav-btn"
-			class:active={activeTab === 'settings'}
-			on:click={() => navigate('/settings', 'settings')}
-			><img src="/game_icons/settings.png" alt="Settings" /><span>Menu</span></button
-		>
-	</nav>
+        <!-- DPad — highest z, opacity fades when idle -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="dpad-float" class:active={dpadActive} on:pointerdown|stopPropagation={onDpadTouch}>
+            <DPad />
+        </div>
+
+        <!-- ── Scout view: full landscape art, dismissable ── -->
+        {#if scoutOpen && $landscapeImage}
+            <div class="scout-overlay" on:click={() => (scoutOpen = false)} role="presentation">
+                <img src={$landscapeImage} alt="landscape" class="scout-img" />
+                <button class="scout-close">▼ tap to dismiss</button>
+            </div>
+        {/if}
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         BOTTOM DOCK — landscape thumb · weapons+bread · log
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="bottom-dock">
+        <button
+            class="scout-thumb"
+            on:click={() => (scoutOpen = !scoutOpen)}
+            title="Scout view"
+        >
+            {#if $landscapeImage}
+                <img src={$landscapeImage} alt="landscape" />
+            {:else}
+                <div class="scout-placeholder">⚑</div>
+            {/if}
+        </button>
+
+        <div class="dock-weapons">
+            <WeaponWidget />
+        </div>
+
+        <button
+            class="log-btn"
+            on:click={() => {
+                logDrawerOpen = !logDrawerOpen;
+                questDrawerOpen = false;
+                hasUnread = false;
+            }}
+            title="Messages"
+        >
+            <img src="/game_icons/message.png" alt="Log" />
+            {#if hasUnread}<span class="dot"></span>{/if}
+        </button>
+    </div>
 </div>
 
 <style>
-	.mobile-root {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		background-color: #111;
-		overflow: hidden;
-	}
+    .mobile-root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #111;
+        overflow: hidden;
+    }
 
-	.map-area {
-		position: relative;
-		flex: 1;
-		min-height: 0;
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-	}
+    /* ── Top strip ───────────────────────────────────────────────────── */
+    .top-strip {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 6px 8px;
+        background-color: var(--surface-2, #2a2a2a);
+        border-bottom: 3px solid #00000056;
+        z-index: 30;
+    }
+    .hp-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        flex: 1;
+        min-width: 0;
+        max-width: 140px;
+    }
+    .strip-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .strip-controls::-webkit-scrollbar { display: none; }
 
-	.loading {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 100%;
-		color: #aaa;
-		font-family: monospace;
-	}
+    .strip-btn {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 5px 7px;
+        background-color: var(--surface-3);
+        color: var(--text-header);
+        border: 2px solid #00000056;
+        box-shadow: #00000056 0 -2px 0 0px inset;
+        border-radius: 5px;
+        font-family: var(--font-family-pixel);
+        font-size: 0.75rem;
+        line-height: 1;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: 100ms transform ease-in-out, 100ms box-shadow ease-in-out;
+    }
+    .strip-btn:active {
+        transform: translateY(2px);
+        box-shadow:
+            inset 0 0 0 1.5px rgba(255, 255, 255, 0.4),
+            #00000056 0 0 0 0px inset;
+    }
+    .strip-btn.active {
+        background-color: var(--color-buff, #6a994e);
+        color: #fff;
+    }
+    .strip-btn .g {
+        font-size: 0.85rem;
+        line-height: 1;
+    }
+    .strip-btn img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
+        image-rendering: pixelated;
+    }
+    .quest-pill .count {
+        font-family: var(--font-family-pixel);
+        font-size: 0.75rem;
+        color: #facc15;
+    }
 
-	/* HP strip */
-	.hp-strip {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 20;
-		padding: 6px 10px;
-		background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent);
-		pointer-events: none;
-	}
-	.hp-bars {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-		max-width: 160px;
-	}
+    /* ── Map area ────────────────────────────────────────────────────── */
+    .map-area {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        width: 100%;
+    }
+    .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #aaa;
+        font-family: monospace;
+    }
 
-	/* Quest strip */
-	.quest-strip {
-		position: absolute;
-		top: 0;
-		right: 0;
-		z-index: 21;
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		background-color: rgba(0, 0, 0, 0.65);
-		color: #facc15;
-		border: none;
-		padding: 5px 10px;
-		font-family: var(--font-family-pixel);
-		font-size: 0.65rem;
-		cursor: pointer;
-		border-bottom-left-radius: 8px;
-	}
-	.quest-strip-icon {
-		width: 14px;
-		height: 14px;
-	}
-	.chevron {
-		font-size: 0.6rem;
-		color: #aaa;
-	}
+    /* ── DPad ────────────────────────────────────────────────────────── */
+    .dpad-float {
+        position: absolute;
+        bottom: 0.75rem;
+        right: 0.75rem;
+        z-index: 100;
+        opacity: 0.25;
+        filter: saturate(0) blur(4px) brightness(0.7);
+        transition: all 0.4s ease;
+    }
+    .dpad-float.active {
+        opacity: 1;
+        filter: none;
+    }
 
-	/* ---- DPad ---- */
-	.dpad-float {
-		position: absolute;
-		bottom: 6rem;
-		right: 1rem;
-		z-index: 100; /* king of the stack */
-		opacity: 0.2;
-		filter: saturate(0) blur(5px) brightness(0.7);
-		transition: all 0.4s ease;
-	}
+    /* Hide the DPad component's own mobile padding/background since we wrap it */
+    .dpad-float :global(.mobile-d-pad) {
+        background: transparent;
+        padding: 0;
+        width: auto;
+    }
+    /* Hide A/B action buttons on the floating DPad — too much real estate */
+    .dpad-float :global(.action-buttons) {
+        display: none;
+    }
 
-	.dpad-float.active {
-		opacity: 1;
-		filter: none;
-	}
+    /* ── Scout view (landscape full) ─────────────────────────────────── */
+    .scout-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        animation: fade-in 0.2s ease;
+    }
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+    .scout-img {
+        max-width: 100%;
+        max-height: 80%;
+        object-fit: contain;
+        border: 4px solid #00000056;
+        box-shadow: #00000056 0 -8px 0 0px inset, 0 0 32px rgba(0, 0, 0, 0.6);
+        border-radius: 8px;
+    }
+    .scout-close {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: var(--surface-3);
+        color: var(--text-header);
+        border: 3px solid #00000056;
+        box-shadow: #00000056 0 -3px 0 0px inset;
+        border-radius: 6px;
+        font-family: var(--font-family-pixel);
+        font-size: 0.75rem;
+        cursor: pointer;
+    }
 
-	.dpad-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 52px);
-		grid-template-rows: repeat(3, 52px);
-		gap: 5px;
-	}
+    /* ── Drawers ─────────────────────────────────────────────────────── */
+    .drawer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 50;
+        background-color: var(--surface-3, #1a1a1a);
+        border-top: 2px solid #444;
+        transform: translateY(100%);
+        transition: transform 0.25s ease;
+        border-radius: 16px 16px 0 0;
+        display: flex;
+        flex-direction: column;
+        max-height: 55%;
+    }
+    .drawer.open { transform: translateY(0); }
 
-	.dp-btn {
-		background-color: var(--surface-1);
-		border: 3px solid var(--color-secondary);
-		color: white;
-		font-size: 1.4rem;
-		cursor: pointer;
-		user-select: none;
-		-webkit-user-select: none;
-		-webkit-tap-highlight-color: transparent;
-		border-radius: 6px;
-		text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
-		box-shadow:
-			inset 0 30px 30px -15px rgba(255, 255, 255, 0.1),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.3),
-			0 3px 0 var(--surface-2),
-			0 3px 2px rgba(0, 0, 0, 0.2),
-			0 5px 10px rgba(0, 0, 0, 0.1);
-		transition: 150ms all ease-in-out;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+    .drawer-handle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 16px;
+        border-bottom: 1px solid #333;
+        font-family: var(--font-family-pixel);
+        font-size: 0.75rem;
+        color: #aaa;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .drawer-content {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+        padding: 0.5rem;
+    }
+    .log-content { display: flex; flex-direction: column; padding: 0; }
 
-	.dp-btn:active {
-		transform: translateY(3px);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.15),
-			inset 0 1px 20px rgba(0, 0, 0, 0.1),
-			0 0 0 var(--surface-2);
-	}
+    .drawer-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 49;
+        background: transparent;
+    }
+    .quest-drawer { max-height: 55%; }
+    .log-drawer   { max-height: 60%; z-index: 45; }
 
-	/* Your diagonal layout, preserved exactly */
-	.dp-btn.up {
-		grid-area: 1 / 3 / 2 / 4;
-	}
-	.dp-btn.left {
-		grid-area: 2 / 2 / 3 / 3;
-	}
-	.dp-btn.right {
-		grid-area: 2 / 3 / 3 / 4;
-	}
-	.dp-btn.down {
-		grid-area: 3 / 3 / 4 / 4;
-	}
+    /* ── Bottom dock ─────────────────────────────────────────────────── */
+    .bottom-dock {
+        flex-shrink: 0;
+        display: flex;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 0.5rem 0.6rem;
+        background-color: var(--surface-2, #2a2a2a);
+        border-top: 3px solid #00000056;
+        z-index: 30;
+    }
 
-	/* Kill MapHUD's own DPad */
+    .scout-thumb {
+        flex-shrink: 0;
+        width: 64px;
+        height: 64px;
+        padding: 0;
+        background-color: var(--surface-3);
+        border: 3px solid #00000056;
+        box-shadow: #00000056 0 -3px 0 0px inset;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: 100ms transform ease-in-out, 100ms box-shadow ease-in-out;
+    }
+    .scout-thumb:active {
+        transform: translateY(3px);
+        box-shadow:
+            inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+            #00000056 0 0 0 0px inset;
+    }
+    .scout-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .scout-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #555;
+    }
 
-	/* Strip DialogueBox of its own positioning since we're containing it */
-	.dialogue-wrapper :global(.dialogue-box) {
-		position: static !important;
-		border-radius: 8px;
-	}
+    .dock-weapons {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-	.map-area :global(.bottom-right) {
-		display: none;
-	}
-
-	/* Log FAB */
-	.log-fab {
-		position: relative; /* ensure dot positions relative to fab */
-	}
-	.fab-dot {
-		position: absolute;
-		top: 2px;
-		right: 2px;
-		width: 8px;
-		height: 8px;
-		background: #e63946;
-		border-radius: 50%;
-		border: 1.5px solid #111;
-		pointer-events: none;
-	}
-	.log-fab img {
-		width: 32px;
-		height: 32px;
-	}
-
-	/* Drawers */
-	.drawer {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 50;
-		background-color: var(--surface-3, #1a1a1a);
-		border-top: 2px solid #444;
-		transform: translateY(100%);
-		transition: transform 0.25s ease;
-		border-radius: 16px 16px 0 0;
-		display: flex;
-		flex-direction: column;
-		max-height: 55%;
-	}
-	.drawer.open {
-		transform: translateY(0);
-	}
-
-	.drawer-handle {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 10px 16px;
-		border-bottom: 1px solid #333;
-		font-family: var(--font-family-pixel);
-		font-size: 0.75rem;
-		color: #aaa;
-		cursor: pointer;
-		flex-shrink: 0;
-	}
-	.drawer-content {
-		flex: 1;
-		overflow-y: auto;
-		min-height: 0;
-	}
-	.log-content {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.drawer-backdrop {
-		position: absolute;
-		inset: 0;
-		z-index: 49;
-		background: transparent;
-	}
-
-	.quest-drawer {
-		max-height: 45%;
-	}
-	.log-drawer {
-		max-height: 60%;
-		/* Log sits below DPad z-index but DPad still usable above it */
-		z-index: 45;
-	}
-
-	/* Bottom nav */
-	.bottom-nav {
-		flex-shrink: 0;
-		display: flex;
-		height: 58px;
-		background-color: var(--color-secondary, #2d2d2d);
-		border-top: 3px solid rgba(0, 0, 0, 0.4);
-		box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.3) inset;
-	}
-	.nav-btn {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 2px;
-		background: none;
-		border: none;
-		cursor: pointer;
-		color: #888;
-		font-family: var(--font-family-pixel);
-		font-size: 0.55rem;
-		transition: color 0.15s;
-		-webkit-tap-highlight-color: transparent;
-		padding: 4px 0;
-	}
-	.nav-btn img {
-		width: 22px;
-		height: 22px;
-		opacity: 0.6;
-		transition: opacity 0.15s;
-	}
-	.nav-btn.active {
-		color: #fff;
-	}
-	.nav-btn.active img {
-		opacity: 1;
-	}
-	.nav-btn:active {
-		background-color: rgba(255, 255, 255, 0.05);
-	}
+    .log-btn {
+        position: relative;
+        flex-shrink: 0;
+        width: 48px;
+        height: 64px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--surface-3);
+        border: 3px solid #00000056;
+        box-shadow: #00000056 0 -3px 0 0px inset;
+        border-radius: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: 100ms transform ease-in-out, 100ms box-shadow ease-in-out;
+    }
+    .log-btn:active {
+        transform: translateY(3px);
+        box-shadow:
+            inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+            #00000056 0 0 0 0px inset;
+    }
+    .log-btn img {
+        width: 28px;
+        height: 28px;
+        image-rendering: pixelated;
+    }
+    .log-btn .dot {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 8px;
+        height: 8px;
+        background: #e63946;
+        border-radius: 50%;
+        border: 1.5px solid #111;
+    }
 </style>

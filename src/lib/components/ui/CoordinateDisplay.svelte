@@ -3,38 +3,35 @@
 </script>
 
 <div class="coordinate-display">
-    <!-- <div class="compass"><img src="/game_icons/compass.png" alt="" srcset=""></div> -->
-    <p>
-        X: {$playerStore.position.x}, Y: {$playerStore.position.y}
-    </p>
+    <span class="axis">X</span>
+    <span class="value">{$playerStore.position.x}</span>
+    <span class="axis">Y</span>
+    <span class="value">{$playerStore.position.y}</span>
 </div>
 
 <style>
     .coordinate-display {
-
-        height: fit-content;
-        background-color: rgba(0, 0, 0, 0.2);
-        color: white;
-        padding: 8px;
-        /* border-radius: 5px; */
-        font-family: monospace;
-        font-size: 14px;
-        z-index: 1;
-        /* clip-path: polygon(28% 0%, 0 0, 0% 28%); */
-        /* backdrop-filter: blur(20px); */
-        /* border: 1px solid salmon; */
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 6px 10px;
         background-color: var(--surface-2);
-    }
-    p {
-        padding: 0;
-        /* border: 1px solid white; */
-        margin: 0;
-        text-align: center;
-        /* width: 12ch; */
-        /* transform-origin: bottom right; */
-        /* transform: rotateZ(-45deg); */
-        font-weight: 600;
+        border: 3px solid #00000056;
+        box-shadow: #00000056 0 -3px 0 0px inset;
+        border-radius: 6px;
         font-family: var(--font-family-pixel);
+        font-size: 0.75rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+    .axis {
+        color: var(--text-muted, #888);
+        font-weight: 600;
+    }
+    .value {
         color: var(--color-primary);
+        font-weight: 600;
+        min-width: 2ch;
+        text-align: right;
     }
 </style>

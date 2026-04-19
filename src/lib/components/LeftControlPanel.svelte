@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { showQuestTracker, showMessageBox, showEventScreen } from '$lib/stores/uiStore';
+	import { showQuestTracker, showMessageBox } from '$lib/stores/uiStore';
 	import { settingsStore, setRenderScale } from '$lib/stores/settingsStore';
 	import { rainEnabled } from '$lib/stores/weatherStore';
 	import { goto } from '$app/navigation';
@@ -103,22 +103,10 @@
 				>
 					<img src="/game_icons/message.png" alt="Messages" />
 				</button>
-				<button
-					class="icon-button"
-					class:active={$showEventScreen}
-					on:click={() => toggle(showEventScreen)}
-					title="Event Panel"
-				>
-					<img src="/game_icons/map.png" alt="Event Panel" />
-				</button>
-				<button
-					class="icon-button"
-					class:active={$rainEnabled}
-					on:click={() => rainEnabled.set(!$rainEnabled)}
-					title="Toggle Rain"
-				>
-					<img src="/game_icons/rain.png" alt="Toggle Rain" />
-				</button>
+				<!--
+					Event Screen toggle and Rain toggle were removed: both moved
+					into the MapHUD dock (top-left of the map page).
+				-->
 			</div>
 		{:else}
 			<div class="zoom-group">
@@ -139,7 +127,6 @@
 		flex-direction: column;
 		gap: 0.25rem;
 		align-items: center;
-		/* height: 600px; */
 		padding: 1rem 0.5rem;
 		padding-bottom: 2rem;
 		box-sizing: border-box;
@@ -212,14 +199,7 @@
 		border-top: 3px solid rgba(0, 0, 0, 0.2);
 		width: 50%;
 	}
-	/* Green for 'on' */
 	.toggle-group .icon-button.active {
 		background-color: var(--color-buff);
-		/* border-color: #4caf50; */
-	}
-	/* Red for 'off' - applied to all toggle buttons by default */
-	.toggle-group .icon-button {
-		/* background-color: #6d2828; */
-		/* border-color: #c53030; */
 	}
 </style>
