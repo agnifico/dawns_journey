@@ -207,7 +207,7 @@
 				<!-- Hero image: Nuvatra map overview -->
 				<figure class="story-figure hero">
 					<!-- DROP IMAGE HERE: Nuvatra.png (full map overview) -->
-					<img src="/case-study/nuvatra.png" alt="The Nuvatra map — full overview of the Dawn's Journey world" />
+					<img src="/screenshots/nuvatra.png" alt="The Nuvatra map — full overview of the Dawn's Journey world" />
 					<figcaption>Nuvatra. About 6900 hand-placed tiles.</figcaption>
 				</figure>
 
@@ -247,7 +247,7 @@
 				<!-- Optional flashback image: old NEW GAME splash -->
 				<figure class="story-figure small">
 					<!-- DROP IMAGE HERE: old NEW GAME splash screen (historical) -->
-					<img src="/case-study/old-splash.png" alt="An early version of the Dawn's Journey splash screen" />
+					<img src="/screenshots/old-splash.png" alt="An early version of the Dawn's Journey splash screen" />
 					<figcaption>An early build's title screen. Around version 10.</figcaption>
 				</figure>
 
@@ -266,17 +266,17 @@
 					<div class="triptych-grid">
 						<div class="triptych-cell">
 							<!-- DROP IMAGE HERE: Image 5 — earliest version map -->
-							<img src="/case-study/map-v1.png" alt="The earliest map, version 1" />
+							<img src="/screenshots/map-v1.png" alt="The earliest map, version 1" />
 							<span class="triptych-label">v1 · August</span>
 						</div>
 						<div class="triptych-cell">
 							<!-- DROP IMAGE HERE: Image 7 — mid-era map -->
-							<img src="/case-study/map-v2.png" alt="A mid-era version of the map UI" />
+							<img src="/screenshots/map-v2.png" alt="A mid-era version of the map UI" />
 							<span class="triptych-label">mid-era</span>
 						</div>
 						<div class="triptych-cell">
 							<!-- DROP IMAGE HERE: Image 4 — current map view -->
-							<img src="/case-study/map-v3.png" alt="The current map view" />
+							<img src="/screenshots/map-v3.png" alt="The current map view" />
 							<span class="triptych-label">current</span>
 						</div>
 					</div>
@@ -320,8 +320,8 @@
 				<!-- Farming register image -->
 				<figure class="story-figure">
 					<!-- DROP IMAGE HERE: Farming UI — warm register example -->
-					<img src="/case-study/register-warm.png" alt="The farming UI — the warm cream register" />
-					<figcaption>The warm register — farming, overworld, homestead.</figcaption>
+					<img src="/screenshots/farming1.png" alt="The farming UI — the warm cream register" />
+					<figcaption>An older version of the inventory page.</figcaption>
 				</figure>
 
 				<!-- ── VIII — The Arena ── -->
@@ -333,7 +333,7 @@
 				<!-- Arena before shot -->
 				<figure class="story-figure small">
 					<!-- DROP IMAGE HERE: old Arena combat — pre-redesign -->
-					<img src="/case-study/arena-old.png" alt="An early version of the Arena combat UI" />
+					<img src="/screenshots/arena-old.png" alt="An early version of the Arena combat UI" />
 					<figcaption>The Arena, early. Functional but raw.</figcaption>
 				</figure>
 
@@ -346,7 +346,7 @@
 				<!-- Arena after shot -->
 				<figure class="story-figure">
 					<!-- DROP IMAGE HERE: current Arena combat — full UI -->
-					<img src="/case-study/arena-new.png" alt="The current Arena combat UI" />
+					<img src="/screenshots/arena-new.png" alt="The current Arena combat UI" />
 					<figcaption>The Arena, current.</figcaption>
 				</figure>
 
