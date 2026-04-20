@@ -207,7 +207,7 @@
 				<!-- Hero image: Nuvatra map overview -->
 				<figure class="story-figure hero">
 					<!-- DROP IMAGE HERE: Nuvatra.png (full map overview) -->
-					<img src="/screenshots/nuvatra.png" alt="The Nuvatra map — full overview of the Dawn's Journey world" />
+					<img class="map-img" src="/screenshots/nuvatra.png" alt="The Nuvatra map — full overview of the Dawn's Journey world" />
 					<figcaption>Nuvatra. About 6900 hand-placed tiles.</figcaption>
 				</figure>
 
@@ -619,6 +619,12 @@
 		margin: 0 auto;
 	}
 
+	.map-img {
+		height: 400px;
+		overflow: hidden;
+		object-fit: cover;
+	}
+
 	/* ── Header ── */
 	.header { text-align: center; margin-bottom: 2rem; }
 	.eyebrow {
@@ -706,7 +712,7 @@
 	.chapter-label {
 		font-size: 0.6rem;
 		letter-spacing: 4px;
-		color: #3d2810;
+		color: #dd8a2a;
 		text-transform: uppercase;
 		flex-shrink: 0;
 		margin: 0;
