@@ -147,7 +147,7 @@
 					</a>
 					<div class="spacer"></div>
 					<!-- <a href="/devs-corner" class="d-studio-link">/ why i built this</a> -->
-					<a href="/devsnote2" class="d-studio-link">// my journey + case study</a>
+					<a href="/devs-corner" class="d-studio-link">// my journey + case study</a>
 				</div>
 			</div>
 

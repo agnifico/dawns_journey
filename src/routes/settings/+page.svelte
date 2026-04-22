@@ -80,10 +80,6 @@
 			</div>
 		</div>
 	</section>
-	<button class="icon-button" on:click={() => goto('/secret')}>
-		<img src="/game_icons/black_flag.png" alt="Vault" />
-		<span>Vault</span>
-	</button>
 	<Notification />
 </div>
 
