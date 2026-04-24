@@ -51,7 +51,7 @@
     let dragOffsetX = 0;
     let dragOffsetY = 0;
     let esX = 16;
-    let esY = 16;
+    let esY = 75;
 
     function onDragStart(e: MouseEvent) {
         if ((e.target as HTMLElement).closest('button')) return;
@@ -113,7 +113,7 @@
                 class="dock-btn"
                 class:active={$rainEnabled}
                 on:click={() => rainEnabled.set(!$rainEnabled)}
-                title="Toggle Rain (R)"
+                title="Toggle Rain for areas that have rainfall (R)"
             >
                 <img src="/game_icons/rain.png" alt="" class="dock-img" />
                 <span class="dock-label">Rain</span>
@@ -133,9 +133,9 @@
     <!-- ═══ TOP-RIGHT ════════════════════════════════════════════════════
          WRHeader · Day/Night (mirror) · HP/Aura -->
     <div class="top-right">
-        <div class="wr-wrap">
+        <!-- <div class="wr-wrap">
             <WRHeader value={worldResonance} elements={$playerActiveElements} />
-        </div>
+        </div> -->
         <div class="row-flex">
             <div class="stat-bars">
                 <HPBar type="hp"   current={$playerStats.hp}        max={$playerStats.maxHp} />

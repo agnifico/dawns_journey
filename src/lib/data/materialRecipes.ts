@@ -99,4 +99,19 @@ export const materialRecipes: CraftingRecipe[] = [
         xpYield: 5,
         requiredLevel: 1,
     },
+    {
+        id: 'a_note',
+        name: 'A Handwritten Note',
+        description: 'Freshly made paper from a lush leaves, and a message scribbled on it. Transfiguration magic, and the strongest alchemical force - love.',
+        skillId: 'alchemy',
+        ingredients: [
+            { itemId: 'gel_pen', quantity: 1 },
+            { itemId: 'leaves',   quantity: 4 },
+            { itemId: 'time_point',   quantity: 100 },
+        ],
+        output: { itemId: 'handwritten_note', quantity: 1 },
+        image: '/general/handwritten_note.png',
+        xpYield: 500,
+        requiredLevel: 1,
+    },
 ];

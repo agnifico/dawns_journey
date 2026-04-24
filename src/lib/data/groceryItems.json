@@ -31,7 +31,7 @@
     {
         "id": "bandage_box",
         "name": "Bandages",
-        "description": "Covers up the evidence of a particularly... vigorous session.",
+        "description": "\"Aww you got an ouchie?\" - probably Hela.",
         "image": "/grocery/bandage_box.png",
         "type": "general",
         "price": 8,
@@ -283,7 +283,7 @@
     {
         "id": "sun_cream_tube",
         "name": "Sunscreen",
-        "description": "For when you're doing it under the sun and don't want to burn... yet.",
+        "description": "Get that skin out safely, even under the scorching sun ;) Now with SPF-69!",
         "image": "/grocery/sun_cream_tube.png",
         "type": "general",
         "price": 16,

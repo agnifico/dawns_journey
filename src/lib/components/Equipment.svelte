@@ -86,7 +86,7 @@
 				}}
 			>
 				{#if $playerStore.equipment.weapon_slots[0]}
-					<ItemBox item={$playerStore.equipment.weapon_slots[0]} viewSize="large" />
+					<ItemBox item={$playerStore.equipment.weapon_slots[0]} viewSize="large" equipped="true" />
 					{#if actionTarget?.slotType === 'weapon_slots' && actionTarget?.index === 0}
 						<div class="action-sheet">
 							<button class="as-btn as-unequip" on:click|stopPropagation={handleUnequip}
@@ -112,7 +112,7 @@
 						}}
 					>
 						{#if item}
-							<ItemBox {item} viewSize="medium" />
+							<ItemBox {item} viewSize="medium" equipped="true" />
 							{#if actionTarget?.slotType === 'relic_slots' && actionTarget?.index === i}
 								<div class="action-sheet">
 									<button class="as-btn as-unequip" on:click|stopPropagation={handleUnequip}
@@ -138,7 +138,7 @@
 				}}
 			>
 				{#if $playerStore.equipment.weapon_slots[1]}
-					<ItemBox item={$playerStore.equipment.weapon_slots[1]} viewSize="large" />
+					<ItemBox item={$playerStore.equipment.weapon_slots[1]} viewSize="large" equipped="true" />
 					{#if actionTarget?.slotType === 'weapon_slots' && actionTarget?.index === 1}
 						<div class="action-sheet">
 							<button class="as-btn as-unequip" on:click|stopPropagation={handleUnequip}
@@ -282,8 +282,9 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		gap: 1rem;
+		/* gap: 1rem; */
 		/* border: 1px solid white; */
+		margin: auto;
 	}
 	.hide-btn {
 		position: absolute;
@@ -308,8 +309,8 @@
 		display: flex;
 		flex-direction: row;
 		gap: 0.5rem;
-		justify-content: center;
-		align-items: center;
+		/* justify-content: center; */
+		/* align-items: center; */
 		background: rgba(0, 0, 0, 0.15);
 		border-radius: 6px;
 		padding: 8px;
@@ -339,24 +340,25 @@
 	.weapon-slot {
 		width: 128px;
 		height: 128px;
+		height: 100%;
 		background: rgba(0, 0, 0, 0.15);
 		border: 2px solid rgba(209, 155, 62, 0.25);
 		box-shadow: #00000056 0 -6px 0 3px inset;
 	}
-	.weapon-slot.has-item {
-		border-color: rgba(209, 155, 62, 0.55);
-		background: rgba(209, 155, 62, 0.04);
+	.weapon-slot.has-item, .relic-slot.has-item {
+		/* border-color: rgba(209, 155, 62, 0.55); */
+		background: rgba(84, 34, 34, 0.242);
 		box-shadow:
 			#00000056 0 -6px 0 3px inset,
 			rgba(209, 155, 62, 0.12) 0 0 12px 0;
 	}
-	.weapon-slot.has-item:hover {
+	.weapon-slot.has-item:hover, .relic-slot.has-item:hover {
 		border-color: rgba(209, 155, 62, 0.85);
 		box-shadow:
 			#00000056 0 -6px 0 3px inset,
 			rgba(209, 155, 62, 0.25) 0 0 16px 0;
 	}
-	.weapon-slot.legendary,
+	/* .weapon-slot.legendary,
 	.relic-slot.legendary {
 		border-color: rgba(232, 201, 110, 0.8) !important;
 		background: rgba(232, 201, 110, 0.07) !important;
@@ -371,7 +373,7 @@
 		box-shadow:
 			#00000056 0 -6px 0 3px inset,
 			rgba(160, 80, 220, 0.2) 0 0 14px 0 !important;
-	}
+	} */
 	.active-sheet {
 		border-color: rgba(209, 155, 62, 1) !important;
 		box-shadow:
@@ -382,13 +384,14 @@
 		box-sizing: border-box;
 		width: 72px;
 		height: 72px;
-		background: rgba(0, 0, 0, 0.1);
+		background: rgba(0, 0, 0, 0.15);
 		border-radius: 5px;
 		box-shadow: #00000056 0 -6px 0 3px inset;
 		border: 2px solid rgba(209, 155, 62, 0.2);
 	}
 	.relic-slot.has-item {
-		border-color: rgba(209, 155, 62, 0.45);
+		/* border-color: rgba(209, 155, 62, 0.45); */
+		background: rgba(84, 34, 34, 0.242);
 	}
 
 	/* ── Action sheet ── */
@@ -399,13 +402,15 @@
 	}
 	.action-sheet {
 		position: absolute;
-		bottom: calc(100% + 6px);
+		/* bottom: calc(100% + 6px); */
 		left: 50%;
 		transform: translateX(-50%);
+		bottom: 10px;
 		background: #1c1610;
 		border: 1px solid rgba(200, 169, 110, 0.35);
 		border-radius: 7px 7px 0 0;
-		padding: 6px;
+		border-radius: 7px 7px;
+		padding: 0px;
 		display: flex;
 		gap: 5px;
 		z-index: 99;
@@ -457,7 +462,7 @@
 		flex-direction: column;
 		gap: 5px;
 		flex: 1;
-		min-width: 180px;
+		/* min-width: 180px; */
 	}
 	.section-label {
 		font-family: var(--font-family-pixel);
@@ -472,6 +477,9 @@
 		display: flex;
 		flex-direction: row;
 		gap: 5px;
+		/* background: rgba(200, 169, 110, 0.1); */
+		/* flex: 1; */
+		border-radius: 8px;
 	}
 
 	.merged-set-card {
@@ -481,7 +489,10 @@
 		padding: 11px 13px;
 		border-radius: 8px;
 		background: rgba(200, 169, 110, 0.1);
+		background: rgba(161, 58, 58, 0.202);
 		border: 1px solid rgba(200, 169, 110, 0.28);
+		border: none;
+		max-width: 180px;
 	}
 	.msc-header {
 		display: flex;
@@ -576,8 +587,8 @@
 		flex: 0;
 	}
 	.explo-section {
-		background: rgba(68, 68, 68, 0.12);
-		border: 1px solid rgba(96, 96, 200, 0.5);
+		/* background: rgba(68, 68, 68, 0.12); */
+		/* border: 1px solid rgba(96, 96, 200, 0.5); */
 		border-radius: 6px;
 		padding: 8px;
 		width: fit-content;
@@ -586,8 +597,11 @@
 
 	/* ── Buffs ── */
 	.buffs-section {
-		background: rgba(68, 68, 68, 0.12);
-		border: 1px solid rgba(225, 84, 84, 0.3);
+		/* background: rgba(68, 68, 68, 0.12); */
+		/* border: 1px solid rgba(225, 84, 84, 0.3); */
+		/* background: rgba(200, 169, 110, 0.1); */
+		/* background: rgba(161, 58, 58, 0.202); */
+		flex: 0;
 		border-radius: 6px;
 		padding: 8px;
 	}

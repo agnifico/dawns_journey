@@ -8,6 +8,7 @@
 
 	export let item: Item;
 	export let viewSize: 'small' | 'medium' | 'large' = 'medium';
+	export let equipped: Boolean = false;
 
 	$: size = viewSize === 'small' ? 40 : viewSize === 'large' ? 120 : 60;
 
@@ -122,6 +123,7 @@
 	class="item-box"
 	class:legendary={isLegendary}
 	class:special={isSpecial}
+	class:equipped={equipped}
 	class:selected
 	class:actionable={hasActions}
 	style="width:{size}px;height:{size}px;min-width:{size}px;min-height:{size}px;"
@@ -247,8 +249,8 @@
 	/* ── Rarity pip — small corner dot ── */
 	.rarity-pip {
 		position: absolute;
-		top: 2px;
-		right: 2px;
+		top: 4px;
+		right: 6px;
 		width: 5px;
 		height: 5px;
 		border-radius: 1px;
@@ -298,4 +300,5 @@
 		color: #c8a96e;
 	}
 	.as-equip:hover { background: rgba(200, 169, 110, 0.22); }
+	.equipped { background-color: transparent !important; border: none; box-shadow: none;}
 </style>

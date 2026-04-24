@@ -304,8 +304,9 @@
 		box-sizing: border-box;
 		overflow: hidden;
 		gap: 1rem;
-		border: 3px solid var(--surface-2);
-		/* border-radius: 12px; */
+		border: 10px solid var(--surface-3);
+		/* margin-left: 1.5rem; */
+		border-radius: 0 0 9px 9px;
 		/* overflow: hidden; */
 		/* border-radius: 12px; */
 		background-size: contain;

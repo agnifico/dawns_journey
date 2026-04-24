@@ -77,9 +77,6 @@
 		<button class="icon-button" on:click={() => goto('/settings')} title="Settings">
 			<img src="/game_icons/settings.png" alt="Settings" />
 		</button>
-		<!-- <button class="icon-button" on:click={() => goto('/secret')}>
-			<img src="/game_icons/black_flag.png" alt="Vault" />
-		</button> -->
 
 		<TimeDisplay />
 

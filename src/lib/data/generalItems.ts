@@ -486,9 +486,9 @@ export const generalItems: Item[] = [
         flags: ["special", "stackable", "grocery"],
     },
     {
-        id: "ball_pen",
-        name: "Ball Pen",
-        description: "Blue ball pen. If I had to place a product here: Uni-ball, ftw.",
+        id: "gel_pen",
+        name: "Gen Pen",
+        description: "Blue gel pen. If I had to place a product here: Uni-ball, ftw.",
         image: "/general/ball_pen.png",
         type: "general",
         flags: ["stackable", "grocery"],

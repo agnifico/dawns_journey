@@ -2,24 +2,20 @@ import type { Set } from '$lib/types';
 
 export const sets: Set[] = [
     {
-        id: 'symphony',
-        name: 'Symphony of the Stars',
-        relicIds: ['freedom_cry', 'lament', 'requiem', 'hymn'],
+        id: 'motherland_calling',
+        name: 'Motherland Calling',
+        relicIds: ['freedom_cry', 'searouser'],
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'speed', value: 75 }]
+                stats: [{ name: 'maxHp', value: 200 }, { name: 'maxAuraShield', value: 200 } ]
             },
-            {
-                pieces: 4,
-                stats: [{ name: 'elementalAttack', value: 125 }, { name: 'elementalDefence', value: 125 }]
-            }
         ]
     },
     {
         id: 'toys',
         name: 'Hela\'s Toys',
-        relicIds: ['helas_whip', 'sylvies_shorts', 'iron_shackles', 'spiked_choker'],
+        relicIds: ['helas_whip', 'purple_bikini', 'iron_shackles', 'spiked_choker'],
         bonuses: [
             {
                 pieces: 2,
@@ -38,14 +34,14 @@ export const sets: Set[] = [
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'physicalDefence', value: 50 }, { name: 'elementalDefence', value: 50 }]
+                stats: [{ name: 'physicalDefence', value: 175 }, { name: 'elementalDefence', value: 175 }]
             }
         ]
     },
     {
         id: 'beach_day',
         name: 'Beach Day',
-        relicIds: ['red_bra', 'purple_bikini', 'pink_sarong', 'orange_bandana', 'blue_undies'],
+        relicIds: ['red_bra', 'pink_sarong', 'orange_bandana', 'blue_undies'],
         bonuses: [
             {
                 pieces: 2,
