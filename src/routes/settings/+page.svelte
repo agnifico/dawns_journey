@@ -3,6 +3,7 @@
 	import * as SettingsService from '$lib/services/SettingsService';
 	import { modalStore } from '$lib/stores/modalStore';
 	import Notification from '$lib/components/Notification.svelte';
+	import { buildPresets } from '$lib/data/buildPresets';
 
 	function handleAddAllItems() {
 		modalStore.showConfirm(
@@ -42,7 +43,7 @@
 		);
 	}
 </script>
-
+<Notification/>
 <div class="settings-page">
 	<header>
 		<h1>Settings</h1>
@@ -50,6 +51,11 @@
 	</header>
 
 	<section>
+		{#each buildPresets as preset}
+			<button on:click={() => SettingsService.applyBuildPreset(preset.id)}>
+				{preset.name}
+			</button>
+		{/each}
 		<h2>Developer Mode</h2>
 		<div class="dev-actions">
 			<div class="action">
@@ -130,8 +136,8 @@
 	.action p {
 		margin: 0;
 		font-family: 'Silkscreen';
-		letter-spacing: -.5px;
-		word-spacing: -.7px;
+		letter-spacing: -0.5px;
+		word-spacing: -0.7px;
 		/* text-transform: uppercase; */
 		font-size: 1.5rem;
 		padding-right: 2rem;
@@ -142,7 +148,7 @@
 		justify-content: center;
 	}
 	.action strong {
-		font-size: .85rem;
+		font-size: 0.85rem;
 		color: #b18e41;
 		font-family: 'DePixel';
 	}

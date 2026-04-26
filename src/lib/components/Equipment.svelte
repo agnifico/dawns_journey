@@ -13,6 +13,7 @@
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
 	import GearPassive from './GearPassive.svelte';
+	import { getGearPassiveById } from '$lib/data/abilities';
 
 	$: hasGearPassive =
 		$playerStore.equipment.weapon_slots[0]?.gearPassives?.length > 0 ||
@@ -195,24 +196,31 @@
 					<span class="section-label">Passives</span>
 					<div class="passives-list">
 						{#if $playerStore.equipment.weapon_slots[0]}
-							{#each $playerStore.equipment.weapon_slots[0].gearPassives as effect}
-								<GearPassive
-									weaponName={$playerStore.equipment.weapon_slots[0].name}
-									passiveName={effect.name}
-									description={effect.description}
-									icon={$playerStore.equipment.weapon_slots[0].image}
-									view="mini"
-								/>
+							{#each $playerStore.equipment.weapon_slots[0].gearPassives ?? [] as passiveId}
+								{@const passive = getGearPassiveById(passiveId)}
+								{#if passive}
+									<GearPassive
+										weaponName={$playerStore.equipment.weapon_slots[0].name}
+										passiveName={passive.name}
+										description={passive.description}
+										icon={$playerStore.equipment.weapon_slots[0].image}
+										view="mini"
+									/>
+								{/if}
 							{/each}
 						{/if}
 						{#if $playerStore.equipment.weapon_slots[1]}
-							{#each $playerStore.equipment.weapon_slots[1].gearPassives as effect}
-								<GearPassive
-									weaponName={$playerStore.equipment.weapon_slots[1].name}
-									passiveName={effect.name}
-									description={effect.description}
-									icon={$playerStore.equipment.weapon_slots[1].image}
-								/>
+							{#each $playerStore.equipment.weapon_slots[1].gearPassives ?? [] as passiveId}
+								{@const passive = getGearPassiveById(passiveId)}
+								{#if passive}
+									<GearPassive
+										weaponName={$playerStore.equipment.weapon_slots[1].name}
+										passiveName={passive.name}
+										description={passive.description}
+										icon={$playerStore.equipment.weapon_slots[1].image}
+										view="mini"
+									/>
+								{/if}
 							{/each}
 						{/if}
 					</div>
@@ -345,14 +353,16 @@
 		border: 2px solid rgba(209, 155, 62, 0.25);
 		box-shadow: #00000056 0 -6px 0 3px inset;
 	}
-	.weapon-slot.has-item, .relic-slot.has-item {
+	.weapon-slot.has-item,
+	.relic-slot.has-item {
 		/* border-color: rgba(209, 155, 62, 0.55); */
 		background: rgba(84, 34, 34, 0.242);
 		box-shadow:
 			#00000056 0 -6px 0 3px inset,
 			rgba(209, 155, 62, 0.12) 0 0 12px 0;
 	}
-	.weapon-slot.has-item:hover, .relic-slot.has-item:hover {
+	.weapon-slot.has-item:hover,
+	.relic-slot.has-item:hover {
 		border-color: rgba(209, 155, 62, 0.85);
 		box-shadow:
 			#00000056 0 -6px 0 3px inset,

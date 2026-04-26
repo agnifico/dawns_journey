@@ -10,7 +10,6 @@
 	import { loadMapData } from '$lib/services/MapLoaderService';
 	import { profiles } from '$lib/data/profiles';
 	import { applyProfile } from '$lib/services/ProfileService';
-	import player from '$lib/data/player';
 	import NpcViewer from '$lib/components/NpcViewer.svelte';
 	import { hideNavbar } from '$lib/stores/uiStore';
 	import { modalStore } from '$lib/stores/modalStore';
@@ -63,7 +62,7 @@
 
 	async function exhibitionModeStart() {
 		if (selectedMapId) {
-			applyProfile('mage');
+			applyProfile('exhibition');
 			mapStore.update((s) => ({ ...s, currentMapId: selectedMapId }));
 			goto('/map');
 		}
@@ -101,6 +100,7 @@
 				<img class="d-logo" src="/dawns_journey_logo_v1.svg" alt="Dawn's Journey" />
 
 				<div class="d-tagline-block">
+					<p class="d-tagline-main">VERSION ALPHA - Out; but only for internal testing. <br> Release date: 27th April.</p>
 					<p class="d-tagline-main">A serverless, no database browser based game.</p>
 					<p class="d-tagline-sub">
 						Fully unlockable. Fully completable. A game with a start and an end — because there's

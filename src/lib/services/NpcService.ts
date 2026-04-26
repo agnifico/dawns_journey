@@ -685,7 +685,13 @@ export function selectBattleAftermath(
     globalNpcs: Record<string, NPC>,
     outcome: 'win' | 'lose'
 ): { value?: number; dialogue: string[] } | null {
-    const rankAftermaths = npc.battleAftermathsBySwordRank?.find(a => a.rank === npc.swordRank);
+    let rankAftermaths = npc.battleAftermathsBySwordRank?.find(a => a.rank === npc.swordRank);
+    if (!rankAftermaths && npc.battleAftermathsBySwordRank?.length) {
+        // Fall back to the highest defined rank bucket at or below current swordRank.
+        rankAftermaths = npc.battleAftermathsBySwordRank
+            .filter(a => a.rank <= npc.swordRank)
+            .sort((a, b) => b.rank - a.rank)[0];
+    }
     if (!rankAftermaths) return null;
 
     const candidates = rankAftermaths.aftermaths.filter(a => a.outcome === outcome);

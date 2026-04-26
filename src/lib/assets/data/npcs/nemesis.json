@@ -4,22 +4,23 @@
     "profileImage": "/images/characters/nemesis/nemesis_avatar.png",
     "image": "/images/characters/nemesis/nemesis0.png",
     "galleryImages": [
-        "/images/characters/nemesis/nemesis0.png",
+        "/images/characters/nemesis/nemesis14.png",
+        "/images/characters/nemesis/nemesis13.png",
         "/images/characters/nemesis/nemesis1.png",
+        "/images/characters/nemesis/nemesis15.png",
         "/images/characters/nemesis/nemesis2.png",
         "/images/characters/nemesis/nemesis3.png",
-         "/images/characters/nemesis/nemesis4.png",
-         "/images/characters/nemesis/nemesis5.png",
-         "/images/characters/nemesis/nemesis6.png",
-         "/images/characters/nemesis/nemesis7.png",
-         "/images/characters/nemesis/nemesis8.png",
-         "/images/characters/nemesis/nemesis9.png",
-         "/images/characters/nemesis/nemesis10.png",
-         "/images/characters/nemesis/nemesis11.png"
+        "/images/characters/nemesis/nemesis4.png",
+        "/images/characters/nemesis/nemesis5.png",
+        "/images/characters/nemesis/nemesis7.png",
+        "/images/characters/nemesis/nemesis9.png"
     ],
-    "hidden": false, "isCombatant": true,
+    "arenaImage": "/images/characters/nemesis/nemesis3.png",
+    "hidden": false,
+    "isCombatant": true,
     "types": [
-        "Water", "Fire"
+        "Water",
+        "Fire"
     ],
     "faction": "south_sea_empire",
     "baseStats": {

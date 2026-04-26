@@ -2,6 +2,18 @@
 
 import type { Combatant, CombatLogMessage, CombatLogSide, StatusEffect, PlayerBaseStats } from '$lib/types';
 
+function consumeGuaranteedHit(attacker: Combatant): { combatant: Combatant; consumed: boolean } {
+    const hasFlag = attacker.statusEffects.some(s => s.flags?.includes('guaranteed_hit'));
+    if (!hasFlag) return { combatant: attacker, consumed: false };
+    return {
+        combatant: {
+            ...attacker,
+            statusEffects: attacker.statusEffects.filter(s => !s.flags?.includes('guaranteed_hit')),
+        },
+        consumed: true,
+    };
+}
+
 type CalculateDamageFunction = (
     attacker: Combatant,
     defender: Combatant,
@@ -55,6 +67,8 @@ export interface StatusEffectApplication {
      */
     stackBehavior?: 'replace' | 'stack';
     statusEffect: {
+        healPerTurn?: number;
+        category?: StatusEffect['category'];
         id: string;
         name: string;
         duration: number;
@@ -315,30 +329,34 @@ export function executeDamageEffect(
     // Hit chance is purely the ability's accuracy value.
     // Combatant precision is NOT a hit multiplier — it reduces defender evasion (see calculateEvasion).
     const combinedAccuracy = abilityAccuracy;
-
+    const { combatant: hitAttacker, consumed: guaranteedHit } = consumeGuaranteedHit(attacker);
     for (let i = 0; i < hitAttempts; i++) {
         // First check accuracy (ability × combatant), then check evasion (defender-level)
-        if (Math.random() > combinedAccuracy) {
-            missCount++;
-            if (!isMultiHit) {
-                logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
+        if (!guaranteedHit) {
+            if (Math.random() > combinedAccuracy) {
+                missCount++;
+                if (!isMultiHit) {
+                    logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
+                }
+                continue;
             }
-            continue;
         }
 
-        if (calculateEvasion(updatedDefender, attacker.precision ?? 0)) {
-            missCount++;
-            if (!isMultiHit) {
-                logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
+        if (!guaranteedHit) {
+            if (calculateEvasion(updatedDefender, hitAttacker.precision ?? 0)) {
+                missCount++;
+                if (!isMultiHit) {
+                    logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
+                }
+                continue;
             }
-            continue;
         }
 
         hitCount++;
         const { damage, isCritical } = calculateDamage(
-            attacker, updatedDefender,
+            hitAttacker, updatedDefender,
             effect.damageType,
-            effect.damageType === 'elemental' ? [attacker.activeElement] : [],
+            effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
             effect.multiplier
         );
         totalDamage += damage;
@@ -385,7 +403,7 @@ export function executeDamageEffect(
     }
 
     return {
-        updatedAttacker: attacker,
+        updatedAttacker: hitAttacker,
         updatedDefender,
         logs,
         totalDamage,
@@ -459,6 +477,36 @@ export function executeStatusEffect(
             updatedAttacker: attacker,
             updatedDefender: defender,
             logs: [],
+            totalDamage: 0,
+        };
+    }
+
+    // Resolve target before immunity check (target depends on `effect.target`)
+    const target = effect.target === 'self' ? attacker : defender;
+
+    // Immunity check — does the target carry a flag matching the incoming status category?
+    const category = effect.statusEffect.category;
+    const FLAG_BY_CATEGORY: Record<string, string> = {
+        poison: 'immune_to_poison',
+        stun: 'immune_to_stun',
+        bleed: 'immune_to_bleed',
+        burn: 'immune_to_burn',
+        freeze: 'immune_to_freeze',
+    };
+    const requiredFlag = category ? FLAG_BY_CATEGORY[category] : undefined;
+    if (requiredFlag && target.statusEffects.some(s => s.flags?.includes(requiredFlag as any))) {
+        const targetName = effect.target === 'self'
+            ? (attacker.isPlayer ? 'Player' : attacker.name)
+            : (defender.isPlayer ? 'Player' : defender.name);
+        return {
+            updatedAttacker: attacker,
+            updatedDefender: defender,
+            logs: [{
+                type: 'status_immune',
+                side: sideOf(attacker),
+                targetName,
+                statusName: effect.statusEffect.name,
+            }],
             totalDamage: 0,
         };
     }
@@ -640,24 +688,25 @@ export function executeLifestealEffect(
 ): EffectResult {
     const attackerName = attacker.isPlayer ? 'Player' : attacker.name;
     const logs: CombatLogMessage[] = [];
+    const { combatant: hitAttacker, consumed: guaranteedHit } = consumeGuaranteedHit(attacker);
 
     // Accuracy check
-    if (Math.random() > abilityAccuracy) {
+    if (!guaranteedHit && Math.random() > abilityAccuracy) {
         logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'accuracy' });
-        return { updatedAttacker: attacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
+        return { updatedAttacker: hitAttacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
     }
 
     // Evasion check
-    if (calculateEvasion(defender, attacker.precision ?? 0)) {
+    if (!guaranteedHit && calculateEvasion(defender, hitAttacker.precision ?? 0)) {
         logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
-        return { updatedAttacker: attacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
+        return { updatedAttacker: hitAttacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
     }
 
     // Deal damage
     const { damage, isCritical } = calculateDamage(
-        attacker, defender,
+        hitAttacker, defender,
         effect.damageType,
-        effect.damageType === 'elemental' ? [attacker.activeElement] : [],
+        effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
         effect.multiplier,
     );
 
@@ -666,8 +715,8 @@ export function executeLifestealEffect(
     // Heal: crit scales the heal too (crit damage = crit heal)
     const healAmount = Math.round(damage * effect.healRatio);
     const updatedAttacker: Combatant = {
-        ...attacker,
-        hp: Math.min(attacker.maxHp, attacker.hp + healAmount),
+        ...hitAttacker,
+        hp: Math.min(hitAttacker.maxHp, hitAttacker.hp + healAmount),
     };
 
     logs.push({
@@ -727,7 +776,7 @@ export function executeCleanseEffect(
 
     const predicate = effect.cleanse === 'negative' ? isNegative : isPositive;
     const stripped = target.statusEffects.filter(e => predicate(e));
-    const kept     = target.statusEffects.filter(e => !predicate(e));
+    const kept = target.statusEffects.filter(e => !predicate(e));
 
     const updatedTarget: Combatant = { ...target, statusEffects: kept };
 

@@ -1,5 +1,6 @@
 import { playerStore } from '$lib/stores/playerStore';
 import { craftingRecipes } from '$lib/data/craftingRecipes';
+import { materialRecipes } from '$lib/data/materialRecipes';
 import {
     addItems,
     hasItem,
@@ -35,7 +36,7 @@ function getSkillLevel(player: Player, skillId: string): number {
  * @param recipeId The ID of the crafting recipe to execute.
  */
 export function craft(recipeId: string): void {
-    const recipe = craftingRecipes.find(r => r.id === recipeId);
+    const recipe = craftingRecipes.find(r => r.id === recipeId) || materialRecipes.find(r => r.id === recipeId);
     if (!recipe) {
         messageStore.addMessage(`Invalid recipe.`, ['System']);
         console.warn(`[CraftingService.craft] Unknown recipe ID: ${recipeId}`);

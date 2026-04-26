@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getArenaNpc, getAllArenaNpcIds } from '$lib/data/arenaNpcs';
-	import { getAbilityById } from '$lib/data/abilities';
+	import { getAbilityById, getGearPassiveById } from '$lib/data/abilities';
 	import { startArenaCombat } from '$lib/services/ArenaCombatService';
 	import CombatModal from '$lib/components/CombatModal.svelte';
 	import type { Combatant, Ability } from '$lib/types';
@@ -11,6 +11,8 @@
 	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
 	import ElementTag from '$lib/components/ui/ElementTag.svelte';
 	import ElementalOverlay from '$lib/components/ElementalOverlay.svelte';
+	// in your existing import block at the top
+
 
 	let opponents: Combatant[] = [];
 	let selectedNpc: Combatant | null = null;
@@ -136,7 +138,11 @@
 						class:fading={transitioning}
 						style:--el-color={getPrimaryElementBg(selectedNpc)}
 					>
-						<img src={selectedNpc.profileImage} alt={selectedNpc.name} class="char-img" />
+						<img
+							src={selectedNpc?.arenaImage || selectedNpc.profileImage}
+							alt={selectedNpc.name}
+							class="char-img"
+						/>
 						<div class="char-backdrop-gradient"></div>
 					</div>
 
@@ -196,13 +202,16 @@
 								{#if selectedNpc.gearPassives?.length}
 									<div class="panel-label" style="margin-top: 0.75rem;">Passives</div>
 									<div class="passives-list">
-										{#each selectedNpc.gearPassives as p}
-											<div class="passive-pill">
-												<span class="passive-name">{p.name}</span>
-												{#if p.description}
-													<span class="passive-desc">{p.description}</span>
-												{/if}
-											</div>
+										{#each selectedNpc.gearPassives as passiveId}
+											{@const p = getGearPassiveById(passiveId)}
+											{#if p}
+												<div class="passive-pill">
+													<span class="passive-name">{p.name}</span>
+													{#if p.description}
+														<span class="passive-desc">{p.description}</span>
+													{/if}
+												</div>
+											{/if}
 										{/each}
 									</div>
 								{/if}
@@ -430,7 +439,7 @@
 		position: absolute;
 		inset: 0;
 		background:
-			linear-gradient(to right, #100a06 30%, rgba(16, 10, 6, 0.2) 70%, rgba(16, 10, 6, 0.5) 100%),
+			linear-gradient(to right, #100a06 40%, rgba(16, 10, 6, 0.2) 70%, rgba(16, 10, 6, 0.5) 100%),
 			linear-gradient(to top, #100a06 0%, transparent 40%),
 			/* Element tint — subtle bloom in top-right */
 				radial-gradient(

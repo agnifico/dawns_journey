@@ -140,6 +140,7 @@
 <style>
     .qt-container {
         width: 100%;
+        height: 100%;
         background-color: var(--surface-2);
         border: 4px solid #00000056;
         box-shadow: #00000056 0 -6px 0 0px inset;

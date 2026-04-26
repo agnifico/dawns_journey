@@ -23,9 +23,9 @@ export const profiles: Profile[] = [
         equippedRelics: [],
     },
     {
-        id: 'mage',
+        id: 'exhibition',
         name: 'Exhibition',
-        avatar: '/images/characters/mage.png',
+        avatar: '/images/characters/player13.png',
         description: 'All items unlocked. Explore freely without limits.',
         initialInventory: [],   // handled by ProfileService — all items × 1
         equippedWeapons: ['unity', 'queens_trident'],

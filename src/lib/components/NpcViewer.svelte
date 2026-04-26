@@ -67,11 +67,12 @@
 			<h2 class="npc-name">{currentNpc.name}</h2>
 			<div class="name-rule" />
 
+			<p class="npc-title">{currentNpc.title || ''}</p>
 			<!-- Description -->
 			<p class="npc-desc">{currentNpc.description || ''}</p>
 
 			<!-- Rank chips -->
-			<div class="rank-row">
+			<!-- <div class="rank-row">
 				<div class="rank-chip">
 					<img src="/game_icons/sword_rank.png" alt="sword" />
 					<span>Rank {currentNpc.swordRank}</span>
@@ -80,7 +81,7 @@
 					<img src="/game_icons/heart_rank.png" alt="heart" />
 					<span>Rank {currentNpc.heartRank}</span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
 		<!-- Navigation — pinned to bottom -->
@@ -195,7 +196,7 @@
 		margin-top: 0.1rem;
 	}
 
-	.npc-desc {
+	.npc-desc, .npc-title {
 		font-family: monospace;
 		font-size: 0.8rem;
 		color: rgba(169, 132, 103, 0.85);
@@ -207,6 +208,15 @@
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 		text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+	}
+
+	.npc-title {
+		font-family: "Silkscreen";
+		/* text-transform: uppercase; */
+		font-size: 1rem;
+		letter-spacing: -.3px;
+		color: var(--text-muted);
+		margin-bottom: 0;
 	}
 
 	.rank-row {

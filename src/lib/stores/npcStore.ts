@@ -14,7 +14,6 @@ const npcModules = {
     'marjane': () => import('../assets/data/npcs/marjane.json'),
     'aoife': () => import('../assets/data/npcs/aoife.json'),
     'veres': () => import('../assets/data/npcs/veres.json'),
-    'akari': () => import('../assets/data/npcs/akari.json'),
     'cygwin': () => import('../assets/data/npcs/cygwin.json'),
     'verona': () => import('../assets/data/npcs/verona.json'),
     'ariana': () => import('../assets/data/npcs/ariana.json'),

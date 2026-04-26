@@ -1,4 +1,4 @@
-import type { Ability } from '$lib/types';
+import type { Ability, GearPassive } from '$lib/types';
 import { ABILITY_MODE } from '$lib/config/abilityConfig';
 
 
@@ -893,8 +893,74 @@ export function getAbilityById(id: string): Ability | undefined {
         passiveAbilities.find(a => a.id === id)
     );
 }
- 
+
 export const allAbilities: Ability[] =
     ABILITY_MODE === 'dev'
         ? [...playerAbilities, ...npcAbilities, ...passiveAbilities]
         : playerAbilities;
+
+
+export const gearPassives: GearPassive[] = [
+    // Generic immunity passives — used across items and NPCs
+    {
+        id: 'stun_immunity',
+        name: 'Stun Immunity',
+        description: 'Gain complete immunity to [Stun].',
+        flags: ['immune_to_stun'],
+    },
+    {
+        id: 'poison_immunity',
+        name: 'Poison Immunity',
+        description: 'Gain complete immunity to [Poison].',
+        flags: ['immune_to_poison'],
+    },
+    {
+        id: 'bleed_immunity',
+        name: 'Bleed Immunity',
+        description: 'Gain complete immunity to [Bleed].',
+        flags: ['immune_to_bleed'],
+    },
+    {
+        id: 'burn_immunity',
+        name: 'Burn Immunity',
+        description: 'Gain complete immunity to [Burn].',
+        flags: ['immune_to_burn'],
+    },
+    {
+        id: 'freeze_immunity',
+        name: 'Freeze Immunity',
+        description: 'Gain complete immunity to [Freeze].',
+        flags: ['immune_to_freeze'],
+    },
+    {
+        id: 'stat_reduction_immunity',
+        name: 'Iron Will',
+        description: 'Stats cannot be reduced by enemy abilities.',
+        flags: ['immune_to_stat_reduction'],
+    },
+
+    // Hela-flavoured (innate to her)
+    {
+        id: 'juggernaut_stun_immunity',
+        name: 'Unstoppable',
+        description: 'Permanent and inalienable immunity to [Stun].',
+        flags: ['immune_to_stun'],
+    },
+    {
+        id: 'juggernaut_stat_immunity',
+        name: 'Unbreakable',
+        description: 'Permanent and inalienable immunity to [Stat Reduction].',
+        flags: ['immune_to_stat_reduction'],
+    },
+
+    // Guinevere-flavoured (her existing passive)
+    {
+        id: 'unshackled',
+        name: 'Unshackled',
+        description: 'Cannot be weakened by reduction or transfer effects.',
+        flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction'],
+    },
+];
+
+export const getGearPassiveById = (id: string): GearPassive | undefined =>
+    gearPassives.find(p => p.id === id);

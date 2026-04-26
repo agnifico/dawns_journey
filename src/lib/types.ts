@@ -32,7 +32,7 @@ export interface Item {
     flags?: string[];
     exploration?: { name: string, level: number }[];
     plantId?: string;
-    gearPassives?: GearPassive[];
+    gearPassives?: string[];
 }
 
 export interface Weapon extends Item {
@@ -77,6 +77,8 @@ export interface Ability {
 }
 
 export interface StatusEffect {
+    // In StatusEffect interface, after `flags?` field, add:
+    category?: 'poison' | 'stun' | 'bleed' | 'burn' | 'freeze' | 'buff' | 'debuff';
     id: string;
     name: string;
     duration: number;
@@ -105,6 +107,9 @@ export interface StatusEffect {
         | 'immune_to_transfer_reduction'
         | 'immune_to_poison'
         | 'immune_to_stun'
+        | 'immune_to_bleed'    // NEW
+        | 'immune_to_burn'     // NEW
+        | 'immune_to_freeze'   // NEW
         | 'guaranteed_hit'
     >;
 }
@@ -169,6 +174,7 @@ export interface Combatant {
     name: string;
     isPlayer: boolean;
     image: string;
+    arenaImage: string;
     profileImage: string;
     types: string[];
     activeElement: string;
@@ -655,6 +661,7 @@ export interface NPC {
     abilityCycle?: string[];
     battleAftermathsBySwordRank?: any[];
     drops?: any[];
+    gearPassives?: string[];
 
     // ── New fields ──────────────────────────────────────────────────────────
     /**

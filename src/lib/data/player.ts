@@ -49,7 +49,7 @@ export const player: Player = {
     profile: {
         avatar: '/images/characters/player1.png',
         name: 'Wanderer',
-        id: 'mage',
+        id: 'exhibition',
         initialInventory: [],
         equippedWeapons: [],
         equippedRelics: []

@@ -3,7 +3,6 @@ import { player as basePlayer } from './player';
 import { createItems } from '../services/ItemFactory';
 
 // Import all base NPC data to construct the full NPC state
-import akari from '../assets/data/npcs/akari.json';
 import claudia from '../assets/data/npcs/claudia.json';
 import cygwin from '../assets/data/npcs/cygwin.json';
 import guinevere from '../assets/data/npcs/guinevere.json';
@@ -62,7 +61,7 @@ export const playerDev: Player = {
 
 // --- 2. NPC State ---
 const baseNpcs: Record<string, NPC> = {
-    akari, claudia, cygwin, guinevere, aoife, hela, marjane, verona, sylvie, veres
+ claudia, cygwin, guinevere, aoife, hela, marjane, verona, sylvie, veres
 };
 
 // Create a deep copy to avoid modifying the original JSON imports

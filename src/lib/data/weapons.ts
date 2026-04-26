@@ -194,7 +194,7 @@ export const weapons: Item[] = [
         image: "/weapons/xochi.png", type: "weapon",
         stats: [{ name: "elementalAttack", value: 190 }, { name: "physicalDefence", value: 55 }, { name: "maxHp", value: 120 }],
         element: "Earth", flags: ['legendary', 'sword'], instanceId: '',
-        gearPassives: [{ id: 'poison_immunity', name: 'Poison Immunity', flags: ['immune_to_poison'], description: "Gain complete immunity to [Poison]" }]
+        gearPassives: ['poison_immunity']
     },
     {
         id: "queens_trident", name: "Queen's Trident",
@@ -420,7 +420,7 @@ export const weapons: Item[] = [
         image: "/weapons/jade_spear.png", type: "weapon",
         stats: [{ name: "physicalAttack", value: 130 }, { name: "evasion", value: 25 }, { name: "precision", value: 20 }, { name: "speed", value: 15 }],
         element: "Wind", flags: ['polearm'], instanceId: '',
-        gearPassives: [{ id: 'stun_immunity', name: 'Stun Immunity', flags: ['immune_to_stun'], description: 'Gain complete immunity to [Stun]' }]
+        gearPassives: ['stun_immunity']
     },
     {
         id: "sun_wukongs_staff", name: "Sun Wukong's Staff",

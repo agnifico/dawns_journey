@@ -12,7 +12,6 @@ import bonnieTemplateJson from '$lib/assets/data/npcs/bonnie.json';
 import arianaTemplateJson from '$lib/assets/data/npcs/ariana.json';
 import veronaTemplateJson from '$lib/assets/data/npcs/verona.json';
 import veresTemplateJson from '$lib/assets/data/npcs/veres.json';
-import akariTemplateJson from '$lib/assets/data/npcs/akari.json';
 import nemesisTemplateJson from '$lib/assets/data/npcs/nemesis.json';
 
 const sylvieTemplate = sylvieTemplateJson as NPC;
@@ -27,7 +26,6 @@ const bonnieTemplate = bonnieTemplateJson as NPC;
 const arianaTemplate = arianaTemplateJson as NPC;
 const veronaTemplate = veronaTemplateJson as NPC;
 const veresTemplate = veresTemplateJson as NPC;
-const akariTemplate = akariTemplateJson as NPC;
 const nemesisTemplate = nemesisTemplateJson as NPC;
 
 function withAccuracy(baseStats: NPC['baseStats']): NPC['baseStats'] {
@@ -209,18 +207,19 @@ const arenaNpcs: Record<string, Combatant> = {
         ...helaTemplate,
         baseStats: {
             ...withAccuracy(helaTemplate.baseStats),
-            hp: 1000,
-            maxHp: 1000,
-            maxAuraShield: 500,
+            hp: 1400,
+            maxHp: 1400,
+            maxAuraShield: 400,
+            auraShield: 400,
             physicalAttack: 450,
-            physicalDefence: 500,
+            physicalDefence: 600,
             elementalAttack: 450,
-            elementalDefence: 500,
+            elementalDefence: 600,
             speed: 85,
-            evasion: 70,
-            precision: 50,
-            critChance: .75,
-            critDamage: 1.5,
+            evasion: 80,
+            precision: 60,
+            critChance: 0.60,
+            critDamage: 1.6,
         },
 
         // Gear passives on NPCs use inflictedBy: 'innate' — permanent, never cleansed
@@ -650,37 +649,6 @@ const arenaNpcs: Record<string, Combatant> = {
                 {
                     condition: { type: 'PLAYER_HP_BELOW', value: 0.25 },
                     responseAbility: 'shadow_strike', priority: 70
-                },
-            ],
-        } satisfies ArenaBehavior,
-    },
-    akari: {
-        ...akariTemplate,
-        baseStats: { ...withAccuracy(akariTemplate.baseStats), hp: 240, maxHp: 240 },
-        arenaBehavior: {
-            phases: [
-                {
-                    hpThreshold: 1.0,
-                    abilities: ['tidal_surge', 'blizzard_surge', 'spirit_storm', 'oceanic_ascendance'],
-                    tactic: 'RANDOM',
-                },
-            ],
-            triggers: [
-                {
-                    condition: { type: 'SELF_HP_ABOVE', value: 0.99 },
-                    responseAbility: 'sea_ward', priority: 110, oneShot: true
-                },
-                {
-                    condition: { type: 'ENEMY_STATUS_MISSING', statusId: 'seal_of_tides' },
-                    responseAbility: 'seal_of_tides', priority: 90, oneShot: true
-                },
-                {
-                    condition: { type: 'TURN_MULTIPLE_OF', value: 5 },
-                    responseAbility: 'oceanic_ascendance', priority: 40
-                },
-                {
-                    condition: { type: 'SELF_HP_BELOW', value: 0.50 },
-                    responseAbility: 'tidal_surge', priority: 35
                 },
             ],
         } satisfies ArenaBehavior,

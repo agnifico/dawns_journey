@@ -16,6 +16,7 @@
 	$: npcList = Object.values($npcStore.globalNpcs);
 
 	function getCardImage(npc: any): string {
+		return npc.image;
 		const zeroImage = npc.galleryImages?.find((img: string) => img.endsWith('0.png'));
 		return zeroImage || npc.image;
 	}

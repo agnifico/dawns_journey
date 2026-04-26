@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { eventScreen, showEventScreen } from '$lib/stores/uiStore';
+    import { eventScreen } from '$lib/stores/uiStore';
     import { currentMapData, landscapeImage } from '$lib/stores/mapStore';
     import { playerStore, playerStats } from '$lib/stores/playerStore';
     import { questStore } from '$lib/stores/questStore';
@@ -31,7 +31,7 @@
     // ── Drawers ────────────────────────────────────────────────────────────
     let questDrawerOpen = false;
     let logDrawerOpen   = false;
-    let scoutOpen       = false; // landscape scout view
+    let scoutOpen       = false;
 
     $: if (isCardEvent || isPanelEvent) questDrawerOpen = false;
     $: if (isCardEvent || isPanelEvent) scoutOpen = false;
@@ -61,8 +61,8 @@
     }}
 >
     <!-- ════════════════════════════════════════════════════════════════
-         TOP STRIP — narrow bar directly below the (now-visible) navbar.
-         HP/Aura · POI · Event · Rain · Time · Coords · Quest count
+         TOP STRIP — sits below the now-visible global navbar.
+         HP/Aura · POI · Rain · Time · Coords · Quest count
          ════════════════════════════════════════════════════════════════ -->
     <div class="top-strip">
         <div class="hp-stack">
@@ -75,18 +75,11 @@
                 class="strip-btn"
                 class:active={showHighlights}
                 on:click={onToggleHighlight}
-                title="POI"
+                title="Points of Interest"
             >
                 <span class="g">{showHighlights ? '◉' : '◎'}</span>
             </button>
-            <button
-                class="strip-btn"
-                class:active={$showEventScreen}
-                on:click={() => showEventScreen.update((v) => !v)}
-                title="Event"
-            >
-                <img src="/game_icons/map.png" alt="" />
-            </button>
+
             <button
                 class="strip-btn"
                 class:active={$rainEnabled}
@@ -113,21 +106,22 @@
     </div>
 
     <!-- ════════════════════════════════════════════════════════════════
-         MAP AREA — events float above
+         MAP AREA
          ════════════════════════════════════════════════════════════════ -->
     <div class="map-area">
         {#if $currentMapData && $playerStore.position}
-            <MapDisplay mapData={$currentMapData} player={$playerStore} />
+            <MapDisplay
+                mapData={$currentMapData}
+                player={$playerStore}
+                {showHighlights}
+            />
             <NewItemNotif />
             <MapEventNotif />
         {:else}
             <div class="loading">Loading map...</div>
         {/if}
 
-        <!-- Floating card events (enemy, resource) -->
         <MobileEventCard />
-
-        <!-- Panel events (npc, location) -->
         <MobileEventPanel />
 
         <!-- Quest drawer -->
@@ -138,7 +132,7 @@
             <div class="drawer-content"><QuestTracker /></div>
         </div>
 
-        <!-- Message log drawer -->
+        <!-- Log drawer -->
         <div class="drawer log-drawer" class:open={logDrawerOpen}>
             <div class="drawer-handle" on:click={() => (logDrawerOpen = false)}>
                 <span>Message Log</span><span>▼</span>
@@ -150,13 +144,13 @@
             <div class="drawer-backdrop" on:click={() => (questDrawerOpen = false)} role="presentation"></div>
         {/if}
 
-        <!-- DPad — highest z, opacity fades when idle -->
+        <!-- DPad -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class="dpad-float" class:active={dpadActive} on:pointerdown|stopPropagation={onDpadTouch}>
             <DPad />
         </div>
 
-        <!-- ── Scout view: full landscape art, dismissable ── -->
+        <!-- Scout view -->
         {#if scoutOpen && $landscapeImage}
             <div class="scout-overlay" on:click={() => (scoutOpen = false)} role="presentation">
                 <img src={$landscapeImage} alt="landscape" class="scout-img" />
@@ -209,6 +203,9 @@
         flex-direction: column;
         background-color: #111;
         overflow: hidden;
+        /* Leave room at top for the global navbar (50px). */
+        padding-top: 50px;
+        box-sizing: border-box;
     }
 
     /* ── Top strip ───────────────────────────────────────────────────── */
@@ -301,7 +298,7 @@
         font-family: monospace;
     }
 
-    /* ── DPad ────────────────────────────────────────────────────────── */
+    /* ── DPad float ──────────────────────────────────────────────────── */
     .dpad-float {
         position: absolute;
         bottom: 0.75rem;
@@ -315,19 +312,16 @@
         opacity: 1;
         filter: none;
     }
-
-    /* Hide the DPad component's own mobile padding/background since we wrap it */
     .dpad-float :global(.mobile-d-pad) {
         background: transparent;
         padding: 0;
         width: auto;
     }
-    /* Hide A/B action buttons on the floating DPad — too much real estate */
     .dpad-float :global(.action-buttons) {
         display: none;
     }
 
-    /* ── Scout view (landscape full) ─────────────────────────────────── */
+    /* ── Scout view ──────────────────────────────────────────────────── */
     .scout-overlay {
         position: absolute;
         inset: 0;
@@ -382,7 +376,6 @@
         max-height: 55%;
     }
     .drawer.open { transform: translateY(0); }
-
     .drawer-handle {
         display: flex;
         justify-content: space-between;
@@ -402,7 +395,6 @@
         padding: 0.5rem;
     }
     .log-content { display: flex; flex-direction: column; padding: 0; }
-
     .drawer-backdrop {
         position: absolute;
         inset: 0;
@@ -423,7 +415,6 @@
         border-top: 3px solid #00000056;
         z-index: 30;
     }
-
     .scout-thumb {
         flex-shrink: 0;
         width: 64px;
@@ -459,7 +450,6 @@
         font-size: 1.5rem;
         color: #555;
     }
-
     .dock-weapons {
         flex: 1;
         min-width: 0;
@@ -467,7 +457,6 @@
         align-items: center;
         justify-content: center;
     }
-
     .log-btn {
         position: relative;
         flex-shrink: 0;

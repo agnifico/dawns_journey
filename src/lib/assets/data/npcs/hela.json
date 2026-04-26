@@ -1,10 +1,16 @@
 {
     "id": "hela",
     "name": "Hela",
+    "title": "The Dawn in the Night — Queen of Hell",
+    "description": "The Queen of Hell. Wielder of limitless power, subject to a lifetime of boredom from her menial duties in the underworld. Now, lost in the new world, she has found a new avenue for fun — you.",
+    "faction": "dawn",
+    "hidden": false,
+    "isCombatant": true,
+
     "profileImage": "/images/characters/hela/hela_avatar.png",
     "image": "/images/characters/hela/hela0.png",
-    "title": "The Dawn in the Night — Queen of Hell",
-    "spriteGif": "/images/hela.gif",
+    "arenaImage": "/images/characters/hela/hela4.png",
+    "spriteGif": "/images/sprites/hela.gif",
     "galleryImages": [
         "/images/characters/hela/hela0.png",
         "/images/characters/hela/hela1.png",
@@ -16,13 +22,9 @@
         "/images/characters/hela/hela8.png",
         "/images/characters/hela/hela9.png",
         "/images/characters/hela/hela10.png",
-        "/images/characters/hela/hela11.png",
-        "/images/characters/hela/hela12.png",
-        "/images/characters/hela/hela13.png"
+        "/images/characters/hela/hela11.png"
     ],
-    "description": "The Queen of Hell. Wielder of limitless power, subject to a lifetime of boredom from her menial duties in the underworld. Now, lost in the new world, she has found a new avenue for fun — you.",
-    "faction": "dawn",
-    "hidden": false, "isCombatant": true,
+
     "types": ["Dark", "Fire"],
     "baseStats": {
         "hp": 1000,
@@ -37,31 +39,31 @@
         "evasion": 70,
         "critChance": 0.6,
         "critDamage": 2,
-        "precision": 1
+        "precision": 50
     },
+    "abilityCycle": [
+        "basic_slash",
+        "abyss_poison",
+        "hellfire",
+        "reaping_blow"
+    ],
+    "gearPassives": ["juggernaut_stun_immunity", "juggernaut_stat_immunity"],
+    "statGrowth": [],
+
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
-    "abilityCycle": [
-        "basic_slash",
-        "abyssal_toxin",
-        "hellfire",
-        "reaping_blow"
+
+    "drops": [
+        { "itemId": "argentum", "chance": 1, "quantity": 2000 },
+        { "itemId": "dark_sigil", "chance": 1, "quantity": 3 },
+        { "itemId": "fire_sigil", "chance": 1, "quantity": 2 },
+        { "itemId": "magma_fossil", "chance": 1, "quantity": 1 },
+        { "itemId": "shadow_veil_tincture", "chance": 1, "quantity": 1 }
     ],
-    "statGrowth": [
-        {
-            "level": 1,
-            "stats": {
-                "maxHp": 550,
-                "physicalAttack": 55,
-                "elementalAttack": 77,
-                "physicalDefence": 44,
-                "elementalDefence": 44
-            }
-        }
-    ],
+
     "mapPositions": [
         {
             "mapId": "dragon_island",
@@ -82,6 +84,7 @@
             "y": 30
         }
     ],
+
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -113,12 +116,127 @@
                     "value": -5,
                     "dialogue": [
                         "Agni, is that you teaching your friends cheat codes to defeat me?",
-                        "I thought you had a thing for me :("
+                        "I thought you had a thing for me. :("
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 1,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": -5,
+                    "dialogue": [
+                        "[TODO: post sword_1 — player wins. Something is wrong. She doesn't lose.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: post sword_1 — player loses. Expected. Amused.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 2,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": -5,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player wins somehow. Suspicious.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player loses. Casual cruelty, affectionate.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 3,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": -3,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player wins. Something has shifted.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player loses after the campfire. Softer than before.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 4,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": -2,
+                    "dialogue": [
+                        "[TODO: post sword_4 — player wins. After the Duskfall confession.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: post sword_4 — player loses. She's been honest with you, but she's still Hela.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 5,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": -1,
+                    "dialogue": [
+                        "[TODO: post sword_5 — player wins. After Veres.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: post sword_5 — player loses. Sterner.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 6,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: post sword_6 — player finally earns it. She acknowledges them.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_6 — player loses. She pushes them to keep going.]"
                     ]
                 }
             ]
         }
     ],
+
     "swordRanks": [
         {
             "questId": "hela_sword_1",
@@ -146,7 +264,7 @@
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 5 },
-                        { "type": "item", "itemId": "argentum" , "amount": 1500 },
+                        { "type": "item", "itemId": "argentum", "quantity": 1500 },
                         { "type": "tag", "tagId": "hela_sword_1_complete" }
                     ]
                 }
@@ -202,12 +320,12 @@
                         "There we go.",
                         "Look, the Queen of Hell is the embodiment of all 7 sins.",
                         "I especially lean into the Gluttony aspect.",
-                        "I had a legion of cooks in Hell. Guess you'll do here. Thanks ^_^"
+                        "I had a legion of cooks in Hell. Guess you'll do here. Thanks. ^_^"
                     ],
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
                         { "type": "tag", "tagId": "hela_sword_2_complete" },
-                        { "type": "item", "itemId": "argentum" , "amount": 1500 }
+                        { "type": "item", "itemId": "argentum", "quantity": 1500 }
                     ]
                 }
             ]
@@ -344,7 +462,7 @@
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
                         { "type": "tag", "tagId": "hela_sword_4_complete" },
-                        { "type": "item", "itemId": "argentum" , "amount": 3000 }
+                        { "type": "item", "itemId": "argentum", "quantity": 3000 }
                     ]
                 }
             ]
@@ -383,7 +501,7 @@
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 5 },
                         { "type": "tag", "tagId": "hela_sword_5_started" },
-                        { "type": "item", "itemId": "argentum" , "amount": 5000 }
+                        { "type": "item", "itemId": "argentum", "quantity": 5000 }
                     ]
                 },
                 {
@@ -416,7 +534,7 @@
                         { "type": "world_resonance", "amount": 5 },
                         { "type": "item", "itemId": "spiked_choker", "quantity": 1 },
                         { "type": "tag", "tagId": "hela_sword_5_complete" },
-                        { "type": "item", "itemId": "argentum" , "amount": 10000 }
+                        { "type": "item", "itemId": "argentum", "quantity": 10000 }
                     ]
                 }
             ]
@@ -462,14 +580,15 @@
                     "success_rewards": [
                         { "type": "world_resonance", "amount": 10 },
                         { "type": "tag", "tagId": "hela_sword_6_complete" },
-                        { "type": "item", "itemId": "argentum" , "amount": 15000 },
-                        { "type": "item", "itemId": "pink_sarong" , "amount": 1 },
-                        { "type": "item", "itemId": "green_bikini" , "amount": 1 }
+                        { "type": "item", "itemId": "argentum", "quantity": 15000 },
+                        { "type": "item", "itemId": "pink_sarong", "quantity": 1 },
+                        { "type": "item", "itemId": "green_bikini", "quantity": 1 }
                     ]
                 }
             ]
         }
     ],
+
     "heartRanks": [
         {
             "rank_up_dialogue": [
@@ -526,35 +645,6 @@
                     ]
                 },
                 {
-                    "itemId": "body_oil",
-                    "quantity": 1,
-                    "value": 5,
-                    "dialogue": [
-                        "Oh, you're bold.",
-                        "I respect it.",
-                        "...Thank you."
-                    ]
-                },
-                {
-                    "itemId": "lube",
-                    "quantity": 1,
-                    "value": 5,
-                    "dialogue": [
-                        "You know exactly what you're doing.",
-                        "The audacity of this. I love it.",
-                        "Don't look so pleased with yourself."
-                    ]
-                },
-                {
-                    "itemId": "latex_gloves",
-                    "quantity": 1,
-                    "value": 3,
-                    "dialogue": [
-                        "Is this a comment on my rulership or an invitation?",
-                        "I'm going to assume both."
-                    ]
-                },
-                {
                     "itemId": "magma_fossil",
                     "quantity": 1,
                     "value": 6,
@@ -562,16 +652,6 @@
                         "This is from deep underground. You went looking for this.",
                         "For me.",
                         "...That's actually very sweet. Don't tell anyone."
-                    ]
-                },
-                {
-                    "itemId": "hellward_lance",
-                    "quantity": 1,
-                    "value": 10,
-                    "dialogue": [
-                        "You would give me a weapon of this calibre.",
-                        "You either trust me completely or you have a death wish.",
-                        "Either way, I'm keeping it."
                     ]
                 }
             ]
@@ -608,34 +688,6 @@
                     ]
                 },
                 {
-                    "itemId": "body_oil",
-                    "quantity": 1,
-                    "value": 5,
-                    "dialogue": [
-                        "You have absolutely no fear.",
-                        "It's one of my favourite things about you."
-                    ]
-                },
-                {
-                    "itemId": "lube",
-                    "quantity": 1,
-                    "value": 5,
-                    "dialogue": [
-                        "Still at it.",
-                        "I would expect nothing less."
-                    ]
-                },
-                {
-                    "itemId": "body_safe_wax",
-                    "quantity": 1,
-                    "value": 7,
-                    "dialogue": [
-                        "Oh, you escalated.",
-                        "I admire the commitment.",
-                        "I'm going to need you to not be smug about this."
-                    ]
-                },
-                {
                     "itemId": "magma_fossil",
                     "quantity": 1,
                     "value": 6,
@@ -646,13 +698,145 @@
                     ]
                 },
                 {
-                    "itemId": "hellward_lance",
+                    "itemId": "helas_whip",
                     "quantity": 1,
                     "value": 10,
                     "dialogue": [
-                        "Another one?",
-                        "You're arming the Queen of Hell.",
-                        "I'm choosing to find this romantic."
+                        "You brought me my own whip.",
+                        "Bold. I love the audacity.",
+                        "I'm keeping this. And I'm choosing to find it romantic."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 4 rank-up — deeper trust. She's unusually honest.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "hela_heart_rank_4_unlocked" },
+                { "type": "world_resonance", "amount": 15 },
+                { "type": "item", "itemId": "dark_sigil", "quantity": 1 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "dark_sigil",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "[TODO: HR4 — dark sigil gift. She respects it.]"
+                    ]
+                },
+                {
+                    "itemId": "fire_sigil",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "[TODO: HR4 — fire sigil gift.]"
+                    ]
+                },
+                {
+                    "itemId": "shadow_veil_tincture",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "[TODO: HR4 — shadow veil tincture. She's amused.]"
+                    ]
+                },
+                {
+                    "itemId": "dragon_vitality_brew",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "[TODO: HR4 — dragon vitality brew. Rare. She notices.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 5 rank-up — she lets something slip she wouldn't say sober.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "hela_heart_rank_5_unlocked" },
+                { "type": "world_resonance", "amount": 20 },
+                { "type": "item", "itemId": "dark_sigil", "quantity": 2 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "dark_sigil",
+                    "quantity": 2,
+                    "value": 8,
+                    "dialogue": [
+                        "[TODO: HR5 — dark sigil gift, bigger stack.]"
+                    ]
+                },
+                {
+                    "itemId": "magma_fossil",
+                    "quantity": 2,
+                    "value": 9,
+                    "dialogue": [
+                        "[TODO: HR5 — magma fossils. A ritual now.]"
+                    ]
+                },
+                {
+                    "itemId": "dragon_tooth_amulet",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "[TODO: HR5 — dragon tooth amulet. She wears it.]"
+                    ]
+                },
+                {
+                    "itemId": "spiked_choker",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "[TODO: HR5 — spiked choker gift. Callback.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 6 rank-up — the last beat. Quietly, genuinely hers.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "tag", "tagId": "hela_heart_rank_6_unlocked" },
+                { "type": "world_resonance", "amount": 30 },
+                { "type": "item", "itemId": "helas_whip", "quantity": 1 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "dark_sigil",
+                    "quantity": 3,
+                    "value": 10,
+                    "dialogue": [
+                        "[TODO: HR6 — dark sigil, at this point she barely reacts with words.]"
+                    ]
+                },
+                {
+                    "itemId": "dragon_vitality_brew",
+                    "quantity": 2,
+                    "value": 10,
+                    "dialogue": [
+                        "[TODO: HR6 — two vitality brews. Unspoken.]"
+                    ]
+                },
+                {
+                    "itemId": "ring_of_the_sky",
+                    "quantity": 1,
+                    "value": 12,
+                    "dialogue": [
+                        "[TODO: HR6 — ring of the sky. She doesn't say anything. She keeps it.]"
+                    ]
+                },
+                {
+                    "itemId": "sky_amulet",
+                    "quantity": 1,
+                    "value": 12,
+                    "dialogue": [
+                        "[TODO: HR6 — sky amulet. Dawn's Journey reference.]"
                     ]
                 }
             ]

@@ -9,6 +9,8 @@ import { checkQuestTriggers } from '../services/QuestService';
 import * as AchievementService from './AchievementService';
 import type { Item, ActiveEffect } from '$lib/types';
 import { notificationStore } from '$lib/stores/notificationStore';
+import { buildPresets } from '$lib/data/buildPresets';
+import { createItem } from './ItemFactory';
 
 /**
  * Replaces the player's inventory with a full set of all items in the game.
@@ -74,4 +76,37 @@ export function applyDevBuff() {
             activeEffects: [...existingEffects, ...devBuffs],
         };
     });
+}
+
+export function applyBuildPreset(presetId: string) {
+    const preset = buildPresets.find(p => p.id === presetId);
+    if (!preset) {
+        console.error(`Build preset ${presetId} not found`);
+        return;
+    }
+
+    playerStore.update(player => {
+        const weaponItems = preset.weapons
+            .map(id => createItem(id))
+            .filter(w => w?.type === 'weapon');
+        const relicItems = preset.relics
+            .map(id => createItem(id))
+            .filter(r => r?.type === 'relic');
+
+        return {
+            ...player,
+            equipment: {
+                weapon_slots: [
+                    ...weaponItems,
+                    ...Array(Math.max(0, 2 - weaponItems.length)).fill(null),
+                ],
+                relic_slots: [
+                    ...relicItems,
+                    ...Array(Math.max(0, 4 - relicItems.length)).fill(null),
+                ],
+            },
+        };
+    });
+
+    notificationStore.addBuff(`Build: ${preset.name}`, 999, 'applied');
 }

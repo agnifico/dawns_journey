@@ -4,11 +4,8 @@
 
     let editing = false;
     const avatars = [
-        '/images/characters/alchemist.png',
-        '/images/characters/assassin.png',
-        '/images/characters/spirit_beast.png',
         '/images/characters/gladiator.png',
-        '/images/characters/guardian.png',
+        '/images/characters/mage.png',
         '/images/characters/player1.png',
         '/images/characters/player2.png',
         '/images/characters/player3.png',
@@ -17,13 +14,14 @@
         '/images/characters/player6.png',
         '/images/characters/player7.png',
         '/images/characters/player9.png',
+        '/images/characters/player10.png',
         '/images/characters/player11.png',
+        '/images/characters/player12.png',
         '/images/characters/player13.png',
         '/images/characters/player14.png',
+        '/images/characters/player15.png',
         '/images/characters/player16.png',
-        '/images/characters/player18.png',
-        '/images/characters/player19.png',
-        '/images/characters/player20.png',
+        '/images/characters/player17.png',
     ];
 
     let selectedAvatar = $playerStore.profile.avatar;

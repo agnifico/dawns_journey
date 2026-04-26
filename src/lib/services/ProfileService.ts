@@ -21,7 +21,7 @@ export function applyProfile(profileId: string) {
             // New game: 10 bread to start, nothing else
             newPlayer = addItems(newPlayer, 'bread', 10, false);
 
-        } else if (profile.id === 'mage') {
+        } else if (profile.id === 'exhibition') {
             // Exhibition: all items × 1 so the player can explore everything
             const allItems = getAllItems();
             for (const item of allItems) {

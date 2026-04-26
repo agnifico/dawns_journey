@@ -113,7 +113,7 @@
                     ],
                     "success_dialogue": [
                         "I've been up here long enough to know when something changes in the air below.",
-                        "The Towers. The Saints. The particular quality of violence spreading across Ashenfall.",
+                        "The Machines. The Golden Concordat. The particular quality of violence spreading across Ashenfall.",
                         "I watch. I remember. I don't intervene — not yet.",
                         "Hela sent you, didn't she.",
                         "Don't bother denying it. I've known her for centuries. She has exactly one method of reaching out, and it's sending someone interesting ahead of herself.",
@@ -293,7 +293,7 @@
         {
             "questId": "veres_sword_4",
             "title": "Old Debt",
-            "description": "Veres has something she wants to say. About the Saints. About Guinevere. About why she watches and does not act.",
+            "description": "Veres has something she wants to say. About the Concordat. About Guinevere. About why she watches and does not act.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "veres_sword_3_complete"
@@ -315,7 +315,7 @@
                         "I knew her before she was Commander. Before she was even very much a soldier.",
                         "She was— she had this quality. Of absolute belief in what she was doing.",
                         "Not arrogance. Conviction. There's a difference, and she knew the difference.",
-                        "We were close. For a time. The kind of close that the Saints would have had opinions about.",
+                        "We were close. For a time. The kind of close that the The Concordat would have had opinions about.",
                         "She made her choice. I made mine.",
                         "I don't regret it. I don't think she does either.",
                         "What I regret is watching what that belief became.",

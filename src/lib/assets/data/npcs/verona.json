@@ -1,46 +1,157 @@
 {
     "id": "verona",
     "name": "Verona",
-    "profileImage": "/images/characters/verona/avatar.png",
-    "image": "/images/characters/verona/2.png",
-    "spriteGif": "/images/verona.gif",
-    "galleryImages": [
-        "/images/characters/verona/1.png",
-        "/images/characters/verona/2.png",
-        "/images/characters/verona/3.png",
-        "/images/characters/verona/4.png",
-        "/images/characters/verona/5.png"
-    ],
+    "title": "Crown of Wandering Leaves",
+    "description": "A ranger who walks the long roads alone, drawn always to the places where the land remembers something. She carries Xochi — a sword of earth, found by accident, kept by something more. She would say she's just looking for answers. The forest, when it speaks of her, says otherwise.",
+    "faction": "forest_watchers",
     "hidden": false,
     "isCombatant": true,
-    "types": [
-        "Earth",
-        "Light"
+
+    "profileImage": "/images/characters/verona/avatar.png",
+    "image": "/images/characters/verona/7.png",
+    "arenaImage": "/images/characters/verona/2.png",
+    "spriteGif": "/images/sprites/verona.gif",
+    "galleryImages": [
+        "/images/characters/verona/7.png",
+        "/images/characters/verona/8.png",
+        "/images/characters/verona/2.png",
+        "/images/characters/verona/6.png",
+        "/images/characters/verona/5.png",
+        "/images/characters/verona/9.png"
     ],
+
+    "types": ["Wind", "Earth"],
     "baseStats": {
-        "hp": 100,
-        "maxHp": 100,
-        "auraShield": 20,
-        "maxAuraShield": 20,
-        "physicalAttack": 15,
-        "physicalDefence": 10,
-        "elementalAttack": 20,
-        "elementalDefence": 15,
-        "speed": 30,
-        "evasion": 20,
-        "critChance": 0.05,
-        "critDamage": 1.5,
-        "precision": 1
+        "hp": 500,
+        "maxHp": 500,
+        "auraShield": 80,
+        "maxAuraShield": 80,
+        "physicalAttack": 220,
+        "physicalDefence": 140,
+        "elementalAttack": 200,
+        "elementalDefence": 130,
+        "speed": 110,
+        "evasion": 35,
+        "critChance": 0.25,
+        "critDamage": 1.8,
+        "precision": 25
     },
+    "abilityCycle": [
+        "basic_slash",
+        "shadow_strike",
+        "vine_whip",
+        "feint"
+    ],
+    "statGrowth": [],
+
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
-    "statGrowth": [],
-    "swordRankMaxedDialogue": [],
-    "allRanksMaxedDialogue": [],
-    "battleAftermathsBySwordRank": [],
+
+    "drops": [
+        { "itemId": "argentum", "chance": 1, "quantity": 800 },
+        { "itemId": "earth_sigil", "chance": 1, "quantity": 2 },
+        { "itemId": "wind_sigil", "chance": 1, "quantity": 1 },
+        { "itemId": "swiftroot_elixir", "chance": 1, "quantity": 1 }
+    ],
+
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 3,
+            "y": 68
+        }
+    ],
+
+    "swordRankMaxedDialogue": [
+        "[TODO: Verona's sword-rank-maxed line. She acknowledges the player as a peer.]"
+    ],
+    "allRanksMaxedDialogue": [
+        "[TODO: Verona's full-bond line. The wandering ranger has found someone she'd actually walk back to.]"
+    ],
+
+    "battleAftermathsBySwordRank": [
+        {
+            "rank": 0,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: pre-quest player wins — Verona is faintly impressed but doesn't show it much.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: pre-quest player loses — Verona is steady, not unkind.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 1,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 4,
+                    "dialogue": [
+                        "[TODO: post sword_1 — player wins. Conversation has begun, she respects them.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_1 — player loses. She offers a quiet correction.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 2,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 4,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player wins, after the Xochi reveal. There's new weight to her now.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player loses. Xochi sang for her, briefly.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 3,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player wins. They've earned it now.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player loses. She tells them what to work on.]"
+                    ]
+                }
+            ]
+        }
+    ],
+
     "swordRanks": [
         {
             "questId": "verona_sword_1",
@@ -53,9 +164,7 @@
             "stages": [
                 {
                     "objective": "Find Verona in the murky swamp",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "unavailable_dialogue": [
                         "She's deeper in the swamp. Keep going."
                     ],
@@ -82,14 +191,8 @@
                         "Stay accessible. I'll have more when I've worked through it."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "verona_sword_1_complete"
-                        }
+                        { "type": "world_resonance", "amount": 8 },
+                        { "type": "tag", "tagId": "verona_sword_1_complete" }
                     ]
                 }
             ]
@@ -105,9 +208,7 @@
             "stages": [
                 {
                     "objective": "Return to Verona in the swamp",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "unavailable_dialogue": [
                         "I'm still working through something.",
                         "Come back in a bit."
@@ -138,18 +239,9 @@
                         "I just do."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "world_resonance",
-                            "amount": 10
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "verona_sword_2_complete"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "xochi_event_witnessed"
-                        }
+                        { "type": "world_resonance", "amount": 10 },
+                        { "type": "tag", "tagId": "verona_sword_2_complete" },
+                        { "type": "tag", "tagId": "xochi_event_witnessed" }
                     ]
                 }
             ]
@@ -165,9 +257,7 @@
             "stages": [
                 {
                     "objective": "Speak with Verona",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "unavailable_dialogue": [
                         "Almost. Give me a day.",
                         "I want to get this right before I say it."
@@ -193,31 +283,145 @@
                         "And someone worth watching carefully."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "item",
-                            "itemId": "spiked_choker",
-                            "quantity": 1
-                        },
-                        {
-                            "type": "world_resonance",
-                            "amount": 10
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "verona_sword_3_complete"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "spiked_choker_acquired"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "verona_dragonblood_tree"
-                        }
+                        { "type": "item", "itemId": "spiked_choker", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 10 },
+                        { "type": "tag", "tagId": "verona_sword_3_complete" },
+                        { "type": "tag", "tagId": "spiked_choker_acquired" },
+                        { "type": "tag", "tagId": "verona_dragonblood_tree" }
                     ]
                 }
             ]
         }
     ],
-    "heartRanks": []
+
+    "heartRanks": [
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 1 — first warmth from Verona. She doesn't open easily. Brief, careful.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 5 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "wood",
+                    "quantity": 10,
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: HR1 — wood gift. Practical. She nods.]"
+                    ]
+                },
+                {
+                    "itemId": "bread",
+                    "quantity": 3,
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: HR1 — bread gift. Travel food. She appreciates it.]"
+                    ]
+                },
+                {
+                    "itemId": "swiftroot_elixir",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR1 — swiftroot elixir. Ranger-fit gift.]"
+                    ]
+                },
+                {
+                    "itemId": "earth_sigil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR1 — earth sigil. Resonates with Xochi.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 2 — she trusts the player with something she usually keeps to herself.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 8 },
+                { "type": "item", "itemId": "earth_sigil", "quantity": 1 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "earth_sigil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR2 — earth sigil gift.]"
+                    ]
+                },
+                {
+                    "itemId": "wind_sigil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR2 — wind sigil. Matches her speed.]"
+                    ]
+                },
+                {
+                    "itemId": "saffron_sight_tonic",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "[TODO: HR2 — saffron sight tonic. For the long roads.]"
+                    ]
+                },
+                {
+                    "itemId": "advanced_sword",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "[TODO: HR2 — advanced sword. She studies the balance.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 3 — final beat. She admits she'd come back here, for them.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 10 },
+                { "type": "item", "itemId": "earth_sigil", "quantity": 2 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "earth_sigil",
+                    "quantity": 2,
+                    "value": 7,
+                    "dialogue": [
+                        "[TODO: HR3 — earth sigil, bigger stack.]"
+                    ]
+                },
+                {
+                    "itemId": "dragon_vitality_brew",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "[TODO: HR3 — dragon vitality brew. Rare. She's touched.]"
+                    ]
+                },
+                {
+                    "itemId": "advanced_bow",
+                    "quantity": 1,
+                    "value": 8,
+                    "dialogue": [
+                        "[TODO: HR3 — advanced bow. She tests the draw.]"
+                    ]
+                },
+                {
+                    "itemId": "ring_of_the_sky",
+                    "quantity": 1,
+                    "value": 10,
+                    "dialogue": [
+                        "[TODO: HR3 — ring of the sky. She wears it without saying anything.]"
+                    ]
+                }
+            ]
+        }
+    ]
 }

@@ -1,10 +1,16 @@
 {
     "id": "sylvie",
     "name": "Sylvie",
-    "description": "A ranger in the forest. She is sharp with her bow, and handy with a rope — both in the field and at night.",
+    "title": "Keeper of the Wilds",
+    "description": "A ranger who lives in the red hut on the forest's edge. She guards the woodlands and grasslands of Dragon Island — and the land, in turn, guards her. Sharp with her bow, handier still with a rope.",
+    "faction": "forest_watchers",
+    "hidden": false,
+    "isCombatant": true,
+
     "profileImage": "/images/characters/sylvie/sylvie_avatar.png",
     "image": "/images/characters/sylvie/sylvie0.png",
-    "spriteGif": "/images/sylvie.gif",
+    "arenaImage": "/images/characters/sylvie/sylvie10.png",
+    "spriteGif": "/images/sprites/sylvie.gif",
     "galleryImages": [
         "/images/characters/sylvie/sylvie1.png",
         "/images/characters/sylvie/sylvie2.png",
@@ -16,34 +22,60 @@
         "/images/characters/sylvie/sylvie8.png",
         "/images/characters/sylvie/sylvie9.png"
     ],
-    "hidden": false, "isCombatant": true,
+
     "types": ["Earth"],
-    "abilityCycle": [
-        "basic_slash",
-        "elemental_smite",
-        "basic_poison"
-    ],
     "baseStats": {
-        "hp": 50,
-        "maxHp": 50,
-        "auraShield": 10,
-        "maxAuraShield": 10,
-        "physicalAttack": 50,
-        "physicalDefence": 10,
-        "elementalAttack": 50,
-        "elementalDefence": 15,
-        "speed": 40,
-        "evasion": 10,
+        "hp": 200,
+        "maxHp": 200,
+        "auraShield": 20,
+        "maxAuraShield": 20,
+        "physicalAttack": 80,
+        "physicalDefence": 40,
+        "elementalAttack": 90,
+        "elementalDefence": 50,
+        "speed": 55,
+        "evasion": 15,
         "critChance": 0.05,
         "critDamage": 1.5,
         "precision": 1
     },
+    "abilityCycle": [
+        "basic_slash",
+        "vine_whip",
+        "elemental_smite",
+        "basic_poison"
+    ],
+    "statGrowth": [],
+
     "swordRank": 0,
     "heartRank": 0,
     "affinity": 0,
     "swordState": "NOT_STARTED",
     "heartState": "NOT_STARTED",
-    "statGrowth": [],
+
+    "drops": [
+        { "itemId": "bread", "chance": 1, "quantity": 5 },
+        { "itemId": "wheat_seed", "chance": 1, "quantity": 3 },
+        { "itemId": "earth_sigil", "chance": 1, "quantity": 1 },
+        { "itemId": "argentum", "chance": 1, "quantity": 500 }
+    ],
+
+    "mapPositions": [
+        {
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 7,
+            "y": 39
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "sylvie_sword_1_complete",
+            "phase": "Duskfall",
+            "x": 13,
+            "y": 11
+        }
+    ],
+
     "swordRankMaxedDialogue": [
         "Congratulations, you have finished the basic tutorial!",
         "Before you go, let me explain to you how time works.",
@@ -60,11 +92,7 @@
         "Over 3 days, with her own hands, no magic, she raised mountains, planted forest, and covered Ymir with a landform,",
         "one that is blessed of life. That is the story of Dragon Island."
     ],
-    "drops": [
-        { "itemId": "bread", "chance": 1, "quantity": 20 },
-        { "itemId": "wheat_seed", "chance": 1, "quantity": 6 },
-        { "itemId": "potato_seed", "chance": 1, "quantity": 6 }
-    ],
+
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -73,7 +101,7 @@
                     "outcome": "win",
                     "value": 5,
                     "dialogue": [
-                        "Well done, don't worry too much about combat right now, it will be explained, later."
+                        "Well done! Don't worry too much about combat right now — it'll be explained later."
                     ]
                 },
                 {
@@ -85,38 +113,138 @@
                     ]
                 }
             ]
-        }
-    ],
-    "mapPositions": [
-        {
-            "mapId": "dragon_island",
-            "default": true,
-            "x": 7,
-            "y": 39
         },
         {
-            "mapId": "dragon_island",
-            "requiredTag": "sylvie_sword_1_complete",
-            "phase": "Duskfall",
-            "x": 13,
-            "y": 11
+            "rank": 1,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: sword_1 complete — player wins. Sylvie impressed, lightly.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: sword_1 complete — player loses. Gentle encouragement.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 2,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player wins.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: post sword_2 — player loses.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 3,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player wins. Getting proud of them.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: post sword_3 — player loses.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 4,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 4,
+                    "dialogue": [
+                        "[TODO: post sword_4 — player wins. She asked for this fight, she takes the loss well.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: post sword_4 — player loses. Teasing but affectionate.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 5,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 4,
+                    "dialogue": [
+                        "[TODO: post sword_5 — player wins.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "[TODO: post sword_5 — player loses.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank": 6,
+            "aftermaths": [
+                {
+                    "outcome": "win",
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: post sword_6 — player wins. Sylvie's questline done, she loves you.]"
+                    ]
+                },
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "[TODO: post sword_6 — player loses. Warm, soft.]"
+                    ]
+                }
+            ]
         }
     ],
+
     "swordRanks": [
         {
             "questId": "sylvie_sword_1",
             "title": "A Friend in the Forest",
-            "description": "As you enter this brave new world, you run into someone who seems to need some assistance. A cute green haired forest ranger?",
+            "description": "As you enter this brave new world, you run into someone who seems to need some assistance. A green-haired forest ranger?",
             "startState": "ACTIVE",
             "stages": [
                 {
                     "objective": "Talk to Sylvie (X:13, Y:2)",
                     "requirement": { "type": "dialogue" },
                     "success_dialogue": [
-                        "Welcome {playerName}, this is Dawn's Journey",
+                        "Welcome, {playerName} — this is Dawn's Journey.",
                         "Move around, you'll find random loot you can pick up.",
                         "There are some places you can't go to right now, but you will, later.",
-                        "For now, can you go into the water and get me a Fish?"
+                        "For now — can you go into the water and get me a Fish?"
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "potato_seed", "quantity": 10 },
@@ -134,12 +262,12 @@
                         "Still waiting for the Fish. 'Walk' over the waters, you'll find one."
                     ],
                     "success_dialogue": [
-                        "Yum, can't wait to cook it! We can have it with some Bread. You don't have any? Here, take some :3",
-                        "I've also added some potato seeds to your backpack, to help start your Farming journey.",
-                        "Go to the Homestead area (you can find it as the 'House' icon on top).",
-                        "There, you can find your Homestead, and your Farming area.",
+                        "Yum — can't wait to cook it! We can have it with some Bread. You don't have any? Here, take some. :3",
+                        "I've also added some potato seeds to your backpack to help start your Farming journey.",
+                        "Go to the Homestead area — the 'House' icon up top.",
+                        "You'll find your Homestead there, and your Farming area.",
                         "Plant one potato seed per plot, water them, and wait.",
-                        "Watch the magic! (Just code, you know)"
+                        "Watch the magic. (Just code, you know.)"
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "bread", "quantity": 5 },
@@ -177,7 +305,7 @@
                         "The trees of the island are bountiful. You can gather some wood from them."
                     ],
                     "success_dialogue": [
-                        "Perfect, you now have enough Wood for a rainy day."
+                        "Perfect — you now have enough Wood for a rainy day."
                     ]
                 },
                 {
@@ -200,8 +328,8 @@
                         "Meaning now you are closer to them <3"
                     ],
                     "success_dialogue": [
-                        "Perfect! *blushes* Wood, I mean, the Wood is just what I needed.",
-                        "Here's a gift for you too. My favourite whip..."
+                        "Perfect! *blushes* Wood — I mean, the Wood is just what I needed.",
+                        "Here's a gift for you too. My favourite whip."
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "vine_whip", "quantity": 1 },
@@ -213,7 +341,7 @@
         {
             "questId": "sylvie_sword_3",
             "title": "Dragon Taming",
-            "description": "Sylvie wants to see you grow stronger! She will teach you about Overworld monsters.",
+            "description": "Sylvie wants to see you grow stronger. She will teach you about Overworld monsters.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_2_complete"
@@ -230,20 +358,21 @@
                         "The forest is quiet today."
                     ],
                     "intro_dialogue": [
-                        "Hey youu, back for some more?",
-                        "Defeat 5 of these monsters called Greenhorns.",
-                        "They're sprawling around these parts. You know those lil baby dragons which keep fluttering around?",
-                        "And again, if you need further help, Talk to me."
+                        "Hey you — back for more?",
+                        "Defeat 5 of those monsters called Greenhorns.",
+                        "They're sprawling around these parts. You know those lil baby dragons that keep fluttering around?",
+                        "And again, if you need further help — Talk to me."
                     ],
                     "reminder_dialogue": [
-                        "You need help? Combat against wild enemies is easy.",
-                        "If you have a World Resonance higher than the Enemy creature, you win. Automatically; with the loot added to your Inventory.",
+                        "Need help? Combat against wild enemies is easy.",
+                        "If your World Resonance is higher than the Enemy creature, you win. Automatically — loot goes straight to your Inventory.",
                         "You also get some XP, which helps you Level Up!"
                     ],
                     "success_dialogue": [
-                        "Was that easy?",
-                        "One of the major game design decisions taken was the concept of not having to do things repeatedly.",
-                        "Anti-grind, in gaming terms. Just imagine, having to battle every single creature across the world as you move around..."
+                        "That was easy, wasn't it?",
+                        "The Maker wanted the world to flow — no grinding the same enemy for hours just to progress.",
+                        "Not the Maker as in God, by the way. God is a whole other thing you'll deal with soon enough.",
+                        "Anyway — anti-grind, as they say. Now you know."
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "citrine", "quantity": 2 },
@@ -256,7 +385,7 @@
         {
             "questId": "sylvie_sword_4",
             "title": "A Test of Mettle",
-            "description": "Sylvie isn't playing anymore (or is she?), and wants you to 'dominate' her.",
+            "description": "Sylvie isn't playing anymore (or is she?), and wants you to prove yourself.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_3_complete"
@@ -270,22 +399,22 @@
                         "quantity": 1
                     },
                     "unavailable_dialogue": [
-                        "I am not ready to face you yet."
+                        "I'm not ready to face you yet."
                     ],
                     "intro_dialogue": [
-                        "Look at you, growing up strong!",
-                        "It's time for a small taste of combat.",
-                        "Fight me. Dominate me."
+                        "Look at you — growing up strong.",
+                        "Time for a taste of real combat.",
+                        "Fight me. Show me what you've got."
                     ],
                     "reminder_dialogue": [
-                        "Combat against Characters: You should check out the Arena page. The button with the Gladiator Helmet on top.",
+                        "Combat against Characters: check out the Arena page — the button with the Gladiator Helmet up top.",
                         "The page has a detailed explanation of how combat works.",
-                        "But for now, assume Combat vs. Characters is the mystery, the strategy aspect of the game,",
-                        "and I highly suggest you finish the Dragon Island questline first, acquire all the Story granted Items and get stronger first.",
-                        "If you're new to RPG games, we'll guide you through it eventually."
+                        "For now, just know this: Combat vs. Characters is the strategy side of the game.",
+                        "I'd strongly suggest finishing the Dragon Island questline first — get the Story Items, get stronger.",
+                        "If you're new to RPGs, we'll guide you through it in time."
                     ],
                     "success_dialogue": [
-                        "Was that too hard? I hope not! xD"
+                        "Was that too hard? I hope not. xD"
                     ]
                 },
                 {
@@ -296,18 +425,18 @@
                         "quantity": 1
                     },
                     "intro_dialogue": [
-                        "Next, I sense this weird sense of power around this island. I don't know who or what is this source of strange, dark, yet liberating aura.",
-                        "Maybe it's someone over on the dildo shaped island to the North. No wonder we call it Pleasure Island xD",
-                        "(Pleasure Island to the North, and a Treasure Island, along the same Y-Axis to the West. Funny no?)",
-                        "Can you go and see what this aura is coming from?"
+                        "There's a strange power on this island. Dark, yet… liberating. I don't know who it's coming from.",
+                        "Maybe someone over on that island to the north.",
+                        "(Pleasure Island to the north, Treasure Island along the same Y-axis to the west. Funny, right?)",
+                        "Go find out what this aura is."
                     ],
                     "reminder_dialogue": [
                         "Hint: You might have to fight this 'source of power'."
                     ],
                     "success_dialogue": [
-                        "Hela, you say? Hmm, is she hot?",
-                        "I might have to go and find out myself sometime.",
-                        "Thank you, we should rest up for the night."
+                        "Hela, you say? Hmm — is she hot?",
+                        "I might have to go meet her myself sometime.",
+                        "Thank you. We should rest up for the night."
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "sylvies_shorts", "quantity": 1 },
@@ -336,24 +465,23 @@
                         "The time is not right."
                     ],
                     "intro_dialogue": [
-                        "It's time you tried out Farming! Grow 5 potatoes and show me.",
-                        "Go to the Homestead area (you can find it as the 'House' icon on top).",
-                        "There, you can find your Homestead, and your Farming area.",
+                        "Time you tried Farming. Grow 5 potatoes and show me.",
+                        "Go to the Homestead area — the 'House' icon up top.",
+                        "You'll find your Homestead there, and your Farming area.",
                         "Plant one potato seed per plot, water them, and wait."
                     ],
                     "reminder_dialogue": [
-                        "Go to the Homestead area (you can find it as the 'House' icon on top).",
-                        "There, you can find your Homestead, and your Farming area.",
+                        "Head to the Homestead area — 'House' icon, up top.",
                         "Plant one potato seed per plot, water them, and wait.",
-                        "For now, ignore Actions — these are technical upgrades to your Plot that allow you to plant more crops.",
-                        "You'll figure out in due time, promise."
+                        "Ignore Actions for now — those are technical upgrades that let you plant more crops.",
+                        "You'll figure it out in due time, promise."
                     ],
                     "success_dialogue": [
-                        "Yayy potaayytoooozz!!!",
-                        "But yay, you also finished the basic tutorial!",
-                        "As a gift for our time together, I gave you something. Do check your Inventory later.",
-                        "Thank you for playing this game so far, and I hope you have a good time here.",
-                        "I know, I did, with you <3"
+                        "Yayy — potaayytooozz!",
+                        "You also just finished the basic tutorial!",
+                        "As a gift for our time together, I left you something. Check your Inventory later.",
+                        "Thank you for playing this game so far. I hope you have a good time here.",
+                        "I know I did — with you. <3"
                     ],
                     "success_rewards": [
                         { "type": "item", "itemId": "freedom_cry", "quantity": 1 },
@@ -379,9 +507,9 @@
                     ],
                     "intro_dialogue": [
                         "Hey. That woman — Hela — she's been on my mind.",
-                        "She's clearly not from here. She's not trying to take anything, she's not fighting anyone.",
-                        "She's just... there. On that island. Alone.",
-                        "I don't know her. But I know what it looks like when someone is finding their footing in a new place.",
+                        "She's clearly not from here. Not trying to take anything, not fighting anyone.",
+                        "Just… there. On that island. Alone.",
+                        "I don't know her. But I know what it looks like when someone's finding their footing in a new place.",
                         "I've been there.",
                         "I'm going to cook her something. Bring it to her, will you?",
                         "She needs something warm. Not a weapon, not a message. Just food.",
@@ -418,7 +546,7 @@
                         "She took it?",
                         "Good.",
                         "You know, I had this image of her as some terrifying force of nature. And she probably is.",
-                        "But she's also just... someone a long way from home.",
+                        "But she's also just… someone a long way from home.",
                         "That's something I understand.",
                         "Thank you for going. I'm glad she's not alone over there.",
                         "Neither are we, I suppose."
@@ -432,10 +560,14 @@
             ]
         }
     ],
+
     "heartRanks": [
         {
             "rank_up_dialogue": [
                 "You're cute, I like you."
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 5 }
             ],
             "giftingOptions": [
                 {
@@ -451,7 +583,109 @@
                     "quantity": 1,
                     "value": 2,
                     "dialogue": [
-                        "Oh, how lovely! These will make a wonderful stew."
+                        "Oh, how lovely! These'll make a wonderful stew."
+                    ]
+                },
+                {
+                    "itemId": "wheat_seed",
+                    "quantity": 5,
+                    "value": 3,
+                    "dialogue": [
+                        "Seeds! The forest thanks you — and so do I."
+                    ]
+                },
+                {
+                    "itemId": "bread",
+                    "quantity": 2,
+                    "value": 2,
+                    "dialogue": [
+                        "Fresh bread? You know the way to a ranger's heart."
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 2 rank-up — Sylvie warms further, still bubbly.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 5 },
+                { "type": "item", "itemId": "earth_sigil", "quantity": 1 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "potato",
+                    "quantity": 3,
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: HR2 — potato gift.]"
+                    ]
+                },
+                {
+                    "itemId": "spaghetti",
+                    "quantity": 1,
+                    "value": 4,
+                    "dialogue": [
+                        "[TODO: HR2 — spaghetti gift. Callback to sword_6.]"
+                    ]
+                },
+                {
+                    "itemId": "earth_sigil",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR2 — earth sigil gift. Resonates with her.]"
+                    ]
+                },
+                {
+                    "itemId": "wood",
+                    "quantity": 20,
+                    "value": 3,
+                    "dialogue": [
+                        "[TODO: HR2 — wood gift, bigger stack.]"
+                    ]
+                }
+            ]
+        },
+        {
+            "rank_up_dialogue": [
+                "[TODO: heart rank 3 rank-up — final beat. Genuinely attached now.]"
+            ],
+            "rank_up_rewards": [
+                { "type": "world_resonance", "amount": 10 },
+                { "type": "item", "itemId": "earth_sigil", "quantity": 2 }
+            ],
+            "giftingOptions": [
+                {
+                    "itemId": "earth_sigil",
+                    "quantity": 2,
+                    "value": 6,
+                    "dialogue": [
+                        "[TODO: HR3 — earth sigil gift.]"
+                    ]
+                },
+                {
+                    "itemId": "swiftroot_elixir",
+                    "quantity": 1,
+                    "value": 5,
+                    "dialogue": [
+                        "[TODO: HR3 — swiftroot elixir, ranger-fit.]"
+                    ]
+                },
+                {
+                    "itemId": "dragon_vitality_brew",
+                    "quantity": 1,
+                    "value": 7,
+                    "dialogue": [
+                        "[TODO: HR3 — dragon vitality brew, rare.]"
+                    ]
+                },
+                {
+                    "itemId": "basic_bow",
+                    "quantity": 1,
+                    "value": 6,
+                    "dialogue": [
+                        "[TODO: HR3 — a bow for the ranger. She's touched.]"
                     ]
                 }
             ]

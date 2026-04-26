@@ -1,9 +1,16 @@
 {
     "id": "guinevere",
     "name": "Guinevere",
+    "title": "The Velvet Crown",
+    "description": "Composed, sincere, and operating on a longer timeline than anyone around her seems to notice. Greets you the same whether you're a refugee or a rival — fully, attentively, like the conversation matters. Believes in order the way a gardener believes in spring: not as control, but as the shape that lets things grow. Carries the warmth of someone who would tend to you, and the stillness of someone who would replace anyone in her way.",
+    "faction": "the_coalition",
+    "hidden": false,
+    "isCombatant": true,
+
     "profileImage": "/images/characters/guinevere/guinevere_avatar.png",
-    "image": "/images/characters/guinevere/guinevere0.png",
-    "title": "Commander of the Solis Saints",
+    "image": "/images/characters/guinevere/guinevere1.png",
+    "arenaImage": "/images/characters/guinevere/guinevere_arena.png",
+    "spriteGif": "/images/sprites/guinevere.gif",
     "galleryImages": [
         "/images/characters/guinevere/guinevere1.png",
         "/images/characters/guinevere/guinevere2.png",
@@ -12,28 +19,8 @@
         "/images/characters/guinevere/guinevere5.png",
         "/images/characters/guinevere/guinevere6.png"
     ],
-    "description": "Commander of the Solis Saints on Ashenfall. She feeds people, houses people, protects people, and is building Towers that are tearing the island apart. She sees no contradiction in this.",
-    "faction": "the_coalition",
-    "hidden": false,
-    "isCombatant": true,
-    "types": [
-        "Light",
-        "Dark"
-    ],
-    "mapPositions": [
-        {
-            "mapId": "dragon_island",
-            "default": true,
-            "x": 55,
-            "y": 45
-        },
-        {
-            "mapId": "dragon_island",
-            "requiredTag": "guinevere_sword_2_complete",
-            "x": 48,
-            "y": 46
-        }
-    ],
+
+    "types": ["Light", "Dark"],
     "baseStats": {
         "hp": 700,
         "maxHp": 700,
@@ -49,29 +36,50 @@
         "critDamage": 1.6,
         "precision": 75
     },
-    "swordRank": 0,
-    "heartRank": 0,
-    "affinity": 0,
-    "swordState": "NOT_STARTED",
-    "heartState": "NOT_STARTED",
     "abilityCycle": [
         "holy_strike",
         "judgment_blade",
         "radiant_guard",
         "divine_reckoning"
     ],
-    "statGrowth": [
+    "gearPassives": ["unshackled"],
+    "statGrowth": [],
+
+    "swordRank": 0,
+    "heartRank": 0,
+    "affinity": 0,
+    "swordState": "NOT_STARTED",
+    "heartState": "NOT_STARTED",
+
+    "drops": [
+        { "itemId": "argentum", "chance": 1, "quantity": 2000 },
+        { "itemId": "light_sigil", "chance": 1, "quantity": 3 },
+        { "itemId": "dark_sigil", "chance": 1, "quantity": 3 },
+        { "itemId": "cardamom_clarity_potion", "chance": 1, "quantity": 1 }
+    ],
+
+    "mapPositions": [
         {
-            "level": 1,
-            "stats": {
-                "hp": 550,
-                "physicalAttack": 55,
-                "elementalAttack": 77,
-                "physicalDefence": 44,
-                "elementalDefence": 44
-            }
+            "mapId": "dragon_island",
+            "default": true,
+            "x": 55,
+            "y": 45
+        },
+        {
+            "mapId": "dragon_island",
+            "requiredTag": "guinevere_sword_2_complete",
+            "x": 48,
+            "y": 46
         }
     ],
+
+    "swordRankMaxedDialogue": [
+        "[TODO: sword ranks complete — Guinevere's questline finale.]"
+    ],
+    "allRanksMaxedDialogue": [
+        "[TODO: all ranks maxed — Guinevere's full arc resolved.]"
+    ],
+
     "battleAftermathsBySwordRank": [
         {
             "rank": 0,
@@ -123,6 +131,7 @@
             ]
         }
     ],
+
     "swordRanks": [
         {
             "questId": "guinevere_sword_1",
@@ -131,14 +140,8 @@
             "startRequirement": {
                 "operator": "AND",
                 "conditions": [
-                    {
-                        "type": "have_tag",
-                        "tag": "claudia_sr1_complete"
-                    },
-                    {
-                        "type": "have_tag",
-                        "tag": "cygwin_sr1_complete"
-                    }
+                    { "type": "have_tag", "tag": "claudia_sr1_complete" },
+                    { "type": "have_tag", "tag": "cygwin_sr1_complete" }
                 ]
             },
             "stages": [
@@ -199,14 +202,8 @@
                         "There's more here than the wyverns would have you believe."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_1_complete"
-                        }
+                        { "type": "world_resonance", "amount": 8 },
+                        { "type": "tag", "tagId": "guinevere_sword_1_complete" }
                     ]
                 }
             ]
@@ -222,9 +219,7 @@
             "stages": [
                 {
                     "objective": "Speak with Guinevere",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "unavailable_dialogue": [
                         "You see that tree over there?",
                         "The one that shouldn't be blooming in this altitude, in this season.",
@@ -251,10 +246,7 @@
                         "Bring it back first. Then we'll talk."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_2_started"
-                        }
+                        { "type": "tag", "tagId": "guinevere_sword_2_started" }
                     ]
                 },
                 {
@@ -277,19 +269,9 @@
                         "Come back. We're not done."
                     ],
                     "refuse_rewards": [
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_2_complete"
-                        },
-                        {
-                            "type": "faction_score",
-                            "factionId": "forest_watchers",
-                            "amount": 15
-                        },
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
-                        }
+                        { "type": "tag", "tagId": "guinevere_sword_2_complete" },
+                        { "type": "faction_score", "factionId": "forest_watchers", "amount": 15 },
+                        { "type": "world_resonance", "amount": 8 }
                     ],
                     "intro_dialogue": [
                         "The tree is waiting.",
@@ -315,28 +297,11 @@
                         "Come back. There's one more thing."
                     ],
                     "success_rewards": [
-                        {
-                            "type": "tag",
-                            "tagId": "tree_cut"
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_2_complete"
-                        },
-                        {
-                            "type": "faction_score",
-                            "factionId": "the_coalition",
-                            "amount": 15
-                        },
-                        {
-                            "type": "faction_score",
-                            "factionId": "golden_concordat",
-                            "amount": 5
-                        },
-                        {
-                            "type": "world_resonance",
-                            "amount": 8
-                        }
+                        { "type": "tag", "tagId": "tree_cut" },
+                        { "type": "tag", "tagId": "guinevere_sword_2_complete" },
+                        { "type": "faction_score", "factionId": "the_coalition", "amount": 15 },
+                        { "type": "faction_score", "factionId": "golden_concordat", "amount": 5 },
+                        { "type": "world_resonance", "amount": 8 }
                     ]
                 }
             ]
@@ -383,9 +348,7 @@
             "stages": [
                 {
                     "objective": "Speak with Guinevere",
-                    "requirement": {
-                        "type": "dialogue"
-                    },
+                    "requirement": { "type": "dialogue" },
                     "unavailable_dialogue": [
                         "I'm still working out the best way to say this.",
                         "Come back soon."
@@ -409,38 +372,23 @@
                         "You can give it to me freely.",
                         "Or.",
                         "You can fight me for it.",
-                        "If you win — keep the Watch, and I'll give you the Saints Greatsword as my acknowledgment of a fair result.",
+                        "If you win — keep the Watch, and I'll give you the Greatsword as my acknowledgment of a fair result.",
                         "If you lose — the Watch comes with me, and we're still on good terms.",
                         "I negotiated. You decided. That's all.",
                         "What do you want to do?"
                     ],
                     "success_rewards": [
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_watch_offer_made"
-                        }
+                        { "type": "tag", "tagId": "guinevere_watch_offer_made" }
                     ]
                 },
                 {
-                    "objective": "Give Guinevere Her Majesty's Watch — or fight her for the Saints Greatsword",
+                    "objective": "Give Guinevere Her Majesty's Watch — or fight her for the Greatsword",
                     "requirement": {
                         "operator": "OR",
                         "conditions": [
-                            {
-                                "type": "give_item",
-                                "itemId": "her_majesty_watch",
-                                "quantity": 1
-                            },
-                            {
-                                "type": "win_against_npc",
-                                "npcId": "guinevere",
-                                "quantity": 1
-                            },
-                            {
-                                "type": "lose_to_npc",
-                                "npcId": "guinevere",
-                                "quantity": 1
-                            }
+                            { "type": "give_item", "itemId": "her_majesty_watch", "quantity": 1 },
+                            { "type": "win_against_npc", "npcId": "guinevere", "quantity": 1 },
+                            { "type": "lose_to_npc", "npcId": "guinevere", "quantity": 1 }
                         ]
                     },
                     "reminder_dialogue": [
@@ -484,24 +432,15 @@
                         ]
                     },
                     "success_rewards": [
-                        {
-                            "type": "world_resonance",
-                            "amount": 10
-                        },
-                        {
-                            "type": "tag",
-                            "tagId": "guinevere_sword_3_complete"
-                        },
-                        {
-                            "type": "item",
-                            "itemId": "searouser",
-                            "quantity": 1
-                        }
+                        { "type": "world_resonance", "amount": 10 },
+                        { "type": "tag", "tagId": "guinevere_sword_4_complete" },
+                        { "type": "item", "itemId": "searouser", "quantity": 1 }
                     ]
                 }
             ]
         }
     ],
+
     "heartRanks": [
         {
             "rank_up_dialogue": [
@@ -513,14 +452,8 @@
                 "Don't make me regret the admission."
             ],
             "rank_up_rewards": [
-                {
-                    "type": "tag",
-                    "tagId": "guinevere_heart_rank_1_unlocked"
-                },
-                {
-                    "type": "world_resonance",
-                    "amount": 8
-                }
+                { "type": "tag", "tagId": "guinevere_heart_rank_1_unlocked" },
+                { "type": "world_resonance", "amount": 8 }
             ],
             "giftingOptions": [
                 {
@@ -559,7 +492,7 @@
                     "value": 5,
                     "dialogue": [
                         "This is from deep in the earth.",
-                        "The Saints have doctrine about what lives down there.",
+                        "The Concordat has doctrine about what lives down there.",
                         "I've always found the reality more interesting than the doctrine.",
                         "Thank you. This goes on my desk."
                     ]
@@ -619,14 +552,8 @@
                 "Don't repeat it."
             ],
             "rank_up_rewards": [
-                {
-                    "type": "tag",
-                    "tagId": "guinevere_heart_rank_2_unlocked"
-                },
-                {
-                    "type": "world_resonance",
-                    "amount": 12
-                }
+                { "type": "tag", "tagId": "guinevere_heart_rank_2_unlocked" },
+                { "type": "world_resonance", "amount": 12 }
             ],
             "giftingOptions": [
                 {
@@ -710,14 +637,8 @@
                 "Something good, I think."
             ],
             "rank_up_rewards": [
-                {
-                    "type": "tag",
-                    "tagId": "guinevere_heart_rank_3_unlocked"
-                },
-                {
-                    "type": "world_resonance",
-                    "amount": 15
-                }
+                { "type": "tag", "tagId": "guinevere_heart_rank_3_unlocked" },
+                { "type": "world_resonance", "amount": 15 }
             ],
             "giftingOptions": [
                 {
@@ -759,7 +680,7 @@
                     "value": 4,
                     "dialogue": [
                         "Pull up a chair.",
-                        "Tell me something that has nothing to do with the Saints.",
+                        "Tell me something that has nothing to do with the Concordat.",
                         "I need to remember there are other things."
                     ]
                 },
@@ -783,7 +704,7 @@
             "rank_up_dialogue": [
                 "I don't do this.",
                 "I have never done this.",
-                "The Saints have opinions about Commanders and attachment.",
+                "The Concordat has opinions about Commanders and attachment.",
                 "I have, historically, agreed with those opinions.",
                 "I appear to no longer agree with those opinions.",
                 "This is your fault.",
@@ -793,14 +714,8 @@
                 "I don't think I mean it anymore."
             ],
             "rank_up_rewards": [
-                {
-                    "type": "tag",
-                    "tagId": "guinevere_heart_rank_4_unlocked"
-                },
-                {
-                    "type": "world_resonance",
-                    "amount": 15
-                }
+                { "type": "tag", "tagId": "guinevere_heart_rank_4_unlocked" },
+                { "type": "world_resonance", "amount": 15 }
             ],
             "giftingOptions": [
                 {
@@ -821,7 +736,7 @@
                     "dialogue": [
                         "Close the door.",
                         "I have things to say that aren't for open air.",
-                        "None of them are about the Saints."
+                        "None of them are about the Concordat."
                     ]
                 },
                 {
@@ -868,21 +783,15 @@
                 "First time since I made the promise.",
                 "I didn't make a new one.",
                 "I just stood there and thought about what I actually want.",
-                "Not what the Saints need. Not what Ashenfall needs.",
+                "Not what the Concordat needs. Not what Ashenfall needs.",
                 "What I want.",
                 "I'm still figuring that out.",
                 "But you're in it.",
                 "That much I know."
             ],
             "rank_up_rewards": [
-                {
-                    "type": "tag",
-                    "tagId": "guinevere_heart_rank_5_unlocked"
-                },
-                {
-                    "type": "world_resonance",
-                    "amount": 20
-                }
+                { "type": "tag", "tagId": "guinevere_heart_rank_5_unlocked" },
+                { "type": "world_resonance", "amount": 20 }
             ],
             "giftingOptions": [
                 {

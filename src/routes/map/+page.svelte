@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { game } from '$lib/game/game';
 	import { playerStore } from '$lib/stores/playerStore';
@@ -12,7 +12,13 @@
 	import { processBuffs } from '$lib/services/BuffService';
 	import * as AchievementService from '$lib/services/AchievementService';
 	import { getRegionForPosition } from '$lib/services/MapService';
-	import { showMessageBox, showQuestTracker, clearEvent, eventScreen } from '$lib/stores/uiStore';
+	import {
+		showMessageBox,
+		showQuestTracker,
+		clearEvent,
+		eventScreen,
+		hideNavbar
+	} from '$lib/stores/uiStore';
 	import MapDisplay from '$lib/components/MapDisplay.svelte';
 	import MessageLog from '$lib/components/MessageLog.svelte';
 	import QuestTracker from '$lib/components/ui/QuestTracker.svelte';
@@ -34,6 +40,11 @@
 	function toggleHighlight() {
 		showHighlights = !showHighlights;
 	}
+
+	// onMount(() => {
+	// 	hideNavbar.set(true);
+	// });
+	// onDestroy(() => hideNavbar.set(false));
 
 	// ── Legendary enemy warning modal ─────────────────────────────────────────
 	// When player tries to move away from a legendary enemy tile, we intercept
@@ -229,7 +240,7 @@
 	{/if}
 
 	{#if isMobile}
-		<MobileLayout />
+		<MobileLayout {showHighlights} onToggleHighlight={toggleHighlight} />
 	{:else}
 		<div class="console">
 			<LeftControlPanel />
@@ -316,8 +327,8 @@
 	.tray-tracker {
 		flex-shrink: 0;
 		width: 240px;
-		border: 3px solid var(--surface-2);
-		border-radius: 12px;
+		/* border: 3px solid var(--surface-2); */
+		/* border-radius: 12px; */
 		overflow: hidden;
 	}
 
