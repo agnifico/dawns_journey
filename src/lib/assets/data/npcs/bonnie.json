@@ -9,16 +9,17 @@
 
     "profileImage": "/images/characters/bonnie/bonnie_avatar.png",
     "image": "/images/characters/bonnie/bonnie0.png",
-    "arenaImage": "/images/characters/bonnie/bonnie2.png",
+    "arenaImage": "/images/characters/bonnie/bonnie7.png",
     "spriteGif": "/images/sprites/bonnie.gif",
     "galleryImages": [
-        "/images/characters/bonnie/bonnie7.png",
         "/images/characters/bonnie/bonnie1.png",
         "/images/characters/bonnie/bonnie2.png",
         "/images/characters/bonnie/bonnie3.png",
         "/images/characters/bonnie/bonnie4.png",
         "/images/characters/bonnie/bonnie5.png",
-        "/images/characters/bonnie/bonnie6.png"
+        "/images/characters/bonnie/bonnie6.png",
+        "/images/characters/bonnie/bonnie7.png",
+        "/images/characters/bonnie/bonnie8.png"
     ],
 
     "types": ["Dark"],

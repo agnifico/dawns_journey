@@ -13,8 +13,10 @@
 	import { getItemById } from '$lib/services/InventoryService';
 
 	export let plot: FarmPlotType;
+	export let plotNumber: number | undefined = undefined;
+	export let locked: boolean = false;
 
-	let isPlanting      = false;
+	let isPlanting = false;
 	let showPlotActions = false;
 	let selectedSeedId: string | null = null;
 
@@ -54,7 +56,9 @@
 					isShaking = false;
 					isBlinking = false;
 					animatedProgress.set(0);
-					setTimeout(() => { animatedProgress.set($growthProgressInStage); }, 50);
+					setTimeout(() => {
+						animatedProgress.set($growthProgressInStage);
+					}, 50);
 				}, 300);
 			}, 450);
 			previousStage = plot.crop.currentGrowthStage;
@@ -68,9 +72,10 @@
 		return undefined;
 	});
 
-	$: isHarvestable = plot.crop && $cropDef
-		? plot.crop.currentGrowthStage >= $cropDef.growthStages.length - 1
-		: false;
+	$: isHarvestable =
+		plot.crop && $cropDef
+			? plot.crop.currentGrowthStage >= $cropDef.growthStages.length - 1
+			: false;
 
 	function handlePlant() {
 		if (selectedSeedId && plot.id) {
@@ -86,8 +91,15 @@
 	}
 </script>
 
-<div class="farm-plot" class:selected={$selectedPlotId === plot.mapObjectId}>
-
+<div class="farm-plot" class:selected={$selectedPlotId === plot.mapObjectId} class:locked>
+	{#if plotNumber !== undefined}
+		<span class="plot-number-badge">{plotNumber}</span>
+	{/if}
+	{#if locked}
+		<div class="locked-overlay">
+			<span class="locked-label">Lv {plot.requiredLevel}</span>
+		</div>
+	{/if}
 	{#if plot.crop && $cropDef && $yieldedItem}
 		<!-- ── Crop growing ─────────────────────────────── -->
 		<div class="crop-header">
@@ -119,11 +131,7 @@
 			<div class="crop-bars">
 				<div class="bar-row">
 					<span class="bar-label">Growth</span>
-					<AnimatedProgressBar
-						value={$animatedProgress}
-						isComplete={isHarvestable}
-						type="growth"
-					/>
+					<AnimatedProgressBar value={$animatedProgress} isComplete={isHarvestable} type="growth" />
 				</div>
 				<div class="bar-row">
 					<span class="bar-label">Water</span>
@@ -155,7 +163,6 @@
 				</button>
 			{/if}
 		</div>
-
 	{:else if isPlanting}
 		<!-- ── Planting UI ──────────────────────────────── -->
 		<div class="planting-ui">
@@ -165,12 +172,16 @@
 				<button class="action-btn plant-btn" on:click={handlePlant} disabled={!selectedSeedId}>
 					Plant
 				</button>
-				<button class="action-btn cancel-btn" on:click={() => { isPlanting = false; }}>
+				<button
+					class="action-btn cancel-btn"
+					on:click={() => {
+						isPlanting = false;
+					}}
+				>
 					Cancel
 				</button>
 			</div>
 		</div>
-
 	{:else if showPlotActions}
 		<!-- ── Plot actions / tech ─────────────────────── -->
 		<div class="plot-actions-ui">
@@ -180,7 +191,6 @@
 				← Back
 			</button>
 		</div>
-
 	{:else}
 		<!-- ── Empty plot ───────────────────────────────── -->
 		<div class="empty-plot">
@@ -192,7 +202,10 @@
 						{/each}
 					</div>
 				{/if}
-				<button class="action-btn techs-btn" on:click|stopPropagation={() => (showPlotActions = true)}>
+				<button
+					class="action-btn techs-btn"
+					on:click|stopPropagation={() => (showPlotActions = true)}
+				>
 					Actions
 				</button>
 			</div>
@@ -207,17 +220,33 @@
 <style>
 	/* ── Animations ── */
 	@keyframes shake {
-		0%   { transform: translateX(0); }
-		25%  { transform: translateX(-2px); }
-		50%  { transform: translateX(2px); }
-		75%  { transform: translateX(-2px); }
-		100% { transform: translateX(0); }
+		0% {
+			transform: translateX(0);
+		}
+		25% {
+			transform: translateX(-2px);
+		}
+		50% {
+			transform: translateX(2px);
+		}
+		75% {
+			transform: translateX(-2px);
+		}
+		100% {
+			transform: translateX(0);
+		}
 	}
 	@keyframes blink {
-		50% { opacity: 0.5; }
+		50% {
+			opacity: 0.5;
+		}
 	}
-	.shake { animation: shake 0.3s ease-in-out; }
-	.blink { animation: blink 0.3s 2; }
+	.shake {
+		animation: shake 0.3s ease-in-out;
+	}
+	.blink {
+		animation: blink 0.3s 2;
+	}
 
 	/* ── Plot card ── */
 	.farm-plot {
@@ -235,8 +264,12 @@
 		font-family: var(--font-family-pixel);
 		transition: background-color 0.15s;
 	}
-	.farm-plot:hover   { background-color: #3c5449; }
-	.farm-plot.selected { border-color: rgba(255, 255, 255, 0.55); }
+	.farm-plot:hover {
+		background-color: #3c5449;
+	}
+	.farm-plot.selected {
+		border-color: rgba(255, 255, 255, 0.55);
+	}
 
 	/* ── Crop header ── */
 	.crop-header {
@@ -258,7 +291,9 @@
 		background: linear-gradient(135deg, #f0d060, #c88020);
 		border-radius: 3px;
 		padding: 2px 6px;
-		box-shadow: 0 1px 0 #7a4a08, inset 0 1px 0 rgba(255, 255, 200, 0.3);
+		box-shadow:
+			0 1px 0 #7a4a08,
+			inset 0 1px 0 rgba(255, 255, 200, 0.3);
 		flex-shrink: 0;
 	}
 
@@ -357,25 +392,67 @@
 		cursor: not-allowed;
 	}
 
-	.crop-action { display: flex; }
+	.crop-action {
+		display: flex;
+	}
 
-	.water-btn   { background: #2b6cb0; color: #c8e8ff; border-color: #1a4a80; }
-	.water-btn:hover:not(:disabled) { background: #3a7cc0; }
+	.water-btn {
+		background: #2b6cb0;
+		color: #c8e8ff;
+		border-color: #1a4a80;
+	}
+	.water-btn:hover:not(:disabled) {
+		background: #3a7cc0;
+	}
 
-	.harvest { background: linear-gradient(180deg, #d4850a 0%, #a85c08 100%); color: #ffe8c0; border-color: #6a3a05; }
-	.harvest:hover:not(:disabled) { filter: brightness(1.12); }
+	.harvest {
+		background: linear-gradient(180deg, #d4850a 0%, #a85c08 100%);
+		color: #ffe8c0;
+		border-color: #6a3a05;
+	}
+	.harvest:hover:not(:disabled) {
+		filter: brightness(1.12);
+	}
 
-	.plant-btn  { background: #3a6a3a; color: #c0e0c0; border-color: #1a3a1a; }
-	.plant-btn:hover:not(:disabled) { background: #4a7a4a; }
+	.plant-btn {
+		background: #3a6a3a;
+		color: #c0e0c0;
+		border-color: #1a3a1a;
+	}
+	.plant-btn:hover:not(:disabled) {
+		background: #4a7a4a;
+	}
 
-	.cancel-btn { background: #333a33; color: #8a9a8a; border-color: #1a201a; }
-	.cancel-btn:hover:not(:disabled) { background: #404a40; }
+	.cancel-btn {
+		background: #333a33;
+		color: #8a9a8a;
+		border-color: #1a201a;
+	}
+	.cancel-btn:hover:not(:disabled) {
+		background: #404a40;
+	}
 
-	.back-btn   { background: #2a3a2a; color: #8aaa8a; border-color: #1a2a1a; width: auto; padding: 5px 12px 8px; }
-	.back-btn:hover:not(:disabled) { background: #384838; }
+	.back-btn {
+		background: #2a3a2a;
+		color: #8aaa8a;
+		border-color: #1a2a1a;
+		width: auto;
+		padding: 5px 12px 8px;
+	}
+	.back-btn:hover:not(:disabled) {
+		background: #384838;
+	}
 
-	.techs-btn  { background: rgba(0,0,0,0.2); color: #9abaaa; border-color: rgba(0,0,0,0.3); width: auto; padding: 4px 10px 7px; }
-	.techs-btn:hover:not(:disabled) { background: rgba(0,0,0,0.35); }
+	.techs-btn {
+		background: rgba(0, 0, 0, 0.2);
+		color: #9abaaa;
+		border-color: rgba(0, 0, 0, 0.3);
+		width: auto;
+		padding: 4px 10px 7px;
+	}
+	.techs-btn:hover:not(:disabled) {
+		background: rgba(0, 0, 0, 0.35);
+	}
 
 	/* ── Empty plot ── */
 	.empty-plot {
@@ -441,5 +518,41 @@
 		display: flex;
 		gap: 6px;
 		margin-top: 2px;
+	}
+
+	/* ── Plot number badge ── */
+	.plot-number-badge {
+		position: absolute;
+		top: 8px;
+		right: 10px;
+		font-size: 0.55rem;
+		color: rgba(255, 255, 255, 0.25);
+		letter-spacing: 0.08em;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	/* ── Locked state ── */
+	.farm-plot.locked {
+		background-color: #2a3530;
+		border-color: rgba(180, 40, 40, 0.35);
+		box-shadow: rgba(150, 0, 0, 0.25) 0 -6px 0 0 inset;
+		pointer-events: none;
+	}
+	.locked-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 14px;
+		background: rgba(0, 0, 0, 0.45);
+	}
+	.locked-label {
+		font-family: var(--font-family-pixel);
+		font-size: 0.7rem;
+		color: #883333;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
 	}
 </style>

@@ -39,13 +39,13 @@
 	const plotsInCurrentEnvironment = derived(
 		[playerStore, currentEnvironment],
 		([$playerStore, $currentEnvironment]) =>
-			$playerStore.homestead.farmPlots.filter(
-				(plot) =>
-					plot.environment === $currentEnvironment &&
-					$playerStore.farmingLevel >= plot.requiredLevel
-			)
+			$playerStore.homestead.farmPlots
+				.filter((plot) => plot.environment === $currentEnvironment)
+				.map((plot) => ({
+					...plot,
+					locked: $playerStore.farmingLevel < plot.requiredLevel
+				}))
 	);
-
 	function handleSaveSeason() {
 		seasonStore.setSeason(selectedSeason);
 	}
@@ -88,6 +88,19 @@
 					class:pan-down={showBottomHalf}
 				/>
 				<MapGrid />
+			</div>
+			<div class="plot-number-bar">
+				{#each $plotsInCurrentEnvironment as plot}
+					<button
+						class="plot-num-btn"
+						class:locked={plot.locked}
+						class:active={$selectedPlotId === plot.mapObjectId}
+						disabled={plot.locked}
+						on:click={() => selectedPlotId.set(plot.mapObjectId)}
+					>
+						{plot.plotNumber}
+					</button>
+				{/each}
 			</div>
 		</div>
 
@@ -166,7 +179,7 @@
 	<div class="plots-grid">
 		{#each $plotsInCurrentEnvironment as plot (plot.id)}
 			<div id="plot-wrapper-{plot.mapObjectId}">
-				<FarmPlot {plot} />
+				<FarmPlot {plot} plotNumber={plot.plotNumber} locked={plot.locked} />
 			</div>
 		{/each}
 	</div>
@@ -199,6 +212,12 @@
 		align-items: stretch;
 	}
 
+	@media (max-width: 600px) {
+		.top-half {
+			flex-direction: column;
+		}
+	}
+
 	/* ── Map ── */
 	.map-info-container {
 		position: relative;
@@ -215,6 +234,16 @@
 		border: 4px solid #6d403b;
 		border-radius: 8px;
 		max-height: 300px;
+	}
+
+	@media (max-width: 600px) {
+		.map-viewport {
+			max-width: 100%;
+			max-height: none;
+			border-radius: 0;
+			border-left: none;
+			border-right: none;
+		}
 	}
 	.map {
 		width: 100%;
@@ -261,12 +290,25 @@
 	}
 
 	/* Primary action tray */
-	.action-tray {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		padding: 10px;
-		flex-grow: 1;
+	@media (max-width: 600px) {
+		.dashboard {
+			margin: 0.5rem;
+		}
+
+		.action-tray {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		/* Harvest All spans full width, refresh sits beside it */
+		.harvest-btn {
+			grid-column: 1 / 2;
+		}
+
+		.refresh-btn {
+			grid-column: 2 / 3;
+			align-self: stretch;
+		}
 	}
 
 	/* Forge buttons */
@@ -459,5 +501,66 @@
 		gap: 1rem;
 		padding: 1rem;
 		background-color: #4e7062;
+	}
+	@media (max-width: 600px) {
+		.plots-grid {
+			grid-template-columns: 1fr;
+			padding: 0.5rem;
+			gap: 0.75rem;
+		}
+	}
+
+	/* ── Plot number bar (shown when map shrinks) ── */
+	.plot-number-bar {
+		display: none;
+		flex-wrap: wrap;
+		gap: 4px;
+		padding: 6px 8px;
+		background: rgba(0, 0, 0, 0.3);
+		border-top: 2px solid rgba(0, 0, 0, 0.35);
+	}
+
+	/* Show bar whenever the map is at mobile width */
+	@media (max-width: 950px) {
+		.map-info-container {
+			flex-direction: column;
+		}
+		.plot-number-bar {
+			display: flex;
+		}
+	}
+
+	.plot-num-btn {
+		font-family: var(--font-family-pixel);
+		font-size: 0.65rem;
+		width: 28px;
+		height: 28px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #435e52;
+		border: 2px solid rgba(0, 0, 0, 0.4);
+		border-radius: 5px;
+		box-shadow: rgba(0, 0, 0, 0.4) 0 -3px 0 0 inset;
+		color: #c0d8c0;
+		cursor: pointer;
+		transition: 0.1s all ease-in;
+	}
+	.plot-num-btn:hover:not(:disabled) {
+		background: #4e6e5e;
+		transform: translateY(1px);
+		box-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0 0 inset;
+	}
+	.plot-num-btn.active {
+		background: #3a5a48;
+		border-color: rgba(255, 255, 255, 0.45);
+		color: #e0f0e0;
+	}
+	.plot-num-btn.locked {
+		background: #2a2a2a;
+		border-color: rgba(255, 0, 0, 0.3);
+		color: #663333;
+		cursor: not-allowed;
+		box-shadow: rgba(150, 0, 0, 0.3) 0 -3px 0 0 inset;
 	}
 </style>

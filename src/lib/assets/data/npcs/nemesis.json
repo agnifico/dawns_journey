@@ -2,7 +2,7 @@
     "id": "nemesis",
     "name": "Nemesis",
     "profileImage": "/images/characters/nemesis/nemesis_avatar.png",
-    "image": "/images/characters/nemesis/nemesis0.png",
+    "image": "/images/characters/nemesis/nemesis6.png",
     "galleryImages": [
         "/images/characters/nemesis/nemesis14.png",
         "/images/characters/nemesis/nemesis13.png",
@@ -12,6 +12,9 @@
         "/images/characters/nemesis/nemesis3.png",
         "/images/characters/nemesis/nemesis4.png",
         "/images/characters/nemesis/nemesis5.png",
+        "/images/characters/nemesis/nemesis6.png",
+        "/images/characters/nemesis/nemesis8.png",
+        "/images/characters/nemesis/nemesis10.png",
         "/images/characters/nemesis/nemesis7.png",
         "/images/characters/nemesis/nemesis9.png"
     ],

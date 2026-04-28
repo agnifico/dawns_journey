@@ -2,14 +2,14 @@
     "id": "alice",
     "name": "Alice",
     "profileImage": "/images/characters/alice/alice_avatar.png",
-    "image": "/images/characters/alice/1.png",
+    "image": "/images/characters/alice/2.png",
     "galleryImages": [
         "/images/characters/alice/0.png",
         "/images/characters/alice/1.png",
         "/images/characters/alice/2.png",
         "/images/characters/alice/3.png"
     ],
-    "arenaImage": "/images/characters/alice/2.png",
+    "arenaImage": "/images/characters/alice/3.png",
     "hidden": false, "isCombatant": true,
     "types": [
         "Fire"
