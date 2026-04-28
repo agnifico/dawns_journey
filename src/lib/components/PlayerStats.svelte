@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { playerStore, playerStats, playerActiveElements, setPlayerName } from '../stores/playerStore';
+	import { playerStore, playerStats, playerActiveElements, playerDualWeaponBonus, setPlayerName } from '../stores/playerStore';
 	import Stat from './Stat.svelte';
 	import StatBar from './ui/StatBar.svelte';
 	import AvatarSelector from './AvatarSelector.svelte';
@@ -10,6 +10,7 @@
 	import HPBar from './HPBar.svelte';
 	import Level from './Level.svelte';
 	import FactionDisplay from './FactionDisplay.svelte';
+	import GearPassive from './GearPassive.svelte';
 
 	let currentView: 'stats' | 'skills' = 'stats';
 	function toggleView() { currentView = currentView === 'stats' ? 'skills' : 'stats'; }
@@ -82,6 +83,17 @@
 				<p class="loading">Loading stats...</p>
 			{/if}
 		</div>
+
+		{#if $playerDualWeaponBonus}
+			<div class="loadout-passives">
+				<div class="loadout-passives-label">Loadout Passives</div>
+				<GearPassive
+					weaponName=""
+					passiveName={$playerDualWeaponBonus.name}
+					description={$playerDualWeaponBonus.description}
+				/>
+			</div>
+		{/if}
 	{:else}
 		<div class="skills-grid">
 			{#if $playerStore.skills}
@@ -172,4 +184,6 @@
 	.xp-fill { height: 100%; background-color: var(--color-primary); border-radius: 2px; }
 	.xp-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 0.6rem; color: rgba(255, 255, 255, 0.8); text-shadow: 1px 1px 0 black; }
 	.loading { font-family: var(--font-family-pixel); font-size: 0.7rem; color: var(--text-muted); }
+	.loadout-passives { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+	.loadout-passives-label { font-family: var(--font-family-pixel); font-size: 0.75rem; color: var(--orange, #d8a85a); letter-spacing: 0.5px; }
 </style>

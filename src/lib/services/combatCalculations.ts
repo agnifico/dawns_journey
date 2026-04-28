@@ -24,7 +24,8 @@ export function calculateDamage(
     defender: Combatant,
     attackType: 'physical' | 'elemental',
     activeElements: string[] = [],
-    abilityMultiplier: number = 1.0 // New optional argument
+    abilityMultiplier: number = 1.0, // New optional argument
+    tagBonusMultiplier: number = 1.0, // From sets / gear passives matching ability tags
 ) {
     let baseDamage = 0;
     let isCritical = false;
@@ -47,8 +48,9 @@ export function calculateDamage(
         baseDamage = atk * (1 - reduction);
     }
 
-    // Apply ability multiplier
+    // Apply ability multiplier and tag bonus multiplier
     baseDamage *= abilityMultiplier;
+    baseDamage *= tagBonusMultiplier;
 
     // 2. Apply Elemental Effectiveness (for elemental attacks)
     let elementalMultiplier = 1.0;

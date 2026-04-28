@@ -73,6 +73,7 @@
 		/* max-width: 960px; */
 		margin: 0 auto;
 		background-color: rgb(13, 13, 13);
+		padding-bottom: 2rem;
 	}
 
 	/* ── Header ── */

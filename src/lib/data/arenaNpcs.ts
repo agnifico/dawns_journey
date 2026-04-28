@@ -9,7 +9,7 @@ import aoifeTemplateJson from '$lib/assets/data/npcs/aoife.json';
 import marjaneTemplateJson from '$lib/assets/data/npcs/marjane.json';
 import minervaTemplateJson from '$lib/assets/data/npcs/minerva.json';
 import bonnieTemplateJson from '$lib/assets/data/npcs/bonnie.json';
-import arianaTemplateJson from '$lib/assets/data/npcs/ariana.json';
+import aliceTemplateJson from '$lib/assets/data/npcs/alice.json';
 import veronaTemplateJson from '$lib/assets/data/npcs/verona.json';
 import veresTemplateJson from '$lib/assets/data/npcs/veres.json';
 import nemesisTemplateJson from '$lib/assets/data/npcs/nemesis.json';
@@ -23,7 +23,7 @@ const aoifeTemplate = aoifeTemplateJson as NPC;
 const marjaneTemplate = marjaneTemplateJson as NPC;
 const minervaTemplate = minervaTemplateJson as NPC;
 const bonnieTemplate = bonnieTemplateJson as NPC;
-const arianaTemplate = arianaTemplateJson as NPC;
+const aliceTemplate = aliceTemplateJson as NPC;
 const veronaTemplate = veronaTemplateJson as NPC;
 const veresTemplate = veresTemplateJson as NPC;
 const nemesisTemplate = nemesisTemplateJson as NPC;
@@ -99,7 +99,7 @@ const arenaNpcs: Record<string, Combatant> = {
     // -----------------------------------------------------------------------
     cygwin: {
         ...cygwinTemplate,
-        baseStats: { ...withAccuracy(cygwinTemplate.baseStats), hp: 600, maxHp: 600 },
+        baseStats: { ...withAccuracy(cygwinTemplate.baseStats), hp: 600, maxHp: 600, precision: 70, speed: 50, evasion: 20, critChance: .75 },
         arenaBehavior: {
             phases: [
                 {
@@ -212,14 +212,14 @@ const arenaNpcs: Record<string, Combatant> = {
             maxAuraShield: 400,
             auraShield: 400,
             physicalAttack: 450,
-            physicalDefence: 600,
+            physicalDefence: 450,
             elementalAttack: 450,
-            elementalDefence: 600,
-            speed: 85,
+            elementalDefence: 450,
+            speed: 80,
             evasion: 80,
-            precision: 60,
-            critChance: 0.60,
-            critDamage: 1.6,
+            precision: 80,
+            critChance: 1.0,
+            critDamage: 2.5,
         },
 
         // Gear passives on NPCs use inflictedBy: 'innate' — permanent, never cleansed
@@ -385,16 +385,16 @@ const arenaNpcs: Record<string, Combatant> = {
     // If you burst her below 60% her damage collapses — she scrambles to heal.
     // She also has dispel to punish player buffing.
     // -----------------------------------------------------------------------
-    ariana: {
-        ...arianaTemplate,
+    alice: {
+        ...aliceTemplate,
         baseStats: {
-            ...withAccuracy(arianaTemplate.baseStats),
+            ...withAccuracy(aliceTemplate.baseStats),
             hp: 500, maxHp: 500,
-            maxAuraShield: 80, auraShield: 80,
-            physicalAttack: 100, elementalAttack: 180,
-            physicalDefence: 160, elementalDefence: 180,
-            evasion: 15, precision: 10, speed: 45,
-            critChance: 0.08, critDamage: 1.5,
+            maxAuraShield: 200, auraShield: 200,
+            physicalAttack: 100, elementalAttack: 300,
+            physicalDefence: 280, elementalDefence: 280,
+            evasion: 65, precision: 90, speed: 65,
+            critChance: 0.8, critDamage: 2.0,
         },
         arenaBehavior: {
             phases: [

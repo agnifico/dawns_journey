@@ -21,7 +21,7 @@
         "/images/characters/bonnie/bonnie6.png"
     ],
 
-    "types": ["Earth", "Dark"],
+    "types": ["Dark"],
     "baseStats": {
         "hp": 480,
         "maxHp": 480,

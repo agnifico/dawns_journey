@@ -64,4 +64,8 @@
 	.dark {
 		color: #f8a6d4;
 	}
+
+	.normal {
+		color: #adadad;
+	}
 </style>

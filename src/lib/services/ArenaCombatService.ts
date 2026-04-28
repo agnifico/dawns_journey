@@ -1,10 +1,10 @@
 import { get } from 'svelte/store';
 import type { Player, Combatant, StatusEffect, GearPassive } from '$lib/types';
 import { combatStore } from '$lib/stores/combatStore';
-import { playerStore, playerStats } from '$lib/stores/playerStore';
+import { playerStore, playerStats, playerActiveSetBonuses } from '$lib/stores/playerStore';
 import { openCombatModal } from '$lib/stores/uiStore';
 import { getArenaNpc } from '$lib/data/arenaNpcs';
-import { allAbilities, getAbilityById } from '$lib/data/abilities';
+import { allAbilities, getAbilityById, getGearPassiveById } from '$lib/data/abilities';
 import { abilityMode } from '$lib/stores/settingsStore';
 import { playerAbilities, npcAbilities } from '$lib/data/abilities';
 
@@ -12,6 +12,48 @@ import { playerAbilities, npcAbilities } from '$lib/data/abilities';
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Collects every tagBonus the player has from active sources:
+ * 1. Active set bonuses (each SetBonus.tagBonus, when piece-count met)
+ * 2. Gear passives on equipped weapons + relics (each GearPassive.tagBonus)
+ *
+ * Multiple bonuses with the same tag stack multiplicatively at strike time
+ * (handled by aggregateTagBonus in abilityEffects.ts).
+ *
+ * NPCs return an empty array — they don't carry equipment-driven bonuses.
+ */
+function collectPlayerTagBonuses(
+    player: Player,
+    activeSetBonuses: ReturnType<typeof get<typeof playerActiveSetBonuses>>,
+): { tag: string; damageMultiplier: number }[] {
+    const bonuses: { tag: string; damageMultiplier: number }[] = [];
+
+    // Source 1: set bonuses
+    for (const active of activeSetBonuses) {
+        if (active.bonus.tagBonus) {
+            bonuses.push(active.bonus.tagBonus);
+        }
+    }
+
+    // Source 2: gear passives on equipped items
+    const allEquipped = [
+        ...(player.equipment.weapon_slots ?? []),
+        ...(player.equipment.relic_slots ?? []),
+    ].filter(Boolean);
+    const seenPassiveIds = new Set<string>();
+    for (const item of allEquipped) {
+        for (const passiveId of (item?.gearPassives ?? []) as unknown as string[]) {
+            // gearPassives on items is string[] — resolve via getGearPassiveById
+            if (typeof passiveId !== 'string' || seenPassiveIds.has(passiveId)) continue;
+            seenPassiveIds.add(passiveId);
+            const passive = getGearPassiveById(passiveId);
+            if (passive?.tagBonus) bonuses.push(passive.tagBonus);
+        }
+    }
+
+    return bonuses;
+}
 
 function resolveAbilities(abilityCycle: string[] | undefined): NonNullable<ReturnType<typeof getAbilityById>>[] {
     if (!abilityCycle || abilityCycle.length === 0) {
@@ -116,6 +158,7 @@ export function startArenaCombat(opponentId: string): void {
         statusEffects: resolvePlayerGearPassives(playerCopy),
         activeElement: playerElements[0] ?? 'None',
         gearPassives: [],
+        tagBonuses: collectPlayerTagBonuses(playerCopy, get(playerActiveSetBonuses)),
     };
 
     // --- Build opponent combatant ---
@@ -145,6 +188,7 @@ export function startArenaCombat(opponentId: string): void {
         equipment: undefined,
         arenaBehavior: opponentData.arenaBehavior,
         gearPassives: [],
+        tagBonuses: [],
     };
 
     combatStore.set({

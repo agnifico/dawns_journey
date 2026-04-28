@@ -21,7 +21,8 @@
     "isCombatant": true,
     "types": [
         "Fire",
-        "Earth"
+        "Earth",
+        "Light"
     ],
     "baseStats": {
         "hp": 500,

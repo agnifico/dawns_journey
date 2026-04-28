@@ -1,6 +1,6 @@
 // abilityEffects.ts
 
-import type { Combatant, CombatLogMessage, CombatLogSide, StatusEffect, PlayerBaseStats } from '$lib/types';
+import type { Combatant, CombatLogMessage, CombatLogSide, StatusEffect, PlayerBaseStats, Ability } from '$lib/types';
 
 function consumeGuaranteedHit(attacker: Combatant): { combatant: Combatant; consumed: boolean } {
     const hasFlag = attacker.statusEffects.some(s => s.flags?.includes('guaranteed_hit'));
@@ -14,12 +14,35 @@ function consumeGuaranteedHit(attacker: Combatant): { combatant: Combatant; cons
     };
 }
 
+/**
+ * Walks the attacker's tagBonuses, multiplying together every entry whose
+ * tag matches one of the ability's tags. Returns 1.0 if there are no
+ * matches or if either side has no tags/bonuses.
+ *
+ * Multiple matching bonuses stack multiplicatively. e.g. Fireborn 4pc
+ * (+30% fire) and Executioner 2pc (+25% finisher) on a fire+finisher
+ * ability = 1.30 × 1.25 = 1.625.
+ */
+export function aggregateTagBonus(attacker: Combatant, ability: Ability): number {
+    const abilityTags = ability.tags;
+    const bonuses = attacker.tagBonuses;
+    if (!abilityTags?.length || !bonuses?.length) return 1.0;
+    let multiplier = 1.0;
+    for (const bonus of bonuses) {
+        if (abilityTags.includes(bonus.tag)) {
+            multiplier *= bonus.damageMultiplier;
+        }
+    }
+    return multiplier;
+}
+
 type CalculateDamageFunction = (
     attacker: Combatant,
     defender: Combatant,
     attackType: 'physical' | 'elemental',
     activeElements: string[],
-    abilityMultiplier: number
+    abilityMultiplier: number,
+    tagBonusMultiplier?: number,
 ) => { damage: number; isCritical: boolean };
 
 type ApplyDamageFunction = (combatant: Combatant, damage: number) => Combatant;
@@ -316,6 +339,7 @@ export function executeDamageEffect(
     applyDamage: ApplyDamageFunction,
     calculateEvasion: CalculateEvasionFunction,
     abilityAccuracy: number = 1.0,
+    tagBonusMultiplier: number = 1.0,
 ): EffectResult {
     const logs: CombatLogMessage[] = [];
     let totalDamage = 0;
@@ -357,7 +381,8 @@ export function executeDamageEffect(
             hitAttacker, updatedDefender,
             effect.damageType,
             effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
-            effect.multiplier
+            effect.multiplier,
+            tagBonusMultiplier
         );
         totalDamage += damage;
         if (isCritical) critCount++;
@@ -420,6 +445,7 @@ export function executeConditionalDamageEffect(
     effect: ConditionalDamageEffect,
     calculateDamage: CalculateDamageFunction,
     applyDamage: ApplyDamageFunction,
+    tagBonusMultiplier: number = 1.0,
 ): EffectResult {
     let multiplier = effect.baseMultiplier;
     let conditionMet = false;
@@ -442,7 +468,8 @@ export function executeConditionalDamageEffect(
         attacker, defender,
         effect.damageType,
         effect.damageType === 'elemental' ? [attacker.activeElement] : [],
-        multiplier
+        multiplier,
+        tagBonusMultiplier
     );
 
     return {
@@ -685,6 +712,7 @@ export function executeLifestealEffect(
     applyDamage: ApplyDamageFunction,
     calculateEvasion: CalculateEvasionFunction,
     abilityAccuracy: number = 1.0,
+    tagBonusMultiplier: number = 1.0,
 ): EffectResult {
     const attackerName = attacker.isPlayer ? 'Player' : attacker.name;
     const logs: CombatLogMessage[] = [];
@@ -708,6 +736,7 @@ export function executeLifestealEffect(
         effect.damageType,
         effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
         effect.multiplier,
+        tagBonusMultiplier,
     );
 
     const updatedDefender = applyDamage(defender, damage);

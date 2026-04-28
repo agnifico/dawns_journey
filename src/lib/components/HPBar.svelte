@@ -106,6 +106,7 @@
 		font-size: 0.6rem;
 		color: #ffffff;
 		text-shadow: 0 1px 2px #000, 0 0 4px #000;
+		text-shadow: 0 1px 2px #000, 1px 0 2px #000;
 		pointer-events: none;
 		letter-spacing: 0.02em;
 		font-family: var(--font-family-pixel);

@@ -11,8 +11,8 @@
 	import { elementBgs, elementColors } from '$lib/data/statDefinitions';
 	import ElementTag from '$lib/components/ui/ElementTag.svelte';
 	import ElementalOverlay from '$lib/components/ElementalOverlay.svelte';
+	import HPBar from '$lib/components/HPBar.svelte';
 	// in your existing import block at the top
-
 
 	let opponents: Combatant[] = [];
 	let selectedNpc: Combatant | null = null;
@@ -53,17 +53,17 @@
 
 	// Stat bar config — max values for normalising the bar width
 	const statBars = [
-		{ id: 'hp', label: 'HP', max: 1500, color: '#c44444' },
-		{ id: 'auraShield', label: 'AURA', max: 800, color: '#4a90d9' },
-		{ id: 'physicalAttack', label: 'PHY ATK', max: 600, color: '#c9973a' },
-		{ id: 'elementalAttack', label: 'ELM ATK', max: 600, color: '#7a8fd4' },
-		{ id: 'physicalDefence', label: 'PHY DEF', max: 600, color: '#5a9e6a' },
-		{ id: 'elementalDefence', label: 'ELM DEF', max: 600, color: '#5a9e6a' },
-		{ id: 'speed', label: 'SPD', max: 120, color: '#d4c44a' },
-		{ id: 'critChance', label: 'CRIT %', max: 1, color: '#c47a4a', isPercent: true },
-		{ id: 'critDamage', label: 'CRIT DMG', max: 3, color: '#e07a5f', isMultiplier: true },
-		{ id: 'evasion', label: 'EVA', max: 150, color: '#9ab4a0' },
-		{ id: 'precision', label: 'PRS', max: 100, color: '#a090b4' }
+		{ id: 'hp', label: 'HP', max: 1500, color: '#2a9d8f' },
+		{ id: 'auraShield', label: 'AURA', max: 800, color: '#e5e5e5' },
+		{ id: 'physicalAttack', label: 'PHY ATK', max: 600, color: '#00b4d8' },
+		{ id: 'physicalDefence', label: 'PHY DEF', max: 600, color: '#00b4d8' },
+		{ id: 'elementalAttack', label: 'ELM ATK', max: 600, color: '#c44444' },
+		{ id: 'elementalDefence', label: 'ELM DEF', max: 600, color: '#c44444' },
+		{ id: 'critChance', label: 'CRIT %', max: 1, color: '#ffb703', isPercent: true },
+		{ id: 'critDamage', label: 'CRIT DMG', max: 3, color: '#fb8500', isMultiplier: true },
+		{ id: 'evasion', label: 'EVA', max: 120, color: '#38b000' },
+		{ id: 'precision', label: 'PRS', max: 120, color: '#fb6f92' },
+		{ id: 'speed', label: 'SPD', max: 120, color: '#9d4edd' }
 	] as const;
 
 	function getStatValue(npc: Combatant, id: string): number {
@@ -172,20 +172,34 @@
 							<div class="panel panel-stats">
 								<div class="panel-label">Stats</div>
 								<div class="stat-rows">
+									<div class="stat-bars">
+										<HPBar
+											type="enemy"
+											current={getStatValue(selectedNpc, 'maxHp')}
+											max={getStatValue(selectedNpc, 'maxHp')}
+										/>
+										<HPBar
+											type="aura"
+											current={getStatValue(selectedNpc, 'maxAuraShield')}
+											max={getStatValue(selectedNpc, 'maxAuraShield')}
+										/>
+									</div>
 									{#each statBars as cfg}
-										{@const val = getStatValue(selectedNpc, cfg.id)}
-										{@const pct = barWidth(val, cfg.max)}
-										<div class="stat-row">
-											<span class="stat-label">{cfg.label}</span>
-											<div class="stat-bar-track">
-												<div
-													class="stat-bar-fill"
-													style:width="{pct}%"
-													style:background={cfg.color}
-												></div>
+										{#if cfg.id !== 'hp' && cfg.id !== 'auraShield'}
+											{@const val = getStatValue(selectedNpc, cfg.id)}
+											{@const pct = barWidth(val, cfg.max)}
+											<div class="stat-row">
+												<span class="stat-label">{cfg.label}</span>
+												<div class="stat-bar-track">
+													<div
+														class="stat-bar-fill"
+														style:width="{pct}%"
+														style:background={cfg.color}
+													></div>
+												</div>
+												<span class="stat-val">{fmtStat(val, cfg)}</span>
 											</div>
-											<span class="stat-val">{fmtStat(val, cfg)}</span>
-										</div>
+										{/if}
 									{/each}
 								</div>
 							</div>
@@ -360,7 +374,7 @@
 		cursor: pointer;
 		overflow: hidden;
 		transition: all 0.12s ease;
-		filter: grayscale(1) brightness(0.45) sepia(0.5);
+		filter: grayscale(0.3) brightness(0.45);
 	}
 	.npc-card:hover {
 		filter: grayscale(0.3) brightness(0.75);
@@ -528,6 +542,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 3px;
+	}
+	.stat-bars {
+		margin-bottom: 2rem;
 	}
 	.stat-row {
 		display: grid;

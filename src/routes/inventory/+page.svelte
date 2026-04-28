@@ -78,7 +78,7 @@
     /* Right column: Equipment above, Inventory below. Column scrolls. */
     .right-column {
         display: flex;
-        flex-direction: column;
+        /* flex-direction: column; */
         gap: 0.75rem;
         min-width: 0;
         height: 100%;

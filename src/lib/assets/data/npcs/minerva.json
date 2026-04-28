@@ -1,6 +1,6 @@
 {
     "id": "minerva",
-    "name": "Benedetta",
+    "name": "Minerva",
     "profileImage": "/images/characters/minerva/minerva_avatar.png",
     "image": "/images/characters/minerva/minerva00.png",
     "galleryImages": [
@@ -15,7 +15,7 @@
     ],
     "hidden": false, "isCombatant": true,
     "types": [
-        "Earth"
+        "Light"
     ],
     "baseStats": {
         "hp": 100,

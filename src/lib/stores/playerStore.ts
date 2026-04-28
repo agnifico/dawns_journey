@@ -1,11 +1,68 @@
 import { writable, derived } from 'svelte/store';
-import type { Player, Item, Weapon, Relic, ActiveEffect, SetBonus, Stat } from '$lib/types';
+import type { Player, Item, Weapon, Relic, ActiveEffect, SetBonus, Stat, DualWeaponBonus } from '$lib/types';
 import player from '$lib/data/player';
 import { sets } from '$lib/data/sets';
 
 const initialState: Player = player;
 
 export const playerStore = writable<Player>(initialState);
+
+// ── Dual-weapon element bonuses ──────────────────────────────────────────────
+// When both equipped weapons share an element, the player gets a passive
+// reflecting that element's stat theme. Mirrors the per-element weapon
+// archetypes (Fire = precision, Earth = pDef+HP, etc.).
+const DUAL_WEAPON_BONUSES: Record<string, DualWeaponBonus> = {
+    Fire: {
+        element: 'Fire',
+        name: 'Dual Fire Resonance',
+        description: 'Wielding two Fire weapons. +25 Precision.',
+        stats: [{ name: 'precision', value: 25 }],
+    },
+    Earth: {
+        element: 'Earth',
+        name: 'Dual Earth Resonance',
+        description: 'Wielding two Earth weapons. +200 Max HP, +50 Physical Defence.',
+        stats: [{ name: 'maxHp', value: 200 }, { name: 'physicalDefence', value: 75 }],
+    },
+    Water: {
+        element: 'Water',
+        name: 'Dual Water Resonance',
+        description: 'Wielding two Water weapons. +200 Max HP, +50 Elemental Defence.',
+        stats: [{ name: 'maxHp', value: 200 }, { name: 'elementalDefence', value: 75 }],
+    },
+    Wind: {
+        element: 'Wind',
+        name: 'Dual Wind Resonance',
+        description: 'Wielding two Wind weapons. +20 Evasion, +20 Speed.',
+        stats: [{ name: 'evasion', value: 20 }, { name: 'speed', value: 20 }],
+    },
+    Light: {
+        element: 'Light',
+        name: 'Dual Light Resonance',
+        description: 'Wielding two Light weapons. +25% Critical Chance.',
+        stats: [{ name: 'critChance', value: 0.25 }],
+    },
+    Dark: {
+        element: 'Dark',
+        name: 'Dual Dark Resonance',
+        description: 'Wielding two Dark weapons. +50% Critical Damage.',
+        stats: [{ name: 'critDamage', value: 0.5 }],
+    },
+};
+
+/**
+ * Returns the active dual-weapon bonus when both equipped weapons share a
+ * non-empty, non-Normal element. Otherwise null.
+ */
+export const playerDualWeaponBonus = derived(playerStore, ($player): DualWeaponBonus | null => {
+    if (!$player?.equipment?.weapon_slots) return null;
+    const slots = $player.equipment.weapon_slots;
+    if (slots.length < 2 || !slots[0] || !slots[1]) return null;
+    const e1 = slots[0].element;
+    const e2 = slots[1].element;
+    if (!e1 || !e2 || e1 === 'None' || e1 === 'none' || e1 !== e2) return null;
+    return DUAL_WEAPON_BONUSES[e1] ?? null;
+});
 
 export interface ActiveSetBonus {
     setName: string;
@@ -36,7 +93,11 @@ export const playerActiveSetBonuses = derived(playerStore, ($player): ActiveSetB
     return activeBonuses;
 });
 
-const calculateFinalStats = (player: Player, activeSetBonuses: ActiveSetBonus[]): Player['baseStats'] => {
+const calculateFinalStats = (
+    player: Player,
+    activeSetBonuses: ActiveSetBonus[],
+    dualWeaponBonus: DualWeaponBonus | null,
+): Player['baseStats'] => {
     if (!player || !player.equipment) {
         console.warn('[calculateFinalStats] Received a player object without an equipment property. Using base stats only.');
         return player.baseStats;
@@ -62,7 +123,36 @@ const calculateFinalStats = (player: Player, activeSetBonuses: ActiveSetBonus[])
     }
 
     for (const activeBonus of activeSetBonuses) {
-        for (const stat of activeBonus.bonus.stats) {
+        // Always-on stats
+        if (activeBonus.bonus.stats) {
+            for (const stat of activeBonus.bonus.stats) {
+                const statName = stat.name as keyof typeof statsFromEquipment;
+                if (statsFromEquipment[statName] !== undefined) {
+                    (statsFromEquipment[statName] as number) += stat.value;
+                }
+            }
+        }
+        // Conditional element-scoped stats: apply if any equipped weapon
+        // matches the bonus element. Stacks additively with always-on stats.
+        if (activeBonus.bonus.elementalBonus) {
+            const requiredElement = activeBonus.bonus.elementalBonus.element;
+            const hasMatchingWeapon = player.equipment.weapon_slots.some(
+                w => w?.element === requiredElement,
+            );
+            if (hasMatchingWeapon) {
+                for (const stat of activeBonus.bonus.elementalBonus.stats) {
+                    const statName = stat.name as keyof typeof statsFromEquipment;
+                    if (statsFromEquipment[statName] !== undefined) {
+                        (statsFromEquipment[statName] as number) += stat.value;
+                    }
+                }
+            }
+        }
+    }
+
+    // Dual-weapon element bonus
+    if (dualWeaponBonus) {
+        for (const stat of dualWeaponBonus.stats) {
             const statName = stat.name as keyof typeof statsFromEquipment;
             if (statsFromEquipment[statName] !== undefined) {
                 (statsFromEquipment[statName] as number) += stat.value;
@@ -107,8 +197,9 @@ const calculateFinalStats = (player: Player, activeSetBonuses: ActiveSetBonus[])
 };
 
 export const playerStats = derived(
-    [playerStore, playerActiveSetBonuses],
-    ([$player, $activeSetBonuses]) => calculateFinalStats($player, $activeSetBonuses)
+    [playerStore, playerActiveSetBonuses, playerDualWeaponBonus],
+    ([$player, $activeSetBonuses, $dualWeaponBonus]) =>
+        calculateFinalStats($player, $activeSetBonuses, $dualWeaponBonus)
 );
 
 export const playerActiveElements = derived(playerStore, ($player) => {

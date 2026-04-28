@@ -20,7 +20,7 @@
     "isCombatant": true,
     "types": [
         "Water",
-        "Fire"
+        "Earth"
     ],
     "faction": "south_sea_empire",
     "baseStats": {

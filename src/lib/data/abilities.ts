@@ -393,24 +393,24 @@ export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     // Guinevere — The Holy Commander
     // -------------------------------------------------------------------------
-    // {
-    //     id: 'unshackled',
-    //     name: 'Unshackled',
-    //     description: 'Guinevere becomes immune to stat reductions and to the cost of transfer abilities for the rest of the fight.',
-    //     abilityType: 'Special',
-    //     category: 'utility',
-    //     targetType: 'self',
-    //     isPassive: true,
-    //     effects: [{
-    //         type: 'apply_status', target: 'self',
-    //         statusEffect: {
-    //             id: 'unshackled',
-    //             name: 'Unshackled',
-    //             duration: 999,
-    //             flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction']
-    //         }
-    //     }]
-    // },
+    {
+        id: 'player_unshackled',
+        name: 'Player Unshackled',
+        description: 'Player becomes immune to stat reductions and to the cost of transfer abilities for the rest of the fight.',
+        abilityType: 'Special',
+        category: 'utility',
+        targetType: 'self',
+        isPassive: true,
+        effects: [{
+            type: 'apply_status', target: 'self',
+            statusEffect: {
+                id: 'unshackled',
+                name: 'Unshackled',
+                duration: 999,
+                flags: ['immune_to_stat_reduction', 'immune_to_transfer_reduction']
+            }
+        }]
+    },
     {
         id: 'divine_judgment',
         name: 'Divine Judgment',
@@ -445,7 +445,9 @@ export const npcAbilities: Ability[] = [
         effects: [{
             type: 'apply_status', target: 'enemy',
             statusEffect: { id: 'abyssal_poison', name: 'Abyssal Toxin', duration: 8, damagePerTurn: 0.12, category: 'poison' }
-        }]
+        }],
+        category: 'damage',
+        targetType: 'enemy'
     },
     {
         id: 'hellfire',
@@ -583,7 +585,9 @@ export const npcAbilities: Ability[] = [
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: { id: 'sea_ward', name: 'Sea Ward', duration: 999, flags: ['immune_to_stat_reduction'] }
-        }]
+        }],
+        category: 'utility',
+        targetType: 'self'
     },
     {
         id: 'seal_of_tides',
@@ -605,7 +609,9 @@ export const npcAbilities: Ability[] = [
         effects: [
             { type: 'damage', damageType: 'elemental', multiplier: 0.70 },
             { type: 'heal', healType: 'hp', multiplier: 0.15, basedOn: 'elementalAttack', target: 'self' }
-        ]
+        ],
+        category: 'buff',
+        targetType: 'both'
     },
     {
         id: 'oceanic_ascendance',
@@ -620,7 +626,9 @@ export const npcAbilities: Ability[] = [
                 duration: 4,
                 statModifiers: { physicalAttack: 1.30, elementalAttack: 1.30, physicalDefence: 1.30, elementalDefence: 1.30 }
             }
-        }]
+        }],
+        category: 'buff',
+        targetType: 'self'
     },
 
     // -------------------------------------------------------------------------

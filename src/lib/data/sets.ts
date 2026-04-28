@@ -19,11 +19,11 @@ export const sets: Set[] = [
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'maxHp', value: 500 }]
+                stats: [{ name: 'evasion', value: 15 },{ name: 'precision', value: 15 }]
             },
             {
                 pieces: 4,
-                stats: [{ name: 'physicalAttack', value: 150 }, { name: 'critChance', value: 0.10 }]
+                stats: [{ name: 'physicalAttack', value: 100 }, { name: 'speed', value: 15 }]
             }
         ]
     },

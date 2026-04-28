@@ -75,6 +75,7 @@
 	.chars-wrap {
 		max-width: 900px;
 		margin: 0 auto;
+		margin-bottom: 4rem;
 	}
 
 	/* ── Header ── */
@@ -138,6 +139,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 		gap: 1rem;
+		margin-bottom: 4rem;
 	}
 
 	/* ── Character card ── */

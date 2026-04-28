@@ -1,18 +1,18 @@
 {
-    "id": "ariana",
-    "name": "Ariana",
-    "profileImage": "/images/characters/ariana/ariana_avatar.png",
-    "image": "/images/characters/ariana/ariana1.png",
+    "id": "alice",
+    "name": "Alice",
+    "profileImage": "/images/characters/alice/alice_avatar.png",
+    "image": "/images/characters/alice/1.png",
     "galleryImages": [
-        "/images/characters/ariana/ariana0.png",
-        "/images/characters/ariana/ariana1.png",
-        "/images/characters/ariana/ariana2.png",
-        "/images/characters/ariana/ariana3.png"
+        "/images/characters/alice/0.png",
+        "/images/characters/alice/1.png",
+        "/images/characters/alice/2.png",
+        "/images/characters/alice/3.png"
     ],
+    "arenaImage": "/images/characters/alice/2.png",
     "hidden": false, "isCombatant": true,
     "types": [
-        "Water",
-        "Light"
+        "Fire"
     ],
     "baseStats": {
         "hp": 100,
@@ -75,9 +75,9 @@
     ],
     "swordRanks": [
         {
-            "questId": "ariana_sword_1",
+            "questId": "alice_sword_1",
             "title": "A Friend in the Forest",
-            "description": "ariana, a guardian of the forest, has asked for your help.",
+            "description": "alice, a guardian of the forest, has asked for your help.",
             "startRequirement": {
                 "type": "have_tag",
                 "tag": "sylvie_sword_5_complete"
@@ -129,19 +129,19 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "ariana_sword_1_complete"
+                            "tagId": "alice_sword_1_complete"
                         }
                     ]
                 }
             ]
         },
         {
-            "questId": "ariana_sword_2",
+            "questId": "alice_sword_2",
             "title": "Heart of the Forest",
-            "description": "ariana wants to teach you more about the forest.",
+            "description": "alice wants to teach you more about the forest.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "ariana_sword_1_complete"
+                "tag": "alice_sword_1_complete"
             },
             "stages": [
                 {
@@ -162,10 +162,10 @@
                     ]
                 },
                 {
-                    "objective": "Reach Heart Rank 1 with ariana",
+                    "objective": "Reach Heart Rank 1 with alice",
                     "requirement": {
                         "type": "npc_rank",
-                        "npcId": "ariana",
+                        "npcId": "alice",
                         "rankType": "heart",
                         "value": 1
                     },
@@ -183,19 +183,19 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "ariana_sword_2_complete"
+                            "tagId": "alice_sword_2_complete"
                         }
                     ]
                 }
             ]
         },
         {
-            "questId": "ariana_sword_3",
+            "questId": "alice_sword_3",
             "title": "Dragon Taming",
-            "description": "ariana is concerned about the growing number of dragons.",
+            "description": "alice is concerned about the growing number of dragons.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "ariana_sword_2_complete"
+                "tag": "alice_sword_2_complete"
             },
             "stages": [
                 {
@@ -223,7 +223,7 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "ariana_sword_3_complete"
+                            "tagId": "alice_sword_3_complete"
                         },
                         {
                             "type": "tag",
@@ -234,19 +234,19 @@
             ]
         },
         {
-            "questId": "ariana_sword_4",
+            "questId": "alice_sword_4",
             "title": "A Test of Mettle",
-            "description": "ariana wants to test your strength.",
+            "description": "alice wants to test your strength.",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "ariana_sword_3_complete"
+                "tag": "alice_sword_3_complete"
             },
             "stages": [
                 {
-                    "objective": "Defeat ariana in combat.",
+                    "objective": "Defeat alice in combat.",
                     "requirement": {
                         "type": "win_against_npc",
-                        "npcId": "ariana",
+                        "npcId": "alice",
                         "quantity": 1
                     },
                     "unavailable_dialogue": [
@@ -280,19 +280,19 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "ariana_sword_4_complete"
+                            "tagId": "alice_sword_4_complete"
                         }
                     ]
                 }
             ]
         },
         {
-            "questId": "ariana_sword_5",
+            "questId": "alice_sword_5",
             "title": "A Simple Meal",
             "description": "A New Gameplay Mode - Farming",
             "startRequirement": {
                 "type": "have_tag",
-                "tag": "ariana_sword_4_complete"
+                "tag": "alice_sword_4_complete"
             },
             "stages": [
                 {
@@ -322,7 +322,7 @@
                         },
                         {
                             "type": "tag",
-                            "tagId": "ariana_sword_5_complete"
+                            "tagId": "alice_sword_5_complete"
                         }
                     ]
                 }

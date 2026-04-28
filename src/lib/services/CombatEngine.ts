@@ -146,17 +146,19 @@ function executeEffect(
     effect: AnyAbilityEffect,
     abilityAccuracy: number,
     lastDamageHit: boolean,
+    tagBonusMultiplier: number,
 ): EffectResult {
     switch (effect.type) {
         case 'damage':
             return EffectHandlers.executeDamageEffect(
                 attacker, defender, effect,
                 calculateDamage, applyDamage, calculateEvasion,
-                abilityAccuracy
+                abilityAccuracy, tagBonusMultiplier
             );
         case 'conditional_damage':
             return EffectHandlers.executeConditionalDamageEffect(
-                attacker, defender, effect, calculateDamage, applyDamage
+                attacker, defender, effect, calculateDamage, applyDamage,
+                tagBonusMultiplier
             );
         case 'heal':
             return EffectHandlers.executeHealEffect(attacker, defender, effect);
@@ -177,7 +179,8 @@ function executeEffect(
         case 'lifesteal':
             return EffectHandlers.executeLifestealEffect(
                 attacker, defender, effect,
-                calculateDamage, applyDamage, calculateEvasion
+                calculateDamage, applyDamage, calculateEvasion,
+                1.0, tagBonusMultiplier
             );
         default:
             effect satisfies never;
@@ -219,6 +222,10 @@ export function executeAbility(
         abilityName: ability.name,
     });
 
+    // Aggregate the attacker's tag bonuses for this ability once. Same value
+    // applies to every damage effect inside the ability (e.g. multi-hit, lifesteal).
+    const tagBonusMultiplier = EffectHandlers.aggregateTagBonus(currentAttacker, ability);
+
     // lastDamageHit starts true so status-only abilities always apply;
     // flips false only when a damage effect explicitly misses.
     let lastDamageHit = true;
@@ -230,6 +237,7 @@ export function executeAbility(
             effect,
             ability.accuracy ?? 1.0,
             lastDamageHit,
+            tagBonusMultiplier,
         );
 
         currentAttacker = result.updatedAttacker;

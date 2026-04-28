@@ -100,7 +100,7 @@
 				<img class="d-logo" src="/dawns_journey_logo_v1.svg" alt="Dawn's Journey" />
 
 				<div class="d-tagline-block">
-					<p class="d-tagline-main">VERSION ALPHA - Out; but only for internal testing. <br> Release date: 27th April.</p>
+					<p class="d-tagline-main">VERSION ALPHA - Out; but only for internal testing. <br> Release date: 29th April.</p>
 					<p class="d-tagline-main">A serverless, no database browser based game.</p>
 					<p class="d-tagline-sub">
 						Fully unlockable. Fully completable. A game with a start and an end — because there's

@@ -15,6 +15,7 @@ export interface GearPassive {
     name: string;
     flags: StatusEffect['flags'];
     description?: string;
+    tagBonus?: { tag: string; damageMultiplier: number };
 }
 
 export interface Item {
@@ -32,7 +33,7 @@ export interface Item {
     flags?: string[];
     exploration?: { name: string, level: number }[];
     plantId?: string;
-    gearPassives?: string[];
+    gearPassives?: GearPassive[];
 }
 
 export interface Weapon extends Item {
@@ -41,6 +42,48 @@ export interface Weapon extends Item {
 
 export interface Relic extends Item {
     type: 'relic';
+}
+
+export interface SetBonus {
+    pieces: number;
+    /** Always-on stat bonuses applied when this piece-count threshold is met. */
+    stats?: Stat[];
+    /**
+     * Stats applied only when the player has at least one weapon equipped
+     * matching the given element. Both `stats` and `elementalBonus.stats`
+     * stack additively when the element condition is met.
+     */
+    elementalBonus?: {
+        element: string;
+        stats: Stat[];
+    };
+    /**
+     * Damage multiplier applied to abilities matching the given tag.
+     * Used at strike time in calculateDamage, not folded into player stats.
+     */
+    tagBonus?: {
+        tag: string;
+        damageMultiplier: number;
+    };
+}
+
+export interface Set {
+    id: string;
+    name: string;
+    relicIds: string[];
+    bonuses: SetBonus[];
+}
+
+/**
+ * A bonus granted when both equipped weapons share an element.
+ * Resolved by `playerDualWeaponBonus` derived store; folded into
+ * `playerStats` via `calculateFinalStats`.
+ */
+export interface DualWeaponBonus {
+    element: string;
+    name: string;
+    description: string;
+    stats: Stat[];
 }
 
 export interface PlayerBaseStats {
@@ -74,11 +117,15 @@ export interface Ability {
     category: 'damage' | 'heal' | 'buff' | 'debuff' | 'control' | 'utility';
     targetType: 'self' | 'enemy' | 'both';
     isPassive?: boolean;
+    /**
+     * Open-vocabulary tags for the ability. Used by sets, gear passives, and
+     * dual-weapon bonuses to apply targeted damage multipliers.
+     * Examples: 'fire', 'water', 'physical_strike', 'finisher', 'aoe', 'poison'.
+     */
+    tags?: string[];
 }
 
 export interface StatusEffect {
-    // In StatusEffect interface, after `flags?` field, add:
-    category?: 'poison' | 'stun' | 'bleed' | 'burn' | 'freeze' | 'buff' | 'debuff';
     id: string;
     name: string;
     duration: number;
@@ -107,9 +154,6 @@ export interface StatusEffect {
         | 'immune_to_transfer_reduction'
         | 'immune_to_poison'
         | 'immune_to_stun'
-        | 'immune_to_bleed'    // NEW
-        | 'immune_to_burn'     // NEW
-        | 'immune_to_freeze'   // NEW
         | 'guaranteed_hit'
     >;
 }
@@ -174,7 +218,6 @@ export interface Combatant {
     name: string;
     isPlayer: boolean;
     image: string;
-    arenaImage: string;
     profileImage: string;
     types: string[];
     activeElement: string;
@@ -184,6 +227,13 @@ export interface Combatant {
      * (inflictedBy: 'equipment' | 'innate' — never expire, never cleansed).
      */
     statusEffects: StatusEffect[];
+    /**
+     * Aggregated tag-based damage multipliers from sets, gear passives, and
+     * dual-weapon bonuses. Computed at combat start by the combat services.
+     * Empty array for NPCs (they don't equip gear). Each entry contributes
+     * a multiplier applied to abilities matching its tag at strike time.
+     */
+    tagBonuses?: { tag: string; damageMultiplier: number }[];
     equipment?: {
         weapon_slots: (Weapon | null)[];
         relic_slots: (Relic | null)[];
@@ -661,7 +711,6 @@ export interface NPC {
     abilityCycle?: string[];
     battleAftermathsBySwordRank?: any[];
     drops?: any[];
-    gearPassives?: string[];
 
     // ── New fields ──────────────────────────────────────────────────────────
     /**

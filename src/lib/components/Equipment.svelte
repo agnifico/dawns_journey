@@ -276,14 +276,16 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		flex: 0;
 		padding: 11px 13px 17px;
 		border-radius: 8px;
-		border: 1px solid rgba(200, 169, 110, 0.28);
-		box-shadow: #00000056 0 -6px 0 3px inset;
-		background: rgba(18, 14, 8, 0.4);
+		/* border: 1px solid rgba(200, 169, 110, 0.28); */
+		/* box-shadow: #00000056 0 -6px 0 3px inset; */
+		/* background: rgba(18, 14, 8, 0.4); */
 	}
 	.top {
 		display: flex;
+		flex-direction: column;
 		gap: 1rem;
 	}
 	.equipment-side-panel {
@@ -295,9 +297,10 @@
 		margin: auto;
 	}
 	.hide-btn {
+		cursor: pointer;
 		position: absolute;
 		right: 1rem;
-		top: 1rem;
+		bottom: 1rem;
 		background: rgb(63, 46, 13);
 		box-shadow: #00000056 0 4px 0 2px;
 		margin-bottom: 0.25rem;
@@ -310,6 +313,7 @@
 		border-radius: 6px;
 		padding: 2px 3px;
 		text-align: center;
+		width: fit-content;
 	}
 
 	/* ── Equipment row ── */
