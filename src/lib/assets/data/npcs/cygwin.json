@@ -5,6 +5,7 @@
     "image": "/images/characters/cygwin/cygwin0.png",
     "title": "War Cry of the Savannah",
     "spriteGif": "/images/cygwin.gif",
+    "arenaImage" : "/images/characters/cygwin/cygwin55.png",
     "galleryImages": [
         "/images/characters/cygwin/cygwin0.png",
         "/images/characters/cygwin/cygwin1.png",

@@ -84,8 +84,10 @@ function resolvePlayerGearPassives(player: Player): StatusEffect[] {
 
     const passiveMap = new Map<string, GearPassive>();
     for (const item of allEquipped) {
-        for (const passive of item?.gearPassives ?? []) {
-            if (!passiveMap.has(passive.id)) passiveMap.set(passive.id, passive);
+        for (const passiveId of (item?.gearPassives ?? []) as unknown as string[]) {
+            if (typeof passiveId !== 'string' || passiveMap.has(passiveId)) continue;
+            const passive = getGearPassiveById(passiveId);
+            if (passive) passiveMap.set(passiveId, passive);
         }
     }
 
@@ -100,15 +102,18 @@ function resolvePlayerGearPassives(player: Player): StatusEffect[] {
 }
 
 /** Converts an NPC's declared gearPassives into innate permanent StatusEffects. */
-function resolveNpcGearPassives(gearPassives: GearPassive[] | undefined): StatusEffect[] {
-    return (gearPassives ?? []).map(passive => ({
-        id: passive.id,
-        name: passive.name,
-        duration: 999,
-        remainingTurns: 999,
-        inflictedBy: 'innate' as const,
-        flags: passive.flags,
-    }));
+function resolveNpcGearPassives(gearPassives: string[] | undefined): StatusEffect[] {
+    return (gearPassives ?? [])
+        .map(id => getGearPassiveById(id))
+        .filter((p): p is NonNullable<ReturnType<typeof getGearPassiveById>> => !!p)
+        .map(passive => ({
+            id: passive.id,
+            name: passive.name,
+            duration: 999,
+            remainingTurns: 999,
+            inflictedBy: 'innate' as const,
+            flags: passive.flags,
+        }));
 }
 
 // ---------------------------------------------------------------------------

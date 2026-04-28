@@ -260,7 +260,7 @@
 	main {
 		position: relative;
 		height: 100%;
-		overflow: hidden;
+		/* overflow: hidden; */
 		font-family: var(--font-family-pixel);
 		color: #e8d5b7;
 	}
@@ -687,6 +687,9 @@
 
 	/* ── Mobile ───────────────────────────────────────────────────────────── */
 	@media (max-width: 768px) {
+		/* main {
+			overflow: scroll;
+		} */
 		.arena-page {
 			padding: 1rem;
 			overflow-y: auto;
@@ -726,6 +729,9 @@
 			background:
 				linear-gradient(to right, #100a06 15%, rgba(16, 10, 6, 0.6) 60%, rgba(16, 10, 6, 0.7) 100%),
 				linear-gradient(to top, #100a06 0%, transparent 50%);
+		}
+		.battle-note {
+			width: 50%;
 		}
 	}
 

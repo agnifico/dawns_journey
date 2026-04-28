@@ -5,6 +5,7 @@
     "image": "/images/characters/veres/veres00.png",
     "title": "The Watching Wing",
     "spriteGif": "/images/veres.gif",
+    "arenaImage" : "/images/characters/veres/veres8.png",
     "galleryImages": [
         "/images/characters/veres/veres0.png",
         "/images/characters/veres/veres1.png",

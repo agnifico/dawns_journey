@@ -3,6 +3,7 @@
     "name": "Aoife",
     "profileImage": "/images/characters/aoife/aoife_avatar.png",
     "image": "/images/characters/aoife/aoife0.png",
+    "arenaImage": "/images/characters/aoife/aoife9.png",
     "galleryImages": [
         "/images/characters/aoife/aoife0.png",
         "/images/characters/aoife/aoife1.png",
@@ -11,12 +12,13 @@
         "/images/characters/aoife/aoife5.png",
         "/images/characters/aoife/aoife6.png",
         "/images/characters/aoife/aoife7.png"
-
     ],
     "description": "The enigmatic and powerful goddess of death, who holds the secrets of life and the afterlife.",
-    "hidden": false, "isCombatant": true,
-    "types": ["Fire"],
-    
+    "hidden": false,
+    "isCombatant": true,
+    "types": [
+        "Fire"
+    ],
     "baseStats": {
         "hp": 700,
         "maxHp": 700,
@@ -63,15 +65,39 @@
         {
             "rank": 0,
             "aftermaths": [
-                { "outcome": "lose", "value": 2, "dialogue": ["Don't worry. I am supposed to be the 'Final Boss' of the game."] },
-                { "outcome": "win", "value": -5, "dialogue": ["Who are you, the game developer!?"] }
+                {
+                    "outcome": "lose",
+                    "value": 2,
+                    "dialogue": [
+                        "Don't worry. I am supposed to be the 'Final Boss' of the game."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": -5,
+                    "dialogue": [
+                        "Who are you, the game developer!?"
+                    ]
+                }
             ]
         },
         {
             "rank": 1,
             "aftermaths": [
-                { "outcome": "lose", "value": 1, "dialogue": ["As expected. Still the final boss here babe."] },
-                { "outcome": "win", "value": 2, "dialogue": ["You finally cracked the secret, right? ;)"] }
+                {
+                    "outcome": "lose",
+                    "value": 1,
+                    "dialogue": [
+                        "As expected. Still the final boss here babe."
+                    ]
+                },
+                {
+                    "outcome": "win",
+                    "value": 2,
+                    "dialogue": [
+                        "You finally cracked the secret, right? ;)"
+                    ]
+                }
             ]
         }
     ],
@@ -80,11 +106,19 @@
             "questId": "aoife_sword_1",
             "title": "First Trial of the Firework Queen",
             "description": "aoife demands a show of force.",
-            "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
+            "requirement": {
+                "type": "kill",
+                "enemyId": "greenhorn",
+                "quantity": 5
+            },
             "stages": [
                 {
                     "objective": "Defeat 5 Greenhorns",
-                    "requirement": { "type": "kill", "enemyId": "greenhorn", "quantity": 5 },
+                    "requirement": {
+                        "type": "kill",
+                        "enemyId": "greenhorn",
+                        "quantity": 5
+                    },
                     "intro_dialogue": [
                         "This place is crawling with these young dragon hatchlings. Figure out how to beat them, and defeat 5 of them.",
                         "Another mortal seeking favor. If you wish to prove your worth, there is a Woodmech Bear causing a nuisance. Remove it."
@@ -97,8 +131,15 @@
                         "You have a spark. I am... intrigued. This is a small token for your service."
                     ],
                     "success_rewards": [
-                        { "type": "item", "itemId": "dawnbringer_evolution", "quantity": 1 },
-                        { "type": "tag", "tagId": "hela_quest_1_complete" }
+                        {
+                            "type": "item",
+                            "itemId": "dawnbringer_evolution",
+                            "quantity": 1
+                        },
+                        {
+                            "type": "tag",
+                            "tagId": "hela_quest_1_complete"
+                        }
                     ]
                 }
             ]
