@@ -204,8 +204,8 @@
 						<button class="m-cta-secondary" on:click={SaveLoadService.loadGame}>Load Save</button>
 					{:else}
 						<div class="m-new-game-block">
-							<span class="m-eyebrow">Starting Mode</span>
-							<div class="m-profile-row">
+							<!-- <span class="m-eyebrow">Starting Mode</span> -->
+							<!-- <div class="m-profile-row">
 								{#each profiles as profile (profile.id)}
 									<label class="m-radio-label" class:selected={selectedProfileId === profile.id}>
 										<span>{profile.name}</span>
@@ -217,20 +217,20 @@
 										/>
 									</label>
 								{/each}
-							</div>
-							<p class="m-profile-desc">
+							</div> -->
+							<!-- <p class="m-profile-desc">
 								{profiles.find((p) => p.id === selectedProfileId).description}
-							</p>
+							</p> -->
 							<button class="m-cta-primary" on:click={startNewGame} disabled={!selectedMapId}>
 								▶ New Game
 							</button>
-							<!-- <button
+							<button
 								class="m-cta-secondary"
 								on:click={exhibitionModeStart}
 								disabled={!selectedMapId}
 							>
 								Exhibition Mode
-							</button> -->
+							</button>
 						</div>
 					{/if}
 				</div>
