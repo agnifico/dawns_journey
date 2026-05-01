@@ -58,12 +58,12 @@ export const playerAbilities: Ability[] = [
     {
         id: 'spirit_storm',
         name: 'Spirit Storm',
-        description: 'An elemental attack dealing 60% of Elemental Attack with 75% chance, twice.',
+        description: 'An elemental attack dealing 80% of Elemental Attack with 75% chance, twice.',
         abilityType: 'Elemental Damage',
         category: 'damage',
         targetType: 'enemy',
         accuracy: 0.75,
-        effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.6, hitCount: 2 }]
+        effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.8, hitCount: 2 }]
     },
     {
         id: 'cataclysm',
@@ -162,7 +162,7 @@ export const playerAbilities: Ability[] = [
     {
         id: 'smokescreen',
         name: 'Smokescreen',
-        description: 'Deals 10% Physical Attack and reduces enemy evasion by 20 for 3 turns.',
+        description: 'Deals 10% Physical Attack and reduces enemy Precision by 20 for 3 turns. The debuff stacks on itself.',
         abilityType: 'Special',
         category: 'debuff',
         targetType: 'enemy',
@@ -170,11 +170,12 @@ export const playerAbilities: Ability[] = [
             { type: 'damage', damageType: 'physical', multiplier: 0.10 },
             {
                 type: 'apply_status', target: 'enemy',
+                stackBehavior: 'stack',
                 statusEffect: {
                     id: 'smokescreen_debuff',
                     name: 'Smokescreen',
                     duration: 3,
-                    statModifiers: { evasion: -20 }
+                    statModifiers: { precision: -20 }
                 }
             }
         ]
@@ -250,12 +251,22 @@ export const playerAbilities: Ability[] = [
 ];
 
 export const npcAbilities: Ability[] = [
+    {
+        id: 'fire_frenzy',
+        name: 'Fire Frenzy',
+        description: 'A flame-laced elemental strike dealing 35% of Elemental Attack. Empowered by [Fire] gear.',
+        abilityType: 'Elemental Damage',
+        category: 'damage',
+        targetType: 'enemy',
+        tags: ['fire', 'elemental_blast'],
+        effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.35 }]
+    },
     // -------------------------------------------------------------------------
     // Cygwin — The Iron Lioness
     // -------------------------------------------------------------------------
     {
         id: 'iron_wall',
-        name: 'Iron Wall',
+        name: 'Will of the Iron Wall',
         description: 'Converts both Attack stats into Defence, reducing them to 20% of their value.',
         abilityType: 'Special',
         category: 'buff',
@@ -270,7 +281,7 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'crushing_poison',
-        name: 'Crushing Poison',
+        name: 'Poison of the Ancients',
         description: 'Inflicts a deep poison for 6 turns (8% max HP per turn).',
         abilityType: 'Special',
         category: 'debuff',
@@ -282,7 +293,7 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'warcry_stun',
-        name: 'War Cry',
+        name: 'Cry of War',
         description: 'Stuns the enemy for 2 turns and reduces their Attack by 20% for 4 turns. 85% accuracy.',
         abilityType: 'Special',
         category: 'control',
@@ -306,7 +317,7 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'second_wind',
-        name: 'Second Wind',
+        name: 'Prayers of a People',
         description: 'Recovers 20% of max HP.',
         abilityType: 'Special',
         category: 'heal',
@@ -315,8 +326,8 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'final_resolve',
-        name: 'Final Resolve',
-        description: 'Draws on the last reserves of strength, recovering 40% of max HP and surging Attack by 150% for 10 turns.',
+        name: 'Roar of the Savannah',
+        description: 'Draws on the last reserves of strength, recovering 40% of max HP and surging Attack(s) by 150% for 10 turns.',
         abilityType: 'Special',
         category: 'heal',
         targetType: 'self',
@@ -374,8 +385,8 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'frozen_ground',
-        name: 'Frozen Ground',
-        description: 'The battlefield freezes around Claudia, raising her Elemental Attack by 25% for 4 turns.',
+        name: 'Geomorph: Glacial Palisade',
+        description: 'The battlefield freezes around Claudia, raising her Elemental Attack by 25% for 25 turns.',
         abilityType: 'Special',
         category: 'buff',
         targetType: 'self',
@@ -384,7 +395,7 @@ export const npcAbilities: Ability[] = [
             statusEffect: {
                 id: 'frozen_ground',
                 name: 'Frozen Ground',
-                duration: 4,
+                duration: 25,
                 statModifiers: { elementalAttack: 1.25 }
             }
         }]
@@ -456,6 +467,7 @@ export const npcAbilities: Ability[] = [
         abilityType: 'Elemental Damage',
         category: 'damage',
         targetType: 'enemy',
+        tags: ['fire', 'elemental_blast'],
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.80 }]
     },
     {
@@ -477,8 +489,8 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'night_curse',
-        name: "Night's Curse",
-        description: 'Hela wraps herself in the dark of night, raising all Attacks and Defences by 25% for 6 turns.',
+        name: "Geomorph: Inferno",
+        description: 'Hela summons her home to be the new battlefield. Raises all Attacks and Defences by 25% for 25 turns.',
         abilityType: 'Special',
         category: 'buff',
         targetType: 'self',
@@ -486,15 +498,15 @@ export const npcAbilities: Ability[] = [
             type: 'apply_status', target: 'self',
             statusEffect: {
                 id: 'night_curse',
-                name: "Night's Curse",
-                duration: 6,
+                name: "Geomorph: Inferno",
+                duration: 25,
                 statModifiers: { physicalAttack: 1.25, elementalAttack: 1.25, physicalDefence: 1.25, elementalDefence: 1.25 }
             }
         }]
     },
     {
         id: 'reaping_blow',
-        name: 'Reaping Blow',
+        name: 'Jolly Reaper',
         description: 'Deals 60% Elemental Attack. If the enemy is below 25% HP, deals 150% instead.',
         abilityType: 'Elemental Damage',
         category: 'damage',
@@ -547,13 +559,13 @@ export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     {
         id: 'rapid_volley',
-        name: 'Rapid Volley',
-        description: 'Fires 6 shots in quick succession, each dealing 10% Physical Attack. 85% accuracy.',
+        name: 'Broadside Volley',
+        description: 'Fires 25 shots in quick succession, each dealing 8% Physical Attack. 85% accuracy.',
         abilityType: 'Physical Damage',
         category: 'damage',
         targetType: 'enemy',
         accuracy: 0.55,
-        effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.02, hitCount: 100 }]
+        effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.08, hitCount: 25 }]
     },
     {
         id: 'powder_keg',
@@ -567,11 +579,11 @@ export const npcAbilities: Ability[] = [
     {
         id: 'flintlock_barrage',
         name: 'Flintlock Barrage',
-        description: 'Unloads both pistols in a rapid elemental burst — 3 hits, each dealing 20% Elemental Attack.',
+        description: 'Unloads both pistols in a rapid elemental burst — 6 hits, each dealing 20% Elemental Attack.',
         abilityType: 'Elemental Damage',
         category: 'damage',
         targetType: 'enemy',
-        effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.20, hitCount: 3 }]
+        effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.20, hitCount: 6 }]
     },
 
     // -------------------------------------------------------------------------
@@ -579,7 +591,7 @@ export const npcAbilities: Ability[] = [
     // -------------------------------------------------------------------------
     {
         id: 'sea_ward',
-        name: 'Sea Ward',
+        name: 'Oceanic Aegis',
         description: 'The sea itself protects Marjane — she becomes immune to all stat reductions for the rest of the fight.',
         abilityType: 'Special',
         effects: [{
@@ -615,15 +627,15 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'oceanic_ascendance',
-        name: 'Oceanic Ascendance',
-        description: 'Marjane channels the full power of the sea, raising all Attacks and Defences by 30% for 4 turns.',
+        name: 'Geomorph: Marjana Trench',
+        description: 'Marjane takes you down into the depths. Raises all Attacks and Defences by 30% for 25 turns.',
         abilityType: 'Special',
         effects: [{
             type: 'apply_status', target: 'self',
             statusEffect: {
                 id: 'oceanic_ascendance',
                 name: 'Oceanic Ascendance',
-                duration: 4,
+                duration: 25,
                 statModifiers: { physicalAttack: 1.30, elementalAttack: 1.30, physicalDefence: 1.30, elementalDefence: 1.30 }
             }
         }],

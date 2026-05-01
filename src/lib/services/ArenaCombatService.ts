@@ -44,7 +44,6 @@ function collectPlayerTagBonuses(
     const seenPassiveIds = new Set<string>();
     for (const item of allEquipped) {
         for (const passiveId of (item?.gearPassives ?? []) as unknown as string[]) {
-            // gearPassives on items is string[] — resolve via getGearPassiveById
             if (typeof passiveId !== 'string' || seenPassiveIds.has(passiveId)) continue;
             seenPassiveIds.add(passiveId);
             const passive = getGearPassiveById(passiveId);
@@ -52,6 +51,22 @@ function collectPlayerTagBonuses(
         }
     }
 
+    return bonuses;
+}
+
+/**
+ * Collects speed-conditional bonuses from active sets. Each entry carries
+ * its own condition + stats/tagBonus and is evaluated fresh at every strike.
+ */
+function collectPlayerSpeedConditionalBonuses(
+    activeSetBonuses: ReturnType<typeof get<typeof playerActiveSetBonuses>>,
+): NonNullable<Combatant['speedConditionalBonuses']> {
+    const bonuses: NonNullable<Combatant['speedConditionalBonuses']> = [];
+    for (const active of activeSetBonuses) {
+        if (active.bonus.speedConditionalBonus) {
+            bonuses.push(active.bonus.speedConditionalBonus);
+        }
+    }
     return bonuses;
 }
 
@@ -164,6 +179,7 @@ export function startArenaCombat(opponentId: string): void {
         activeElement: playerElements[0] ?? 'None',
         gearPassives: [],
         tagBonuses: collectPlayerTagBonuses(playerCopy, get(playerActiveSetBonuses)),
+        speedConditionalBonuses: collectPlayerSpeedConditionalBonuses(get(playerActiveSetBonuses)),
     };
 
     // --- Build opponent combatant ---
@@ -194,6 +210,7 @@ export function startArenaCombat(opponentId: string): void {
         arenaBehavior: opponentData.arenaBehavior,
         gearPassives: [],
         tagBonuses: [],
+        speedConditionalBonuses: [],
     };
 
     combatStore.set({

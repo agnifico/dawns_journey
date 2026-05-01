@@ -5,7 +5,7 @@
     import { skillTreeStore } from '$lib/stores/skillTreeStore';
 
     // IDs treated as special / legendary nodes
-    const SPECIAL_IDS = new Set(['hire_saoirse', 'thunders_blessing', 'decree_of_verdis']);
+    const SPECIAL_IDS = new Set(['hire_sylvie', 'thunders_blessing', 'decree_of_gaia']);
 
     const techsByLevel: { [level: number]: TechNode[] } = {};
     farmingTechTree.forEach(tech => {

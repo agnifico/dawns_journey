@@ -22,18 +22,90 @@ function consumeGuaranteedHit(attacker: Combatant): { combatant: Combatant; cons
  * Multiple matching bonuses stack multiplicatively. e.g. Fireborn 4pc
  * (+30% fire) and Executioner 2pc (+25% finisher) on a fire+finisher
  * ability = 1.30 × 1.25 = 1.625.
+ *
+ * Also reads `speedConditionalBonuses` whose condition is met against
+ * `defender` (the opponent) — those tagBonuses fold into the same
+ * multiplier when their condition holds.
  */
-export function aggregateTagBonus(attacker: Combatant, ability: Ability): number {
+export function aggregateTagBonus(
+    attacker: Combatant,
+    defender: Combatant,
+    ability: Ability,
+): number {
     const abilityTags = ability.tags;
-    const bonuses = attacker.tagBonuses;
-    if (!abilityTags?.length || !bonuses?.length) return 1.0;
+    if (!abilityTags?.length) return 1.0;
+
     let multiplier = 1.0;
-    for (const bonus of bonuses) {
+
+    // Source 1: always-on tagBonuses
+    for (const bonus of attacker.tagBonuses ?? []) {
         if (abilityTags.includes(bonus.tag)) {
             multiplier *= bonus.damageMultiplier;
         }
     }
+
+    // Source 2: speed-conditional tagBonuses
+    for (const cond of attacker.speedConditionalBonuses ?? []) {
+        if (!cond.tagBonus) continue;
+        if (!isSpeedConditionMet(cond.condition, attacker, defender)) continue;
+        if (abilityTags.includes(cond.tagBonus.tag)) {
+            multiplier *= cond.tagBonus.damageMultiplier;
+        }
+    }
+
     return multiplier;
+}
+
+/**
+ * Check whether a speed condition is met between the attacker and opponent.
+ */
+function isSpeedConditionMet(
+    condition: 'attacker_faster' | 'attacker_slower',
+    attacker: Combatant,
+    defender: Combatant,
+): boolean {
+    const attackerSpeed = attacker.speed ?? 0;
+    const defenderSpeed = defender.speed ?? 0;
+    if (condition === 'attacker_faster') return attackerSpeed > defenderSpeed;
+    if (condition === 'attacker_slower') return attackerSpeed < defenderSpeed;
+    return false;
+}
+
+/**
+ * Returns a new Combatant with speed-conditional stat bonuses overlaid onto
+ * the relevant base fields (physicalAttack, physicalDefence, etc.). Used by
+ * damage handlers to feed an "effective" attacker into calculateDamage
+ * without mutating the persistent combatant state.
+ *
+ * Only stats matching keyof PlayerBaseStats are overlaid; unknown stats
+ * are silently ignored.
+ */
+export function applyConditionalStatOverlay(
+    attacker: Combatant,
+    defender: Combatant,
+): Combatant {
+    const conditional = attacker.speedConditionalBonuses;
+    if (!conditional?.length) return attacker;
+
+    let overlay: Record<string, number> = {};
+
+    for (const cond of conditional) {
+        if (!cond.stats?.length) continue;
+        if (!isSpeedConditionMet(cond.condition, attacker, defender)) continue;
+        for (const stat of cond.stats) {
+            overlay[stat.name] = (overlay[stat.name] ?? 0) + stat.value;
+        }
+    }
+
+    if (Object.keys(overlay).length === 0) return attacker;
+
+    const overlaid: any = { ...attacker };
+    for (const [stat, value] of Object.entries(overlay)) {
+        if (typeof overlaid[stat] === 'number') {
+            overlaid[stat] = overlaid[stat] + value;
+        }
+    }
+    return overlaid as Combatant;
 }
 
 type CalculateDamageFunction = (
@@ -354,6 +426,9 @@ export function executeDamageEffect(
     // Combatant precision is NOT a hit multiplier — it reduces defender evasion (see calculateEvasion).
     const combinedAccuracy = abilityAccuracy;
     const { combatant: hitAttacker, consumed: guaranteedHit } = consumeGuaranteedHit(attacker);
+    // Apply speed-conditional stat overlay once per ability (speed is read fresh
+    // here so any mid-fight buffs/debuffs change which conditionals fire).
+    const effectiveAttacker = applyConditionalStatOverlay(hitAttacker, defender);
     for (let i = 0; i < hitAttempts; i++) {
         // First check accuracy (ability × combatant), then check evasion (defender-level)
         if (!guaranteedHit) {
@@ -367,7 +442,7 @@ export function executeDamageEffect(
         }
 
         if (!guaranteedHit) {
-            if (calculateEvasion(updatedDefender, hitAttacker.precision ?? 0)) {
+            if (calculateEvasion(updatedDefender, effectiveAttacker.precision ?? 0)) {
                 missCount++;
                 if (!isMultiHit) {
                     logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
@@ -378,9 +453,9 @@ export function executeDamageEffect(
 
         hitCount++;
         const { damage, isCritical } = calculateDamage(
-            hitAttacker, updatedDefender,
+            effectiveAttacker, updatedDefender,
             effect.damageType,
-            effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
+            effect.damageType === 'elemental' ? [effectiveAttacker.activeElement] : [],
             effect.multiplier,
             tagBonusMultiplier
         );
@@ -464,10 +539,11 @@ export function executeConditionalDamageEffect(
 
     if (conditionMet) multiplier = effect.bonusMultiplier;
 
+    const effectiveAttacker = applyConditionalStatOverlay(attacker, defender);
     const { damage, isCritical } = calculateDamage(
-        attacker, defender,
+        effectiveAttacker, defender,
         effect.damageType,
-        effect.damageType === 'elemental' ? [attacker.activeElement] : [],
+        effect.damageType === 'elemental' ? [effectiveAttacker.activeElement] : [],
         multiplier,
         tagBonusMultiplier
     );
@@ -643,6 +719,8 @@ export function executeStatModifierEffect(
         if (sm.elementalDefence !== undefined) updatedTarget.elementalDefence *= sm.elementalDefence;
         if (sm.speed !== undefined) updatedTarget.speed *= sm.speed;
         if (sm.evasion !== undefined) updatedTarget.evasion += sm.evasion;
+        if (sm.speed !== undefined) updatedTarget.speed += sm.speed;
+        if (sm.precision !== undefined) updatedTarget.precision += sm.precision;
         if (sm.critChance !== undefined) updatedTarget.critChance *= sm.critChance;
         if (sm.critDamage !== undefined) updatedTarget.critDamage *= sm.critDamage;
     }
@@ -717,6 +795,7 @@ export function executeLifestealEffect(
     const attackerName = attacker.isPlayer ? 'Player' : attacker.name;
     const logs: CombatLogMessage[] = [];
     const { combatant: hitAttacker, consumed: guaranteedHit } = consumeGuaranteedHit(attacker);
+    const effectiveAttacker = applyConditionalStatOverlay(hitAttacker, defender);
 
     // Accuracy check
     if (!guaranteedHit && Math.random() > abilityAccuracy) {
@@ -725,16 +804,16 @@ export function executeLifestealEffect(
     }
 
     // Evasion check
-    if (!guaranteedHit && calculateEvasion(defender, hitAttacker.precision ?? 0)) {
+    if (!guaranteedHit && calculateEvasion(defender, effectiveAttacker.precision ?? 0)) {
         logs.push({ type: 'miss', side: sideOf(attacker), defenderName: defender.name, reason: 'dodge' });
         return { updatedAttacker: hitAttacker, updatedDefender: defender, logs, totalDamage: 0, didHit: false };
     }
 
     // Deal damage
     const { damage, isCritical } = calculateDamage(
-        hitAttacker, defender,
+        effectiveAttacker, defender,
         effect.damageType,
-        effect.damageType === 'elemental' ? [hitAttacker.activeElement] : [],
+        effect.damageType === 'elemental' ? [effectiveAttacker.activeElement] : [],
         effect.multiplier,
         tagBonusMultiplier,
     );

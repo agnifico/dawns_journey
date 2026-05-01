@@ -74,5 +74,24 @@ export const sets: Set[] = [
                 stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }]
             }
         ]
-    }
+    },
+    {
+        id: 'sovereignty_of_hell',
+        name: 'Sovereignty of Hell',
+        relicIds: ['drops_of_fire', 'the_fire_dress', 'hellfire_crown', 'command_of_hell'],
+        bonuses: [
+            {
+                pieces: 2,
+                elementalBonus: {
+                    element: 'Fire',
+                    stats: [{ name: 'elementalAttack', value: 200 }],
+                },
+            },
+            {
+                pieces: 4,
+                tagBonus: { tag: 'fire', damageMultiplier: 1.30 },
+            },
+        ],
+    },
+
 ];

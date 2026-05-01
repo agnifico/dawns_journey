@@ -202,7 +202,7 @@ export function harvestCrop(plotId: string) {
         let totalYieldMultiplier = 1;
         const currentSeason = get(seasonStore);
 
-        if (newPlayer.unlockedTech.includes('decree_of_verdis')) {
+        if (newPlayer.unlockedTech.includes('decree_of_gaia')) {
             totalYieldMultiplier *= 3;
         }
 
@@ -389,8 +389,8 @@ export function harvestAll() {
             let totalYieldMultiplier = 1;
             const currentSeason = get(seasonStore);
 
-            // decree_of_verdis: permanent 3x yield multiplier
-            if (newPlayer.unlockedTech.includes('decree_of_verdis')) {
+            // decree_of_gaia: permanent 3x yield multiplier
+            if (newPlayer.unlockedTech.includes('decree_of_gaia')) {
                 totalYieldMultiplier *= 3;
             }
 

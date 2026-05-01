@@ -5,7 +5,7 @@
     "image": "/images/characters/veres/veres00.png",
     "title": "The Watching Wing",
     "spriteGif": "/images/veres.gif",
-    "arenaImage" : "/images/characters/veres/veres8.png",
+    "arenaImage": "/images/characters/veres/veres8.png",
     "galleryImages": [
         "/images/characters/veres/veres0.png",
         "/images/characters/veres/veres1.png",
@@ -16,9 +16,10 @@
         "/images/characters/veres/veres6.png",
         "/images/characters/veres/veres7.png"
     ],
-    "description": "A dark-winged angel who has watched this island longer than the Saints have been building on it. She chose the mountain. She does not regret this.",
+    "description": "A dark-winged angel who has watched this island longer than the Saints have been building on it. She chose the mountain. She does not regret this. -------- Dev's Note: Veres is one of those characters for whom I wish I had someone drawing these characters for me. Someone with a Fashion Design, or hair and make up artist, or simply someone who can draw better than me ykwim? Because I never really got her down to what I wanted - I kinda struggled with her art direction.",
     "faction": "",
-    "hidden": false, "isCombatant": true,
+    "hidden": false,
+    "isCombatant": true,
     "types": [
         "Dark",
         "Wind"

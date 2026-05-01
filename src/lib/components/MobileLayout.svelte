@@ -32,6 +32,7 @@
     let questDrawerOpen = false;
     let logDrawerOpen   = false;
     let scoutOpen       = false;
+    let eventCardsVisible = true;
 
     $: if (isCardEvent || isPanelEvent) questDrawerOpen = false;
     $: if (isCardEvent || isPanelEvent) scoutOpen = false;
@@ -62,7 +63,7 @@
 >
     <!-- ════════════════════════════════════════════════════════════════
          TOP STRIP — sits below the now-visible global navbar.
-         HP/Aura · POI · Rain · Time · Coords · Quest count
+         HP/Aura · POI · Rain · Event · Time · Coords
          ════════════════════════════════════════════════════════════════ -->
     <div class="top-strip">
         <div class="hp-stack">
@@ -89,19 +90,17 @@
                 <img src="/game_icons/rain.png" alt="" />
             </button>
 
+            <button
+                class="strip-btn"
+                class:active={eventCardsVisible}
+                on:click={() => (eventCardsVisible = !eventCardsVisible)}
+                title="Event Panel"
+            >
+                <img src="/game_icons/map.png" alt="" />
+            </button>
+
             <TimeDisplay />
             <CoordinateDisplay />
-
-            {#if activeQuestCount > 0}
-                <button
-                    class="strip-btn quest-pill"
-                    on:click={() => (questDrawerOpen = !questDrawerOpen)}
-                    title="Quests"
-                >
-                    <img src="/game_icons/expression_confused.png" alt="" />
-                    <span class="count">{activeQuestCount}</span>
-                </button>
-            {/if}
         </div>
     </div>
 
@@ -121,8 +120,10 @@
             <div class="loading">Loading map...</div>
         {/if}
 
-        <MobileEventCard />
-        <MobileEventPanel />
+        {#if eventCardsVisible}
+            <MobileEventCard />
+            <MobileEventPanel />
+        {/if}
 
         <!-- Quest drawer -->
         <div class="drawer quest-drawer" class:open={questDrawerOpen}>
@@ -178,6 +179,19 @@
         <div class="dock-weapons">
             <WeaponWidget />
         </div>
+
+        <button
+            class="log-btn"
+            class:active={questDrawerOpen}
+            on:click={() => {
+                questDrawerOpen = !questDrawerOpen;
+                logDrawerOpen = false;
+            }}
+            title="Quests"
+        >
+            <img src="/game_icons/expression_confused.png" alt="Quests" />
+            {#if activeQuestCount > 0}<span class="dot quest-dot">{activeQuestCount}</span>{/if}
+        </button>
 
         <button
             class="log-btn"
@@ -275,10 +289,25 @@
         object-fit: contain;
         image-rendering: pixelated;
     }
-    .quest-pill .count {
+    .log-btn.active {
+        background-color: var(--color-buff, #6a994e);
+    }
+    .quest-dot {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 15px;
+        height: 15px;
+        background: #facc15;
+        color: #111;
+        border-radius: 50%;
+        border: 1.5px solid #111;
         font-family: var(--font-family-pixel);
-        font-size: 0.75rem;
-        color: #facc15;
+        font-size: 0.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
     }
 
     /* ── Map area ────────────────────────────────────────────────────── */

@@ -33,7 +33,7 @@
         "elementalAttack": 80,
         "elementalDefence": 70,
         "speed": 75,
-        "evasion": 10,
+        "evasion": 50,
         "critChance": 0.25,
         "critDamage": 1.9,
         "precision": 30

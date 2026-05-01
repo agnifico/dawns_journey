@@ -110,9 +110,9 @@ export const farmingTechTree: TechNode[] = [
 
   // --- Super Upgrades ---
   {
-    id: "hire_saoirse",
-    name: "Hire Saoirse",
-    description: "Hire Saoirse to manage your farm (Auto Harvest Crops + Re-plant).",
+    id: "hire_sylvie",
+    name: "Hire Sylvie",
+    description: "[ Not Implemented, yet ] Hire Sylvie to manage your farm (Auto Harvest Crops + Re-plant).",
     unlockLevel: 25,
     costTP: 8,
     prerequisites: ["tech_irrigation"]
@@ -126,11 +126,11 @@ export const farmingTechTree: TechNode[] = [
     prerequisites: ["env_greenhouse", "tech_cold_frame"]
   },
   {
-    id: "decree_of_verdis",
-    name: "Decree of Verdis",
+    id: "decree_of_gaia",
+    name: "Gaia's Decree",
     description: "\"These lands will bloom again\" - Awoken Goddess of The Earth. A permanent 3x yield multiplier for all harvests.",
     unlockLevel: 35,
     costTP: 15,
-    prerequisites: ["thunders_blessing", "hire_saoirse"]
+    prerequisites: ["thunders_blessing", "hire_sylvie"]
   }
 ];

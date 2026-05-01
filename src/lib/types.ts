@@ -65,6 +65,23 @@ export interface SetBonus {
         tag: string;
         damageMultiplier: number;
     };
+    /**
+     * Conditional stat bonuses re-evaluated on every strike based on a
+     * speed comparison between attacker and opponent. Used for sets like
+     * Outpace ('attacker_faster') and Patient Bulwark ('attacker_slower').
+     *
+     * `stats` overlay onto the attacker's effective stats for that strike
+     * (NOT folded into the persistent stat panel — speed can shift mid-fight
+     * via buffs/debuffs, so the condition is re-checked each strike).
+     *
+     * `tagBonus` (optional) applies an additional damage multiplier to
+     * matching abilities when the condition is met.
+     */
+    speedConditionalBonus?: {
+        condition: 'attacker_faster' | 'attacker_slower';
+        stats?: Stat[];
+        tagBonus?: { tag: string; damageMultiplier: number };
+    };
 }
 
 export interface Set {
@@ -234,6 +251,16 @@ export interface Combatant {
      * a multiplier applied to abilities matching its tag at strike time.
      */
     tagBonuses?: { tag: string; damageMultiplier: number }[];
+    /**
+     * Speed-conditional bonuses from sets like Outpace / Patient Bulwark.
+     * Evaluated at strike time by comparing attacker.speed to opponent.speed.
+     * Empty array for NPCs.
+     */
+    speedConditionalBonuses?: {
+        condition: 'attacker_faster' | 'attacker_slower';
+        stats?: Stat[];
+        tagBonus?: { tag: string; damageMultiplier: number };
+    }[];
     equipment?: {
         weapon_slots: (Weapon | null)[];
         relic_slots: (Relic | null)[];

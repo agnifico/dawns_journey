@@ -8,7 +8,7 @@
 		useItem,
 		countInventoryItem
 	} from '$lib/services/InventoryService';
-	import { getSetForRelic } from '$lib/services/SetDataService';
+	import { getSetForRelic, formatBonusLines } from '$lib/services/SetDataService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
 	import Stat from './Stat.svelte';
 	import { derived } from 'svelte/store';
@@ -441,11 +441,11 @@
 					<div class="drawer-section-label">Set: {relicSet.name}</div>
 					<div class="drawer-set">
 						{#each relicSet.bonuses as bonus}
+							{@const lines = formatBonusLines(bonus)}
 							<div class="set-bonus-line">
 								<span class="set-pieces">({bonus.pieces}-pc)</span>
-								{#each bonus.stats as stat, i}
-									{getStatName(stat.name)}
-									{formatValue(stat.value, stat.name)}{i < bonus.stats.length - 1 ? ', ' : ''}
+								{#each lines as line, i}
+									{line}{i < lines.length - 1 ? ' · ' : ''}
 								{/each}
 							</div>
 						{/each}

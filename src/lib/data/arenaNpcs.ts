@@ -104,7 +104,7 @@ const arenaNpcs: Record<string, Combatant> = {
             phases: [
                 {
                     hpThreshold: 1.0,
-                    abilities: ['warcry_stun', 'crushing_poison', 'smokescreen', 'demoralise', 'basic_slash'],
+                    abilities: ['warcry_stun', 'crushing_poison', 'cataclysm', 'elemental_blast'],
                     tactic: 'RANDOM',
                 },
             ],
@@ -207,14 +207,14 @@ const arenaNpcs: Record<string, Combatant> = {
         ...helaTemplate,
         baseStats: {
             ...withAccuracy(helaTemplate.baseStats),
-            hp: 1400,
-            maxHp: 1400,
-            maxAuraShield: 400,
-            auraShield: 400,
-            physicalAttack: 450,
-            physicalDefence: 450,
-            elementalAttack: 450,
-            elementalDefence: 450,
+            hp: 2000,
+            maxHp: 2000,
+            maxAuraShield: 600,
+            auraShield: 600,
+            physicalAttack: 600,
+            physicalDefence: 600,
+            elementalAttack: 600,
+            elementalDefence: 500,
             speed: 80,
             evasion: 80,
             precision: 80,
@@ -271,7 +271,7 @@ const arenaNpcs: Record<string, Combatant> = {
     // -----------------------------------------------------------------------
     aoife: {
         ...aoifeTemplate,
-        baseStats: { ...withAccuracy(aoifeTemplate.baseStats), hp: 400, maxHp: 400, physicalAttack: 400, elementalDefence: 300},
+        baseStats: { ...withAccuracy(aoifeTemplate.baseStats), hp: 400, maxHp: 400, physicalAttack: 400, elementalDefence: 300 },
         arenaBehavior: {
             phases: [
                 {
@@ -300,7 +300,21 @@ const arenaNpcs: Record<string, Combatant> = {
     // -----------------------------------------------------------------------
     marjane: {
         ...marjaneTemplate,
-        baseStats: { ...withAccuracy(marjaneTemplate.baseStats), hp: 240, maxHp: 240 },
+        baseStats: {
+            ...withAccuracy(marjaneTemplate.baseStats), hp: 1300,
+            maxHp: 1300,
+            maxAuraShield: 150,
+            auraShield: 150,
+            physicalAttack: 0,
+            physicalDefence: 600,
+            elementalAttack: 500,
+            elementalDefence: 500,
+            speed: 80,
+            evasion: 80,
+            precision: 80,
+            critChance: 1.0,
+            critDamage: 2.5,
+        },
         arenaBehavior: {
             phases: [
                 {
@@ -341,12 +355,12 @@ const arenaNpcs: Record<string, Combatant> = {
         ...bonnieTemplate,
         baseStats: {
             ...withAccuracy(bonnieTemplate.baseStats),
-            hp: 320, maxHp: 320,
-            maxAuraShield: 0, auraShield: 0,
-            physicalAttack: 190, elementalAttack: 80,
-            physicalDefence: 120, elementalDefence: 100,
-            evasion: 10, precision: 5, speed: 70,
-            critChance: 0.15, critDamage: 1.8,
+            hp: 600, maxHp: 600,
+            maxAuraShield: 300, auraShield: 300,
+            physicalAttack: 360, elementalAttack: 100,
+            physicalDefence: 280, elementalDefence: 400,
+            evasion: 65, precision: 55, speed: 75,
+            critChance: 0.6, critDamage: 1.8,
         },
         arenaBehavior: {
             phases: [

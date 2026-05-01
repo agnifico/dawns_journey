@@ -224,7 +224,7 @@ export function executeAbility(
 
     // Aggregate the attacker's tag bonuses for this ability once. Same value
     // applies to every damage effect inside the ability (e.g. multi-hit, lifesteal).
-    const tagBonusMultiplier = EffectHandlers.aggregateTagBonus(currentAttacker, ability);
+    const tagBonusMultiplier = EffectHandlers.aggregateTagBonus(currentAttacker, currentDefender, ability);
 
     // lastDamageHit starts true so status-only abilities always apply;
     // flips false only when a damage effect explicitly misses.

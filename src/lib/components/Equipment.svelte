@@ -9,6 +9,7 @@
 	import { activeItem } from '$lib/stores/uiStore';
 	import { rarityClass, unequipItem } from '$lib/services/InventoryService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
+	import { formatBonusLines } from '$lib/services/SetDataService';
 	import SetBonusDisplay from './ui/SetBonusDisplay.svelte';
 	import BuffDisplay from './ui/BuffDisplay.svelte';
 	import ExploBubble_OLD from './ExploBubble_OLD.svelte';
@@ -41,7 +42,7 @@
 		setName: string;
 		equippedPieces: number;
 		totalPieces: number;
-		allStats: { pieces: number; stats: { name: string; value: number }[] }[];
+		tiers: { pieces: number; bonus: import('$lib/types').SetBonus }[];
 	};
 
 	$: mergedSetBonuses = (() => {
@@ -52,12 +53,12 @@
 					setName: ab.setName,
 					equippedPieces: ab.equippedPieces,
 					totalPieces: ab.totalPieces,
-					allStats: []
+					tiers: []
 				});
 			}
 			const entry = map.get(ab.setName)!;
 			if (ab.equippedPieces > entry.equippedPieces) entry.equippedPieces = ab.equippedPieces;
-			entry.allStats.push({ pieces: ab.bonus.pieces, stats: ab.bonus.stats });
+			entry.tiers.push({ pieces: ab.bonus.pieces, bonus: ab.bonus });
 		}
 		return Array.from(map.values());
 	})();
@@ -244,19 +245,12 @@
 										</span>
 									</div>
 								</div>
-								{#each set.allStats as tier}
+								{#each set.tiers as tier}
 									<div class="msc-tier">
 										<span class="msc-tier-label">({tier.pieces}-pc)</span>
 										<div class="msc-stats">
-											{#each tier.stats as stat}
-												<span class="msc-stat">
-													{statDefinitions[stat.name]?.name ?? stat.name}
-													<span class="msc-stat-val">
-														{stat.value > 0 ? '+' : ''}{Math.abs(stat.value) < 1
-															? Math.round(stat.value * 100) + '%'
-															: stat.value}
-													</span>
-												</span>
+											{#each formatBonusLines(tier.bonus) as line}
+												<span class="msc-stat">{line}</span>
 											{/each}
 										</div>
 									</div>

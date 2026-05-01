@@ -19,10 +19,10 @@
         "/images/characters/hela/hela4.png",
         "/images/characters/hela/hela5.png",
         "/images/characters/hela/hela6.png",
+        "/images/characters/hela/hela7.png",
         "/images/characters/hela/hela8.png",
         "/images/characters/hela/hela9.png",
-        "/images/characters/hela/hela10.png",
-        "/images/characters/hela/hela11.png"
+        "/images/characters/hela/hela10.png"
     ],
 
     "types": ["Dark", "Fire"],
