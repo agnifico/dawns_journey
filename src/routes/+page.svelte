@@ -155,7 +155,7 @@
 			<div class="d-centre">
 				<div class="d-video-frame">
 					<video autoplay muted loop playsinline controls class="d-video">
-						<source src="/videos/video_v1.mp4" type="video/mp4" />
+						<source src="/videos/video_v3.mp4" type="video/mp4" />
 					</video>
 					<span class="corner tl" aria-hidden="true" />
 					<span class="corner tr" aria-hidden="true" />

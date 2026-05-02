@@ -85,5 +85,12 @@ export function formatBonusLines(bonus: SetBonus): string[] {
         lines.push(`${condText}: ${parts.join(', ')}`);
     }
 
+    if (bonus.dotMultiplier) {
+        const dm = bonus.dotMultiplier;
+        const pct = Math.round((bonus.dotMultiplier.multiplier - 1) * 100);
+        const sign = pct >= 0 ? '+' : '';
+        lines.push(`${sign}${pct}% extra ${bonus.dotMultiplier.category.toUpperCase()} DoT DMG.`);
+    }
+
     return lines;
 }

@@ -94,7 +94,8 @@ export function applyStatusEffects(
 
         // Damage over time
         if (current.damagePerTurn) {
-            const damage = Math.round(updated.maxHp * current.damagePerTurn);
+            const multiplier = current.damagePerTurnMultiplier ?? 1.0;
+            const damage = Math.round(updated.maxHp * current.damagePerTurn * multiplier);
             updated = applyDamage(updated, damage);
             logs.push({
                 type: 'status_tick',

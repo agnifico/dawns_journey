@@ -16,6 +16,11 @@ export interface GearPassive {
     flags: StatusEffect['flags'];
     description?: string;
     tagBonus?: { tag: string; damageMultiplier: number };
+    /**
+     * Multiplier applied to damage-over-time ticks the wearer applies.
+     * Snapshotted onto the StatusEffect at apply time.
+     */
+    dotMultiplier?: { category: 'poison' | 'bleed' | 'burn' | 'freeze'; multiplier: number };
 }
 
 export interface Item {
@@ -82,6 +87,12 @@ export interface SetBonus {
         stats?: Stat[];
         tagBonus?: { tag: string; damageMultiplier: number };
     };
+    /**
+     * Multiplier applied to damage-over-time ticks the wearer applies. Read at
+     * status-effect apply time and snapshotted onto the resulting StatusEffect
+     * (so subsequent gear changes don't retroactively change ticks already in flight).
+     */
+    dotMultiplier?: { category: 'poison' | 'bleed' | 'burn' | 'freeze'; multiplier: number };
 }
 
 export interface Set {
@@ -149,6 +160,11 @@ export interface StatusEffect {
     remainingTurns?: number;
     /** % of maxHp dealt as damage each turn. */
     damagePerTurn?: number;
+    /**
+     * Multiplier applied to damagePerTurn at tick time. Snapshotted at status
+     * apply time from the attacker's gear. Default 1.0 if absent.
+     */
+    damagePerTurnMultiplier?: number;
     /** % of maxHp restored as HP each turn. */
     healPerTurn?: number;
     damageType?: 'physical' | 'elemental';
@@ -172,6 +188,9 @@ export interface StatusEffect {
         | 'immune_to_poison'
         | 'immune_to_stun'
         | 'guaranteed_hit'
+        | 'immune_to_bleed'
+        | 'immune_to_burn'
+        | 'immune_to_freeze'
     >;
 }
 
@@ -261,6 +280,13 @@ export interface Combatant {
         stats?: Stat[];
         tagBonus?: { tag: string; damageMultiplier: number };
     }[];
+    /**
+     * DoT-tick multipliers collected at combat start from sets, gear passives,
+     * and (potentially) other sources. Read by aggregateDotMultiplier when the
+     * combatant applies a status effect — value gets snapshotted onto the
+     * resulting StatusEffect.damagePerTurnMultiplier.
+     */
+    dotMultiplierSources?: { category: 'poison' | 'bleed' | 'burn' | 'freeze'; multiplier: number }[];
     equipment?: {
         weapon_slots: (Weapon | null)[];
         relic_slots: (Relic | null)[];

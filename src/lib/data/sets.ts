@@ -8,25 +8,28 @@ export const sets: Set[] = [
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'maxHp', value: 200 }, { name: 'maxAuraShield', value: 200 } ]
+                stats: [{ name: 'maxHp', value: 200 }, { name: 'maxAuraShield', value: 200 }]
             },
         ]
     },
     {
         id: 'toys',
-        name: 'Hela\'s Toys',
-        relicIds: ['helas_whip', 'purple_bikini', 'iron_shackles', 'spiked_choker'],
+        name: "Hela's Toys",
+        relicIds: ['helas_whip', 'helas_corset', 'garter_straps', 'spiked_choker'],
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'evasion', value: 15 },{ name: 'precision', value: 15 }]
+                tagBonus: { tag: 'dark', damageMultiplier: 1.25 },
+                stats: [{ name: 'elementalAttack', value: 100 }]
             },
             {
                 pieces: 4,
-                stats: [{ name: 'physicalAttack', value: 100 }, { name: 'speed', value: 15 }]
-            }
-        ]
+                dotMultiplier: { category: 'poison', multiplier: 1.30 },
+                stats: [{ name: 'elementalAttack', value: 150 }]
+            },
+        ],
     },
+
     {
         id: 'fossil',
         name: 'Primordial Fossil',
@@ -34,7 +37,7 @@ export const sets: Set[] = [
         bonuses: [
             {
                 pieces: 2,
-                stats: [{ name: 'physicalDefence', value: 175 }, { name: 'elementalDefence', value: 175 }]
+                stats: [{ name: 'physicalDefence', value: 175 }, { name: 'elementalDefence', value: 175 }],
             }
         ]
     },
@@ -69,10 +72,19 @@ export const sets: Set[] = [
         name: 'Dragon Rider',
         relicIds: ['dragon_rider_helmet', 'dragon_tooth_amulet'],
         bonuses: [
+            // {
+            //     pieces: 2,
+            //     stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }]
+            // },
             {
                 pieces: 2,
-                stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }]
-            }
+                stats: [{ name: "critChance", value: .20 }, { name: "critDamage", value: .40 }],
+                speedConditionalBonus: {
+                    condition: 'attacker_faster',
+                    tagBonus: { tag: 'oceanic', damageMultiplier: 1.30 },
+                },
+            },
+            
         ]
     },
     {

@@ -166,8 +166,8 @@ export const weapons: Item[] = [
         id: "freedom_sworn", name: "Freedom Sworn",
         description: "A blade that fights for liberation — strikes with conviction and rarely misses the mark.",
         image: "/weapons/freedom_sworn.png", type: "weapon",
-        stats: [{ name: "elementalAttack", value: 150 }, { name: "critChance", value: .35 }],
-        element: "Light", flags: ['special', 'ranged'], instanceId: ''
+        stats: [{ name: "elementalAttack", value: 175 }, { name: "critDamage", value: .7 }],
+        element: "Light", flags: ['legendary', 'ranged'], instanceId: ''
     },
     {
         id: "vampiric_sword", name: "Vampiric Sword",

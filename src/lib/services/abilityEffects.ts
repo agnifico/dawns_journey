@@ -57,6 +57,27 @@ export function aggregateTagBonus(
 }
 
 /**
+ * Returns the aggregated DoT-tick multiplier for status effects of the given
+ * category that the attacker is about to apply. Walks set bonuses, gear
+ * passives, and speed-conditional sources (none for now, but easy to add).
+ *
+ * Multiple matching bonuses stack multiplicatively.
+ *
+ * Returns 1.0 if no sources match — the caller should treat that as "no
+ * snapshot needed" and omit the field from the StatusEffect.
+ */
+export function aggregateDotMultiplier(
+    attacker: Combatant,
+    category: 'poison' | 'bleed' | 'burn' | 'freeze',
+): number {
+    let multiplier = 1.0;
+    for (const source of attacker.dotMultiplierSources ?? []) {
+        if (source.category === category) multiplier *= source.multiplier;
+    }
+    return multiplier;
+}
+
+/**
  * Check whether a speed condition is met between the attacker and opponent.
  */
 function isSpeedConditionMet(
@@ -617,10 +638,25 @@ export function executeStatusEffect(
     let updatedAttacker = { ...attacker };
     let updatedDefender = { ...defender };
 
+    // Snapshot a DoT multiplier from the attacker if this is a damage-over-time
+    // status. Frozen onto the StatusEffect so subsequent gear changes don't
+    // retroactively change ticks already in flight.
+    let dotMultiplierSnapshot: number | undefined;
+    const dotCategory = effect.statusEffect.category;
+    if (
+        effect.statusEffect.damagePerTurn &&
+        dotCategory &&
+        (dotCategory === 'poison' || dotCategory === 'bleed' || dotCategory === 'burn' || dotCategory === 'freeze')
+    ) {
+        const m = aggregateDotMultiplier(attacker, dotCategory);
+        if (m !== 1.0) dotMultiplierSnapshot = m;
+    }
+
     const newStatusEffect: StatusEffect = {
         ...effect.statusEffect,
         remainingTurns: effect.statusEffect.duration,
         inflictedBy: attacker.id,
+        ...(dotMultiplierSnapshot !== undefined && { damagePerTurnMultiplier: dotMultiplierSnapshot }),
     };
 
     const stackBehavior = effect.stackBehavior ?? 'replace';
@@ -719,8 +755,6 @@ export function executeStatModifierEffect(
         if (sm.elementalDefence !== undefined) updatedTarget.elementalDefence *= sm.elementalDefence;
         if (sm.speed !== undefined) updatedTarget.speed *= sm.speed;
         if (sm.evasion !== undefined) updatedTarget.evasion += sm.evasion;
-        if (sm.speed !== undefined) updatedTarget.speed += sm.speed;
-        if (sm.precision !== undefined) updatedTarget.precision += sm.precision;
         if (sm.critChance !== undefined) updatedTarget.critChance *= sm.critChance;
         if (sm.critDamage !== undefined) updatedTarget.critDamage *= sm.critDamage;
     }

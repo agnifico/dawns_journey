@@ -70,6 +70,41 @@ function collectPlayerSpeedConditionalBonuses(
     return bonuses;
 }
 
+/**
+ * Collects DoT-tick multiplier sources from sets and gear passives.
+ * Read by aggregateDotMultiplier when the player applies a DoT status effect.
+ */
+function collectPlayerDotMultiplierSources(
+    player: Player,
+    activeSetBonuses: ReturnType<typeof get<typeof playerActiveSetBonuses>>,
+): NonNullable<Combatant['dotMultiplierSources']> {
+    const sources: NonNullable<Combatant['dotMultiplierSources']> = [];
+
+    // Source 1: set bonuses
+    for (const active of activeSetBonuses) {
+        if (active.bonus.dotMultiplier) {
+            sources.push(active.bonus.dotMultiplier);
+        }
+    }
+
+    // Source 2: gear passives on equipped items
+    const allEquipped = [
+        ...(player.equipment.weapon_slots ?? []),
+        ...(player.equipment.relic_slots ?? []),
+    ].filter(Boolean);
+    const seenPassiveIds = new Set<string>();
+    for (const item of allEquipped) {
+        for (const passiveId of (item?.gearPassives ?? []) as unknown as string[]) {
+            if (typeof passiveId !== 'string' || seenPassiveIds.has(passiveId)) continue;
+            seenPassiveIds.add(passiveId);
+            const passive = getGearPassiveById(passiveId);
+            if (passive?.dotMultiplier) sources.push(passive.dotMultiplier);
+        }
+    }
+
+    return sources;
+}
+
 function resolveAbilities(abilityCycle: string[] | undefined): NonNullable<ReturnType<typeof getAbilityById>>[] {
     if (!abilityCycle || abilityCycle.length === 0) {
         const fallback = getAbilityById('basic_slash');
@@ -180,6 +215,7 @@ export function startArenaCombat(opponentId: string): void {
         gearPassives: [],
         tagBonuses: collectPlayerTagBonuses(playerCopy, get(playerActiveSetBonuses)),
         speedConditionalBonuses: collectPlayerSpeedConditionalBonuses(get(playerActiveSetBonuses)),
+        dotMultiplierSources: collectPlayerDotMultiplierSources(playerCopy, get(playerActiveSetBonuses)),
     };
 
     // --- Build opponent combatant ---
@@ -211,6 +247,7 @@ export function startArenaCombat(opponentId: string): void {
         gearPassives: [],
         tagBonuses: [],
         speedConditionalBonuses: [],
+        dotMultiplierSources: [],
     };
 
     combatStore.set({

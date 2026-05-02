@@ -30,7 +30,7 @@
 
 	$: isPercent = statId === 'critChance' || statId === 'critDamage';
 
-	$: displayValue = isPercent ? `${(Number(value) * 100).toFixed(0)}%` : String(value);
+	$: displayValue = isPercent ? `${(Number(value) * 100).toFixed(0)}%` : Number(value).toFixed(0);
 
 	$: bonus = (() => {
 		if (baseValue === undefined || typeof value !== 'number') return undefined;

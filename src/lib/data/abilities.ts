@@ -92,10 +92,12 @@ export const playerAbilities: Ability[] = [
         abilityType: 'Special',
         category: 'debuff',
         targetType: 'enemy',
-        effects: [{
-            type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
-            statusEffect: { id: 'poison', name: 'Poison', duration: 6, damagePerTurn: 0.05, category: 'poison' }
-        }]
+        tags: ['poison_apply', 'setup'],
+        effects: [
+            { type: 'damage', damageType: 'elemental', multiplier: 0.15 }, {
+                type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
+                statusEffect: { id: 'poison', name: 'Poison', duration: 6, damagePerTurn: 0.05, category: 'poison' }
+            }]
     },
     {
         id: 'rapid_strike',
@@ -281,15 +283,18 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'crushing_poison',
-        name: 'Poison of the Ancients',
+        name: 'Crushing Poison',
         description: 'Inflicts a deep poison for 6 turns (8% max HP per turn).',
         abilityType: 'Special',
         category: 'debuff',
         targetType: 'enemy',
-        effects: [{
-            type: 'apply_status', target: 'enemy',
-            statusEffect: { id: 'deep_poison', name: 'Deep Poison', duration: 6, damagePerTurn: 0.08, category: 'poison' }
-        }]
+        tags: ['poison_apply', 'setup'],
+        effects: [
+            { type: 'damage', damageType: 'elemental', multiplier: 0.35 },
+            {
+                type: 'apply_status', target: 'enemy',
+                statusEffect: { id: 'deep_poison', name: 'Deep Poison', duration: 6, damagePerTurn: 0.08, category: 'poison' }
+            }]
     },
     {
         id: 'warcry_stun',
@@ -453,10 +458,13 @@ export const npcAbilities: Ability[] = [
         name: 'Abyssal Toxin',
         description: 'Inflicts a virulent poison for 8 turns (12% max HP per turn).',
         abilityType: 'Special',
-        effects: [{
-            type: 'apply_status', target: 'enemy',
-            statusEffect: { id: 'abyssal_poison', name: 'Abyssal Toxin', duration: 8, damagePerTurn: 0.12, category: 'poison' }
-        }],
+        tags: ['hela', 'setup'],
+        effects: [
+            { type: 'damage', damageType: 'elemental', multiplier: 0.25 },
+            {
+                type: 'apply_status', target: 'enemy',
+                statusEffect: { id: 'abyssal_poison', name: 'Abyssal Toxin', duration: 8, damagePerTurn: 0.12, category: 'poison' }
+            }],
         category: 'damage',
         targetType: 'enemy'
     },
@@ -467,7 +475,7 @@ export const npcAbilities: Ability[] = [
         abilityType: 'Elemental Damage',
         category: 'damage',
         targetType: 'enemy',
-        tags: ['fire', 'elemental_blast'],
+        tags: ['fire', 'elemental_blast', 'hela'],
         effects: [{ type: 'damage', damageType: 'elemental', multiplier: 0.80 }]
     },
     {
@@ -506,11 +514,12 @@ export const npcAbilities: Ability[] = [
     },
     {
         id: 'reaping_blow',
-        name: 'Jolly Reaper',
+        name: 'Reaping Blow',
         description: 'Deals 60% Elemental Attack. If the enemy is below 25% HP, deals 150% instead.',
         abilityType: 'Elemental Damage',
         category: 'damage',
         targetType: 'enemy',
+        tags: ['hela'],
         effects: [{
             type: 'conditional_damage', damageType: 'elemental',
             baseMultiplier: 0.60, condition: 'hp_below', threshold: 0.25, bonusMultiplier: 1.50
@@ -548,10 +557,13 @@ export const npcAbilities: Ability[] = [
         abilityType: 'Special',
         category: 'debuff',
         targetType: 'enemy',
-        effects: [{
-            type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
-            statusEffect: { id: 'thorned_poison', name: 'Thorned Poison', duration: 8, damagePerTurn: 0.08, category: 'poison' }
-        }]
+        tags: ['poison_apply', 'setup'],
+        effects: [
+            { type: 'damage', damageType: 'elemental', multiplier: 0.15 },
+            {
+                type: 'apply_status', target: 'enemy', stackBehavior: 'stack',
+                statusEffect: { id: 'thorned_poison', name: 'Thorned Poison', duration: 8, damagePerTurn: 0.08, category: 'poison' }
+            }]
     },
 
     // -------------------------------------------------------------------------
@@ -769,16 +781,20 @@ export const npcAbilities: Ability[] = [
     {
         id: 'shadow_strike',
         name: 'Shadow Strike',
-        description: 'Strikes from the blind spot — deals 55% Physical Attack.',
+        description: 'Strikes from the blind spot — deals 55% Physical Attack. Does not miss.',
         abilityType: 'Physical Damage',
         category: 'damage',
         targetType: 'enemy',
-        effects: [{ type: 'damage', damageType: 'physical', multiplier: 0.55 }]
+        effects: [{
+            type: 'apply_status', target: 'self',
+            statusEffect: { id: 'lock_on', name: 'Lock On', duration: 1, flags: ['guaranteed_hit'] }
+        },
+        { type: 'damage', damageType: 'physical', multiplier: 0.55 }]
     },
     {
         id: 'feint',
-        name: 'Feint',
-        description: 'Reduces enemy precision by 30 for 4 turns, making their attacks easier to dodge.',
+        name: 'Anxiety',
+        description: 'Inflicts self-doubt damage. Reduces enemy Precision by 30 for 4 turns.',
         abilityType: 'Special',
         category: 'debuff',
         targetType: 'enemy',
