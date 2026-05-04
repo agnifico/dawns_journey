@@ -929,7 +929,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     warm_spring: {
         id: 'warm_spring',
         name: 'The Warm Spring',
-        image: '/locations/campfire.png',
+        image: '/locations/campfire2.png',
         shortDesc: 'A thermal spring inside the glacier territory. Impossibly warm.',
         stepOnMessage: 'The temperature rises sharply. Steam rises from still water ahead.',
         message: [

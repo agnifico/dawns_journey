@@ -169,7 +169,6 @@
 						<img
 							src={$eventScreen.image}
 							alt="Event"
-							class:npc-image={$eventScreen.type === 'npc' || false}
 							class:enemy-image={$eventScreen.type === 'enemy' || false}
 							class:location-icon={$eventScreen.type === 'resource' ||
 								$eventScreen.type === 'location_event'}
@@ -461,7 +460,7 @@
 		padding: 1rem;
 		/* backdrop-filter: blur(2px); */
 		display: flex;
-		flex-direction: column;
+		/* flex-direction: column; */
 		padding-top: 2rem;
 		flex-grow: 1;
 		/* align-items: center; */
@@ -554,7 +553,9 @@
 		box-shadow: var(--npc-first-element-bg) 0 6px 0 3px, var(--npc-first-element-bg) 0 -0px 0 3px ;
 	}
 	.location-icon {
-		height: 96px;
+		width: 160px;
+		height: 160px;
+		object-fit: cover;
 	}
 	.info-box {
 		display: flex;

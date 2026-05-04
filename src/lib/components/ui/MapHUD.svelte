@@ -150,10 +150,8 @@
         <RegionNotification />
     </div>
 
-    <!-- ═══ BOTTOM-LEFT — item pickups ═════════════════════════════════ -->
-    <div class="bottom-left">
-        <NewItemNotif />
-    </div>
+    <!-- ═══ BOTTOM-LEFT — item pickups (self-positioned via its own css) ══ -->
+    <NewItemNotif />
 
     <!-- ═══ BOTTOM-CENTER — weapons + bread (one module) ═══════════════ -->
     <div class="bottom-center">
@@ -349,12 +347,6 @@
         left: 50%;
         transform: translateX(-50%);
     }
-    .bottom-left {
-        bottom: 1rem; left: 1rem;
-        display: flex;
-        align-items: flex-end;
-        gap: 1rem;
-    }
     .bottom-right {
         bottom: 1rem; right: 1rem;
     }
@@ -369,7 +361,7 @@
     }
 
     @media (max-width: 768px) {
-        .bottom-left { display: none; }
+        /* .bottom-left { display: none; } */
         .top-left, .top-right { margin-top: 2rem; }
         .wr-wrap { width: 240px; }
     }

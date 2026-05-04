@@ -143,7 +143,7 @@ export const weapons: Item[] = [
     },
     {
         id: "vine_whip", name: "Vine Whip",
-        description: "A flexible whip made of enchanted vines — entangles foes and shrugs off earth's punishment.",
+        description: "A flexible whip made of enchanted vines with a blade at the end — entangles foes and delivers nature's punishment.",
         image: "/weapons/vine_whip.png", type: "weapon",
         stats: [{ name: "elementalAttack", value: 150 }, { name: "physicalDefence", value: 55 }, { name: "maxHp", value: 100 }],
         element: "Earth", flags: ['special', 'sword'], instanceId: ''

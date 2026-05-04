@@ -77,7 +77,7 @@
         /* Hard width limit: never intrude on bottom-center dock.
            ~360px reserved on the right covers the WeaponWidget + bread + buffer. */
         max-width: calc(100% - 360px);
-        overflow: hidden;
+        /* overflow: hidden; */
 
         display: flex;
         flex-direction: row;
@@ -104,6 +104,7 @@
     .notification.is-special {
         min-width: 240px;
         max-width: 280px;
+        box-sizing: border-box;
         padding: 0;
         border: none;
         overflow: hidden;

@@ -69,12 +69,12 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
 
     basic_tree: {
         id: 'basic_tree',
-        name: 'Young Tree',
+        name: 'Green Tree',
         skillId: 'woodcutting',
         requiredLevel: 1,
         reward: { itemId: 'wood', amount: 1 },
         cooldown: 2,
-        image: './locations/basic_tree.png',
+        image: './locations/green_tree.png',
         dialogue: { success: 'You cut down the young tree.', failure: 'This tree has been stripped bare.' },
         maxGathers: 6,
         xpPerLevel: 6
@@ -106,7 +106,7 @@ export const resourceNodeDefinitions: { [key: string]: ResourceNode } = {
     },
     evergreen_tree: {
         id: 'evergreen_tree',
-        name: 'Evergreen Tree',
+        name: 'Mountain Evergreen',
         skillId: 'woodcutting',
         requiredLevel: 3,
         reward: { itemId: 'wood', amount: 3 },

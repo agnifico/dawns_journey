@@ -493,6 +493,75 @@
                     ]
                 }
             ]
+        },
+        {
+            "questId": "sylvie_sword_6",
+            "title": "Something Warm",
+            "description": "Sylvie has been thinking about the strange woman on Pleasure Island. She wants to do something about it.",
+            "startRequirement": {
+                "type": "have_tag",
+                "tag": "sylvie_sword_5_complete"
+            },
+            "stages": [
+                {
+                    "objective": "Speak with Sylvie",
+                    "requirement": { "type": "dialogue" },
+                    "unavailable_dialogue": [
+                        "Come back in a bit. I'm thinking."
+                    ],
+                    "intro_dialogue": [
+                        "Hey. That woman — Hela — she's been on my mind.",
+                        "She's clearly not from here. Not trying to take anything, not fighting anyone.",
+                        "Just… there. On that island. Alone.",
+                        "I don't know her. But I know what it looks like when someone's finding their footing in a new place.",
+                        "I've been there.",
+                        "I'm going to cook her something. Bring it to her, will you?",
+                        "She needs something warm. Not a weapon, not a message. Just food.",
+                        "Tell her it's from the forest."
+                    ],
+                    "success_dialogue": [
+                        "Here. Spaghetti. Don't ask why — it's what I had.",
+                        "Just bring it to her before it gets cold.",
+                        "And — be kind? I have a feeling she doesn't get that very often."
+                    ],
+                    "success_rewards": [
+                        { "type": "item", "itemId": "spaghetti", "quantity": 1 },
+                        { "type": "world_resonance", "amount": 5 }
+                    ]
+                },
+                {
+                    "objective": "Deliver the spaghetti to Hela (Heart Rank 2)",
+                    "requirement": {
+                        "type": "npc_rank",
+                        "npcId": "hela",
+                        "rankType": "heart",
+                        "value": 2
+                    },
+                    "intro_dialogue": [
+                        "Go. Bring her the food.",
+                        "She's on the island to the west."
+                    ],
+                    "reminder_dialogue": [
+                        "She needs to actually trust you a little before she'll take food from a stranger.",
+                        "Spend some time with her. Let her warm up to you.",
+                        "Pun intended."
+                    ],
+                    "success_dialogue": [
+                        "She took it?",
+                        "Good.",
+                        "You know, I had this image of her as some terrifying force of nature. And she probably is.",
+                        "But she's also just… someone a long way from home.",
+                        "That's something I understand.",
+                        "Thank you for going. I'm glad she's not alone over there.",
+                        "Neither are we, I suppose."
+                    ],
+                    "success_rewards": [
+                        { "type": "world_resonance", "amount": 5 },
+                        { "type": "tag", "tagId": "sylvie_sword_6_complete" },
+                        { "type": "tag", "tagId": "sylvie_sent_food_to_hela" }
+                    ]
+                }
+            ]
         }
     ],
 
