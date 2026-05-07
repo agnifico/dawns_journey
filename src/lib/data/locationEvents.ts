@@ -61,7 +61,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     boat_to_cathedral: {
         id: 'boat_to_cathedral',
         name: 'A Boat',
-        image: '/locations/shrine.png',
+        image: '/locations/boat1.png',
         shortDesc: 'A boat with a route charted for the Shimmering Isles - Home of The Golden Concordat.',
         stepOnMessage: 'This is the boat Cygwin and Claudia might have used to get to this island. It will lead to their home base.',
         message: 'Do you want to travel to the Cathedral in The Shimmering Isles?',
@@ -84,7 +84,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     boat_to_mainland: {
         id: 'boat_to_mainland',
         name: 'Boat to the Mainland',
-        image: '/locations/boat.png',
+        image: '/locations/boat2.png',
         shortDesc: 'A sturdy boat moored at the dock.',
         stepOnMessage: 'A weather-beaten boat sits ready at the dock.',
         message: 'The mainland is a long way off. The boat could take you there — if you\'re ready.',
@@ -94,7 +94,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     boat_to_pleasure_island: {
         id: 'boat_to_pleasure_island',
         name: 'Boat to Pleasure Island',
-        image: '/locations/boat.png',
+        image: '/locations/boat1.png',
         shortDesc: 'A small vessel pointed northeast.',
         stepOnMessage: 'A small boat is moored here, pointed toward the island to the northeast.',
         message: 'Pleasure Island sits out there in the water, vivid and strange. The boat is seaworthy.',
@@ -162,7 +162,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword1: {
         id: 'legendary_sword1',
         name: 'Blade of the First Accord',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword5.png',
         shortDesc: 'A blade half-swallowed by the earth, still perfectly balanced.',
         stepOnMessage: 'Something catches the light beneath the soil. You dig — and find a sword.',
         message: "The inscription reads: 'To guard is not to rule. The first accord was made in trust, and trust is what we leave behind.'",
@@ -214,7 +214,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword5: {
         id: 'legendary_sword5',
         name: 'Blade of Equanimity',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword2.png',
         shortDesc: 'A blade floating an inch above a flat stone, held by something you cannot see.',
         stepOnMessage: 'A sword hovers above a flat stone. No mechanism. No magic you can name. It simply waits.',
         message: "The inscription reads: 'We did not seek to be above. We sought only to be present. Equanimity is not absence of feeling — it is the choice to feel without being destroyed by it.'",
@@ -227,7 +227,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword6: {
         id: 'legendary_sword6',
         name: 'Blade of the Deep Accord',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword3.png',
         shortDesc: 'A blade sunk to its hilt in the seafloor, visible only at low tide.',
         stepOnMessage: 'The tide pulls back to reveal something embedded in the seabed. You wade in.',
         message: "The inscription reads: 'We made a pact with what lives below. Not to control it — to coexist. The deep keeps its own counsel. We respected that.'",
@@ -240,7 +240,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword7: {
         id: 'legendary_sword7',
         name: 'Blade of the Last Sovereign',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword2.png',
         shortDesc: 'A blade embedded in a throne no one has sat in for centuries.',
         stepOnMessage: 'The throne is carved from a single piece of black stone. The blade stands upright in the seat, as if placed there deliberately.',
         message: "The inscription reads: 'I leave this last. Not because I am defeated — because I choose to lay it down. A sovereign who cannot relinquish power was never truly sovereign. This island will remember us by what we built. Not by what we took.'",
@@ -253,7 +253,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword8: {
         id: 'legendary_sword8',
         name: 'Blade of Witness',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword3.png',
         shortDesc: 'A blade wedged into the cliff face at the island\'s highest point.',
         stepOnMessage: 'At the peak, a single blade faces outward — as if it has been watching the horizon for centuries.',
         message: "The inscription reads: 'To witness is also to serve. We watched, and in watching, we held a space for what might return. Something always returns.'",
@@ -266,7 +266,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword9: {
         id: 'legendary_sword9',
         name: 'Blade of Return',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword4.png',
         shortDesc: 'The ninth blade. It was waiting for you specifically.',
         stepOnMessage: 'There is nothing remarkable about this spot. Except the sword, standing in open ground, pointing skyward.',
         message: "There is no inscription. There is a carving, though — a small dragon curled around a human figure. Both are smiling. Beneath it, in a script older than the island's current name, a single word you somehow understand: 'Welcome back.'",
@@ -438,7 +438,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     underground_well1: {
         id: 'underground_well1',
         name: 'Underground Well — Site One',
-        image: '/locations/underground_well.png',
+        image: '/locations/underground_well1.png',
         shortDesc: "A shaft bored straight down into the island's core. First of its kind.",
         stepOnMessage: "A reinforced shaft drops straight into the earth. Cold air rises from it, carrying something metallic.",
         message: [
@@ -466,7 +466,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     underground_well2: {
         id: 'underground_well2',
         name: 'Underground Well — Site Two',
-        image: '/locations/underground_well.png',
+        image: '/locations/underground_well2.png',
         shortDesc: "A shaft bored straight down into the island's core. First of its kind.",
         stepOnMessage: "A reinforced shaft drops straight into the earth. Cold air rises from it, carrying something metallic.",
         message: [
@@ -599,7 +599,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     empty_sword_site_claudia: {
         id: 'empty_sword_site_claudia',
         name: 'Empty Sword Site',
-        image: '/locations/empty_site.png',
+        image: '/locations/sword5.png',
         shortDesc: 'Something was pulled from the earth here. Recently.',
         stepOnMessage: [
             'The ground here is disturbed.',
@@ -655,7 +655,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     empty_sword_site_cygwin: {
         id: 'empty_sword_site_cygwin',
         name: 'Empty Sword Site',
-        image: '/locations/empty_site.png',
+        image: '/locations/sword1.png',
         shortDesc: 'The rock here is cracked. Something was pulled free.',
         stepOnMessage: [
             'The stone here is split.',
