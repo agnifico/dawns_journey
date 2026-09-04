@@ -19,6 +19,7 @@
         "/images/characters/nemesis/nemesis9.png"
     ],
     "arenaImage": "/images/characters/nemesis/nemesis3.png",
+    "spriteGif": "/images/sprites/nemesis.gif",
     "hidden": false,
     "isCombatant": true,
     "types": [

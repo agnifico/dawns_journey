@@ -1,0 +1,1120 @@
+<!doctype html><html><head><!-- frame-runtime --><base href="/_f/1786656525-5edb/"><script>window.__FRAME_PREAMBLE={"capabilities":{"artifact":"artifact.BWD0CGLd.js","assets":"assets.a_mJ8q_Q.js","comments":"comments.DGBrvfFR.js","db":"db.VpIrzqr_.js","downloads":"downloads.BXsoAvg9.js","mcp":"mcp.D3B2EyQu.js","permissions":"permissions.BNySkLV5.js","room":"room.BgXZkiYR.js","sample":"sample.kXGC3wc0.js","self":"artifact.BWD0CGLd.js","user":"user.CGub7vEP.js"},"transforms":"_transforms.BI3gXbbT.js","comments":"_comments.hMHmCz0l.js","translate":"_translate.3AdCy0Ua.js"}</script><script>(function(){"use strict";var ce=["light","dark","system"],ue=/^[A-Za-z0-9_-]{1,64}$/,V=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,fe=new Set(["class","hidden","value","checked"]);function de(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||fe.has(t)}var pe="http://www.w3.org/1999/xhtml",me="http://www.w3.org/2000/svg",ge=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),_e=new Set(["script","style"]);function ve(e){const t=e.localName.toLowerCase();return e.namespaceURI===pe?!ge.has(t):e.namespaceURI===me?!_e.has(t):!1}function he(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_patch;if(t===null||typeof t!="object")return!1;const{seq:n,elements:a}=t;if(typeof n!="number"||!Number.isSafeInteger(n)||!Array.isArray(a)||a.length===0||a.length>64)return!1;for(const i of a){if(i===null||typeof i!="object")return!1;const r=i;if(typeof r.target!="string"||!ue.test(r.target)||r.text!==void 0&&typeof r.text!="string")return!1;if(r.attrsSet!==void 0){if(r.attrsSet===null||typeof r.attrsSet!="object")return!1;for(const[l,c]of Object.entries(r.attrsSet))if(!V.test(l)||typeof c!="string")return!1}if(r.attrsRemoved!==void 0){if(!Array.isArray(r.attrsRemoved))return!1;for(const l of r.attrsRemoved)if(typeof l!="string"||!V.test(l))return!1}}return!0}function ye(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function be(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function Ee(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&ce.includes(n)}function we(e){try{typeof reportError=="function"?reportError(e):setTimeout(()=>{throw e},0)}catch{}}var X=["#62744c","#b04e72","#5b7596","#a3651f","#7a6ba8","#3f7a75"],J=e=>{let t=0;for(let n=0;n<e.length;n++)t=t*31+e.charCodeAt(n)>>>0;return X[t%X.length]??"#788c5d"},Z="#c7c9d1",Ae=["data:image","/svg+xml,"].join(""),Q=e=>Ae+"%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2'%3E%3Ccircle cx='1' cy='1' r='1' fill='"+encodeURIComponent(e)+"'/%3E%3C/svg%3E",Se=Object.freeze({id:null,name:"",avatarUrl:Q(Z),color:Z,email:null,isOwner:!1,canEdit:!1}),je=(...e)=>{const t=e[0],n=typeof t=="string"?[t]:Array.isArray(t)?t.filter(i=>typeof i=="string"):[],a=Object.create(null);for(const i of n)a[i]={id:i,name:"",avatarUrl:Q(J(i)),color:J(i),email:null,isMe:!1};return a},ee=Object.freeze(Object.assign(Object.create(null),{user:Object.freeze(Object.assign(Object.create(null),{id:null,isOwner:!1,canEdit:!1,me:Se,profiles:je,name:"",avatarUrl:null,search:Object.freeze([]),email:null}))})),Re={sample:"sample"};function te(){const e=new Uint8Array(20);try{crypto.getRandomValues(e)}catch{for(let n=0;n<e.length;n++)e[n]=Math.floor(Math.random()*256)}let t="";for(const n of e)t+=(n%36).toString(36);return t}function Oe(e,t){const n=r=>{const l={path:r},c=r.split("/");return{id:c[c.length-1],path:r,get:()=>t("get",[l]),set:d=>t("set",[l,d]),update:d=>t("update",[l,d]),delete:()=>t("delete",[l]),acquire:d=>t("acquire",[l,d]),onSnapshot:(d,E)=>t("subscribe",[l,d,E]),collection:d=>i(r+"/"+String(d))}},a=r=>({where:(l,c,d)=>a({...r,where:[...r.where??[],{f:String(l),op:String(c),v:d}]}),orderBy:(l,c)=>a({...r,orderBy:{f:String(l),dir:c===void 0?"asc":String(c)}}),limit:l=>a({...r,limit:Number(l)}),get:()=>t("query",[r]),onSnapshot:(l,c)=>t("subscribe",[r,l,c])}),i=r=>({...a({collection:r}),path:r,doc:l=>n(r+"/"+(l===void 0?te():String(l))),add:l=>{const c=n(r+"/"+te());return Promise.resolve(c.set(l)).then(()=>c)}});e.doc=r=>n(String(r)),e.collection=r=>i(String(r))}var Pe=Object.freeze([]);function Te(e,t){let n=null,a=null;const i=()=>e.__settled;e.peers=()=>Pe,e.connected=()=>!1,e.emit=()=>i()?.()??Promise.resolve(),e.presence=r=>{const l=i();if(l)return l();let c=null;if(r!==null&&typeof r=="object")try{Array.isArray(r)||(c={...r})}catch{}return c===null?Promise.reject({code:"invalid_argument",message:"presence takes an object"}):(n===null&&(n=Object.create(null),a=Promise.resolve(t("presence",[n]))),Object.assign(n,c),a)}}var B="__frame_scroll",Me=150,Le=310,ke=160,Ce=3e4;function Ne(){let e=0,t=!1,n=!1,a=!1,i=0,r=null;const l=u=>{try{sessionStorage.setItem(B,JSON.stringify({y:u}))}catch{}},c=()=>{if(clearTimeout(e),r===null)return;const u=r;r=null,l(u)},d=()=>{if(t){t=!1;return}n=!0,r=scrollY,clearTimeout(e),e=setTimeout(c,Me)};try{addEventListener("scroll",d,{passive:!0}),addEventListener("pagehide",c)}catch{}const E=()=>{let u;try{u=sessionStorage.getItem(B)}catch{return null}if(u===null)return null;let g;try{g=JSON.parse(u)}catch{g=null}const f=g?.y;if(!(typeof f=="number"&&Number.isFinite(f)&&f>=0)){try{sessionStorage.removeItem(B)}catch{}return null}return f};let T=!1;const h=u=>{try{const g=scrollY;scrollTo({top:u,left:0,behavior:"instant"}),i=u,a=!0,clearTimeout(e),r=null,l(u);const f=scrollY;f!==g&&(t=!0),f!==u&&!T&&(T=!0,addEventListener("load",()=>{try{if(scrollY===f){const p=E();h(p!==null?p:i)}}catch{}},{once:!0}))}catch{}},R=()=>{try{return!!location.hash}catch{return!0}};let A=!1;const O=()=>{try{if(A||innerWidth>Le||innerHeight>ke)return;A=!0;const u=Date.now(),g=()=>{try{removeEventListener("resize",g)}catch{}if(Date.now()-u>Ce||n||R())return;const f=E();h(f!==null?f:i)};addEventListener("resize",g)}catch{}};let M=!1,o=!1;return{restore(){if(M||(M=!0,R()))return;const u=E();u!==null&&(h(u),O())},promoted(){if(o||(o=!0,R()))return;const u=E();u!==null?(h(u),O()):a&&h(i)}}}var Ye="modulepreload",We=function(e){return"/"+e},Ke={},Ue=function(t,n,a){let i=Promise.resolve();function r(l){const c=new Event("vite:preloadError",{cancelable:!0});if(c.payload=l,window.dispatchEvent(c),!c.defaultPrevented)throw l}return i.then(l=>{for(const c of l||[])c.status==="rejected"&&r(c.reason);return t().catch(r)})};(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let a=0;for(let i=0;i<n.length;i++){const r=n[i];try{e(t,r,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[r]}catch{}try{e(t,r,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[r]=="function"&&a++}if(a&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:a},"*")}catch{}})();var qe=1e4,Ie=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function re(e){for(const t of Ie)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var k=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),x=window.__FRAME_PREAMBLE?.transforms,$=window.__FRAME_PREAMBLE?.comments,z=window.__FRAME_PREAMBLE?.translate,q=/^[\w.-]+\.js$/,De=/^[a-z][a-z0-9_-]{0,63}$/,I=e=>Ue(()=>import("/_runtime/"+e),void 0);function Be(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:Y,pipe:()=>({wrap:(n,a)=>(...i)=>{try{return a(...i)}catch(r){return Promise.reject(r)}}})}}var ne=null,C=null;function F(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var H=!1;function xe(e,t){const n=[];for(const a of e.elements){const i=document.querySelector(`[data-id="${a.target}"]`);if(!i){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}if([...Object.keys(a.attrsSet??{}),...a.attrsRemoved??[]].some(r=>!de(r))){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}if(a.text!==void 0&&!ve(i)){parent.postMessage({__frame_patch_miss:{seq:e.seq}},t);return}for(const[r,l]of Object.entries(a.attrsSet??{}))if(!oe(i,r)){try{i.setAttribute(r,l)}catch{}se(i,r,l)}for(const r of a.attrsRemoved??[])oe(i,r)||(i.removeAttribute(r),se(i,r,null));typeof a.text=="string"&&(i.textContent=a.text),n.push(a.target)}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function se(e,t,n){if(!(e instanceof HTMLInputElement))return;const a=t.toLowerCase();a==="checked"?e.checked=n!==null:a==="value"&&e.type!=="file"&&(e.value=n??"")}function oe(e,t){const n=t.toLowerCase(),a=e;return n==="data-id"||(n==="value"||n==="checked")&&(a.__artifactSecret===!0||/^(password|hidden|file)$/.test(a.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${a.autocomplete??""}`))}function ae(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,H=!0):H&&(delete t.dataset.theme,t.style.colorScheme="",H=!1)}var ie=256,N=Object.assign(Object.create(null),{mcp:Object.assign(Object.create(null),{watchTool:{handlerArg:3}}),db:Object.assign(Object.create(null),{subscribe:{handlerArg:1,errArg:2}}),room:Object.assign(Object.create(null),{on:{handlerArg:1,errArg:2},onPeers:{handlerArg:0,errArg:1},onConnection:{handlerArg:0,errArg:1}})}),$e=Object.assign(Object.create(null),{db:(e,t)=>Oe(e,t),room:(e,t,n)=>Te(e,n)}),j=new Map;function Y(e,t){const n=j.get(e);if(!n)return;const a=Object.assign(Object.create(null),t);Object.assign(n.impl,a),n.r(n.ns),n.impl.__settled=()=>Promise.reject({code:"capability_removed",message:`${e}: method not in this runtime`});const i=n.queue;n.queue=[];for(const r of i){const l=a[r.method];if(l)if(N[e]?.[r.method])try{r.resolve(l(...r.args))}catch{U(r,N[e][r.method],{code:"transform_error",message:`${e}.${r.method} rejected its arguments`})}else l(...r.args).then(r.resolve,r.reject);else{const c={code:"capability_removed",message:`${e}.${r.method} is not in this runtime`},d=N[e]?.[r.method];if(d){U(r,d,c);continue}r.reject(c)}}}function ze(e,t){const n=j.get(e);if(!n)return;n.impl.__settled=()=>Promise.reject(t),n.r(null);const a=n.queue;n.queue=[];for(const i of a){const r=N[e]?.[i.method];if(r){U(i,r,t);continue}i.reject(t)}}function le(e,t){if(typeof e=="function")try{return e(...t)}catch{return Object.create(null)}return Array.isArray(e)?[...e]:e!==null&&typeof e=="object"?{...e}:e}function D(e,t){const n=ee[e];if(!n){ze(e,t);return}j.get(e)?.r(null),Y(e,Object.fromEntries(Object.entries(n).map(([a,i])=>[a,(...r)=>Promise.resolve(le(i,r))])))}function U(e,t,n){if(e.syncState?.dead)return;const a=t.errArg===void 0?void 0:e.args[t.errArg],i=t.errArg===void 0?e.args[t.handlerArg]:a;typeof i=="function"&&queueMicrotask(()=>{if(!e.syncState?.dead)try{i(t.errArg===void 0?{type:"error",error:n}:n)}catch(r){we(r)}})}var W=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(W&&W.writable===!1)){const e=x&&q.test(x)?I(x).catch(()=>{}):Promise.resolve(void 0),t=o=>{if(o.type==="auxclick"&&o.button!==1)return;const u=o.target,g=u&&u.closest?u.closest("a[href],area[href]"):null;if(!g)return;const f=g.getAttribute("href");if(!f)return;let p,P;try{p=new URL(f,document.baseURI),P=new URL(document.baseURI).origin}catch{return}if((p.protocol==="http:"||p.protocol==="https:")&&p.origin!==P){o.preventDefault();const w=(g.getAttribute("target")??"").toLowerCase(),y=o.type==="auxclick"||o.metaKey||o.ctrlKey||o.shiftKey||o.altKey||!["","_self","_top","_parent"].includes(w);parent.postMessage({__frame_nav:!0,url:p.href,newTab:y},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const n={},a=o=>{o.isTrusted&&(n.pointer=!0)},i=o=>{o.isTrusted&&(n.click=!0)};addEventListener("pointermove",a,{capture:!0,passive:!0}),addEventListener("click",i,{capture:!0,passive:!0}),e.then(o=>{o?.wireNav&&(o.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",a,!0),removeEventListener("click",i,!0),o.wireEngagement?.(n))});let r=null;try{r=Ne()}catch{}const l=W?.value??{};F(window,"claude",l);const c=o=>{let u;const g=new Promise(v=>{u=v}),f={impl:Object.create(null),queue:[],u:g,r:u,ns:null};j.set(o,f);const p=f.impl,P=v=>({code:"queue_overflow",message:`${o}.${v}: pre-init call queue is full`}),w=(v,s)=>{if(f.queue.length>=ie){const m=ee[o];return m&&v in m?Promise.resolve(le(m[v],s)):Promise.reject(P(v))}return new Promise((m,_)=>{f.queue.push({method:v,args:s,resolve:m,reject:_})})},y=Re[o],L=new Proxy(y===void 0?p:(()=>{}),{apply:(v,s,m)=>{const _=y,b=p[_]??p.__settled;return b?b(...m):w(_,m)},get:(v,s)=>{if(typeof s!="string"||s==="then"||s==="toJSON"||s==="valueOf")return;if(s==="toString")return Object.prototype.toString;if(y!==void 0&&(s==="call"||s==="apply"||s==="bind"))return Function.prototype[s];const m=N[o]?.[s];return m?(..._)=>{if(typeof _[m.handlerArg]!="function")throw new TypeError(`${o}.${s} requires a handler function`);const b=p[s];if(b)return b(..._);if(p.__settled){const S={dead:!1},Fe={args:[..._],syncState:S};return p.__settled().catch(He=>U(Fe,m,He)),()=>{S.dead=!0}}if(f.queue.length>=ie){const S={dead:!1};return U({args:[..._],syncState:S},m,P(s)),()=>{S.dead=!0}}let K=null;const G={dead:!1};return f.queue.push({method:s,args:_,resolve:S=>{K=typeof S=="function"?S:null,G.dead&&K?.()},reject:()=>{},syncState:G}),()=>{G.dead=!0,K?.()}}:(..._)=>{const b=p[s]??p.__settled;return b?b(..._):w(s,_)}},set:()=>!1});$e[o]?.(p,(v,s)=>L[v](...s),w),f.ns=L,F(l,o,L)};for(const o of Object.keys(k)){if(l[o]!==void 0){F(l,o,l[o]);continue}c(o)}if(l.use===void 0){const o=u=>{if(typeof u!="string"||!Object.hasOwn(k,u))return Promise.resolve(null);const g=j.get(u);return g?g.u:Promise.resolve(l[u]??null)};try{Object.defineProperty(l,"use",{value:o,writable:!0,configurable:!0,enumerable:!1})}catch{}}let d=null,E=null,T=0;const h=o=>{o.source!==parent||!re(o.origin)||ye(o.data)&&(d=o.data.__frame_init,C=o.origin,removeEventListener("message",h),clearTimeout(T),E?.())};addEventListener("message",h),parent.postMessage({__frame_connect:!0},"*");const R=new Promise(o=>{E=o,T=setTimeout(()=>{removeEventListener("message",h),o()},qe)}),A=document.readyState==="loading"?new Promise(o=>document.addEventListener("DOMContentLoaded",()=>o(),{once:!0})):Promise.resolve();A.then(()=>{try{r?.restore()}catch{}});const O={cb:null},M=o=>{if(!(o.source!==parent||!re(o.origin))&&be(o.data)){try{r?.promoted()}catch{}O.cb?.()}};addEventListener("message",M),R.then(async()=>{if(!d||!C){for(const s of j.keys())D(s,{code:"not_granted",message:"frame initialization did not arrive - capability unavailable"});return}ae(d.theme);const o=C;let u=!1,g=!1;addEventListener("message",s=>{if(s.source!==parent||s.origin!==o)return;Ee(s.data)&&ae(s.data.__frame_theme.theme),he(s.data)&&xe(s.data.__frame_patch,o);const m=s.data?.__fc_mode;m&&typeof m=="object"&&!u&&$&&q.test($)&&(u=!0,I($).then(b=>b.install?.(o,m.on===!0)).catch(()=>{}));const _=s.data?.__ft_cmd;_&&typeof _=="object"&&!g&&z&&q.test(z)&&(g=!0,I(z).then(b=>b.install?.(o,_)).catch(()=>{}))});const f=Object.keys(d.capabilities??{});for(const s of f)Object.hasOwn(k,s)||De.test(s)&&l[s]===void 0&&(c(s),D(s,{code:"capability_disabled",message:"capability not in this runtime generation"}));const p=f.filter(s=>Object.hasOwn(k,s)).map(s=>[s,k[s]]).filter(s=>typeof s[1]=="string"&&q.test(s[1])),P=await Promise.allSettled(p.map(([,s])=>I(s))),w=await e,y=C;w?.buildBoot||parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},y),ne=w?.buildBoot?w.buildBoot(d,w.TRANSFORMS??{},{shellOrigin:y,mount:Y},s=>parent.postMessage({__frame_cap_telemetry:s},y)):Be(d,y);const L=s=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:s}},y),v=ne;P.forEach((s,m)=>{const _=p[m][0];if(s.status!=="fulfilled"){L(_);return}try{s.value?.install?.(v)}catch{L(_)}});for(const[s,m]of j)if(m.impl.__settled===void 0){if(f.includes(s)){D(s,{code:"capability_disabled",message:"capability not available in this session"});continue}D(s,{code:"not_granted",message:"capability not available in this session"})}await A,parent.postMessage({__frame_ready:!0},C),e.then(s=>s?.installSizeReporter?.(y,O))})}})();</script><!-- /frame-runtime --><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Ashenfall Codex</title>
+<style>
+  :root {
+    --bg: #120c07;
+    --surface: #1a1208;
+    --surface-alt: #170f07;
+    --surface-raised: #201608;
+    --border: #3d2810;
+    --border-soft: #2a1808;
+    --text: #e8d4a8;
+    --text-dim: #b89968;
+    --text-mute: #7a5a38;
+    --accent: #e8b96a;
+    --accent-strong: #c9973a;
+    --accent-ember: #e2793c;
+    --shadow-inset: rgba(0, 0, 0, 0.35);
+
+    --el-fire: #e2703c;
+    --el-water: #4f9fd4;
+    --el-earth: #5cae7c;
+    --el-wind: #4bc7e3;
+    --el-light: #e8d383;
+    --el-dark: #b48ce0;
+    --el-normal: #b7ac95;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { color-scheme: dark; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(232, 185, 106, 0.06), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(180, 140, 224, 0.04), transparent 60%);
+    color: var(--text);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent-strong); color: #1a1208; }
+
+  a { color: var(--accent-strong); text-decoration-color: rgba(201, 151, 58, 0.4); }
+  a:hover { color: var(--accent); }
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+  }
+
+  .label {
+    font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  /* ── Page frame ─────────────────────────────────────────────────── */
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 6rem;
+  }
+
+  header.masthead {
+    text-align: center;
+    padding: 1.5rem 0 2.75rem;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    color: var(--text-mute);
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: "✦";
+    color: var(--accent-strong);
+    margin: 0 0.6em;
+    font-size: 0.75em;
+  }
+
+  h1.title {
+    font-family: Georgia, "Iowan Old Style", serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    margin: 0 0 0.6rem;
+    text-wrap: balance;
+  }
+
+  p.subhead {
+    max-width: 46rem;
+    margin: 0 auto 1.1rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 1.05rem;
+    text-wrap: balance;
+  }
+
+  .meta-line {
+    font-size: 0.68rem;
+    color: var(--text-mute);
+  }
+  .meta-line span + span::before { content: "·"; margin: 0 0.6em; color: var(--border); }
+
+  .callout {
+    max-width: 46rem;
+    margin: 1.75rem auto 0;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: inset 0 -3px 0 var(--shadow-inset);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .callout .label { font-size: 0.62rem; color: var(--accent-strong); display: block; margin-bottom: 0.5rem; }
+  .callout ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+  .callout li { margin-bottom: 0.35rem; color: var(--text-dim); font-size: 0.9rem; }
+  .callout li b { color: var(--text); font-weight: 600; }
+
+  /* ── Layout: sidebar + content ─────────────────────────────────── */
+
+  .layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+  nav.toc::-webkit-scrollbar { width: 6px; }
+  nav.toc::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .toc-part {
+    font-size: 0.62rem;
+    color: var(--accent-strong);
+    margin: 1.4rem 0 0.5rem;
+  }
+  .toc-part:first-child { margin-top: 0; }
+
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav.toc li a {
+    display: block;
+    padding: 0.28rem 0.1rem;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    padding-left: 0.6rem;
+  }
+  nav.toc li a:hover { color: var(--accent); border-left-color: var(--border); }
+  nav.toc li a.active { color: var(--accent); border-left-color: var(--accent-strong); }
+
+  main { min-width: 0; }
+
+  .part-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3.5rem 0 2rem;
+  }
+  .part-divider:first-child { margin-top: 0; }
+  .part-divider .rule { flex: 1; height: 1px; background: var(--border); }
+  .part-divider .part-label {
+    font-size: 0.72rem;
+    color: var(--accent-strong);
+    white-space: nowrap;
+  }
+
+  section.chapter {
+    margin-bottom: 2.6rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  h2.chapter-title {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    font-size: 1.35rem;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border-soft);
+    text-wrap: balance;
+  }
+  h2.chapter-title .num {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--text-mute);
+  }
+
+  h3.sub {
+    font-size: 1.02rem;
+    color: var(--accent-strong);
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .chapter p { margin: 0 0 0.9rem; max-width: 68ch; color: var(--text); }
+  .chapter p.dim { color: var(--text-dim); }
+  .chapter ul, .chapter ol { max-width: 68ch; margin: 0 0 0.9rem; padding-left: 1.3rem; }
+  .chapter li { margin-bottom: 0.55rem; }
+  .chapter strong { color: var(--accent); font-weight: 600; }
+  .chapter code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    padding: 0.05em 0.35em;
+    color: var(--accent-strong);
+  }
+
+  .note-box {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--accent-strong);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0 1.2rem;
+    max-width: 64ch;
+  }
+  .note-box p { margin: 0; font-size: 0.88rem; color: var(--text-dim); }
+  .note-box .label { display: block; font-size: 0.58rem; color: var(--accent-strong); margin-bottom: 0.35rem; }
+
+  /* ── Tables ─────────────────────────────────────────────────────── */
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0 0 1.4rem;
+  }
+
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    min-width: 460px;
+  }
+  table.data th {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.66rem;
+    text-align: left;
+    color: var(--text-mute);
+    background: var(--surface-raised);
+    padding: 0.6rem 0.85rem;
+    position: sticky;
+    top: 0;
+  }
+  table.data td {
+    padding: 0.55rem 0.85rem;
+    border-top: 1px solid var(--border-soft);
+    vertical-align: top;
+    color: var(--text-dim);
+  }
+  table.data td.name { color: var(--text); font-weight: 600; white-space: nowrap; }
+  table.data tr:nth-child(even) td { background: var(--surface-alt); }
+  table.data tr.filtered-out { display: none; }
+
+  /* element chips */
+  .chip {
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    padding: 0.14em 0.55em;
+    border-radius: 10px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .chip.fire   { color: var(--el-fire); }
+  .chip.water  { color: var(--el-water); }
+  .chip.earth  { color: var(--el-earth); }
+  .chip.wind   { color: var(--el-wind); }
+  .chip.light  { color: var(--el-light); }
+  .chip.dark   { color: var(--el-dark); }
+  .chip.normal, .chip.none { color: var(--el-normal); }
+  .chip + .chip { margin-left: 0.3rem; }
+
+  .yes { color: var(--accent-ember); font-weight: 600; }
+  .no  { color: var(--text-mute); }
+
+  /* weapon-type mini tables */
+  .type-block { margin-bottom: 1.6rem; }
+  .type-block h4 {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    color: var(--accent-strong);
+    margin: 0 0 0.55rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .type-block h4 .count { color: var(--text-mute); font-weight: normal; letter-spacing: 0; }
+  .weapon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0.4rem 1rem;
+  }
+  .weapon-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.87rem;
+    padding: 0.15rem 0;
+    border-bottom: 1px dotted var(--border-soft);
+  }
+  .weapon-row .wname { color: var(--text); }
+
+  /* archetype cards */
+  .archetype {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: inset 0 -3px 0 var(--shadow-inset);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.9rem;
+  }
+  .archetype h4 {
+    margin: 0 0 0.4rem;
+    color: var(--accent);
+    font-size: 1rem;
+  }
+  .archetype p { margin: 0; font-size: 0.88rem; color: var(--text-dim); max-width: 62ch; }
+
+  /* search */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.3rem;
+    max-width: 340px;
+  }
+  .filter-bar input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    outline: none;
+  }
+  .filter-bar input::placeholder { color: var(--text-mute); }
+  .filter-bar input:focus { border-color: var(--accent-strong); }
+  .filter-count { font-size: 0.68rem; color: var(--text-mute); font-family: ui-monospace, monospace; white-space: nowrap; }
+
+  footer.colophon {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-soft);
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-mute);
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.toc {
+      position: static;
+      max-height: none;
+      columns: 2;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+    }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow label">Dawn's Journey</p>
+    <h1 class="title">Ashenfall Codex</h1>
+    <p class="subhead">A complete reference for the game's mechanics and static data — compiled directly from source, not from the original design notes.</p>
+    <p class="meta-line label">
+      <span>2 parts</span>
+      <span>23 mechanics chapters</span>
+      <span>8 data catalogs</span>
+      <span>numeric balance values intentionally omitted</span>
+    </p>
+
+    <div class="callout">
+      <span class="label">Where this codex disagrees with earlier design notes, the source wins</span>
+      <ul>
+        <li><b>There is no "Weapon Mastery" stat.</b> Wild encounters are gated by a single account-wide <b>World Resonance</b> value; map regions are gated separately by per-element <b>Exploration Level</b> from equipped gear. See Chapter 4.</li>
+        <li><b>Ability types are not attack/heal/defence/utility.</b> In the shipped data, an ability's <code>abilityType</code> is one of <b>Physical Damage</b>, <b>Elemental Damage</b>, or <b>Special</b> — a looser <code>category</code> field (damage/heal/buff/debuff/control/utility) carries the old meaning instead. See Chapter 7.</li>
+        <li><b>The quest requirement vocabulary is larger than documented.</b> Beyond the eleven types previously written up, the engine also supports <code>counterpart_rank</code>, <code>talk</code>, <code>finish_location_event</code>, <code>not_tag</code>, <code>faction_rank</code>, <code>faction_score</code>, <code>stat_check</code>, <code>element_check</code>, <code>element_exploration_level_check</code>, <code>watch_scene</code>, and a <code>NOT</code> operator alongside <code>AND</code>/<code>OR</code>. See Chapter 12.</li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Table of contents">
+      <p class="toc-part label">Part I — Mechanics</p>
+      <ol>
+        <li><a href="#m1">1. The Core Loop</a></li>
+        <li><a href="#m2">2. Interaction Model</a></li>
+        <li><a href="#m3">3. Exploration &amp; the Event Screen</a></li>
+        <li><a href="#m4">4. World Resonance &amp; Exploration Level</a></li>
+        <li><a href="#m5">5. Wild Encounters</a></li>
+        <li><a href="#m6">6. Turn-Based Combat</a></li>
+        <li><a href="#m7">7. Abilities &amp; Effects</a></li>
+        <li><a href="#m8">8. Status Effects, Flags &amp; Tags</a></li>
+        <li><a href="#m9">9. Equipment</a></li>
+        <li><a href="#m10">10. Sword Rank &amp; Heart Rank</a></li>
+        <li><a href="#m11">11. Gifting</a></li>
+        <li><a href="#m12">12. Quests</a></li>
+        <li><a href="#m13">13. Factions &amp; Reputation</a></li>
+        <li><a href="#m14">14. Achievements</a></li>
+        <li><a href="#m15">15. Homestead: Farming</a></li>
+        <li><a href="#m16">16. Composting</a></li>
+        <li><a href="#m17">17. Gathering Skills</a></li>
+        <li><a href="#m18">18. Production &amp; Crafting</a></li>
+        <li><a href="#m19">19. The Workshop</a></li>
+        <li><a href="#m20">20. Player Progression</a></li>
+        <li><a href="#m21">21. Economy &amp; Shops</a></li>
+        <li><a href="#m22">22. The Journal</a></li>
+        <li><a href="#m23">23. Saves &amp; Profiles</a></li>
+      </ol>
+      <p class="toc-part label">Part II — Data Codex</p>
+      <ol>
+        <li><a href="#dA">A. Enemies</a></li>
+        <li><a href="#dB">B. Combat Archetypes</a></li>
+        <li><a href="#dC">C. Weapons by Type</a></li>
+        <li><a href="#dD">D. Relics &amp; Sets</a></li>
+        <li><a href="#dE">E. Crops</a></li>
+        <li><a href="#dF">F. Potions</a></li>
+        <li><a href="#dG">G. Food &amp; Provisions</a></li>
+        <li><a href="#dH">H. Gifting Data</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <div class="part-divider"><span class="part-label label">Part I</span><div class="rule"></div><span class="part-label label">Mechanics</span></div>
+
+      <section class="chapter" id="m1">
+        <h2 class="chapter-title"><span class="num">01</span> The Core Loop</h2>
+        <p>Dawn's Journey runs on one loop repeated at every scale, from a single footstep to a whole region: <strong>explore</strong> the world on foot, <strong>discover</strong> whatever the tile you land on holds — a creature, a character, a resource, a scripted moment — <strong>overcome</strong> it by clearing whatever check it presents, <strong>acquire</strong> the result, and come away able to <strong>go further</strong>, because almost everything you gain either raises your combat power or unlocks somewhere you couldn't reach before.</p>
+        <p class="dim">There is no separate "combat game" bolted onto an "exploration game" — wild creatures resolve as an instant threshold check rather than a fight (Chapter 5), and the only opponents you actually duel turn-by-turn are named characters and the Arena roster (Chapter 6). Progression is exploration.</p>
+      </section>
+
+      <section class="chapter" id="m2">
+        <h2 class="chapter-title"><span class="num">02</span> Interaction Model</h2>
+        <p>Everything interactive resolves through a single floating panel — the <strong>Event Screen</strong> — that updates every step and surfaces one or two contextual actions instead of a fixed menu. The effect is a controller-friendly, two-input feel: an <strong>Interact</strong> action whose meaning follows what you're facing, and a <strong>Contextual Action</strong> whose icon and label change to match it.</p>
+        <ul>
+          <li>Facing a character: <strong>Talk</strong>, plus <strong>Challenge</strong> (start a duel) and <strong>Gift</strong> when you're carrying something relevant.</li>
+          <li>Facing a chest, door, or similar object: <strong>Open</strong>.</li>
+          <li>Facing a resource node: <strong>Gather</strong>.</li>
+          <li>Inside a scripted scene or any menu: <strong>Confirm</strong>, or a labelled choice if the moment branches.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="m3">
+        <h2 class="chapter-title"><span class="num">03</span> Exploration &amp; the Event Screen</h2>
+        <p>Movement is tile-based — every input advances the player exactly one tile in a cardinal direction (arrow keys/WASD on desktop, a D-Pad on mobile). Each attempted step is checked, in order, against map boundaries and unwalkable terrain, then a region gate if the destination has one (Chapter 4), and only then resolves against that region's random tables. A resolved step lands on exactly one outcome:</p>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Outcome</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Nothing</td><td>The Event Screen shows the current region's atmospheric art. No mechanical effect.</td></tr>
+              <tr><td class="name">Enemy Encounter</td><td>A wild creature is here — resolved instantly, see Chapter 5.</td></tr>
+              <tr><td class="name">Item Found</td><td>A random item is added straight to inventory; the possible pool depends on the region.</td></tr>
+              <tr><td class="name">Character</td><td>A character's card appears with Talk / Challenge / Gift options.</td></tr>
+              <tr><td class="name">Location Event</td><td>A scripted moment plays — dialogue, sometimes a branching choice, sometimes a reward or a lasting change to the tile.</td></tr>
+              <tr><td class="name">Resource Node</td><td>A gathering spot you can harvest directly from the panel — see Chapter 17.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="dim">Most scripted Location Events fire once and leave an inert, changed version of the scene behind; a few are marked reusable (a shrine you can rest at repeatedly) and stay live indefinitely.</p>
+      </section>
+
+      <section class="chapter" id="m4">
+        <h2 class="chapter-title"><span class="num">04</span> World Resonance &amp; Exploration Level</h2>
+        <p>Two independent stats gate two different kinds of progress.</p>
+        <h3 class="sub">World Resonance</h3>
+        <p><strong>World Resonance</strong> is a single, account-wide number with no elemental split. It climbs passively over real time (it accrues even while you're not playing and is claimed on your next load), from quest rewards, and from a one-time bonus the very first time you defeat any given creature type. It's compared directly against a creature's own Resonance Requirement to decide the win/lose check in Chapter 5 — nothing else about the fight matters.</p>
+        <h3 class="sub">Exploration Level</h3>
+        <p><strong>Exploration Level</strong> is elemental and comes from equipped gear — chiefly Relics, occasionally a Weapon — each carrying bonus levels in one or more elements. A gated region lists one or more alternative <em>(element, level)</em> requirements, and satisfying <em>any single one</em> of them is enough to pass — the "you need Water Exploration to swim here" mechanic runs on this stat, not on World Resonance or on overall combat power.</p>
+        <div class="note-box"><span class="label">Note</span><p>Because the two systems are independent, it's entirely possible to be strong enough to defeat everything in a region and still be turned back at its border for lacking the right element in your gear — or the reverse.</p></div>
+      </section>
+
+      <section class="chapter" id="m5">
+        <h2 class="chapter-title"><span class="num">05</span> Wild Encounters</h2>
+        <p>Wild creatures are not fought turn-by-turn. Landing on one triggers a single automatic check: if your current World Resonance meets or exceeds that creature's Resonance Requirement, you win outright — the game awards XP, registers a kill (relevant to some quests), rolls the creature's drop table, plays a flavour line chosen by the element of your currently equipped weapon, and, the very first time you've ever beaten that specific creature, grants a one-time World Resonance bonus on top. Falling short means an automatic loss instead: a small fixed HP cost, no rewards, and the creature simply disappears — there is no partial credit and no player input in either outcome.</p>
+        <p><strong>Legendary</strong> creatures run the identical mechanic at a much higher Resonance Requirement, but — unlike ordinary wild creatures — carry a full combat stat block of their own and exclusive drops, and several double as one-off sighting Achievements (Chapter 14).</p>
+      </section>
+
+      <section class="chapter" id="m6">
+        <h2 class="chapter-title"><span class="num">06</span> Turn-Based Combat</h2>
+        <p>Actual turn-based combat is reserved for characters: duels against story NPCs (tied to their Sword Rank track, Chapter 10) and the dedicated Arena roster (Data Codex, Section B). The shape of a fight:</p>
+        <ul>
+          <li><strong>Speed</strong> decides who acts first each round.</li>
+          <li>On your turn you pick one <strong>Ability</strong>; an AI-controlled opponent picks its own via the phase/trigger system below.</li>
+          <li>Landing a hit clears two independent checks: the ability's own accuracy roll, and a contest between the attacker's <strong>Precision</strong> and the defender's <strong>Evasion</strong> (Precision reduces effective Evasion point-for-point). A <code>guaranteed_hit</code> status — the payoff of Lock-On-style setup abilities — skips both, once.</li>
+          <li>A landed hit can additionally roll <strong>Critical</strong>: a chance stat for whether it happens, a damage stat for how much extra it does.</li>
+          <li><strong>Aura Shield</strong>, where present, is a secondary pool that absorbs damage ahead of HP.</li>
+          <li><strong>Elemental effectiveness</strong> follows a four-element cycle plus a paired opposition: Fire is strong against Earth, Earth against Wind, Wind against Water, and Water against Fire — and each element resists an attack of its own kind. Light and Dark counter each other directly. Both Light and Dark deal reduced damage against Normal-element targets, while Normal itself carries no advantage or weakness against anything.</li>
+          <li>The fight ends the moment either side's HP reaches zero.</li>
+        </ul>
+        <h3 class="sub">How opponents decide</h3>
+        <p>Every NPC and Arena opponent runs on a <strong>phase-and-trigger</strong> AI. Their ability roster is split into HP-threshold <strong>phases</strong> (each played either as a fixed sequence or drawn randomly), overlaid with priority-ordered <strong>triggers</strong> that fire on specific conditions — the player's HP crossing a line, a status appearing or lapsing on either side, a fixed turn number, an immunity flag being detected on the player. This is what lets an opponent open with a signature move, adapt mid-fight to what you've done, and pivot to a finisher once you're low — see the Combat Archetypes catalog for what this produces in practice.</p>
+      </section>
+
+      <section class="chapter" id="m7">
+        <h2 class="chapter-title"><span class="num">07</span> Abilities &amp; Effects</h2>
+        <p>An <strong>Ability</strong> is a named, targetable action built from one or more <strong>Effects</strong> that resolve in order. Every ability carries an <code>abilityType</code> — <strong>Physical Damage</strong>, <strong>Elemental Damage</strong>, or <strong>Special</strong> — used for UI grouping, and a stricter <code>category</code> — <strong>damage / heal / buff / debuff / control / utility</strong> — that reflects its dominant purpose and feeds AI and set-bonus logic. Open-vocabulary <strong>tags</strong> (an element, a role like <em>finisher</em>/<em>opener</em>/<em>setup</em>/<em>sustain</em>, a synergy marker like <em>poison_apply</em>/<em>poison_payoff</em>) let gear passives, Sets, and dual-weapon bonuses apply targeted damage multipliers without hardcoding ability lists.</p>
+        <p>Eleven effect types cover everything an ability can do:</p>
+        <ul>
+          <li><strong>Damage</strong> — physical or elemental damage scaled off the attacker's stats; optionally multi-hit.</li>
+          <li><strong>Conditional Damage</strong> — a multiplier that changes based on a condition (an HP threshold on either side, or a status being present) — the basis of "execute" abilities.</li>
+          <li><strong>Apply Status</strong> — attaches a Status Effect (Chapter 8) to a target, either replacing or stacking with an existing instance.</li>
+          <li><strong>Stat Modifier</strong> — a lighter-weight temporary stat change for straightforward buffs and debuffs.</li>
+          <li><strong>Shield Manipulate</strong> — reduces, breaks, or drains an Aura Shield.</li>
+          <li><strong>Heal</strong> — restores HP or Aura Shield, scaled off a chosen stat.</li>
+          <li><strong>Stat Transfer</strong> — steals a stat from the defender into a (possibly different) stat on the attacker; the defender can retain a portion of what's taken.</li>
+          <li><strong>Heal % Max HP</strong> and <strong>Heal Full</strong> — flat-percentage and full restores, used by "second wind" and resurrection-style abilities.</li>
+          <li><strong>Lifesteal</strong> — damage that returns a fraction of what it deals as healing.</li>
+          <li><strong>Cleanse</strong> — strips either negative effects (debuffs, poisons, stuns) or positive ones (buffs — functioning as Dispel) from a target.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="m8">
+        <h2 class="chapter-title"><span class="num">08</span> Status Effects, Flags &amp; Tags</h2>
+        <p>A <strong>Status Effect</strong> is the runtime object abilities create: a duration, an optional damage- or heal-per-turn tick, an optional stun (skips the holder's next turn), optional temporary stat modifiers, and a <strong>category</strong> — poison / stun / bleed / burn / freeze / buff / debuff — that immunities key off. Gear-granted passives use the identical structure but are marked permanent and immune to being cleansed.</p>
+        <p>A short set of <strong>flags</strong> models immunities and one-shot combat guarantees: immunity to stat reduction, immunity to stat increase, immunity to the loss-half of a stat transfer, immunity to poison, immunity to stun, and <code>guaranteed_hit</code> (the carrier's next attack skips both accuracy and evasion, then is consumed). Bleed, burn, and freeze immunity flags already exist in the data model but aren't granted by anything shipped yet — reserved for future status categories.</p>
+      </section>
+
+      <section class="chapter" id="m9">
+        <h2 class="chapter-title"><span class="num">09</span> Equipment</h2>
+        <p>Two equipment groups: up to two <strong>Weapons</strong> and up to four <strong>Relics</strong>, both contributing combat stats directly. Weapons and some Relics additionally carry <strong>Exploration Level</strong> bonuses (Chapter 4) and occasionally a <strong>Gear Passive</strong> — a small always-on effect (an immunity, a tag-based damage bonus, a damage-over-time multiplier) baked in as a permanent status the instant the item is equipped.</p>
+        <p><strong>Sets</strong> are predefined groups of specific Relics; wearing enough pieces from the same set unlocks an escalating bonus at each piece-count threshold — flat stats, a bonus conditional on an equipped weapon's element, a tag-targeted damage multiplier, a damage-over-time multiplier, or a bonus that only applies while the wearer is faster or slower than their opponent (re-evaluated every single strike, so it can flip mid-fight). Separately, equipping two weapons that share an element unlocks its own dual-weapon bonus — a standing incentive to commit to one element rather than mixing.</p>
+        <p class="dim">A handful of preset loadouts — quick-swap combinations such as a physical glass-cannon build or an Aura-shield tank build — exist purely as convenience presets for jumping into a playstyle without re-equipping six items by hand.</p>
+      </section>
+
+      <section class="chapter" id="m10">
+        <h2 class="chapter-title"><span class="num">10</span> Sword Rank &amp; Heart Rank</h2>
+        <p>Every combat-capable character tracks two independent, numeric relationship ladders. <strong>Sword Rank</strong> rises through duelling and defeating them — some characters weight this far more heavily than any gift. <strong>Heart Rank</strong> rises through conversation, time, and Gifting (Chapter 11), gating its own dialogue, rewards, and story content with its own rank-up requirements and rewards, entirely separate from the Sword track. The two can move independently — it's possible to earn someone's combat respect long before they warm up to you, or the other way around.</p>
+      </section>
+
+      <section class="chapter" id="m11">
+        <h2 class="chapter-title"><span class="num">11</span> Gifting</h2>
+        <p>From the Event Screen, a character with a defined gift list can be handed an item straight out of inventory. Each item that character actually recognises has its own short reaction line and its own contribution toward their Heart Rank — recognised gifts aren't worth the same amount, so the system rewards knowing what a specific character wants rather than just spending items at them. Handing over something outside their list plays no reaction and has no relationship effect. See Section H of the Data Codex for the underlying data shape.</p>
+      </section>
+
+      <section class="chapter" id="m12">
+        <h2 class="chapter-title"><span class="num">12</span> Quests</h2>
+        <p>A quest is a <strong>Rank</strong>: a title, a description, an optional start requirement, and an ordered list of <strong>Stages</strong>. Each stage has an objective, a <strong>Requirement</strong> that must be satisfied to clear it, and optional dialogue for when the stage begins, when it's reminded, and when it succeeds — plus success rewards, and, for stages that allow it, a refusal path with its own dialogue and effects.</p>
+        <h3 class="sub">Quest states</h3>
+        <p><code>LOCKED</code> · <code>AVAILABLE</code> · <code>ACTIVE</code> · <code>COMPLETED</code> · <code>FAILED</code> · <code>REPORT_PENDING</code> (a stage is mechanically done but hasn't yet been reported back to the character in dialogue).</p>
+        <h3 class="sub">Requirement types</h3>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Type</th><th>Checks</th></tr></thead>
+            <tbody>
+              <tr><td class="name">dialogue / talk</td><td>Simply speaking to the character.</td></tr>
+              <tr><td class="name">give_item</td><td>Holding a quantity of an item — consumed on completion.</td></tr>
+              <tr><td class="name">have_item</td><td>Holding a quantity of an item — not consumed.</td></tr>
+              <tr><td class="name">kill</td><td>Cumulative defeats of a specific enemy.</td></tr>
+              <tr><td class="name">win_against_npc / lose_to_npc / fight_npc</td><td>A duel outcome (or simply a duel, regardless of outcome) against a specific character.</td></tr>
+              <tr><td class="name">npc_rank / counterpart_rank</td><td>A character's Sword or Heart Rank reaching a value; <code>counterpart_rank</code> checks the same character's other track.</td></tr>
+              <tr><td class="name">have_tag / not_tag</td><td>Presence or absence of a world tag on the player.</td></tr>
+              <tr><td class="name">quest_state</td><td>Another quest currently sitting in a specific state.</td></tr>
+              <tr><td class="name">finish_location_event</td><td>Completion of a specific Location Event, optionally scoped to past history vs. future occurrence.</td></tr>
+              <tr><td class="name">faction_rank / faction_score</td><td>A minimum rank or score with a specific faction.</td></tr>
+              <tr><td class="name">stat_check</td><td>A minimum value on a specific base stat.</td></tr>
+              <tr><td class="name">element_check / element_exploration_level_check</td><td>Elemental stat thresholds, including Exploration Level in a specific element.</td></tr>
+              <tr><td class="name">watch_scene</td><td>Having watched a specific cutscene.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Requirements combine into trees with <code>AND</code> (all must pass), <code>OR</code> (any one), and <code>NOT</code> (inverts a single child requirement).</p>
+        <h3 class="sub">Reward types</h3>
+        <p><code>item</code>, <code>tag</code> / <code>remove_tag</code>, <code>change_reputation</code> (the two mega-factions, Chapter 13), <code>faction_score</code> (a local faction), <code>complete_quest_stage</code>, <code>world_resonance</code>, <code>fail_quest</code>, and <code>tag_conditional</code> — a bundle of further rewards gated behind the player already holding a given tag.</p>
+      </section>
+
+      <section class="chapter" id="m13">
+        <h2 class="chapter-title"><span class="num">13</span> Factions &amp; Reputation</h2>
+        <p>Two structurally different faction layers exist side by side. At the top sits a single binary allegiance between two large, opposed powers — a devout, order-preserving public institution and its secretive, unseen counterpart — which shapes certain quest and reward branches project-wide once chosen. Beneath that, a set of smaller, local factions each track their own independent <strong>Score</strong> and tiered <strong>Rank</strong>, raised through quests, character interactions, and world events, each unlocking its own item rewards at set score thresholds. Some local factions are explicit rivals: gaining Score with one automatically docks a fraction of it from the rival.</p>
+      </section>
+
+      <section class="chapter" id="m14">
+        <h2 class="chapter-title"><span class="num">14</span> Achievements</h2>
+        <p>Achievements fall into four categories: <strong>Sighting</strong> (first encounter with a specific — often legendary — creature), <strong>Kill Count</strong> (cumulative defeats, single- or multi-tier), <strong>Collection</strong>, and <strong>Milestone</strong>. Some are marked secret and stay hidden until unlocked. Multi-tier achievements track progress toward successive thresholds, each awarding its own reward independently.</p>
+      </section>
+
+      <section class="chapter" id="m15">
+        <h2 class="chapter-title"><span class="num">15</span> Homestead: Farming</h2>
+        <p>The Homestead holds the player's personal farm plots, organised into unlockable <strong>Environments</strong> — an always-available open field, plus gated ones like a greenhouse or a forest floor — each starting with a base plot count that can be expanded further through the Workshop (Chapter 19). Each plot holds one <strong>Crop</strong> at a time, planted from a matching Seed. A crop advances through several timed <strong>Growth Stages</strong> — real-world-clock timers that keep running even while the game is closed — each optionally gated by a watering requirement in one of two flavours: <em>lifetime-based</em> (water it enough times, ever, across the whole grow) or <em>stage-based</em> (water it enough times since the current stage began). A stage whose timer has finished but whose watering hasn't been met is flagged and stalls until watered. Most crops also carry an <strong>Ideal Season</strong>, in which they grow faster and yield more. Harvesting yields the crop item — sometimes with a secondary "leaves" by-product — plus Farming XP; some crops additionally require a specific Environment and/or a specific unlocked Workshop technology before they can be planted at all.</p>
+      </section>
+
+      <section class="chapter" id="m16">
+        <h2 class="chapter-title"><span class="num">16</span> Composting</h2>
+        <p>Leaves gathered while harvesting convert into <strong>Compost</strong> — a soil amendment some crops require — by committing them, in fixed batches, to a timed composting queue that runs down in real time exactly like crop growth; larger batches simply take proportionally longer.</p>
+      </section>
+
+      <section class="chapter" id="m17">
+        <h2 class="chapter-title"><span class="num">17</span> Gathering Skills</h2>
+        <p><strong>Woodcutting</strong> and <strong>Mining</strong> are the pure gathering skills, worked through <strong>Resource Nodes</strong> scattered across the world — trees and logs yielding wood, rock and ore veins yielding stone and similar materials. Every node defines a required skill level to attempt, a fixed reward, a cooldown before it can be gathered again, a cap on total gathers before it's exhausted for good, and its own XP-per-gather value. <strong>Alchemy</strong> gathers some of its own raw ingredients the same way (gem fountains, mushroom patches) in addition to its production role below.</p>
+      </section>
+
+      <section class="chapter" id="m18">
+        <h2 class="chapter-title"><span class="num">18</span> Production &amp; Crafting</h2>
+        <p>Three skills turn gathered or farmed materials into new items. <strong>Smithing</strong> forges Weapons from raw materials. <strong>Cooking</strong> turns ingredients into dishes that heal and/or grant temporary combat buffs — several recipes additionally consume <strong>Time Point</strong> (Chapter 21) as an ingredient, standing in for real preparation time. <strong>Alchemy</strong> brews Potions — temporary stat elixirs — from herbs, gems, and crops. Every recipe shares the same shape: a skill, a list of ingredient items and quantities, an output item and quantity, an XP award, and a minimum skill level. A parallel materials track under Smithing turns raw gems plus a secondary ingredient into elemental <strong>Bars</strong>, which feed into weapon crafting and upgrades of that element.</p>
+      </section>
+
+      <section class="chapter" id="m19">
+        <h2 class="chapter-title"><span class="num">19</span> The Workshop</h2>
+        <p>The Workshop is a Farming-linked tech tree, spent in <strong>Tech Points</strong> earned by levelling the Farming skill. Its nodes unlock new farm Environments, expand an existing environment's plot count, or unlock supporting technologies (raised beds, vertical supports, cold frames, and similar) that specific crops require before they can be planted. Nodes can carry level requirements and prerequisite nodes, occasionally offering alternative (either/or) prerequisites.</p>
+      </section>
+
+      <section class="chapter" id="m20">
+        <h2 class="chapter-title"><span class="num">20</span> Player Progression</h2>
+        <p>Beyond the six skills, each with its own level/XP curve and per-level rewards, the player character has an overall <strong>Level</strong>, gaining XP from combat and other sources and awarding <strong>Level-Up Points</strong> spent permanently on individual combat stats. <strong>World Resonance</strong> (Chapter 4) is a separate, always-climbing axis with no "level" of its own — it's a raw accumulating number checked directly against enemy requirements.</p>
+      </section>
+
+      <section class="chapter" id="m21">
+        <h2 class="chapter-title"><span class="num">21</span> Economy &amp; Shops</h2>
+        <p><strong>Argentum</strong> is the primary currency — earned from world drops and quest rewards, spent in shops and some crafting. <strong>Time Point</strong> is a secondary, passively-accumulating currency (earned simply by playing) spent almost exclusively as a Cooking ingredient. Shops present three separate storefronts: a <strong>Café</strong> selling prepared dishes, a <strong>Grocery</strong> selling raw ingredients and everyday goods, and a curated rarities counter for a handful of special items priced well above the rest.</p>
+      </section>
+
+      <section class="chapter" id="m22">
+        <h2 class="chapter-title"><span class="num">22</span> The Journal</h2>
+        <p>An in-game reference — chapters for Achievements, Characters, Enemies, a Glossary, a How-to-Play index, and Items — mirrors much of what's documented here, browsable at any time without leaving the game.</p>
+      </section>
+
+      <section class="chapter" id="m23">
+        <h2 class="chapter-title"><span class="num">23</span> Saves &amp; Profiles</h2>
+        <p>The game autosaves the full player state — inventory, position, quest/achievement/faction progress, farm plots, and more. Beyond a standard fresh start, named starting <strong>Profiles</strong> exist, including a curated "everything unlocked" exhibition mode for free exploration of the full item and weapon roster.</p>
+      </section>
+
+      <div class="part-divider"><span class="part-label label">Part II</span><div class="rule"></div><span class="part-label label">Data Codex</span></div>
+
+      <div class="filter-bar">
+        <input type="text" id="dataFilter" placeholder="Filter every table below…" autocomplete="off">
+        <span class="filter-count" id="filterCount"></span>
+      </div>
+
+      <section class="chapter" id="dA">
+        <h2 class="chapter-title"><span class="num">A</span> Enemies</h2>
+        <p class="dim">Wild and legendary creatures encountered while exploring. See Chapter 5 for how an encounter actually resolves.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Name</th><th>Element(s)</th><th>Legendary</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Aquamech Shark</td><td><span class="chip water">Water</span></td><td class="no">—</td><td>A mechanical shark patrolling the waters.</td></tr>
+              <tr><td class="name">Greenhorn</td><td><span class="chip earth">Earth</span></td><td class="no">—</td><td>A novice adventurer, easily defeated.</td></tr>
+              <tr><td class="name">White Wyvern</td><td><span class="chip wind">Wind</span></td><td class="no">—</td><td>A majestic but dangerous white wyvern.</td></tr>
+              <tr><td class="name">Woodmech Bear</td><td><span class="chip earth">Earth</span></td><td class="no">—</td><td>A bear-like automaton made of wood and gears.</td></tr>
+              <tr><td class="name">Vanguard Siren</td><td><span class="chip water">Water</span></td><td class="no">—</td><td>An elite soldier who fiercely protects the Southern Seas.</td></tr>
+              <tr><td class="name">Biceon</td><td><span class="chip water">Water</span><span class="chip earth">Earth</span></td><td class="no">—</td><td>A massive bison with fur of permafrost and horns of solid ice.</td></tr>
+              <tr><td class="name">Coral-Eyes</td><td><span class="chip water">Water</span></td><td class="no">—</td><td>A sturdy crab whose eyes have been replaced by living, growing coral.</td></tr>
+              <tr><td class="name">Forest Prowler</td><td><span class="chip earth">Earth</span><span class="chip wind">Wind</span></td><td class="no">—</td><td>A feline predator built for extreme speed.</td></tr>
+              <tr><td class="name">Inkjet Ray</td><td><span class="chip earth">Earth</span><span class="chip wind">Wind</span></td><td class="no">—</td><td>A manta ray evolved into a draconic, semi-flying, ink-spitting beast.</td></tr>
+              <tr><td class="name">Mountain Basilisk</td><td><span class="chip earth">Earth</span></td><td class="no">—</td><td>A heavy-scaled lizard that can turn prey to stone.</td></tr>
+              <tr><td class="name">Punching Tortoise</td><td><span class="chip water">Water</span><span class="chip earth">Earth</span></td><td class="no">—</td><td>A beach-dwelling tortoise with unexpectedly fast reflexes.</td></tr>
+              <tr><td class="name">Rock Lion</td><td><span class="chip earth">Earth</span></td><td class="no">—</td><td>A prideful beast with a mane of jagged stone.</td></tr>
+              <tr><td class="name">Shark Soldier</td><td><span class="chip water">Water</span></td><td class="no">—</td><td>Humanoid shark warriors serving the undersea kingdom.</td></tr>
+              <tr><td class="name">Solis Sentinel</td><td><span class="chip light">Light</span></td><td class="no">—</td><td>A knight clad in armor that radiates pure sunlight.</td></tr>
+              <tr><td class="name">Toxolotl</td><td><span class="chip water">Water</span><span class="chip dark">Dark</span></td><td class="no">—</td><td>A neon-colored axolotl that secretes paralysing toxins.</td></tr>
+              <tr><td class="name">Water Spirit Beast</td><td><span class="chip water">Water</span></td><td class="no">—</td><td>A shimmering entity made of pure, high-pressure water.</td></tr>
+              <tr><td class="name">Archangel One</td><td><span class="chip light">Light</span><span class="chip wind">Wind</span></td><td class="yes">Yes</td><td>A high-ranking divine valkyrie serving the celestial realms.</td></tr>
+              <tr><td class="name">Bob</td><td><span class="chip water">Water</span><span class="chip wind">Wind</span></td><td class="yes">Yes</td><td>A titanic dragon shark the size of an island.</td></tr>
+              <tr><td class="name">Wilhemina</td><td><span class="chip water">Water</span></td><td class="yes">Yes</td><td>An elite siren commander, spectral and legendary.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter" id="dB">
+        <h2 class="chapter-title"><span class="num">B</span> Combat Archetypes</h2>
+        <p class="dim">The Arena roster and named duel opponents, described by fighting style rather than identity — drawn from the phase/trigger design of each combatant (Chapter 6).</p>
+
+        <div class="archetype">
+          <h4>The Forest Ranger</h4>
+          <p>Patient and reactive. Opens by applying a poison and keeps it topped up all fight, escalating to raw elemental damage once critically wounded. Detects poison immunity on the first exchange and switches entirely to direct damage if it finds one.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Iron Lioness</h4>
+          <p>Opens by converting its own Attack into Defence, then grinds the opponent down with stuns, debuffs, and poison. Carries two one-time self-heals, each triggered at a specific health threshold.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Ice Aristocrat</h4>
+          <p>Opens by converting Defence into Attack, then snowballs with periodic attack buffs and defence-shredding debuffs, plus a battlefield chill effect that recurs on a fixed cadence.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Holy Commander</h4>
+          <p>A burst archetype: a safety/evasion opener, an accuracy-guaranteeing follow-up while healthy, and an all-in execute once the opponent drops low.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Juggernaut</h4>
+          <p>Permanently immune to both stun and stat reduction — no control or debuff works on it at all. Resurrects itself once when brought near defeat. Wins purely through sustained raw damage; there is no trick that shortcuts the fight.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Pirate Captain</h4>
+          <p>Pure aggression. Fast, hard-hitting, and largely sequence-driven rather than reactive, escalating to an explosive area-style attack once the opponent is low.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Sea Sovereign</h4>
+          <p>A bulky, evasive sustain archetype. Opens with a defensive ward, locks a persistent debuff onto the opponent early, periodically ascends for a temporary power spike, and leans on a healing/damage hybrid attack when hurt.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Tidal Duelist</h4>
+          <p>Runs the Sea Sovereign's exact ability kit and opening sequence, but rebuilt as a leaner, far faster mirror of it — trading the Sovereign's bulk for extreme speed, evasion, and precision.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Berserker</h4>
+          <p>Stacks a self-buff every single turn without exception, carries no healing or utility of its own, and grows disproportionately dangerous the longer a fight against it runs. Abandons its normal pattern entirely for a harder-hitting, all-out mode once critically wounded.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Lifestealer</h4>
+          <p>Its own damage output scales with its remaining HP, so its whole strategy is staying topped up — a regenerating aura, lifesteal, and a cleanse-plus-heal panic button when hurt, plus a Dispel to punish the opponent's own buffs.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Punisher</h4>
+          <p>A pure counter-archetype. Raises its own defence the moment the opponent buffs their attack, ignores the opponent's defence buffs and hits straight through them, strips healing-over-time and precision-lock effects on sight, and punishes a guaranteed-hit setup by striking first before it can land.</p>
+        </div>
+        <div class="archetype">
+          <h4>The Trickster</h4>
+          <p>Built entirely around very high Evasion backed by high Precision, so the opponent's own Evasion barely helps against it in return. Opens by stacking evasion immediately and keeps a precision debuff on the opponent topped up — only a guaranteed-hit effect reliably gets a clean hit in. This exact kit appears twice in the roster, on two separate combatants.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="dC">
+        <h2 class="chapter-title"><span class="num">C</span> Weapons by Type</h2>
+        <p class="dim">Seven physical forms recur across all six elements plus a neutral Normal tier. Six of the seven (Sword, Staff, Polearm, Ranged, Fan, Heavy) are exposed as filterable categories in the Equipment screen; Claw exists identically in the data but isn't yet one of the exposed filter buttons. A further handful of early and signature weapons ship without an explicit type flag and are listed separately at the end.</p>
+
+        <div class="type-block">
+          <h4>Sword <span class="count">— 14</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Burning Cutlass</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Vine Whip</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Water Whip</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Falling Leaves</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Vampiric Sword</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Dawnbringer</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Xochi</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Raikiri</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Unity</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Fatespinner</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Amaterasu</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Frost Dagger</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Beloved's Eye</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Raven Sword</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Staff <span class="count">— 8</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Staff</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Mountain Breaker</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Kyoka Suigetsu</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Lightning</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Serpent's Spire</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Nightsoul Staff</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Rose Rapier</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Lotus Rapier</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Polearm <span class="count">— 7</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Polearm</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Advanced Polearm</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Queen's Trident</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Hearthfire</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Crystal Polearm</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Jade Spear</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Sun Wukong's Staff</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Ranged (Bow) <span class="count">— 8</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Bow</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Advanced Bow</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Freedom Sworn</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Flame Bow</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Viper Bow</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Skypiercer</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Nightpiercer</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Ode to Harmony</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Claw <span class="count">— 8</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Claw</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Advanced Claw</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Blazing Claw</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Nature's Claw</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Frost Claw</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Ancient Dragon Claw</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Royal Claw</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Darkness Claw</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Fan <span class="count">— 8</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Fan</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Windcaller</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">White Peacock Fan</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Salty Winds</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Sakura Fubuki</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Gilded Fan</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Night Sky</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Razor Fan</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Heavy (Axe / Warhammer / Greatsword / Lance) <span class="count">— 14</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Axe</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Spiked Warhammer</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Her Majesty's Watch</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Royal Greatsword</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Hellward Lance</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Pestilence</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Tsunami Fin</span></div>
+            <div class="weapon-row"><span class="chip wind">Wind</span><span class="wname">Phobos and Deimos</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Saint's Greatsword</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Cygwin's Axe</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Toxic Fang</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Snowflake</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Gilded Claymore</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Kingslayer</span></div>
+          </div>
+        </div>
+
+        <div class="type-block">
+          <h4>Untyped / Signature <span class="count">— 8</span></h4>
+          <div class="weapon-grid">
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Basic Sword</span></div>
+            <div class="weapon-row"><span class="chip normal">Normal</span><span class="wname">Advanced Sword</span></div>
+            <div class="weapon-row"><span class="chip fire">Fire</span><span class="wname">Magma Sword</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Pleasure</span></div>
+            <div class="weapon-row"><span class="chip water">Water</span><span class="wname">Frostfall</span></div>
+            <div class="weapon-row"><span class="chip light">Light</span><span class="wname">Saint's Rapier</span></div>
+            <div class="weapon-row"><span class="chip dark">Dark</span><span class="wname">Medusa Scissors</span></div>
+            <div class="weapon-row"><span class="chip earth">Earth</span><span class="wname">Gratitude <em>(secret / gift weapon)</em></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" id="dD">
+        <h2 class="chapter-title"><span class="num">D</span> Relics &amp; Sets</h2>
+        <p class="dim">Relics fill the four accessory slots. A <strong>Shield</strong> flag marks a distinct sub-line of purely defensive relics; everything else is a general accessory (trinket, garment, jewellery).</p>
+
+        <h3 class="sub">Shields</h3>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Name</th><th>Element</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Basic Shield</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Hide Shield</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Astral Shield</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Rock Shield</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Cygwin's Shield</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Valkyrie Buckler</td><td><span class="chip none">None</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub">Accessories</h3>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Name</th><th>Element</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Dragon Rider Helmet</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Dragon Tooth Amulet</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Iron Shackles</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Hela's Whip</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Hela's Corset</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Garter Straps</td><td><span class="chip dark">Dark</span></td></tr>
+              <tr><td class="name">Spiked Choker</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Red Scarf</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Empty Energy Orb</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Dragon's Energy Orb</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Purified Energy Orb</td><td><span class="chip none">None</span></td></tr>
+              <tr><td class="name">Sylvie's Shorts</td><td><span class="chip earth">Earth</span></td></tr>
+              <tr><td class="name">Searouser</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Seabed Fossil</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Pink Sarong</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Purple Bikini</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Blue Undies</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Orange Bandana</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Red Bra</td><td><span class="chip water">Water</span></td></tr>
+              <tr><td class="name">Freedom Cry</td><td><span class="chip light">Light</span></td></tr>
+              <tr><td class="name">Sky Bracers</td><td><span class="chip light">Light</span></td></tr>
+              <tr><td class="name">Ring of the Sky</td><td><span class="chip light">Light</span></td></tr>
+              <tr><td class="name">Amulet of the Sky</td><td><span class="chip light">Light</span></td></tr>
+              <tr><td class="name">Magma Fossil</td><td><span class="chip fire">Fire</span></td></tr>
+              <tr><td class="name">Drops of Fire</td><td><span class="chip fire">Fire</span></td></tr>
+              <tr><td class="name">The Fire Dress</td><td><span class="chip fire">Fire</span></td></tr>
+              <tr><td class="name">Hellfire Crown</td><td><span class="chip fire">Fire</span></td></tr>
+              <tr><td class="name">Command of Hell</td><td><span class="chip fire">Fire</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub">Sets</h3>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Set</th><th>Pieces</th><th>Bonus flavour</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Motherland Calling</td><td>Freedom Cry, Searouser</td><td>Flat HP and Aura Shield bonus.</td></tr>
+              <tr><td class="name">Hela's Toys</td><td>Hela's Whip, Hela's Corset, Garter Straps, Spiked Choker</td><td>A Dark-tagged damage bonus, escalating into a poison damage-over-time multiplier at full pieces.</td></tr>
+              <tr><td class="name">Primordial Fossil</td><td>Magma Fossil, Seabed Fossil</td><td>Flat Physical and Elemental Defence bonus.</td></tr>
+              <tr><td class="name">Beach Day</td><td>Red Bra, Pink Sarong, Orange Bandana, Blue Undies</td><td>Escalating Physical and Elemental Defence bonus.</td></tr>
+              <tr><td class="name">Trinkets of the Sky</td><td>Ring of the Sky, Sky Bracers, Amulet of the Sky</td><td>A bundled Precision, Evasion, Speed, and Physical Attack bonus at full set.</td></tr>
+              <tr><td class="name">Dragon Rider</td><td>Dragon Rider Helmet, Dragon Tooth Amulet</td><td>A Crit Chance/Damage bonus, plus a damage bonus to "oceanic"-tagged abilities while faster than the opponent.</td></tr>
+              <tr><td class="name">Sovereignty of Hell</td><td>Drops of Fire, The Fire Dress, Hellfire Crown, Command of Hell</td><td>A Fire-conditional Elemental Attack bonus, escalating into a Fire-tagged damage multiplier at full pieces.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter" id="dE">
+        <h2 class="chapter-title"><span class="num">E</span> Crops</h2>
+        <p class="dim">Every plantable crop, its required Environment, and its Ideal Season (faster growth, higher yield). See Chapter 15.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Crop</th><th>Environment</th><th>Ideal Season</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Potato</td><td>Open Field</td><td>Spring</td></tr>
+              <tr><td class="name">Wheat</td><td>Open Field</td><td>Summer</td></tr>
+              <tr><td class="name">Carrot</td><td>Open Field, Cold Frame</td><td>Autumn</td></tr>
+              <tr><td class="name">Fava Bean</td><td>Open Field, Greenhouse</td><td>Spring</td></tr>
+              <tr><td class="name">Kale</td><td>Cold Frame</td><td>Winter</td></tr>
+              <tr><td class="name">Cardamom</td><td>Greenhouse</td><td>Summer</td></tr>
+              <tr><td class="name">Cucumber</td><td>Greenhouse</td><td>Summer</td></tr>
+              <tr><td class="name">Dragon Fruit</td><td>Greenhouse</td><td>Summer</td></tr>
+              <tr><td class="name">Ginseng</td><td>Forest Floor</td><td>Autumn</td></tr>
+              <tr><td class="name">Mushroom</td><td>Forest Floor</td><td>— (none)</td></tr>
+              <tr><td class="name">Parsnip</td><td>Cold Frame</td><td>Winter</td></tr>
+              <tr><td class="name">Pumpkin</td><td>Greenhouse</td><td>Autumn</td></tr>
+              <tr><td class="name">Saffron</td><td>Cold Frame</td><td>Autumn</td></tr>
+              <tr><td class="name">Snow Pea</td><td>Cold Frame</td><td>Spring</td></tr>
+              <tr><td class="name">Tomato</td><td>Greenhouse</td><td>Summer</td></tr>
+              <tr><td class="name">Wasabi</td><td>Forest Floor</td><td>Spring</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter" id="dF">
+        <h2 class="chapter-title"><span class="num">F</span> Potions</h2>
+        <p class="dim">Alchemy's finished output — temporary combat buffs, each keyed to a different stat focus.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Potion</th><th>Focus</th><th>Flavour</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Iron Resolve Potion</td><td>Physical Defence</td><td>A dense amber brew that reinforces the body against physical blows.</td></tr>
+              <tr><td class="name">Swiftroot Elixir</td><td>Speed &amp; Evasion</td><td>A vivid green elixir. Sharpens speed and evasion for a time.</td></tr>
+              <tr><td class="name">Saffron Sight Tonic</td><td>Precision</td><td>Brewed from rare saffron threads. Sharpens elemental precision.</td></tr>
+              <tr><td class="name">Cardamom Clarity Potion</td><td>Crit Chance &amp; Damage</td><td>A warm, spiced potion that heightens elemental attack.</td></tr>
+              <tr><td class="name">Shadow Veil Tincture</td><td>Evasion</td><td>A dark, bitter tincture of pumpkin and night herbs. Boosts evasion sharply.</td></tr>
+              <tr><td class="name">Dragon Vitality Brew</td><td>Physical Attack</td><td>A volatile red brew of dragon fruit and rare minerals. Surges physical attack.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter" id="dG">
+        <h2 class="chapter-title"><span class="num">G</span> Food &amp; Provisions</h2>
+
+        <h3 class="sub">Prepared Dishes</h3>
+        <p class="dim">Obtainable either by cooking the recipe yourself or by buying the finished dish at the Café. Most restore HP and/or Aura Shield; several also grant a short combat buff.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th colspan="6">Dishes</th></tr></thead>
+            <tbody>
+              <tr><td>Sandwich</td><td>Egg Salad</td><td>Fried Egg</td><td>Omelette</td><td>French Fries</td><td>Bacon</td></tr>
+              <tr><td>Hot Dog</td><td>Nachos</td><td>Bread</td><td>Onigiri</td><td>Taco</td><td>Jelly</td></tr>
+              <tr><td>Vegetable Stew</td><td>Mac n Cheese</td><td>Spaghetti</td><td>Curry</td><td>Meatballs</td><td>Burger</td></tr>
+              <tr><td>Burrito</td><td>Pizza</td><td>Dumplings</td><td>Pudding</td><td>Apple Pie</td><td>Ice Cream</td></tr>
+              <tr><td>Roasted Meat</td><td>Steak</td><td>Salmon</td><td>Chocolate Cake</td><td>Strawberry Cake</td><td>Fruitcake</td></tr>
+              <tr><td>Ramen</td><td>Roasted Chicken</td><td>Sushi</td><td>Baguette</td><td>Fresh Baked Bread</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub">Grocery Goods</h3>
+        <p class="dim">Raw cooking ingredients and everyday sundries sold at the Grocery — bought to feed recipes rather than eaten directly.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th colspan="6">Grocery</th></tr></thead>
+            <tbody>
+              <tr><td>Candy Bar</td><td>Bacon</td><td>Baking Powder</td><td>Bandages</td><td>Barbeque Sauce</td><td>Butter</td></tr>
+              <tr><td>Cereal</td><td>Coffee Bag</td><td>Cookies</td><td>Flour</td><td>Grape Soda</td><td>Hot Cocoa Mix</td></tr>
+              <tr><td>Ketchup</td><td>Marshmallows</td><td>Milk</td><td>Mustard</td><td>Olive Oil</td><td>Orange Juice</td></tr>
+              <tr><td>Peanut Butter</td><td>Plain Yogurt</td><td>Potato Chips</td><td>Sausage</td><td>Strawberry Ice Cream</td><td>Strawberry Jam</td></tr>
+              <tr><td>Sugar</td><td>Tuna Can</td><td>Water</td><td>Red Wine</td><td>White Wine</td><td>Cigarettes</td></tr>
+              <tr><td>Gel Pen</td><td>Heart-Shaped Chocolates</td><td>Aether Myst (perfume)</td><td colspan="3">and assorted personal-care sundries</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub">Foraged &amp; Farmed</h3>
+        <p class="dim">Raw items found while exploring or harvested directly, several with an innate on-eat effect of their own.</p>
+        <div class="table-wrap">
+          <table class="data" data-filterable>
+            <thead><tr><th>Item</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Fish</td><td>Restores HP and Aura Shield.</td></tr>
+              <tr><td class="name">Meat</td><td>Restores HP.</td></tr>
+              <tr><td class="name">Bread</td><td>Restores HP and Aura Shield.</td></tr>
+              <tr><td class="name">Blueberries</td><td>Restores Aura Shield; grants a short Physical Defence buff.</td></tr>
+              <tr><td class="name">Corn</td><td>Restores Aura Shield.</td></tr>
+              <tr><td class="name">Onion</td><td>Small HP restore; trades a Physical Attack buff for a brief Physical Defence penalty.</td></tr>
+              <tr><td class="name">Island Herb</td><td>Small HP restore plus a short Elemental Defence buff.</td></tr>
+              <tr><td class="name">Egg / Milk</td><td>Raw animal products, mainly used as cooking ingredients.</td></tr>
+              <tr><td class="name">Forza Mead</td><td>Grants an extended Physical Attack buff.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="chapter" id="dH">
+        <h2 class="chapter-title"><span class="num">H</span> Gifting Data</h2>
+        <p class="dim">The underlying shape of a Gift, as defined per-character (see Chapter 11 for how the mechanic plays out).</p>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Item &amp; Quantity</td><td>The exact item and amount that must be handed over in one gift.</td></tr>
+              <tr><td class="name">Value</td><td>How much Heart Rank progress this specific gift is worth — varies per item, not a flat amount per gift.</td></tr>
+              <tr><td class="name">Reaction Dialogue</td><td>A short line or two of flavour text the character responds with, unique to that item.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>A handful of Grocery items exist chiefly as gift-appropriate curios rather than cooking ingredients — a handwritten note, heart-shaped chocolates, a rare perfume — suited to being handed to a character rather than consumed or used in a recipe. Only items on a character's own defined gift list register any reaction or Heart Rank progress; anything else can still be handed over narratively but has no mechanical effect.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="colophon">
+    <p>Ashenfall Codex — compiled from <code>src/lib/data</code>, <code>src/lib/services</code>, and <code>src/lib/types.ts</code>. Names of the recurring cast and named world locations are intentionally omitted from Part II by request.</p>
+  </footer>
+</div>
+
+<script>
+  // Scrollspy for the sidebar TOC
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+    var sections = links
+      .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+      .filter(Boolean);
+
+    function onScroll() {
+      var pos = window.scrollY + 120;
+      var current = sections[0];
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].offsetTop <= pos) current = sections[i];
+      }
+      links.forEach(function (a) {
+        a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id);
+      });
+    }
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Filter across every data table in the Data Codex
+  (function () {
+    var input = document.getElementById('dataFilter');
+    var countEl = document.getElementById('filterCount');
+    if (!input) return;
+
+    var tables = Array.prototype.slice.call(document.querySelectorAll('table[data-filterable]'));
+    var allRows = [];
+    tables.forEach(function (t) {
+      Array.prototype.slice.call(t.querySelectorAll('tbody tr')).forEach(function (r) { allRows.push(r); });
+    });
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      allRows.forEach(function (row) {
+        var match = !q || row.textContent.toLowerCase().indexOf(q) !== -1;
+        row.classList.toggle('filtered-out', !match);
+        if (match) shown++;
+      });
+      countEl.textContent = q ? (shown + ' / ' + allRows.length + ' rows') : '';
+    });
+  })();
+</script>
+
+</body></html>

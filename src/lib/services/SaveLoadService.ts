@@ -279,7 +279,8 @@ export async function loadGame() {
             let updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer);
             updatedPlayer = claimAccumulatedTimePoints(updatedPlayer);
             updatedPlayer = claimAccumulatedWorldResonance(updatedPlayer);
-            playerStore.set({ ...updatedPlayer, isInitialized: true });
+            // isMoving is transient animation state — never resume mid-stride
+            playerStore.set({ ...updatedPlayer, isInitialized: true, isMoving: false });
         }
 
         // ── Map ─────────────────────────────────────────────────────────────

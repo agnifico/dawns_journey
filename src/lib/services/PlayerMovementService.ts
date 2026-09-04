@@ -11,6 +11,20 @@ import { processBuffs } from './BuffService';
 import * as AchievementService from './AchievementService';
 import type { MapData } from '$lib/types';
 
+// How long the walk animation keeps playing after the last step. Slightly
+// longer than the fastest repeat rate (DPad holds at 110ms) so continuous
+// walking never drops back to the idle frame mid-stride.
+const WALK_ANIM_LINGER_MS = 200;
+let walkAnimTimer: ReturnType<typeof setTimeout> | null = null;
+
+function markMoving() {
+    if (walkAnimTimer) clearTimeout(walkAnimTimer);
+    walkAnimTimer = setTimeout(() => {
+        walkAnimTimer = null;
+        playerStore.update(p => ({ ...p, isMoving: false }));
+    }, WALK_ANIM_LINGER_MS);
+}
+
 /**
  * Moves the player and triggers appropriate interactions or encounters.
  */
@@ -63,4 +77,5 @@ export async function movePlayer(dx: number, dy: number) {
         isMoving: true,
         stepsTaken: p.stepsTaken + 1,
     }));
+    markMoving();
 }

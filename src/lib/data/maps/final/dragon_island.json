@@ -3354,6 +3354,22 @@
       "parentId": "multi-5"
     },
     {
+      "id": "multi-55",
+      "x": 55,
+      "y": 3,
+      "width": 1,
+      "height": 2,
+      "type": "npc",
+      "multiTile": true,
+      "npcId": "aoife"
+    },
+    {
+      "x": 55,
+      "y": 4,
+      "type": "multi_tile_part",
+      "parentId": "multi-55"
+    },
+    {
       "id": "multi-6",
       "x": 41,
       "y": 59,
