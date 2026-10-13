@@ -19,7 +19,7 @@
 	} from '$lib/services/FishingService';
 	import { FISHING_GEAR, RARITY_DIFFICULTY, ZONE_NAMES } from '$lib/data/fishing';
 	import { countInventoryItem } from '$lib/services/InventoryService';
-	import { newReel, stepReel, type ReelState, type ReelParams } from '$lib/services/fishingReel';
+	import { newReel, stepReel, isInside, isDraining, type ReelState, type ReelParams } from '$lib/services/fishingReel';
 
 	type Phase = 'cast' | 'wait' | 'bite' | 'reel' | 'result' | 'lost';
 
@@ -94,6 +94,7 @@
 		phase = 'reel';
 		reelParams = {
 			behaviour: current.fish.behaviour,
+			rarity: current.fish.rarity,
 			difficulty: difficulty(),
 			level: getFishingLevel(),
 			rodTier: getRodTier()
@@ -112,14 +113,21 @@
 		raf = requestAnimationFrame(step);
 	}
 
+	// The player is usually mashing Space when a reel ends: ignore presses
+	// briefly so the result (or the miss) stays on screen.
+	const RESULT_LOCK_MS = 1000;
+	let lockedUntil = 0;
+
 	function land() {
 		clearTimers();
+		lockedUntil = performance.now() + RESULT_LOCK_MS;
 		phase = 'result';
 		result = applyCatch(current!);
 	}
 
 	function lose(msg: string) {
 		clearTimers();
+		lockedUntil = performance.now() + RESULT_LOCK_MS;
 		lostMessage = msg;
 		phase = 'lost';
 	}
@@ -133,7 +141,7 @@
 	function press() {
 		if (phase === 'wait') lose('Too early. It swam off.');
 		else if (phase === 'bite') strike();
-		else if (phase === 'result' || phase === 'lost') cast();
+		else if ((phase === 'result' || phase === 'lost') && performance.now() >= lockedUntil) cast();
 		holding = true;
 	}
 	function release() {
@@ -175,7 +183,7 @@
 		cast: 'Casting...',
 		wait: 'Wait for the bite. Nibbles are not bites.',
 		bite: 'Strike now!',
-		reel: 'Hold to raise the net, release to drop it. Keep the fish inside.',
+		reel: 'Hold to raise the net, release to drop it. Keep the fish inside to fill the gold bar.',
 		result: 'Space / tap to cast again · Esc to leave',
 		lost: 'Space / tap to cast again · Esc to leave'
 	}[phase];
@@ -247,7 +255,7 @@
 			{#if phase === 'reel' && reel}
 				<div class="reel">
 					<div class="bar">
-						<div class="net" class:hooked={reel.fishY >= reel.zoneY && reel.fishY <= reel.zoneY + reel.zoneSize} style="bottom: {reel.zoneY}%; height: {reel.zoneSize}%"></div>
+						<div class="net" class:hooked={isInside(reel)} style="bottom: {reel.zoneY}%; height: {reel.zoneSize}%"></div>
 						{#if current?.kind === 'fish'}
 							<img
 								class="reel-fish"
@@ -257,7 +265,7 @@
 							/>
 						{/if}
 					</div>
-					<div class="meter"><div class="meter-fill" style="height: {Math.max(0, reel.progress) * 100}%"></div></div>
+					<div class="meter" class:draining={reelParams && isDraining(reel, reelParams)}><div class="meter-fill" style="height: {Math.max(0, reel.progress) * 100}%"></div></div>
 				</div>
 			{/if}
 		</div>
@@ -466,6 +474,8 @@
 		border: 2px solid rgba(0, 0, 0, 0.6);
 		overflow: hidden;
 	}
+	.meter.draining { border-color: rgba(224, 80, 80, 0.8); }
+	.meter.draining .meter-fill { background: linear-gradient(0deg, #b04a3a, #e0704a); }
 	.meter-fill {
 		position: absolute;
 		left: 0;
