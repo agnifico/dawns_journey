@@ -5,6 +5,11 @@
     "image": "/images/characters/aoife/aoife0.png",
     "arenaImage": "/images/characters/aoife/aoife9.png",
     "spriteGif": "/images/sprites/aoife.gif",
+    "spriteIdle": {
+        "left": "/images/sprites/npc/aoife/idle-left.png",
+        "down": "/images/sprites/npc/aoife/idle-down.png",
+        "right": "/images/sprites/npc/aoife/idle-right.png"
+    },
     "galleryImages": [
         "/images/characters/aoife/aoife0.png",
         "/images/characters/aoife/aoife1.png",

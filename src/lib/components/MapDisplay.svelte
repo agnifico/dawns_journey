@@ -11,6 +11,7 @@
 	import PlayerIcon from './ui/PlayerIcon.svelte';
 	import MapObject from './MapObject.svelte';
 	import HighlightLayer from './HighlightLayer.svelte';
+	import CollisionLayer from './CollisionLayer.svelte';
 	import RainOverlay from '$lib/components/ui/RainOverlay.svelte';
 
 	export let mapData: MapData;
@@ -21,6 +22,10 @@
 	export function toggleHighlight() {
 		showHighlights = !showHighlights;
 	}
+
+	// Dev-only collision editor overlay (toggled with C on the map page)
+	export let showCollision = false;
+	export let collisionBrush = '#';
 
 	// ── Scale ───────────────────────────────────────────────────────────────────
 	const TILE_SIZE = 16;
@@ -120,6 +125,17 @@
 		<PlayerIcon {player} {FINAL_TILE_SIZE} />
 
 		<div class="day-night-overlay" class:night={$phase === 'Duskfall'}></div>
+
+		{#if showCollision}
+			<CollisionLayer
+				mapId={$mapStore.currentMapId}
+				width={mapData.width}
+				height={mapData.height}
+				objects={mapData.objects}
+				{FINAL_TILE_SIZE}
+				brush={collisionBrush}
+			/>
+		{/if}
 	</div>
 
 	<RainOverlay rainLevel={$rainLevel} />
@@ -130,6 +146,7 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
+		overflow: clip; /* hidden still lets the browser scroll to reveal focusable children (the action prompt) */
 		position: relative;
 		background-image: url('/topography.svg');
 	}
@@ -150,7 +167,7 @@
 		background-color: rgba(0, 0, 0, 0);
 		transition: background-color 1s ease;
 		pointer-events: none;
-		z-index: 20;
+		z-index: 1000; /* above depth-sorted sprites (100 + 2y) */
 	}
 	.day-night-overlay.night {
 		background-color: rgba(0, 0, 50, 0.3);

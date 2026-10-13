@@ -11,6 +11,12 @@
     "image": "/images/characters/hela/hela0.png",
     "arenaImage": "/images/characters/hela/hela4.png",
     "spriteGif": "/images/sprites/hela.gif",
+    "spriteIdle": {
+        "up": "/images/sprites/npc/hela/idle-up.png",
+        "left": "/images/sprites/npc/hela/idle-left.png",
+        "down": "/images/sprites/npc/hela/idle-down.png",
+        "right": "/images/sprites/npc/hela/idle-right.png"
+    },
     "galleryImages": [
         "/images/characters/hela/hela0.png",
         "/images/characters/hela/hela1.png",

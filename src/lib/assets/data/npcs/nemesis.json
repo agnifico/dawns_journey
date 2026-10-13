@@ -20,6 +20,9 @@
     ],
     "arenaImage": "/images/characters/nemesis/nemesis3.png",
     "spriteGif": "/images/sprites/nemesis.gif",
+    "spriteIdle": {
+        "down": "/images/sprites/npc/nemesis/idle-down.png"
+    },
     "hidden": false,
     "isCombatant": true,
     "types": [

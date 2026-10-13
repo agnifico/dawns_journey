@@ -748,6 +748,9 @@ export interface NPC {
     profileImage: string;
     image: string;
     spriteGif?: string;
+    // Standing frame per facing; when present it replaces spriteGif on the map
+    // so the NPC can turn to face the player. Missing facings fall back to down.
+    spriteIdle?: Partial<Record<'up' | 'down' | 'left' | 'right', string>>;
     galleryImages?: string[];
     faction?: string;
     isCombatant?: boolean;

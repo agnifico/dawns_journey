@@ -1,11 +1,18 @@
 <script lang="ts">
 	// NpcSprite.svelte
-	// Renders a 64×64px LPC-format GIF sprite scaled to fill the entity footprint.
+	// Renders a 64×64px LPC-format sprite scaled to fill the entity footprint.
 	// Centered within the footprint. Shows a nameplate on hover.
+	// With spriteIdle the NPC stands still and faces `facing` (falling back to
+	// down); otherwise the legacy spriteGif is shown as-is.
 
 	export let npc: any;
 	export let footprintW: number;
 	export let footprintH: number;
+	export let facing: 'up' | 'down' | 'left' | 'right' = 'down';
+
+	$: spriteSrc = npc.spriteIdle
+		? (npc.spriteIdle[facing] ?? npc.spriteIdle.down)
+		: npc.spriteGif;
 
 	// LPC sprites are always 64×64px source
 	const SOURCE_SIZE = 64;
@@ -28,9 +35,9 @@
 	on:mouseenter={() => (hovered = true)}
 	on:mouseleave={() => (hovered = false)}
 >
-	{#if npc.spriteGif}
+	{#if spriteSrc}
 		<img
-			src={npc.spriteGif}
+			src={spriteSrc}
 			alt={npc.name}
 			class="npc-gif"
 			style="

@@ -1,7 +1,8 @@
 import { get } from 'svelte/store';
 import { playerStore } from '$lib/stores/playerStore';
 import { mapStore } from '$lib/stores/mapStore';
-import { showEvent } from '$lib/stores/uiStore';
+import { showEvent, clearEvent, eventScreen, setContextualActions, clearContextualActions } from '$lib/stores/uiStore';
+import { isCellBlocked, getCellKind } from '$lib/stores/collisionStore';
 import { dialogueStore } from '$lib/stores/dialogueStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { resourceStore } from '$lib/stores/resourceStore';
@@ -17,14 +18,24 @@ import { game } from '$lib/game/game';
 import { toastStore } from '$lib/stores/toastStore';
 import { checkRequirement } from './QuestService';
 
-const INTERACTIVE = new Set(['npc', 'resource', 'event', 'teleport']);
+// NPCs are not stepped on: they block movement and are talked to by facing
+// them. Everything else still triggers when the player stands on it.
+const STEP_ON = new Set(['resource', 'event', 'teleport']);
+const NPC_ONLY = new Set(['npc']);
+
+const DIRECTION_DELTAS: Record<string, { dx: number; dy: number }> = {
+    up:    { dx: 0,  dy: -1 },
+    down:  { dx: 0,  dy: 1 },
+    left:  { dx: -1, dy: 0 },
+    right: { dx: 1,  dy: 0 },
+};
 
 /**
- * Finds the interactive parent entity whose footprint contains (x, y).
+ * Finds the parent entity of one of `types` whose footprint contains (x, y).
  * NPC positions are resolved against the player's current tags and phase,
- * so moving NPCs trigger correctly at their new location.
+ * so moving NPCs are found at their new location.
  */
-function getEntityAtPosition(x: number, y: number, objects: any[]): any | null {
+function getEntityAtPosition(x: number, y: number, objects: any[], types: Set<string> = STEP_ON): any | null {
     const player       = get(playerStore);
     const mapId        = get(mapStore).currentMapId;
     const tags         = player.worldTags ?? [];
@@ -32,15 +43,15 @@ function getEntityAtPosition(x: number, y: number, objects: any[]): any | null {
     const npcs         = get(npcStore).globalNpcs;
 
     for (const obj of objects) {
-        if (obj.type === 'multi_tile_part') continue;
-        if (!INTERACTIVE.has(obj.type)) continue;
+        if (!types.has(obj.type)) continue;
 
         let objX = obj.x;
         let objY = obj.y;
 
         if (obj.type === 'npc') {
             const npc = npcs[obj.npcId];
-            if (npc?.mapPositions) {
+            if (!npc) continue; // undefined NPCs aren't rendered, so they mustn't block either
+            if (npc.mapPositions) {
                 const pos = resolveNpcPosition(npc, mapId, tags, currentPhase);
                 if (!pos) continue; // NPC absent from this map right now
                 objX = pos.x;
@@ -59,6 +70,7 @@ function getEntityAtPosition(x: number, y: number, objects: any[]): any | null {
 }
 
 export async function checkForTileInteraction(): Promise<boolean> {
+    updateFacingActions();
     const player = get(playerStore);
     const mapStoreState = get(mapStore);
     const mapData = mapStoreState.maps[mapStoreState.currentMapId];
@@ -72,16 +84,6 @@ export async function checkForTileInteraction(): Promise<boolean> {
 
     if (mapObject) {
         switch (mapObject.type) {
-            case 'npc': {
-                const npcData = await getNpcData(mapObject.npcId);
-                if (!npcData) {
-                    console.warn(`No NPC data found for npcId: "${mapObject.npcId}"`);
-                    break;
-                }
-                showEvent('npc', npcData.profileImage, { npcId: npcData.id, fullImage: npcData.image });
-                return true;
-            }
-
             case 'resource': {
                 const node = resourceNodeDefinitions[mapObject.resourceId];
                 if (!node) {
@@ -151,12 +153,88 @@ export async function checkForTileInteraction(): Promise<boolean> {
         }
     }
 
+    if (await checkForFacingNpc()) return true;
+
     const dialogue = get(dialogueStore);
     if (dialogue.isOpen && !dialogue.justClosed) {
         dialogueStore.closeDialogue();
     }
 
     return false;
+}
+
+function currentMapObjects(): any[] {
+    const mapStoreState = get(mapStore);
+    return mapStoreState.maps[mapStoreState.currentMapId]?.objects ?? [];
+}
+
+/** The NPC whose (resolved) footprint covers (x, y), if any. */
+export function getNpcAtPosition(x: number, y: number): any | null {
+    return getEntityAtPosition(x, y, currentMapObjects(), NPC_ONLY);
+}
+
+/**
+ * True when (x, y) is painted solid in the collision grid. Tiles under a
+ * step-on entity (resource, event, teleport) are never solid, so things
+ * placed on trees or rocks stay reachable.
+ */
+export function isTileSolid(x: number, y: number): boolean {
+    if (!isCellBlocked(get(mapStore).currentMapId, x, y)) return false;
+    return !getEntityAtPosition(x, y, currentMapObjects());
+}
+
+/** Opens the NPC's event screen, unless it's already showing that NPC. */
+export async function interactWithNpc(mapObject: any): Promise<boolean> {
+    const screen = get(eventScreen);
+    if (screen.type === 'npc' && screen.data?.npcId === mapObject.npcId) return true;
+
+    const npcData = await getNpcData(mapObject.npcId);
+    if (!npcData) {
+        console.warn(`No NPC data found for npcId: "${mapObject.npcId}"`);
+        return false;
+    }
+    showEvent('npc', npcData.profileImage, { npcId: npcData.id, fullImage: npcData.image });
+    return true;
+}
+
+/**
+ * Talks to the NPC on the tile the player is facing, if there is one.
+ * If not, closes an NPC screen left over from before the player turned away.
+ */
+export async function checkForFacingNpc(): Promise<boolean> {
+    const player = get(playerStore);
+    const delta = DIRECTION_DELTAS[player.direction];
+    const npc = delta && getNpcAtPosition(player.position.x + delta.dx, player.position.y + delta.dy);
+    if (npc) return interactWithNpc(npc);
+
+    if (get(eventScreen).type === 'npc') clearEvent();
+    return false;
+}
+
+/** The tile in front of the player. */
+function facingTile(): { x: number; y: number } | null {
+    const player = get(playerStore);
+    const delta = DIRECTION_DELTAS[player.direction];
+    return delta ? { x: player.position.x + delta.dx, y: player.position.y + delta.dy } : null;
+}
+
+/**
+ * Context actions for what the player is facing (shown as a prompt above
+ * the player, triggered with E). Currently: water → Fish.
+ */
+export function updateFacingActions() {
+    const tile = facingTile();
+    const kind = tile && getCellKind(get(mapStore).currentMapId, tile.x, tile.y);
+    if (kind?.water && !getNpcAtPosition(tile!.x, tile!.y)) {
+        setContextualActions([{ text: 'Fish', hotkey: 'E', action: startFishing }]);
+    } else {
+        clearContextualActions();
+    }
+}
+
+// Placeholder until the fishing minigame lands (Phase 2).
+function startFishing() {
+    toastStore.info('You cast a line... (fishing is coming soon)');
 }
 
 export function gatherResource() {

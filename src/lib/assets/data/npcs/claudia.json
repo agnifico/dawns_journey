@@ -11,6 +11,12 @@
     "image": "/images/characters/claudia/claudia1.png",
     "arenaImage": "/images/characters/claudia/claudia9.png",
     "spriteGif": "/images/sprites/claudia.gif",
+    "spriteIdle": {
+        "up": "/images/sprites/npc/claudia/idle-up.png",
+        "left": "/images/sprites/npc/claudia/idle-left.png",
+        "down": "/images/sprites/npc/claudia/idle-down.png",
+        "right": "/images/sprites/npc/claudia/idle-right.png"
+    },
     "galleryImages": [
         "/images/characters/claudia/claudia1.png",
         "/images/characters/claudia/claudia2.png",

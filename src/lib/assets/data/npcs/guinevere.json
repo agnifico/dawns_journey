@@ -11,6 +11,12 @@
     "image": "/images/characters/guinevere/guinevere1.png",
     "arenaImage": "/images/characters/guinevere/guinevere_arena.png",
     "spriteGif": "/images/sprites/guinevere.gif",
+    "spriteIdle": {
+        "up": "/images/sprites/npc/guinevere/idle-up.png",
+        "left": "/images/sprites/npc/guinevere/idle-left.png",
+        "down": "/images/sprites/npc/guinevere/idle-down.png",
+        "right": "/images/sprites/npc/guinevere/idle-right.png"
+    },
     "galleryImages": [
         "/images/characters/guinevere/guinevere1.png",
         "/images/characters/guinevere/guinevere2.png",

@@ -5,6 +5,12 @@
     "image": "/images/characters/cygwin/cygwin0.png",
     "title": "War Cry of the Savannah",
     "spriteGif": "/images/sprites/cygwin.gif",
+    "spriteIdle": {
+        "up": "/images/sprites/npc/cygwin/idle-up.png",
+        "left": "/images/sprites/npc/cygwin/idle-left.png",
+        "down": "/images/sprites/npc/cygwin/idle-down.png",
+        "right": "/images/sprites/npc/cygwin/idle-right.png"
+    },
     "arenaImage" : "/images/characters/cygwin/cygwin55.png",
     "galleryImages": [
         "/images/characters/cygwin/cygwin0.png",

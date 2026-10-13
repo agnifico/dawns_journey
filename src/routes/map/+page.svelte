@@ -30,6 +30,8 @@
 	import MobileLayout from '$lib/components/MobileLayout.svelte';
 	import { modalStore } from '$lib/stores/modalStore';
 	import * as SaveLoadService from '$lib/services/SaveLoadService';
+	import { exportCollision, TILE_KINDS, TILE_KIND_KEYS } from '$lib/stores/collisionStore';
+	import { contextualActions } from '$lib/stores/uiStore';
 
 	let mainElement: HTMLElement;
 	let isMobile = false;
@@ -39,6 +41,25 @@
 	let showHighlights = false;
 	function toggleHighlight() {
 		showHighlights = !showHighlights;
+	}
+
+	// ── Collision editor (dev only) ───────────────────────────────────────────
+	// C toggles the overlay (click/drag tiles to paint), 1-6 pick the category
+	// to paint, Shift+C downloads the grid as <mapId>.json for
+	// src/lib/data/maps/collision/.
+	let showCollision = false;
+	let collisionBrush = '#';
+
+	function downloadCollision() {
+		const { currentMapId } = get(mapStore);
+		const mapData = get(currentMapData);
+		if (!mapData) return;
+		const json = exportCollision(currentMapId, mapData.width, mapData.height);
+		const a = document.createElement('a');
+		a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+		a.download = `${currentMapId}.json`;
+		a.click();
+		URL.revokeObjectURL(a.href);
 	}
 
 	// onMount(() => {
@@ -129,16 +150,11 @@
 		lastSteps = $playerStore.stepsTaken;
 	}
 
-	// ── NPC event screen auto-clear ───────────────────────────────────────────
-	// When the event screen is showing an NPC and the player steps off their
-	// tile, clear the screen. Runs reactively on position change.
-	$: if ($eventScreen.type === 'npc' && $eventScreen.data?.npcId) {
-		// clearEvent is already called on every step in the step handler above.
-		// This block is intentionally minimal — the step handler's clearEvent()
-		// followed by checkForTileInteraction() re-opens the event if player is
-		// still on the NPC tile, and leaves it closed if they've moved away.
-		// No additional reactive check needed here.
-	}
+	// ── NPC event screen ──────────────────────────────────────────────────────
+	// NPCs are solid and talked to by facing them. The step handler's
+	// clearEvent() followed by checkForTileInteraction() re-opens the NPC screen
+	// if the player still faces them; turning in place (a blocked move) goes
+	// through checkForFacingNpc() in PlayerMovementService instead.
 
 	// ── Movement handler ──────────────────────────────────────────────────────
 	function handleKeyDown(event: KeyboardEvent) {
@@ -146,6 +162,26 @@
 
 		if (event.key === 'h' || event.key === 'H') {
 			toggleHighlight();
+			return;
+		}
+
+		if (import.meta.env.DEV && event.key === 'c') {
+			showCollision = !showCollision;
+			return;
+		}
+		if (import.meta.env.DEV && event.key === 'C') {
+			downloadCollision();
+			return;
+		}
+		if (showCollision && /^[1-9]$/.test(event.key)) {
+			const key = TILE_KIND_KEYS[Number(event.key) - 1];
+			if (key) collisionBrush = key;
+			return;
+		}
+
+		// Act on what the player is facing (e.g. Fish)
+		if ((event.key === 'e' || event.key === 'E') && get(contextualActions).length > 0) {
+			get(contextualActions)[0].action();
 			return;
 		}
 
@@ -248,7 +284,22 @@
 				<div class="game-view-container">
 					{#if $currentMapData && $playerStore.position}
 						<MapHUD {showHighlights} onToggleHighlight={toggleHighlight} />
-						<MapDisplay mapData={$currentMapData} player={$playerStore} {showHighlights} />
+						<MapDisplay mapData={$currentMapData} player={$playerStore} {showHighlights} {showCollision} {collisionBrush} />
+						{#if showCollision}
+							<div class="collision-legend">
+								{#each TILE_KIND_KEYS as key, i}
+									<button
+										class="legend-item"
+										class:active={collisionBrush === key}
+										on:click={() => (collisionBrush = key)}
+									>
+										<span class="legend-swatch" style="background: {TILE_KINDS[key].color}"></span>
+										{i + 1} {TILE_KINDS[key].name}
+									</button>
+								{/each}
+								<span class="legend-hint">click/drag paints · same kind erases · Shift+C saves</span>
+							</div>
+						{/if}
 					{:else}
 						<p>Loading map...</p>
 					{/if}
@@ -307,6 +358,47 @@
 		background-color: #222;
 		border: 3px solid var(--surface-2);
 		box-sizing: border-box;
+	}
+	.collision-legend {
+		position: absolute;
+		left: 8px;
+		bottom: 8px;
+		z-index: 2000;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px;
+		padding: 6px;
+		border-radius: 8px;
+		background: rgba(10, 8, 6, 0.85);
+		font-family: var(--font-family-pixel);
+		font-size: 0.65rem;
+		color: #e4d8be;
+	}
+	.legend-item {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 2px 6px;
+		border-radius: 4px;
+		border: 1px solid transparent;
+		background: none;
+		color: inherit;
+		font: inherit;
+		cursor: pointer;
+	}
+	.legend-item.active {
+		border-color: #c8a96e;
+		background: rgba(200, 169, 110, 0.15);
+	}
+	.legend-swatch {
+		width: 12px;
+		height: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.4);
+	}
+	.legend-hint {
+		color: rgba(228, 216, 190, 0.5);
+		margin-left: 4px;
 	}
 	.tray {
 		display: flex;

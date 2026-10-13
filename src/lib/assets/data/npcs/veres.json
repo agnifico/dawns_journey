@@ -5,6 +5,12 @@
     "image": "/images/characters/veres/veres00.png",
     "title": "The Watching Wing",
     "spriteGif": "/images/sprites/veres.gif",
+    "spriteIdle": {
+        "up": "/images/sprites/npc/veres/idle-up.png",
+        "left": "/images/sprites/npc/veres/idle-left.png",
+        "down": "/images/sprites/npc/veres/idle-down.png",
+        "right": "/images/sprites/npc/veres/idle-right.png"
+    },
     "arenaImage": "/images/characters/veres/veres8.png",
     "galleryImages": [
         "/images/characters/veres/veres0.png",
