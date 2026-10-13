@@ -13,7 +13,9 @@ import { locationEventDefinitions } from '$lib/data/locationEvents';
 import { gainExperience } from '$lib/services/SkillService';
 import { addItems } from '$lib/services/InventoryService';
 import { triggerLocationEvent } from '$lib/services/LocationEventService';
-import { resolveNpcPosition } from '$lib/services/MapService';
+import { resolveNpcPosition, getRegionForPosition } from '$lib/services/MapService';
+import { fishingStore } from '$lib/stores/fishingStore';
+import { describeSpot } from './FishingService';
 import { game } from '$lib/game/game';
 import { toastStore } from '$lib/stores/toastStore';
 import { checkRequirement } from './QuestService';
@@ -232,9 +234,13 @@ export function updateFacingActions() {
     }
 }
 
-// Placeholder until the fishing minigame lands (Phase 2).
+/** Opens the fishing minigame for the water the player is facing. */
 function startFishing() {
-    toastStore.info('You cast a line... (fishing is coming soon)');
+    const tile = facingTile();
+    const mapData = get(mapStore).maps[get(mapStore).currentMapId];
+    if (!tile || !mapData) return;
+    const region = getRegionForPosition(tile, mapData);
+    fishingStore.set(describeSpot(region?.id ?? mapData.defaultRegion));
 }
 
 export function gatherResource() {

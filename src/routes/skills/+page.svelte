@@ -8,7 +8,7 @@
 	import FactionCard from '$lib/components/skills/FactionCard.svelte';
 
 	// Gathering on the top row, making on the bottom; anything else after
-	const ORDER = ['woodcutting', 'mining', 'farming', 'smithing', 'cooking', 'alchemy'];
+	const ORDER = ['woodcutting', 'mining', 'farming', 'fishing', 'smithing', 'cooking', 'alchemy'];
 	$: skills = [...($playerStore.skills ?? [])].sort((a, b) => {
 		const ia = ORDER.indexOf(a.id);
 		const ib = ORDER.indexOf(b.id);
@@ -59,7 +59,7 @@
 	.skills {
 		min-height: 0;
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 		grid-auto-rows: minmax(0, 1fr);
 		gap: 0.75rem;
 	}

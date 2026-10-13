@@ -379,6 +379,8 @@ export interface Player {
     techPoints: number;
     unlockedTech: string[];
     locationEventHistory: { [eventId: string]: number };
+    /** Fishing catalogue: catches per fish/object id, with the biggest size (cm) for fish. */
+    fishLog?: Record<string, { count: number; best?: number }>;
     factionReputation: Record<string, number>;
     achievements: {
         [achievementId: string]: {

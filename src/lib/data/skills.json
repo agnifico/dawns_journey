@@ -76,5 +76,18 @@
             "5": { "xp": 1000, "rewards": [{ "itemId": "bread", "amount": 2 }] },
             "6": { "xp": 1500, "rewards": [{ "itemId": "bread", "amount": 2 }] }
         }
+    },
+    "fishing": {
+        "name": "Fishing",
+        "description": "The art of reading the water and outlasting what's in it.",
+        "icon" : "/fishing/gear/wooden_rod.png",
+        "levels": {
+            "1": { "xp": 0, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "2": { "xp": 100, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "3": { "xp": 300, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "4": { "xp": 600, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "5": { "xp": 1000, "rewards": [{ "itemId": "bread", "amount": 2 }] },
+            "6": { "xp": 1500, "rewards": [{ "itemId": "bread", "amount": 2 }] }
+        }
     }
 }

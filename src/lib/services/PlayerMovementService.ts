@@ -4,6 +4,7 @@ import { mapStore } from '$lib/stores/mapStore';
 import { time } from '$lib/stores/timeStore';
 import { messageStore } from '$lib/stores/messageStore';
 import { clearEvent } from '$lib/stores/uiStore';
+import { fishingStore } from '$lib/stores/fishingStore';
 import { checkForTileInteraction, checkForFacingNpc, getNpcAtPosition, isTileSolid, updateFacingActions } from './InteractionService';
 import { checkForRandomEncounter } from './EncounterService';
 import { getRegionForPosition } from './MapService';
@@ -41,6 +42,7 @@ function turnPlayer(direction: string) {
  * Moves the player and triggers appropriate interactions or encounters.
  */
 export async function movePlayer(dx: number, dy: number) {
+    if (get(fishingStore)) return; // the line is out
     const mapStoreState = get(mapStore);
     const mapData = mapStoreState.maps[mapStoreState.currentMapId];
     if (!mapData) return;

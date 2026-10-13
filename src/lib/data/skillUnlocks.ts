@@ -1,14 +1,15 @@
 // What each skill unlocks, by level, collected from the data the game already
-// uses: resource nodes (gathering), crafting + material recipes, and crops.
-// New nodes / recipes / crops show up on the Skills page automatically.
+// uses: resource nodes (gathering), crafting + material recipes, crops and fish.
+// New nodes / recipes / crops / fish show up on the Skills page automatically.
 
 import { resourceNodeDefinitions } from './resourceNodeDefinitions';
 import { craftingRecipes } from './craftingRecipes';
 import { materialRecipes } from './materialRecipes';
 import { cropDefinitions } from './cropDefinitions';
+import { FISH, ZONE_NAMES, RARITY_XP } from './fishing';
 import { getItemById } from '$lib/services/InventoryService';
 
-export type UnlockKind = 'gather' | 'craft' | 'grow';
+export type UnlockKind = 'gather' | 'craft' | 'grow' | 'catch';
 
 export interface SkillUnlock {
 	kind: UnlockKind;
@@ -20,6 +21,8 @@ export interface SkillUnlock {
 	xp: (skillLevel: number) => number;
 	/** What the action gives, e.g. "2× Wood" */
 	yields?: string;
+	/** Collectibles (fish): shown as an unknown silhouette until it's in player.fishLog. */
+	collectId?: string;
 }
 
 const itemName = (id: string) => getItemById(id)?.name ?? id;
@@ -68,6 +71,20 @@ function buildUnlocks(): Record<string, SkillUnlock[]> {
 			image: itemImage(crop.yields),
 			xp: () => crop.xpYield ?? 0,
 			yields: `${crop.yieldsAmount}× ${itemName(crop.yields)}`
+		});
+	}
+
+	for (const f of FISH) {
+		const when = [f.time === 'any' ? '' : f.time, f.seasons.join('/')].filter(Boolean).join(' · ');
+		add('fishing', {
+			kind: 'catch',
+			id: f.id,
+			name: f.name,
+			level: f.level,
+			image: f.image,
+			xp: () => RARITY_XP[f.rarity],
+			yields: f.zones.map((z) => ZONE_NAMES[z]).join(', ') + (when ? ` · ${when}` : ''),
+			collectId: f.id
 		});
 	}
 

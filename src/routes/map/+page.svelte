@@ -32,6 +32,8 @@
 	import * as SaveLoadService from '$lib/services/SaveLoadService';
 	import { exportCollision, TILE_KINDS, TILE_KIND_KEYS } from '$lib/stores/collisionStore';
 	import { contextualActions } from '$lib/stores/uiStore';
+	import { fishingStore } from '$lib/stores/fishingStore';
+	import FishingGame from '$lib/components/fishing/FishingGame.svelte';
 
 	let mainElement: HTMLElement;
 	let isMobile = false;
@@ -159,6 +161,7 @@
 	// ── Movement handler ──────────────────────────────────────────────────────
 	function handleKeyDown(event: KeyboardEvent) {
 		if (get(combatStore).isInCombat) return;
+		if (get(fishingStore)) return; // FishingGame handles its own keys
 
 		if (event.key === 'h' || event.key === 'H') {
 			toggleHighlight();
@@ -256,6 +259,9 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <main on:keydown={handleKeyDown} tabindex="0" bind:this={mainElement}>
 	<CombatModal />
+	{#if $fishingStore}
+		<FishingGame />
+	{/if}
 
 	<!-- Legendary enemy warning modal -->
 	{#if showLegendaryWarning}

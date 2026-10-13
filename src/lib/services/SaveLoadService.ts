@@ -275,6 +275,13 @@ export async function loadGame() {
 
             if (loadedPlayer.level === undefined) loadedPlayer.level = 1;
             if (loadedPlayer.xp === undefined) loadedPlayer.xp = 0;
+            // Saves keep their own skills array, so skills added later (e.g. Fishing) are missing
+            for (const skill of playerDefaults.skills) {
+                if (!loadedPlayer.skills.some((s: { id: string }) => s.id === skill.id)) {
+                    loadedPlayer.skills = [...loadedPlayer.skills, { ...skill }];
+                }
+            }
+            loadedPlayer.fishLog ??= {};
 
             let updatedPlayer = FarmingService.calculateOfflineGrowth(loadedPlayer);
             updatedPlayer = claimAccumulatedTimePoints(updatedPlayer);

@@ -7,10 +7,11 @@
 	import { skillUnlocks, type SkillUnlock } from '$lib/data/skillUnlocks';
 	import { getXpForLevel } from '$lib/services/SkillService';
 	import { getItemById } from '$lib/services/InventoryService';
+	import { playerStore } from '$lib/stores/playerStore';
 
 	export let skill: { id: string; name: string; level: number; experience: number };
 
-	const KIND_LABEL = { gather: 'Gather', craft: 'Craft', grow: 'Grow' } as const;
+	const KIND_LABEL = { gather: 'Gather', craft: 'Craft', grow: 'Grow', catch: 'Catch' } as const;
 
 	$: data = (skillsData as Record<string, any>)[skill.id];
 	$: xpNeeded = getXpForLevel(skill.id, skill.level);
@@ -26,6 +27,10 @@
 		return [...byLevel.entries()].sort((a, b) => a[0] - b[0]);
 	})();
 	$: unlockedCount = (skillUnlocks[skill.id] ?? []).filter((u) => u.level <= skill.level).length;
+	// Collectibles (fish) stay a mystery until caught
+	$: log = $playerStore.fishLog ?? {};
+	$: collected = (skillUnlocks[skill.id] ?? []).filter((u) => u.collectId && log[u.collectId]).length;
+	$: collectible = (skillUnlocks[skill.id] ?? []).filter((u) => u.collectId).length;
 	$: totalCount = (skillUnlocks[skill.id] ?? []).length;
 </script>
 
@@ -53,7 +58,9 @@
 				</span>
 			{/each}
 		{/if}
-		{#if totalCount > 0}
+		{#if collectible > 0}
+			<span class="unlock-count">{collected}/{collectible} caught</span>
+		{:else if totalCount > 0}
 			<span class="unlock-count">{unlockedCount}/{totalCount} unlocked</span>
 		{/if}
 	</div>
@@ -67,12 +74,21 @@
 				</div>
 				<div class="entries">
 					{#each entries as u (u.kind + u.id)}
-						<div class="entry kind-{u.kind}" title="{KIND_LABEL[u.kind]}: {u.name}">
+						{@const unknown = !!u.collectId && !log[u.collectId]}
+						<div
+							class="entry kind-{u.kind}"
+							class:unknown
+							title={unknown ? `Not caught yet · ${u.yields}` : `${KIND_LABEL[u.kind]}: ${u.name}`}
+						>
 							<img class="entry-img" src={u.image} alt="" />
 							<div class="entry-text">
-								<span class="entry-name">{u.name}</span>
+								<span class="entry-name">{unknown ? '???' : u.name}</span>
 								<span class="entry-meta">
-									{KIND_LABEL[u.kind]}{#if u.yields} · {u.yields}{/if} · {u.xp(skill.level)} XP
+									{#if u.kind === 'catch'}
+										{u.yields}{#if !unknown && log[u.collectId!]?.best} · best {log[u.collectId!].best} cm{/if}
+									{:else}
+										{KIND_LABEL[u.kind]}{#if u.yields} · {u.yields}{/if} · {u.xp(skill.level)} XP
+									{/if}
 								</span>
 							</div>
 						</div>
@@ -246,6 +262,9 @@
 	.entry.kind-gather { border-left-color: rgba(104, 211, 145, 0.55); }
 	.entry.kind-craft { border-left-color: rgba(255, 196, 87, 0.55); }
 	.entry.kind-grow { border-left-color: rgba(99, 202, 255, 0.55); }
+	.entry.kind-catch { border-left-color: rgba(98, 182, 255, 0.55); }
+	.entry.unknown .entry-img { filter: brightness(0) opacity(0.55); }
+	.entry.unknown .entry-name { color: rgba(228, 216, 190, 0.45); }
 	.entry-img {
 		width: 28px;
 		height: 28px;

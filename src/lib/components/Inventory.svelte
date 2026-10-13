@@ -58,9 +58,14 @@
 		);
 	}
 
-	// Collapsible state for material/sigil sections
+	function isCatch(item: Item) {
+		return !!item.flags?.includes('fish') || !!item.flags?.includes('fish_catch');
+	}
+
+	// Collapsible state for material/sigil/catch sections
 	let materialsExpanded = false;
 	let sigilsExpanded = false;
+	let catchesExpanded = false;
 
 	const isConsumable = (item: Item) =>
 		item.type === 'general' &&
@@ -169,18 +174,20 @@
 
 	const groupedInventory = derived([filteredInventory, inventoryTab], ([$filtered, $tab]) => {
 		const deduped = dedupeStackables($filtered);
-		if ($tab !== 'general') return { regular: deduped, materials: [], sigils: [] };
+		if ($tab !== 'general') return { regular: deduped, materials: [], sigils: [], catches: [] };
 
 		const materials: Item[] = [];
 		const sigils: Item[] = [];
+		const catches: Item[] = [];
 		const regular: Item[] = [];
 
 		for (const item of deduped) {
 			if (isMaterial(item)) materials.push(item);
 			else if (isSigil(item)) sigils.push(item);
+			else if (isCatch(item)) catches.push(item);
 			else regular.push(item);
 		}
-		return { regular, materials, sigils };
+		return { regular, materials, sigils, catches };
 	});
 
 	let actionSheetItem: Item | null = null;
@@ -328,6 +335,26 @@
 												>{/if}
 										</div>
 									{/if}
+								</div>
+							{/each}
+						{/if}
+					{/if}
+
+					<!-- Fish & other catches collapsible section -->
+					{#if $groupedInventory.catches.length > 0}
+						<button class="section-header" on:click={() => (catchesExpanded = !catchesExpanded)}>
+							<span class="sh-label">Fish & Catches</span>
+							<span class="sh-count">{$groupedInventory.catches.length}</span>
+							<span class="sh-chevron" class:open={catchesExpanded}>›</span>
+						</button>
+						{#if catchesExpanded}
+							{#each $groupedInventory.catches as item (item.instanceId || item.id)}
+								<div
+									class="grid-item"
+									class:selected={$activeItem?.id === item.id}
+									on:click={() => selectItem(item)}
+								>
+									<ItemBox {item} viewSize="medium" base="" />
 								</div>
 							{/each}
 						{/if}

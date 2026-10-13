@@ -85,6 +85,7 @@ export const player: Player = {
     techPoints: 0,
     unlockedTech: ['env_open_field'], // Start with only the open field unlocked
     locationEventHistory: {},
+    fishLog: {},
     factionReputation: {},
     homestead: {
         farmPlots: initialFarmPlots,

@@ -5,8 +5,9 @@ import { relics } from './relics';
 import { weapons } from './weapons';
 import cafeItems from '../data/cafeItems.json'; // New import
 import groceryItems from '../data/groceryItems.json'; // New import
+import { fishingItems } from './fishing';
 
-const allItems: Item[] = [...generalItems, ...homesteadItems, ...relics, ...weapons, ...cafeItems, ...groceryItems];
+const allItems: Item[] = [...generalItems, ...homesteadItems, ...relics, ...weapons, ...cafeItems, ...groceryItems, ...fishingItems];
 
 const generateItemDictionary = (items: Item[]): { [key: string]: Item } => {
     return items.reduce((acc, item) => {
