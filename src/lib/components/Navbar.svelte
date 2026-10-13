@@ -56,6 +56,9 @@
 		<button class="icon-button" on:click={() => goto('/inventory')} title="Inventory">
 			<img src="/game_icons/inventory.png" alt="Inventory" />
 		</button>
+		<button class="icon-button" on:click={() => goto('/skills')} title="Skills & Factions">
+			<img src="/game_icons/compass.png" alt="Skills & Factions" />
+		</button>
 		<button class="icon-button" on:click={() => goto('/journal')} title="Journal">
 			<img src="/game_icons/journal.png" alt="Journal" />
 		</button>
@@ -119,6 +122,10 @@
 			<button class="icon-button" on:click={() => navigate('/inventory')} title="Inventory">
 				<img src="/game_icons/inventory.png" alt="Inventory" />
 				<span>Inventory</span>
+			</button>
+			<button class="icon-button" on:click={() => navigate('/skills')} title="Skills & Factions">
+				<img src="/game_icons/compass.png" alt="Skills & Factions" />
+				<span>Skills</span>
 			</button>
 			<button class="icon-button" on:click={() => navigate('/journal')} title="Journal">
 				<img src="/game_icons/journal.png" alt="Journal" />
