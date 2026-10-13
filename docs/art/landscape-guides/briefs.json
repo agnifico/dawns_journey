@@ -1,0 +1,2029 @@
+{
+ "shallow_water": {
+  "camera": {
+   "x": 10,
+   "y": 23,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "water"
+   ],
+   "near centre": [
+    "water",
+    "shallow_water"
+   ],
+   "near right": [
+    "shallow_water",
+    "north_beach"
+   ],
+   "mid left": [
+    "water"
+   ],
+   "mid centre": [
+    "water",
+    "shallow_water"
+   ],
+   "mid right": [
+    "north_beach",
+    "arrival_plains"
+   ],
+   "far left": [
+    "water",
+    "open sea"
+   ],
+   "far centre": [
+    "water",
+    "north_beach"
+   ],
+   "far right": [
+    "dragon_shrine_grounds",
+    "forest1"
+   ]
+  },
+  "features": [
+   {
+    "id": "big_chest2",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "north_beach": {
+  "camera": {
+   "x": 44,
+   "y": 25,
+   "heading": "west"
+  },
+  "layout": {
+   "near left": [
+    "arrival_plains",
+    "north_beach"
+   ],
+   "near centre": [
+    "north_beach"
+   ],
+   "near right": [
+    "north_beach",
+    "shallow_water"
+   ],
+   "mid left": [
+    "arrival_plains",
+    "forest1"
+   ],
+   "mid centre": [
+    "north_beach",
+    "shallow_water"
+   ],
+   "mid right": [
+    "water",
+    "shallow_water"
+   ],
+   "far left": [
+    "arrival_plains",
+    "open sea"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "big_chest0",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "arrival_plains": {
+  "camera": {
+   "x": 8,
+   "y": 50,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "arrival_plains"
+   ],
+   "near centre": [
+    "arrival_plains"
+   ],
+   "near right": [
+    "arrival_plains"
+   ],
+   "mid left": [
+    "arrival_plains",
+    "open sea"
+   ],
+   "mid centre": [
+    "arrival_plains",
+    "north_beach"
+   ],
+   "mid right": [
+    "arrival_plains",
+    "north_beach"
+   ],
+   "far left": [
+    "open sea"
+   ],
+   "far centre": [
+    "water",
+    "open sea"
+   ],
+   "far right": [
+    "water",
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "sylvie",
+    "type": "npc",
+    "where": "mid centre"
+   },
+   {
+    "id": "legendary_sword1",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "big_chest0",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "sylvies_home",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "boat_to_pleasure_island",
+    "type": "event",
+    "where": "far left"
+   }
+  ]
+ },
+ "forest1": {
+  "camera": {
+   "x": 24,
+   "y": 33,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "arrival_plains"
+   ],
+   "near centre": [
+    "arrival_plains",
+    "forest1"
+   ],
+   "near right": [
+    "forest1",
+    "arrival_plains"
+   ],
+   "mid left": [
+    "north_beach",
+    "arrival_plains"
+   ],
+   "mid centre": [
+    "forest1"
+   ],
+   "mid right": [
+    "veres_hill",
+    "forest1"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea",
+    "dragon_shrine_grounds"
+   ]
+  },
+  "features": [
+   {
+    "id": "claudia",
+    "type": "npc",
+    "where": "far left"
+   },
+   {
+    "id": "legendary_sword5",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "big_chest2",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "legendary_sword6",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "dragonblood_tree",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "underground_well1",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "commanders_tent",
+    "type": "event",
+    "where": "far left"
+   }
+  ]
+ },
+ "murky_water": {
+  "camera": {
+   "x": 16,
+   "y": 51,
+   "heading": "southwest"
+  },
+  "layout": {
+   "near left": [
+    "murky_water"
+   ],
+   "near centre": [
+    "murky_water",
+    "south_land"
+   ],
+   "near right": [
+    "south_land",
+    "murky_water"
+   ],
+   "mid left": [
+    "south_land",
+    "south_coast"
+   ],
+   "mid centre": [
+    "murky_water",
+    "south_land"
+   ],
+   "mid right": [
+    "south_land",
+    "open sea"
+   ],
+   "far left": [
+    "open sea",
+    "icy_mountain_top"
+   ],
+   "far centre": [
+    "open sea"
+   ],
+   "far right": [
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "big_chest1",
+    "type": "event",
+    "where": "near right"
+   },
+   {
+    "id": "verona",
+    "type": "npc",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "veres_hill": {
+  "camera": {
+   "x": 36,
+   "y": 52,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "veres_hill"
+   ],
+   "near centre": [
+    "veres_hill"
+   ],
+   "near right": [
+    "veres_hill"
+   ],
+   "mid left": [
+    "forest1",
+    "arrival_plains"
+   ],
+   "mid centre": [
+    "veres_hill",
+    "forest1"
+   ],
+   "mid right": [
+    "forest1",
+    "veres_hill"
+   ],
+   "far left": [
+    "water",
+    "pleasure_island"
+   ],
+   "far centre": [
+    "water",
+    "open sea"
+   ],
+   "far right": [
+    "water",
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "claudia",
+    "type": "npc",
+    "where": "far right"
+   },
+   {
+    "id": "veres",
+    "type": "npc",
+    "where": "near right"
+   },
+   {
+    "id": "empty_sword_site_claudia",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "big_chest2",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "near left"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "mountain_lair",
+    "type": "event",
+    "where": "near centre"
+   },
+   {
+    "id": "underground_well1",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "commanders_tent",
+    "type": "event",
+    "where": "far right"
+   }
+  ]
+ },
+ "south_land": {
+  "camera": {
+   "x": 20,
+   "y": 62,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "south_land"
+   ],
+   "near centre": [
+    "south_land"
+   ],
+   "near right": [
+    "south_land",
+    "south_coast"
+   ],
+   "mid left": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "mid centre": [
+    "south_land",
+    "south_coast"
+   ],
+   "mid right": [
+    "water",
+    "ice_spring_island"
+   ],
+   "far left": [
+    "open sea",
+    "dragon_shrine_grounds"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "water",
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "nemesis",
+    "type": "npc",
+    "where": "far right"
+   },
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "far left"
+   }
+  ]
+ },
+ "unknown_hills": {
+  "camera": {
+   "x": 43,
+   "y": 60,
+   "heading": "south"
+  },
+  "layout": {
+   "near left": [
+    "water",
+    "south_coast"
+   ],
+   "near centre": [
+    "water",
+    "south_coast"
+   ],
+   "near right": [
+    "water",
+    "south_coast"
+   ],
+   "mid left": [
+    "water",
+    "ice_spring_island"
+   ],
+   "mid centre": [
+    "ice_spring_island",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "ice_spring_island"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "nemesis",
+    "type": "npc",
+    "where": "mid centre"
+   },
+   {
+    "id": "legendary_sword8",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "ice_den",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "special_sunflower",
+    "type": "event",
+    "where": "far centre"
+   }
+  ]
+ },
+ "mountain_forest": {
+  "camera": {
+   "x": 25,
+   "y": 46,
+   "heading": "southeast"
+  },
+  "layout": {
+   "near left": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "near centre": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "near right": [
+    "mountain_forest",
+    "veres_hill"
+   ],
+   "mid left": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "mid centre": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "mid right": [
+    "veres_hill",
+    "water"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "water",
+    "open sea"
+   ],
+   "far right": [
+    "water",
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "veres",
+    "type": "npc",
+    "where": "mid left"
+   },
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "stormy_water": {
+  "camera": {
+   "x": 30,
+   "y": 18,
+   "heading": "northwest"
+  },
+  "layout": {
+   "near left": [
+    "water"
+   ],
+   "near centre": [
+    "water"
+   ],
+   "near right": [
+    "water"
+   ],
+   "mid left": [
+    "pleasure_island",
+    "water"
+   ],
+   "mid centre": [
+    "pleasure_island",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "pleasure_island"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "hela",
+    "type": "npc",
+    "where": "mid left"
+   },
+   {
+    "id": "legendary_sword4",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "hells_glow",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "boat_to_mainland",
+    "type": "event",
+    "where": "mid left"
+   }
+  ]
+ },
+ "northeastern_sea": {
+  "camera": {
+   "x": 50,
+   "y": 16,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "water"
+   ],
+   "near centre": [
+    "water"
+   ],
+   "near right": [
+    "water"
+   ],
+   "mid left": [
+    "water",
+    "open sea"
+   ],
+   "mid centre": [
+    "water",
+    "open sea"
+   ],
+   "mid right": [
+    "water",
+    "open sea"
+   ],
+   "far left": [
+    "open sea"
+   ],
+   "far centre": [
+    "open sea"
+   ],
+   "far right": [
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "aoife",
+    "type": "npc",
+    "where": "mid right"
+   },
+   {
+    "id": "big_chest3",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "black_sails",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "south_coast": {
+  "camera": {
+   "x": 5,
+   "y": 67,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "south_land"
+   ],
+   "near centre": [
+    "south_land",
+    "south_coast"
+   ],
+   "near right": [
+    "south_coast",
+    "south_land"
+   ],
+   "mid left": [
+    "south_land",
+    "murky_water"
+   ],
+   "mid centre": [
+    "water",
+    "south_coast"
+   ],
+   "mid right": [
+    "icy_mountain_top",
+    "water"
+   ],
+   "far left": [
+    "veres_hill",
+    "dragon_shrine_grounds"
+   ],
+   "far centre": [
+    "water"
+   ],
+   "far right": [
+    "water",
+    "unknown_islands"
+   ]
+  },
+  "features": [
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "mid right"
+   }
+  ]
+ },
+ "glacier_bottom": {
+  "camera": {
+   "x": 18,
+   "y": 97,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "icy_mountain",
+    "water"
+   ],
+   "near centre": [
+    "icy_mountain",
+    "water"
+   ],
+   "near right": [
+    "icy_mountain"
+   ],
+   "mid left": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "mid centre": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "mid right": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "far left": [
+    "open sea",
+    "south_land"
+   ],
+   "far centre": [
+    "south_land",
+    "arrival_plains"
+   ],
+   "far right": [
+    "veres_hill",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "far centre"
+   }
+  ]
+ },
+ "glacier_top": {
+  "camera": {
+   "x": 17,
+   "y": 82,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "icy_mountain_top",
+    "water"
+   ],
+   "near centre": [
+    "glacier_top",
+    "icy_mountain_top"
+   ],
+   "near right": [
+    "icy_mountain_top",
+    "glacier_top"
+   ],
+   "mid left": [
+    "south_land",
+    "icy_mountain_top"
+   ],
+   "mid centre": [
+    "water",
+    "south_land"
+   ],
+   "mid right": [
+    "water",
+    "south_land"
+   ],
+   "far left": [
+    "open sea",
+    "arrival_plains"
+   ],
+   "far centre": [
+    "arrival_plains",
+    "murky_water"
+   ],
+   "far right": [
+    "veres_hill",
+    "forest1"
+   ]
+  },
+  "features": [
+   {
+    "id": "big_chest1",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "near centre"
+   }
+  ]
+ },
+ "icy_coast_south": {
+  "camera": {
+   "x": 25,
+   "y": 100,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "icy_mountain",
+    "water"
+   ],
+   "near centre": [
+    "icy_mountain",
+    "water"
+   ],
+   "near right": [
+    "water",
+    "icy_mountain"
+   ],
+   "mid left": [
+    "icy_mountain",
+    "icy_mountain_top"
+   ],
+   "mid centre": [
+    "icy_mountain",
+    "icy_mountain_top"
+   ],
+   "mid right": [
+    "icy_mountain",
+    "water"
+   ],
+   "far left": [
+    "south_land",
+    "open sea"
+   ],
+   "far centre": [
+    "veres_hill",
+    "water"
+   ],
+   "far right": [
+    "water",
+    "veres_hill"
+   ]
+  },
+  "features": [
+   {
+    "id": "legendary_sword8",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "ice_den",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "unknown_islands": {
+  "camera": {
+   "x": 42,
+   "y": 88,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "unknown_islands",
+    "water"
+   ],
+   "near centre": [
+    "unknown_islands"
+   ],
+   "near right": [
+    "unknown_islands"
+   ],
+   "mid left": [
+    "water",
+    "unknown_islands"
+   ],
+   "mid centre": [
+    "unknown_islands",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "unknown_islands"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "special_sunflower",
+    "type": "event",
+    "where": "near centre"
+   },
+   {
+    "id": "special_campfire",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "deserted_island": {
+  "camera": {
+   "x": 50,
+   "y": 13,
+   "heading": "northeast"
+  },
+  "layout": {
+   "near left": [
+    "water",
+    "northeastern_sea"
+   ],
+   "near centre": [
+    "water"
+   ],
+   "near right": [
+    "water"
+   ],
+   "mid left": [
+    "open sea",
+    "water"
+   ],
+   "mid centre": [
+    "water",
+    "deserted_island"
+   ],
+   "mid right": [
+    "water",
+    "open sea"
+   ],
+   "far left": [
+    "open sea"
+   ],
+   "far centre": [
+    "open sea"
+   ],
+   "far right": [
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "aoife",
+    "type": "npc",
+    "where": "mid left"
+   },
+   {
+    "id": "big_chest3",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "white_sails",
+    "type": "event",
+    "where": "mid right"
+   }
+  ]
+ },
+ "mountain_forest2": {
+  "camera": {
+   "x": 58,
+   "y": 47,
+   "heading": "southwest"
+  },
+  "layout": {
+   "near left": [
+    "mountain_forest2"
+   ],
+   "near centre": [
+    "mountain_forest2",
+    "waterfall"
+   ],
+   "near right": [
+    "mountain_forest2",
+    "water"
+   ],
+   "mid left": [
+    "water",
+    "mountain_forest2"
+   ],
+   "mid centre": [
+    "water",
+    "mountain_forest2"
+   ],
+   "mid right": [
+    "veres_hill",
+    "mountain_forest"
+   ],
+   "far left": [
+    "water",
+    "open sea"
+   ],
+   "far centre": [
+    "water",
+    "icy_mountain_top"
+   ],
+   "far right": [
+    "south_land",
+    "veres_hill"
+   ]
+  },
+  "features": [
+   {
+    "id": "nemesis",
+    "type": "npc",
+    "where": "far left"
+   },
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "mid right"
+   }
+  ]
+ },
+ "dragon_shrine_grounds": {
+  "camera": {
+   "x": 53,
+   "y": 50,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "mountain_forest2",
+    "dragon_shrine_grounds"
+   ],
+   "near centre": [
+    "dragon_shrine_grounds",
+    "mountain_forest2"
+   ],
+   "near right": [
+    "dragon_shrine_grounds",
+    "mountain_forest2"
+   ],
+   "mid left": [
+    "dragon_shrine_grounds",
+    "forest1"
+   ],
+   "mid centre": [
+    "dragon_shrine_grounds",
+    "forest1"
+   ],
+   "mid right": [
+    "dragon_shrine_grounds",
+    "water"
+   ],
+   "far left": [
+    "water",
+    "open sea"
+   ],
+   "far centre": [
+    "water",
+    "open sea"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "guinevere",
+    "type": "npc",
+    "where": "near right"
+   },
+   {
+    "id": "claudia",
+    "type": "npc",
+    "where": "far centre"
+   },
+   {
+    "id": "cygwin",
+    "type": "npc",
+    "where": "mid right"
+   },
+   {
+    "id": "legendary_sword5",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "legendary_sword6",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "dragonblood_tree",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "underground_well1",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "underground_well2",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "commanders_tent",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "boat_to_cathedral",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "boat_to_cathedral",
+    "type": "event",
+    "where": "far right"
+   }
+  ]
+ },
+ "mountain_east": {
+  "camera": {
+   "x": 70,
+   "y": 60,
+   "heading": "west"
+  },
+  "layout": {
+   "near left": [
+    "water",
+    "open sea"
+   ],
+   "near centre": [
+    "water",
+    "open sea"
+   ],
+   "near right": [
+    "water",
+    "open sea"
+   ],
+   "mid left": [
+    "water",
+    "south_coast"
+   ],
+   "mid centre": [
+    "water",
+    "waterfall"
+   ],
+   "mid right": [
+    "mountain_forest2",
+    "dragon_shrine_grounds"
+   ],
+   "far left": [
+    "water",
+    "icy_mountain"
+   ],
+   "far centre": [
+    "south_land",
+    "water"
+   ],
+   "far right": [
+    "veres_hill",
+    "arrival_plains"
+   ]
+  },
+  "features": [
+   {
+    "id": "nemesis",
+    "type": "npc",
+    "where": "far left"
+   },
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "legendary_sword7",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "mid right"
+   }
+  ]
+ },
+ "waterfall": {
+  "camera": {
+   "x": 53,
+   "y": 62,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "waterfall",
+    "water"
+   ],
+   "near centre": [
+    "mountain_forest2",
+    "waterfall"
+   ],
+   "near right": [
+    "mountain_forest2",
+    "waterfall"
+   ],
+   "mid left": [
+    "veres_hill",
+    "mountain_forest2"
+   ],
+   "mid centre": [
+    "dragon_shrine_grounds",
+    "mountain_forest2"
+   ],
+   "mid right": [
+    "dragon_shrine_grounds",
+    "mountain_forest2"
+   ],
+   "far left": [
+    "water",
+    "forest1"
+   ],
+   "far centre": [
+    "water",
+    "dragon_shrine_grounds"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "guinevere",
+    "type": "npc",
+    "where": "mid centre"
+   },
+   {
+    "id": "legendary_sword5",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "big_chest2",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "legendary_sword6",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "dragonblood_tree",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "ruined_quarters",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "underground_well2",
+    "type": "event",
+    "where": "far centre"
+   }
+  ]
+ },
+ "ice_spring": {
+  "camera": {
+   "x": 41,
+   "y": 83,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "ice_spring_island",
+    "water"
+   ],
+   "near centre": [
+    "ice_spring_island",
+    "ice_spring"
+   ],
+   "near right": [
+    "ice_spring_island",
+    "ice_spring"
+   ],
+   "mid left": [
+    "water",
+    "ice_spring_island"
+   ],
+   "mid centre": [
+    "water",
+    "ice_spring_island"
+   ],
+   "mid right": [
+    "water",
+    "ice_spring_island"
+   ],
+   "far left": [
+    "arrival_plains",
+    "veres_hill"
+   ],
+   "far centre": [
+    "veres_hill",
+    "forest1"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "legendary_sword8",
+    "type": "event",
+    "where": "near left"
+   }
+  ]
+ },
+ "eastern_sea": {
+  "camera": {
+   "x": 76,
+   "y": 40,
+   "heading": "west"
+  },
+  "layout": {
+   "near left": [
+    "open sea"
+   ],
+   "near centre": [
+    "open sea"
+   ],
+   "near right": [
+    "open sea"
+   ],
+   "mid left": [
+    "dragon_shrine_grounds",
+    "mountain_forest2"
+   ],
+   "mid centre": [
+    "dragon_shrine_grounds",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "northeast"
+   ],
+   "far left": [
+    "water",
+    "veres_hill"
+   ],
+   "far centre": [
+    "forest1",
+    "veres_hill"
+   ],
+   "far right": [
+    "water",
+    "forest1"
+   ]
+  },
+  "features": [
+   {
+    "id": "guinevere",
+    "type": "npc",
+    "where": "mid centre"
+   },
+   {
+    "id": "claudia",
+    "type": "npc",
+    "where": "far right"
+   },
+   {
+    "id": "cygwin",
+    "type": "npc",
+    "where": "mid right"
+   },
+   {
+    "id": "legendary_sword5",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "legendary_sword6",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "dragonblood_tree",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "ruined_quarters",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "waterfall_magic",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "underground_well1",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "underground_well2",
+    "type": "event",
+    "where": "mid right"
+   },
+   {
+    "id": "commanders_tent",
+    "type": "event",
+    "where": "far right"
+   }
+  ]
+ },
+ "icy_mountain_top": {
+  "camera": {
+   "x": 5,
+   "y": 80,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "icy_mountain_top"
+   ],
+   "near centre": [
+    "icy_mountain_top"
+   ],
+   "near right": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "mid left": [
+    "icy_mountain_top",
+    "water"
+   ],
+   "mid centre": [
+    "icy_mountain_top",
+    "glacier_top"
+   ],
+   "mid right": [
+    "icy_mountain",
+    "icy_mountain_top"
+   ],
+   "far left": [
+    "water",
+    "south_coast"
+   ],
+   "far centre": [
+    "water",
+    "ice_spring_island"
+   ],
+   "far right": [
+    "water",
+    "open sea"
+   ]
+  },
+  "features": [
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "mid left"
+   },
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "ice_den",
+    "type": "event",
+    "where": "far centre"
+   }
+  ]
+ },
+ "icy_mountain": {
+  "camera": {
+   "x": 12,
+   "y": 94,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "icy_mountain"
+   ],
+   "near centre": [
+    "icy_mountain"
+   ],
+   "near right": [
+    "icy_mountain"
+   ],
+   "mid left": [
+    "icy_mountain_top",
+    "water"
+   ],
+   "mid centre": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "mid right": [
+    "icy_mountain_top",
+    "icy_mountain"
+   ],
+   "far left": [
+    "open sea"
+   ],
+   "far centre": [
+    "arrival_plains",
+    "south_land"
+   ],
+   "far right": [
+    "veres_hill",
+    "forest1"
+   ]
+  },
+  "features": [
+   {
+    "id": "legendary_sword9",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "verona",
+    "type": "npc",
+    "where": "far left"
+   }
+  ]
+ },
+ "cold_waters": {
+  "camera": {
+   "x": 30,
+   "y": 70,
+   "heading": "south"
+  },
+  "layout": {
+   "near left": [
+    "water",
+    "ice_spring_island"
+   ],
+   "near centre": [
+    "water",
+    "icy_mountain"
+   ],
+   "near right": [
+    "water",
+    "icy_mountain"
+   ],
+   "mid left": [
+    "water",
+    "unknown_islands"
+   ],
+   "mid centre": [
+    "icy_mountain",
+    "water"
+   ],
+   "mid right": [
+    "icy_mountain",
+    "icy_mountain_top"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "open sea",
+    "icy_mountain"
+   ]
+  },
+  "features": [
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "ice_den",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "southeastern_sea": {
+  "camera": {
+   "x": 62,
+   "y": 78,
+   "heading": "southwest"
+  },
+  "layout": {
+   "near left": [
+    "water"
+   ],
+   "near centre": [
+    "water"
+   ],
+   "near right": [
+    "water"
+   ],
+   "mid left": [
+    "water",
+    "unknown_islands"
+   ],
+   "mid centre": [
+    "unknown_islands",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "unknown_islands"
+   ],
+   "far left": [
+    "open sea"
+   ],
+   "far centre": [
+    "open sea",
+    "water"
+   ],
+   "far right": [
+    "icy_mountain",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "campfire",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "special_sunflower",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "special_campfire",
+    "type": "event",
+    "where": "mid centre"
+   }
+  ]
+ },
+ "ice_spring_island": {
+  "camera": {
+   "x": 44,
+   "y": 81,
+   "heading": "north"
+  },
+  "layout": {
+   "near left": [
+    "ice_spring",
+    "ice_spring_island"
+   ],
+   "near centre": [
+    "ice_spring_island",
+    "ice_spring"
+   ],
+   "near right": [
+    "ice_spring_island",
+    "ice_spring"
+   ],
+   "mid left": [
+    "water",
+    "south_coast"
+   ],
+   "mid centre": [
+    "water",
+    "south_coast"
+   ],
+   "mid right": [
+    "water",
+    "ice_spring_island"
+   ],
+   "far left": [
+    "veres_hill",
+    "arrival_plains"
+   ],
+   "far centre": [
+    "veres_hill",
+    "forest1"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "nemesis",
+    "type": "npc",
+    "where": "near right"
+   },
+   {
+    "id": "empty_sword_site_cygwin",
+    "type": "event",
+    "where": "far centre"
+   },
+   {
+    "id": "secret_cave",
+    "type": "event",
+    "where": "far centre"
+   }
+  ]
+ },
+ "pleasure_island": {
+  "camera": {
+   "x": 4,
+   "y": 12,
+   "heading": "east"
+  },
+  "layout": {
+   "near left": [
+    "pleasure_island"
+   ],
+   "near centre": [
+    "pleasure_island"
+   ],
+   "near right": [
+    "pleasure_island"
+   ],
+   "mid left": [
+    "pleasure_island",
+    "water"
+   ],
+   "mid centre": [
+    "pleasure_island",
+    "water"
+   ],
+   "mid right": [
+    "water",
+    "pleasure_island"
+   ],
+   "far left": [
+    "open sea",
+    "water"
+   ],
+   "far centre": [
+    "water"
+   ],
+   "far right": [
+    "water",
+    "dragon_shrine_grounds"
+   ]
+  },
+  "features": [
+   {
+    "id": "hela",
+    "type": "npc",
+    "where": "near left"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "far right"
+   },
+   {
+    "id": "boat_to_mainland",
+    "type": "event",
+    "where": "near right"
+   }
+  ]
+ },
+ "northeast": {
+  "camera": {
+   "x": 62,
+   "y": 34,
+   "heading": "northwest"
+  },
+  "layout": {
+   "near left": [
+    "forest1",
+    "northeast"
+   ],
+   "near centre": [
+    "northeast"
+   ],
+   "near right": [
+    "northeast",
+    "water"
+   ],
+   "mid left": [
+    "forest1",
+    "northeast"
+   ],
+   "mid centre": [
+    "northeast",
+    "water"
+   ],
+   "mid right": [
+    "water"
+   ],
+   "far left": [
+    "water",
+    "north_beach"
+   ],
+   "far centre": [
+    "water",
+    "open sea"
+   ],
+   "far right": [
+    "open sea",
+    "water"
+   ]
+  },
+  "features": [
+   {
+    "id": "claudia",
+    "type": "npc",
+    "where": "mid centre"
+   },
+   {
+    "id": "cygwin",
+    "type": "npc",
+    "where": "near right"
+   },
+   {
+    "id": "aoife",
+    "type": "npc",
+    "where": "far right"
+   },
+   {
+    "id": "red_extractor",
+    "type": "event",
+    "where": "far left"
+   },
+   {
+    "id": "legendary_sword6",
+    "type": "event",
+    "where": "near left"
+   },
+   {
+    "id": "underground_well1",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "commanders_tent",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "boat_to_cathedral",
+    "type": "event",
+    "where": "mid centre"
+   },
+   {
+    "id": "boat_to_cathedral",
+    "type": "event",
+    "where": "near right"
+   }
+  ]
+ }
+}

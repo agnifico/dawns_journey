@@ -1,0 +1,1211 @@
+{
+ "note": "Generated from grok-prompt-pack.md. size = shipped pixel size; background \"transparent\" = generate on #FF00FF and key it out.",
+ "items": [
+  {
+   "group": "A3-cathedral",
+   "file": "backforest.jpg",
+   "target": "static/locations/backforest.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "dense old forest behind a gothic cathedral, cathedral spires visible through the trees, dappled light",
+   "deferred": true,
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "agnes_garden.jpg",
+   "target": "static/locations/agnes_garden.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "walled cathedral herb and flower garden, stone paths, gravestones with flowers, a bench, warm afternoon light",
+   "deferred": true,
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "church_roof.jpg",
+   "target": "static/locations/church_roof.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "on the slate roof of a gothic cathedral, flying buttresses, gargoyles, gold-trimmed spires, sea horizon beyond",
+   "deferred": true,
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "sewers.jpg",
+   "target": "static/locations/sewers.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "stone sewers beneath a cathedral, arched brick tunnels, shallow green water channel, lanterns, moss",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "tower_balcony.jpg",
+   "target": "static/locations/tower_balcony.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "narrow stone balcony high on a cathedral bell tower, gold railing, view over a sunlit island and sea",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "courtyard.jpg",
+   "target": "static/locations/courtyard.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "cathedral cloister courtyard, white stone arcades, gold banners, central lawn, statues",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "tower_top.jpg",
+   "target": "static/locations/tower_top.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "the very top of a gothic bell tower, great bronze bell, open arches, wind and clouds at eye level",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "bridge.jpg",
+   "target": "static/locations/bridge.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "ornate white stone bridge leading to a gothic cathedral over a sea channel, gold lamps",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "church_wall.jpg",
+   "target": "static/locations/church_wall.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "outer wall of a gothic cathedral, stained-glass windows, ivy, buttresses, path along the base",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "tower_wall.jpg",
+   "target": "static/locations/tower_wall.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "climbing the outside of a stone bell tower, sheer wall, ivy, ledges, dizzying drop to the sea",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "fountain.jpg",
+   "target": "static/locations/fountain.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "ornate marble fountain in a cathedral plaza, gold statue at its centre, pigeons, sunlight through spray",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A3-cathedral",
+   "file": "cross.jpg",
+   "target": "static/locations/cross.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "subject": "huge golden cross at the cathedral's peak against a dramatic sky, seen up close",
+   "deferred": true,
+   "status": "todo"
+  },
+  {
+   "group": "A2-arena",
+   "file": "arenabg.png",
+   "target": "static/images/arenabg.jpg",
+   "size": [
+    1920,
+    1080
+   ],
+   "background": "opaque",
+   "subject": "grand sandstone gladiator arena interior, tiered seating, banners, sandy floor, empty, midday (ship 1920\u00d71080)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "legendary_sword.png",
+   "target": "static/locations/legendary_sword.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "an ornate legendary sword driven into a small mossy stone plinth, faint glow",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "mountain_lair.png",
+   "target": "static/locations/mountain_lair.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a private alcove carved in grey mountain rock, arranged stones, furs, a small fire, comfortable and deliberate",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "waterfall.png",
+   "target": "static/locations/waterfall.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a small waterfall in mountain forest, faint luminous musical motes rising from the pool",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "hells_glow.png",
+   "target": "static/locations/hells_glow.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a patch of scorched earth glowing deep red from cracks below, wisps of heat",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "secret_cave.png",
+   "target": "static/locations/secret_cave.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a narrow cave mouth hidden behind thick overgrowth, vines parting slightly",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "underground_well.png",
+   "target": "static/locations/underground_well.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a humming survey site, small wooden derrick over a drilled hole, faint resonance rings in the ground",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B1",
+   "file": "campfire2.png",
+   "target": "static/locations/campfire2.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a steaming thermal pool in glacier ice, warm turquoise water, snow banks around it",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_still_water.png",
+   "target": "static/locations/sword_still_water.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a sword lying at the bottom of a perfectly still shallow pool, untouched by rust",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_open_mountain.png",
+   "target": "static/locations/sword_open_mountain.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a sword driven into a shaped mountain rockface at a dragon's eye height",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_forest_pact.png",
+   "target": "static/locations/sword_forest_pact.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a sword wrapped in living vines that grow in a perfect circle",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_river_fork.png",
+   "target": "static/locations/sword_river_fork.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a fork in a river, something glinting beneath the slow water",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_stone_circle.png",
+   "target": "static/locations/sword_stone_circle.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a ring of ancient standing stones on a plateau, a sword at the centre",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_shrine_sanctum.png",
+   "target": "static/locations/sword_shrine_sanctum.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "inner sanctum of a dragon shrine, heavy stone, a sword on an altar",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_glacier_shelf.png",
+   "target": "static/locations/sword_glacier_shelf.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a sword suspended inside a shelf of ancient clear blue ice",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B2",
+   "file": "sword_farthest_shore.png",
+   "target": "static/locations/sword_farthest_shore.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "the last shore before an unnamed ocean, a sword planted in pale sand",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B3",
+   "file": "shrine.png",
+   "target": "static/locations/shrine.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "an ancient humming shrine, carved stone pillar with a floating blue crystal",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B3",
+   "file": "teleporter.png",
+   "target": "static/locations/teleporter.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a ring portal of standing stones humming with blue-violet energy (currently shares `shrine.png`)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B3",
+   "file": "rune.png",
+   "target": "static/locations/rune.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a giant fossil dragon fang rising from the ground, a rune circle of stones and small glowing lamps at its base",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "B3",
+   "file": "crevice.png",
+   "target": "static/locations/crevice.png",
+   "size": [
+    512,
+    512
+   ],
+   "background": "transparent",
+   "subject": "a small crevice in a hillside leaking a nauseating dark purple aura",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "swamp_tree.png",
+   "target": "static/locations/swamp_tree.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a gnarled swamp tree with hanging moss, roots in dark water",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "red_palm_tree.png",
+   "target": "static/locations/red_palm_tree.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a palm tree with crimson-red fronds",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "green_mushroom.png",
+   "target": "static/locations/green_mushroom.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a large green mushroom with white spots",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "green_mushroom_mini.png",
+   "target": "static/locations/green_mushroom_mini.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a cluster of three small green mushrooms with white spots",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "blue_mushroom.png",
+   "target": "static/locations/blue_mushroom.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a large pale-blue mushroom with white spots",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "blue_mushroom_mini.png",
+   "target": "static/locations/blue_mushroom_mini.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a cluster of three small pale-blue mushrooms",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "yellow_mushroom.png",
+   "target": "static/locations/yellow_mushroom.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a large yellow mushroom cap with red spots",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "yellow_mushroom_mini.png",
+   "target": "static/locations/yellow_mushroom_mini.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a cluster of three small yellow mushrooms with red spots",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "red_flowers.png",
+   "target": "static/locations/red_flowers.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a clump of red wildflowers in grass",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "blue_flowers.png",
+   "target": "static/locations/blue_flowers.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a clump of blue wildflowers in grass",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "red_crystal.png",
+   "target": "static/locations/red_crystal.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a formation of jagged red crystals growing from rock",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "tree.png",
+   "target": "static/locations/tree.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a broad oak tree (replaces the old 32\u00d732 icon)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "big_mushroom.png",
+   "target": "static/locations/big_mushroom.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a giant red toadstool (replaces the old icon)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "rock_mine.png",
+   "target": "static/locations/rock_mine.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a minable rock outcrop with visible ore veins (replaces the old icon)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "C",
+   "file": "fountain.png",
+   "target": "static/locations/fountain.png",
+   "size": [
+    256,
+    256
+   ],
+   "background": "transparent",
+   "subject": "a small stone fountain with gems glinting in the basin (replaces the 24\u00d724 icon)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "biceon.png",
+   "target": "static/images/enemies/biceon.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a massive bison with fur of permafrost and horns of solid ice, glacier background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "bob.png",
+   "target": "static/images/enemies/bob.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a titanic dragon-shark the size of an island, surfacing from the sea, oddly calm expression",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "coral-eyes.png",
+   "target": "static/images/enemies/coral-eyes.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a sturdy crab whose eyes are living, growing coral, reef background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "forest_prowler.png",
+   "target": "static/images/enemies/forest_prowler.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a sleek feline predator built for extreme speed, glowing green runes, forest background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "goddess.png",
+   "target": "static/images/enemies/goddess.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a radiant divine goddess in white and gold with great feathered wings, sunlight clouds",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "mountain_basilisk.png",
+   "target": "static/images/enemies/mountain_basilisk.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a heavy-scaled coiled lizard that turns prey to stone, rocky mountain background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "punching_tortoise.png",
+   "target": "static/images/enemies/punching_tortoise.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a muscular beach tortoise in a boxing stance, beach background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "rock_lion.png",
+   "target": "static/images/enemies/rock_lion.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a proud lion with a mane of jagged stone, forest edge background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "shark_soldier.png",
+   "target": "static/images/enemies/shark_soldier.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a humanoid shark warrior in coral armour with a trident, undersea kingdom background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "solis_sentinel.png",
+   "target": "static/images/enemies/solis_sentinel.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a knight in golden armour radiating pure sunlight, cathedral interior background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "toxolotl.png",
+   "target": "static/images/enemies/toxolotl.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a neon-coloured axolotl secreting paralysing toxin, murky water background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "vanguard_siren.png",
+   "target": "static/images/enemies/vanguard_siren.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "an elite siren soldier with trident and coral armour, guardian of the southern seas",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "water_spirit_beast.png",
+   "target": "static/images/enemies/water_spirit_beast.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a shimmering beast made of pure high-pressure water, swirling sea background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D1",
+   "file": "wilhemina.png",
+   "target": "static/images/enemies/wilhemina.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "the elite siren commander, ornate blue and gold armour, long blue hair, wielding a blade",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D2",
+   "file": "greenhorn.png",
+   "target": "static/images/enemies/greenhorn.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a young green dragon whelp, a little clumsy, golden wheat field background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D2",
+   "file": "woodmech_bear.png",
+   "target": "static/images/enemies/woodmech_bear.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a bear-shaped automaton of carved wood and brass gears, forest background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D2",
+   "file": "white_wyvern.png",
+   "target": "static/images/enemies/white_wyvern.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a majestic white wyvern, wings spread, waterfall cliff background",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D2",
+   "file": "aquamech_shark.png",
+   "target": "static/images/enemies/aquamech_shark.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a mechanical shark of riveted steel plates patrolling deep water",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "D2",
+   "file": "inkjet_ray.png",
+   "target": "static/images/enemies/inkjet_ray.png",
+   "size": [
+    1024,
+    1024
+   ],
+   "background": "opaque",
+   "subject": "a manta ray evolved into a draconic semi-flying beast spitting ink, stormy sky over sea (current one has a white background)",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "E",
+   "file": "mastery.png",
+   "target": "static/game_icons/mastery.png",
+   "size": [
+    32,
+    32
+   ],
+   "background": "transparent",
+   "subject": "a small gold medal with a star, pixel art icon, magenta background. Models struggle at 32px, so generate at 512 and downscale, or take one from the existing icon pack instead.",
+   "status": "installed 2026-10-13"
+  },
+  {
+   "group": "A-main",
+   "file": "shallow_water.jpg",
+   "target": "static/locations/shallow_water.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/shallow_water.png",
+   "subject": "Standing in turquoise shallows off the north beach, looking east along the coast. Left half: open deep-blue sea to the horizon. Right half: a long pale-sand beach curving away into the distance with palm trees behind it; further along the shore, the red extractor and its pipe scaffold reaching into the sea. Far right: green forest canopy rising inland.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "north_beach.jpg",
+   "target": "static/locations/north_beach.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/north_beach.png",
+   "subject": "On the sand of a long beach, looking west along the shoreline. Centre and right: the sea, turquoise near the shore and deep blue beyond; on the far-right horizon, Pleasure Island. Left midground: the red extractor and its pipe scaffold out over the shallows, palm trees and a driftwood log on the sand. Left edge: green meadow inland.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "arrival_plains.jpg",
+   "target": "static/locations/arrival_plains.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/arrival_plains.png",
+   "subject": "A grassy meadow looking north. Centre midground: Sylvie's cottage inside a low wooden picket fence, a small garden and a few giant mushrooms in front, pine trees either side. Behind it a pale beach, then the sea; on the horizon centre-left, Pleasure Island. Foreground: open grass and a round green bush.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "forest1.jpg",
+   "target": "static/locations/forest1.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/forest1.png",
+   "subject": "At the western edge of a dense forest, looking east into it. Left: a sandy path and the red extractor's roof toward the beach. Centre and right: a thick canopy of rounded deciduous and pine trees stretching away, giant red-capped and blue mushrooms between the trunks, the ground rising gently toward the central plateau. Far right: grey stone ruins above the treeline.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "murky_water.jpg",
+   "target": "static/locations/murky_water.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/murky_water.png",
+   "subject": "Looking down into a sunken swamp: dark still pools with lily pads and cattails, divided by raised grassy banks with crumbling stone ledges, gnarled dark swamp trees and a dead red tree, a wooden chest on a small islet. Beyond, the land ends in low cliffs; on the far-left horizon across the sea, the glacier island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "veres_hill.jpg",
+   "target": "static/locations/veres_hill.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/veres_hill.png",
+   "subject": "On a high stone plateau, looking north at Veres' mesa rising straight ahead: a dark cave mouth at its base, a wooden ladder up its side, a small campfire nearby. Left and right: lavender-grey stone terraces and pine trees. Far beyond, the forest falls away to the north coast and the sea, with Pleasure Island on the far-left horizon.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "south_land.jpg",
+   "target": "static/locations/south_land.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/south_land.png",
+   "subject": "A southern lowland meadow, looking east. Left: the land climbs in the central plateau's terraced cliffs, topped with pine forest. Centre: rolling green meadow with scattered boulders running toward the coast. Right: low cliffs drop to the sea; across the water, the glacier island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "unknown_hills.jpg",
+   "target": "static/locations/unknown_hills.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/unknown_hills.png",
+   "subject": "On a high rocky hillside at the south edge of the main island, looking south over the sea. Foreground: lavender-grey rock and sparse grass falling away. Midground: across a channel of turquoise water, a snow-covered island with blue ice cliffs and a frozen pool ringed by ice. Far right: more of the glacier coast.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "mountain_forest.jpg",
+   "target": "static/locations/mountain_forest.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/mountain_forest.png",
+   "subject": "Mountain forest on the western slopes of the central plateau, looking southeast. Foreground: lavender-grey stone terraces, carved stone stairs leading down, purple-leaved shrubs. Midground: pine trees and grassy ledges stepping down. Far: the sea, and the glacier island on the horizon.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "stormy_water.jpg",
+   "target": "static/locations/stormy_water.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/stormy_water.png",
+   "subject": "Out on open sea in a violent storm, looking northwest. Huge dark waves in the foreground. Midground: Pleasure Island, its cliffs lashed by surf, a rowing boat tied at its foot. Dark storm clouds, lightning, sheets of rain.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "northeastern_sea.jpg",
+   "target": "static/locations/northeastern_sea.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/northeastern_sea.png",
+   "subject": "Open sea looking north. Centre-right midground: the black-sailed galleon at anchor; to its right, a tiny sandy islet with a palm tree. Calm deep-blue water, a distant horizon.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "south_coast.jpg",
+   "target": "static/locations/south_coast.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/south_coast.png",
+   "subject": "On a clifftop path along the southern coast, looking east. Left: green coastal meadow with a dead red tree; inland, the terraced cliffs of the central plateau. Right: the cliff edge drops to a channel of sea; across it, the towering white wall of the glacier island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "glacier_bottom.jpg",
+   "target": "static/locations/glacier_bottom.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/glacier_bottom.png",
+   "subject": "At the foot of the glacier, looking north up its terraces: walls of pale blue ice cliffs, snowfields with dark stone obelisks and a bare dead tree, small purple frost flowers. Far: the green main island across the sea.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "glacier_top.jpg",
+   "target": "static/locations/glacier_top.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/glacier_top.png",
+   "subject": "On the glacier summit, looking north. Foreground: a frozen moat ringed with ice crystals around a small snowy islet with a golden ankh-shaped shrine. Beyond the glacier's ice-cliff edge and across a channel: the green main island, its swamp, meadows and the central plateau.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "icy_coast_south.jpg",
+   "target": "static/locations/icy_coast_south.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/icy_coast_south.png",
+   "subject": "From the sea off the glacier island's south coast, looking north at it: jagged blue ice cliffs rising from turquoise water, snowfields above with dark stone pillars, and a camp with a campfire and wooden barricades at the mouth of an ice cave.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "unknown_islands.jpg",
+   "target": "static/locations/unknown_islands.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/unknown_islands.png",
+   "subject": "Turquoise shallows dotted with small flat sandbar islets: one with a single tall orange sunflower, another with a campfire. Calm clear water, open-sea horizon.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "deserted_island.jpg",
+   "target": "static/locations/deserted_island.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/deserted_island.png",
+   "subject": "From the water, looking at a tiny deserted island: pale sand, two red-leaved palm trees, a large wooden treasure chest. The black-sailed galleon anchored to its left, the white-sailed ship to its right.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "mountain_forest2.jpg",
+   "target": "static/locations/mountain_forest2.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/mountain_forest2.png",
+   "subject": "Upper mountain forest by a river, looking southwest. Foreground: thick pine canopy. Midground: a blue river pool with lily pads winding between grassy banks, lavender-grey rock, a stone pillar. Far: across the sea, the glacier island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "dragon_shrine_grounds.jpg",
+   "target": "static/locations/dragon_shrine_grounds.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/dragon_shrine_grounds.png",
+   "subject": "Looking north across the grounds of the ruined dragon shrine: crumbling grey stone walls with arched windows, broken pillars, stone dragon statues flanking a golden ankh, a ruined stone building with a blue tiled roof on the right, ivy and red flowers everywhere. Beyond, forest and the northern sea.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "mountain_east.jpg",
+   "target": "static/locations/mountain_east.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/mountain_east.png",
+   "subject": "From the sea east of the main island, looking west at its eastern cliffs: tall lavender-grey rock faces, a waterfall pouring from the cliff into the sea, pine forest on top. To the left, the south coast and a glimpse of the glacier island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "waterfall.jpg",
+   "target": "static/locations/waterfall.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/waterfall.png",
+   "subject": "At the foot of a waterfall in mountain forest, looking north: a wide waterfall dropping over lavender-grey cliffs into a pool, a winding blue river above with lily pads, pines along the ledges, and the ruined shrine's stone building visible on the right-hand ledge.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "ice_spring.jpg",
+   "target": "static/locations/ice_spring.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/ice_spring.png",
+   "subject": "Close to a frozen spring on a small ice island, looking north: a still pool of turquoise water ringed by ice crystals in the foreground, snowfields and small purple frost plants around it. Across a channel, the main island's south cliffs, green on top.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "eastern_sea.jpg",
+   "target": "static/locations/eastern_sea.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/eastern_sea.png",
+   "subject": "Open sea looking west at the main island's east coast: low grassy cliffs, the ruined shrine with grey stone walls and a blue-roofed building, forest and a river behind it, the central plateau rising in the middle distance.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "icy_mountain_top.jpg",
+   "target": "static/locations/icy_mountain_top.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/icy_mountain_top.png",
+   "subject": "On a high snowy plateau of the glacier island, looking east: an open snowfield, dark stone pillars and fallen columns, ice ridges and blue ice cliffs dropping toward the sea on the left; the green main island on the horizon.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "icy_mountain.jpg",
+   "target": "static/locations/icy_mountain.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/icy_mountain.png",
+   "subject": "Snowy slopes of the glacier island, looking north: terraced snowfields, blue ice cliffs, dark stone pillars lining a path, ice boulders, a lit torch. Far: the sea and the main island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "cold_waters.jpg",
+   "target": "static/locations/cold_waters.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/cold_waters.png",
+   "subject": "On cold, choppy turquoise water between islands, looking south. Right: the towering ice cliffs of the glacier island. Left: distant sandbar islets. Pale overcast sky.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "southeastern_sea.jpg",
+   "target": "static/locations/southeastern_sea.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/southeastern_sea.png",
+   "subject": "Open sea looking southwest: a cluster of flat sandbars in turquoise shallows in the midground, and the white edge of the glacier island on the far right.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "ice_spring_island.jpg",
+   "target": "static/locations/ice_spring_island.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/ice_spring_island.png",
+   "subject": "On a small ice island, looking north from its southern snowfield: a rim of blue ice cliffs and drifts in the foreground, frost plants. Across a channel, the long south coast of the main island: lavender-grey cliffs with green grass on top.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "pleasure_island.jpg",
+   "target": "static/locations/pleasure_island.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/pleasure_island.png",
+   "subject": "On Pleasure Island, looking east across its plateau: grass with a red-earth clearing, red palm trees, flaming stone torches, cliff edges dropping away on both sides. Across the water on the right, the long north beach of the main island.",
+   "status": "todo"
+  },
+  {
+   "group": "A-main",
+   "file": "northeast.jpg",
+   "target": "static/locations/northeast.jpg",
+   "size": [
+    960,
+    540
+   ],
+   "background": "opaque",
+   "guide": "docs/art/landscape-guides/northeast.png",
+   "subject": "On the north-east headland, looking northwest: a grassy coast with the commanders' red canvas tent and a stone well, the forest edge on the left. Beyond, the sea with two ships and a sandy islet.",
+   "status": "todo"
+  }
+ ]
+}

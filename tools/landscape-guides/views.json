@@ -1,0 +1,267 @@
+{
+ "_note": "Camera per landscape in map tiles (x right/east, y down/south). heading: north|northeast|...|degrees (0 = map up). elevation: base ground height per landscape in tiles; water is 0.",
+ "elevation": {
+  "shallow_water": 0.3,
+  "north_beach": 0.6,
+  "arrival_plains": 1.5,
+  "south_land": 1.5,
+  "murky_water": 0.8,
+  "forest1": 2.0,
+  "northeast": 2.0,
+  "dragon_shrine_grounds": 3.0,
+  "veres_hill": 4.5,
+  "mountain_forest": 4.0,
+  "mountain_forest2": 4.0,
+  "waterfall": 3.0,
+  "mountain_east": 3.5,
+  "unknown_hills": 3.5,
+  "south_coast": 2.5,
+  "pleasure_island": 3.0,
+  "deserted_island": 0.6,
+  "unknown_islands": 0.5,
+  "ice_spring_island": 2.0,
+  "ice_spring": 1.5,
+  "icy_mountain_top": 5.0,
+  "glacier_top": 6.5,
+  "icy_mountain": 3.5,
+  "glacier_bottom": 3.5,
+  "icy_coast_south": 2.0,
+  "stormy_water": 0,
+  "northeastern_sea": 0,
+  "eastern_sea": 0,
+  "cold_waters": 0,
+  "southeastern_sea": 0
+ },
+ "views": {
+  "shallow_water": {
+   "x": 10,
+   "y": 23,
+   "heading": "east",
+   "mood": "clear",
+   "composition": "Standing in turquoise shallows off the north beach, looking east along the coast. Left half: open deep-blue sea to the horizon. Right half: a long pale-sand beach curving away into the distance with palm trees behind it; further along the shore, the red extractor and its pipe scaffold reaching into the sea. Far right: green forest canopy rising inland."
+  },
+  "north_beach": {
+   "x": 44,
+   "y": 25,
+   "heading": "west",
+   "mood": "clear",
+   "composition": "On the sand of a long beach, looking west along the shoreline. Centre and right: the sea, turquoise near the shore and deep blue beyond; on the far-right horizon, Pleasure Island. Left midground: the red extractor and its pipe scaffold out over the shallows, palm trees and a driftwood log on the sand. Left edge: green meadow inland."
+  },
+  "arrival_plains": {
+   "x": 8,
+   "y": 50,
+   "heading": "north",
+   "mood": "clear",
+   "composition": "A grassy meadow looking north. Centre midground: Sylvie's cottage inside a low wooden picket fence, a small garden and a few giant mushrooms in front, pine trees either side. Behind it a pale beach, then the sea; on the horizon centre-left, Pleasure Island. Foreground: open grass and a round green bush."
+  },
+  "forest1": {
+   "x": 24,
+   "y": 33,
+   "heading": "east",
+   "mood": "clear",
+   "composition": "At the western edge of a dense forest, looking east into it. Left: a sandy path and the red extractor's roof toward the beach. Centre and right: a thick canopy of rounded deciduous and pine trees stretching away, giant red-capped and blue mushrooms between the trunks, the ground rising gently toward the central plateau. Far right: grey stone ruins above the treeline."
+  },
+  "murky_water": {
+   "x": 16,
+   "y": 51,
+   "heading": "southwest",
+   "mood": "overcast",
+   "composition": "Looking down into a sunken swamp: dark still pools with lily pads and cattails, divided by raised grassy banks with crumbling stone ledges, gnarled dark swamp trees and a dead red tree, a wooden chest on a small islet. Beyond, the land ends in low cliffs; on the far-left horizon across the sea, the glacier island."
+  },
+  "veres_hill": {
+   "x": 36,
+   "y": 52,
+   "heading": "north",
+   "mood": "clear",
+   "composition": "On a high stone plateau, looking north at Veres' mesa rising straight ahead: a dark cave mouth at its base, a wooden ladder up its side, a small campfire nearby. Left and right: lavender-grey stone terraces and pine trees. Far beyond, the forest falls away to the north coast and the sea, with Pleasure Island on the far-left horizon."
+  },
+  "south_land": {
+   "x": 20,
+   "y": 62,
+   "heading": "east",
+   "mood": "clear",
+   "composition": "A southern lowland meadow, looking east. Left: the land climbs in the central plateau's terraced cliffs, topped with pine forest. Centre: rolling green meadow with scattered boulders running toward the coast. Right: low cliffs drop to the sea; across the water, the glacier island."
+  },
+  "unknown_hills": {
+   "x": 43,
+   "y": 60,
+   "heading": "south",
+   "mood": "clear",
+   "composition": "On a high rocky hillside at the south edge of the main island, looking south over the sea. Foreground: lavender-grey rock and sparse grass falling away. Midground: across a channel of turquoise water, a snow-covered island with blue ice cliffs and a frozen pool ringed by ice. Far right: more of the glacier coast."
+  },
+  "mountain_forest": {
+   "x": 25,
+   "y": 46,
+   "heading": "southeast",
+   "mood": "clear",
+   "composition": "Mountain forest on the western slopes of the central plateau, looking southeast. Foreground: lavender-grey stone terraces, carved stone stairs leading down, purple-leaved shrubs. Midground: pine trees and grassy ledges stepping down. Far: the sea, and the glacier island on the horizon."
+  },
+  "stormy_water": {
+   "x": 30,
+   "y": 18,
+   "heading": "northwest",
+   "mood": "storm",
+   "composition": "Out on open sea in a violent storm, looking northwest. Huge dark waves in the foreground. Midground: Pleasure Island, its cliffs lashed by surf, a rowing boat tied at its foot. Dark storm clouds, lightning, sheets of rain."
+  },
+  "northeastern_sea": {
+   "x": 50,
+   "y": 16,
+   "heading": "north",
+   "mood": "clear",
+   "composition": "Open sea looking north. Centre-right midground: the black-sailed galleon at anchor; to its right, a tiny sandy islet with a palm tree. Calm deep-blue water, a distant horizon."
+  },
+  "south_coast": {
+   "x": 5,
+   "y": 67,
+   "heading": "east",
+   "mood": "drizzle",
+   "composition": "On a clifftop path along the southern coast, looking east. Left: green coastal meadow with a dead red tree; inland, the terraced cliffs of the central plateau. Right: the cliff edge drops to a channel of sea; across it, the towering white wall of the glacier island."
+  },
+  "glacier_bottom": {
+   "x": 18,
+   "y": 97,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "At the foot of the glacier, looking north up its terraces: walls of pale blue ice cliffs, snowfields with dark stone obelisks and a bare dead tree, small purple frost flowers. Far: the green main island across the sea."
+  },
+  "glacier_top": {
+   "x": 17,
+   "y": 82,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "On the glacier summit, looking north. Foreground: a frozen moat ringed with ice crystals around a small snowy islet with a golden ankh-shaped shrine. Beyond the glacier's ice-cliff edge and across a channel: the green main island, its swamp, meadows and the central plateau."
+  },
+  "icy_coast_south": {
+   "x": 25,
+   "y": 100,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "From the sea off the glacier island's south coast, looking north at it: jagged blue ice cliffs rising from turquoise water, snowfields above with dark stone pillars, and a camp with a campfire and wooden barricades at the mouth of an ice cave."
+  },
+  "unknown_islands": {
+   "x": 42,
+   "y": 88,
+   "heading": "east",
+   "mood": "clear",
+   "composition": "Turquoise shallows dotted with small flat sandbar islets: one with a single tall orange sunflower, another with a campfire. Calm clear water, open-sea horizon."
+  },
+  "deserted_island": {
+   "x": 50,
+   "y": 13,
+   "heading": "northeast",
+   "mood": "clear",
+   "composition": "From the water, looking at a tiny deserted island: pale sand, two red-leaved palm trees, a large wooden treasure chest. The black-sailed galleon anchored to its left, the white-sailed ship to its right."
+  },
+  "mountain_forest2": {
+   "x": 58,
+   "y": 47,
+   "heading": "southwest",
+   "mood": "clear",
+   "composition": "Upper mountain forest by a river, looking southwest. Foreground: thick pine canopy. Midground: a blue river pool with lily pads winding between grassy banks, lavender-grey rock, a stone pillar. Far: across the sea, the glacier island."
+  },
+  "dragon_shrine_grounds": {
+   "x": 53,
+   "y": 50,
+   "heading": "north",
+   "mood": "clear",
+   "composition": "Looking north across the grounds of the ruined dragon shrine: crumbling grey stone walls with arched windows, broken pillars, stone dragon statues flanking a golden ankh, a ruined stone building with a blue tiled roof on the right, ivy and red flowers everywhere. Beyond, forest and the northern sea."
+  },
+  "mountain_east": {
+   "x": 70,
+   "y": 60,
+   "heading": "west",
+   "mood": "clear",
+   "composition": "From the sea east of the main island, looking west at its eastern cliffs: tall lavender-grey rock faces, a waterfall pouring from the cliff into the sea, pine forest on top. To the left, the south coast and a glimpse of the glacier island."
+  },
+  "waterfall": {
+   "x": 53,
+   "y": 62,
+   "heading": "north",
+   "mood": "clear",
+   "composition": "At the foot of a waterfall in mountain forest, looking north: a wide waterfall dropping over lavender-grey cliffs into a pool, a winding blue river above with lily pads, pines along the ledges, and the ruined shrine's stone building visible on the right-hand ledge."
+  },
+  "ice_spring": {
+   "x": 41,
+   "y": 83,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "Close to a frozen spring on a small ice island, looking north: a still pool of turquoise water ringed by ice crystals in the foreground, snowfields and small purple frost plants around it. Across a channel, the main island's south cliffs, green on top."
+  },
+  "eastern_sea": {
+   "x": 76,
+   "y": 40,
+   "heading": "west",
+   "mood": "clear",
+   "composition": "Open sea looking west at the main island's east coast: low grassy cliffs, the ruined shrine with grey stone walls and a blue-roofed building, forest and a river behind it, the central plateau rising in the middle distance."
+  },
+  "icy_mountain_top": {
+   "x": 5,
+   "y": 80,
+   "heading": "east",
+   "mood": "crisp",
+   "composition": "On a high snowy plateau of the glacier island, looking east: an open snowfield, dark stone pillars and fallen columns, ice ridges and blue ice cliffs dropping toward the sea on the left; the green main island on the horizon."
+  },
+  "icy_mountain": {
+   "x": 12,
+   "y": 94,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "Snowy slopes of the glacier island, looking north: terraced snowfields, blue ice cliffs, dark stone pillars lining a path, ice boulders, a lit torch. Far: the sea and the main island."
+  },
+  "cold_waters": {
+   "x": 30,
+   "y": 70,
+   "heading": "south",
+   "mood": "overcast",
+   "composition": "On cold, choppy turquoise water between islands, looking south. Right: the towering ice cliffs of the glacier island. Left: distant sandbar islets. Pale overcast sky."
+  },
+  "southeastern_sea": {
+   "x": 62,
+   "y": 78,
+   "heading": "southwest",
+   "mood": "clear",
+   "composition": "Open sea looking southwest: a cluster of flat sandbars in turquoise shallows in the midground, and the white edge of the glacier island on the far right."
+  },
+  "ice_spring_island": {
+   "x": 44,
+   "y": 81,
+   "heading": "north",
+   "mood": "crisp",
+   "composition": "On a small ice island, looking north from its southern snowfield: a rim of blue ice cliffs and drifts in the foreground, frost plants. Across a channel, the long south coast of the main island: lavender-grey cliffs with green grass on top."
+  },
+  "pleasure_island": {
+   "x": 4,
+   "y": 12,
+   "heading": "east",
+   "mood": "sunset",
+   "composition": "On Pleasure Island, looking east across its plateau: grass with a red-earth clearing, red palm trees, flaming stone torches, cliff edges dropping away on both sides. Across the water on the right, the long north beach of the main island."
+  },
+  "northeast": {
+   "x": 62,
+   "y": 34,
+   "heading": "northwest",
+   "mood": "clear",
+   "composition": "On the north-east headland, looking northwest: a grassy coast with the commanders' red canvas tent and a stone well, the forest edge on the left. Beyond, the sea with two ships and a sandy islet."
+  }
+ },
+ "moods": {
+  "clear": "bright clear late-morning light, soft shadows, a few white clouds",
+  "overcast": "soft overcast light, muted colours, low grey clouds",
+  "drizzle": "grey overcast sky, light drizzle, damp muted colours",
+  "storm": "dark storm, lightning, heavy rain, dramatic contrast",
+  "crisp": "crisp cold clear light, pale blue sky, sparkling snow",
+  "sunset": "warm sunset, pink and orange sky, long shadows"
+ },
+ "world": {
+  "Sylvie's cottage": "a cottage with white stone walls, a bright red rounded roof and blue-framed windows",
+  "Pleasure Island": "a small tropical island ringed by sheer lavender-grey cliffs, with red-leaved palm trees and stone torches on top",
+  "the central plateau": "terraced lavender-grey stone cliffs with grassy ledges and pine forest, rising in the middle of the main island",
+  "Veres' mesa": "a flat-topped mound of brown earth with grass on top",
+  "the red extractor": "an industrial machine with a teal roof and a red body standing on the beach, with a dark metal pipe scaffold running out into the sea",
+  "the ruined dragon shrine": "grey stone walls and pillars with stone dragon statues, overgrown with ivy",
+  "the glacier island": "an island of white snowfields and tiers of pale-blue ice cliffs, with dark stone pillars",
+  "the black-sailed galleon": "a large wooden galleon with black sails",
+  "the white-sailed ship": "a smaller wooden ship with white sails"
+ },
+ "palette": "vivid green grass, lavender-grey rock, pale sand, deep-blue sea with turquoise shallows"
+}
