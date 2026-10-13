@@ -12,6 +12,13 @@
 	import FactionDisplay from './FactionDisplay.svelte';
 	import GearPassive from './GearPassive.svelte';
 
+	// grid: the classic 2-column stat grid; list: one stat per row with full
+	// names and gear bonuses shown inline (new inventory layout)
+	export let statsLayout: 'grid' | 'list' = 'grid';
+	$: statView = statsLayout === 'list' ? 'row' : 'full';
+	// false when skills live on their own page (new inventory layout → /skills)
+	export let showSkills = true;
+
 	let currentView: 'stats' | 'skills' = 'stats';
 	function toggleView() { currentView = currentView === 'stats' ? 'skills' : 'stats'; }
 
@@ -50,7 +57,9 @@
 		</div>
 
 		<div class="header-right">
-			<Switch text1="Stats" text2="Skills" fn={toggleView} />
+			{#if showSkills}
+				<Switch text1="Stats" text2="Skills" fn={toggleView} />
+			{/if}
 			<div class="stat-bars">
 				<HPBar type="hp"   current={$playerStats.hp}         max={$playerStats.maxHp} />
 				<HPBar type="aura" current={$playerStats.auraShield} max={$playerStats.maxAuraShield} />
@@ -66,19 +75,19 @@
 	<WRHeader value={$playerStore.worldResonance} elements={$playerActiveElements} />
 
 	{#if currentView === 'stats'}
-		<div class="stats-grid">
+		<div class="stats-grid" class:stats-list={statsLayout === 'list'}>
 			{#if $playerStats}
-				<Stat view="full" statId="hp"               value={`${$playerStats.hp} / ${$playerStats.maxHp}`}    baseValue={$playerStore.baseStats.maxHp} />
-				<Stat view="full" statId="maxAuraShield"    value={$playerStats.maxAuraShield}    baseValue={$playerStore.baseStats.maxAuraShield} />
-				<Stat view="full" statId="physicalAttack"   value={$playerStats.physicalAttack}   baseValue={$playerStore.baseStats.physicalAttack} />
-				<Stat view="full" statId="elementalAttack"  value={$playerStats.elementalAttack}  baseValue={$playerStore.baseStats.elementalAttack} />
-				<Stat view="full" statId="physicalDefence"  value={$playerStats.physicalDefence}  baseValue={$playerStore.baseStats.physicalDefence} />
-				<Stat view="full" statId="elementalDefence" value={$playerStats.elementalDefence} baseValue={$playerStore.baseStats.elementalDefence} />
-				<Stat view="full" statId="critChance"       value={$playerStats.critChance}       baseValue={$playerStore.baseStats.critChance} />
-				<Stat view="full" statId="critDamage"       value={$playerStats.critDamage}       baseValue={$playerStore.baseStats.critDamage} />
-				<Stat view="full" statId="precision"        value={$playerStats.precision}        baseValue={$playerStore.baseStats.precision} />
-				<Stat view="full" statId="speed"            value={$playerStats.speed}            baseValue={$playerStore.baseStats.speed} />
-				<Stat view="full" statId="evasion"          value={$playerStats.evasion}          baseValue={$playerStore.baseStats.evasion} />
+				<Stat view={statView} statId="hp"           value={`${$playerStats.hp} / ${$playerStats.maxHp}`}    baseValue={$playerStore.baseStats.maxHp} bonusValue={$playerStats.maxHp} />
+				<Stat view={statView} statId="maxAuraShield"    value={$playerStats.maxAuraShield}    baseValue={$playerStore.baseStats.maxAuraShield} />
+				<Stat view={statView} statId="physicalAttack"   value={$playerStats.physicalAttack}   baseValue={$playerStore.baseStats.physicalAttack} />
+				<Stat view={statView} statId="elementalAttack"  value={$playerStats.elementalAttack}  baseValue={$playerStore.baseStats.elementalAttack} />
+				<Stat view={statView} statId="physicalDefence"  value={$playerStats.physicalDefence}  baseValue={$playerStore.baseStats.physicalDefence} />
+				<Stat view={statView} statId="elementalDefence" value={$playerStats.elementalDefence} baseValue={$playerStore.baseStats.elementalDefence} />
+				<Stat view={statView} statId="critChance"       value={$playerStats.critChance}       baseValue={$playerStore.baseStats.critChance} />
+				<Stat view={statView} statId="critDamage"       value={$playerStats.critDamage}       baseValue={$playerStore.baseStats.critDamage} />
+				<Stat view={statView} statId="precision"        value={$playerStats.precision}        baseValue={$playerStore.baseStats.precision} />
+				<Stat view={statView} statId="speed"            value={$playerStats.speed}            baseValue={$playerStore.baseStats.speed} />
+				<Stat view={statView} statId="evasion"          value={$playerStats.evasion}          baseValue={$playerStore.baseStats.evasion} />
 			{:else}
 				<p class="loading">Loading stats...</p>
 			{/if}
@@ -174,6 +183,7 @@
 	.name-input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; color: #eee; font-family: var(--font-family-pixel); font-size: 0.75rem; padding: 3px 6px; text-align: center; outline: none; }
 	.stat-bars { display: flex; flex-direction: column; gap: 4px; max-width: 400px; width: 100%; }
 	.stats-grid { display: grid; margin-top: 1rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: 1rem; gap: 0.25rem; }
+	.stats-grid.stats-list { grid-template-columns: 1fr; margin-top: 0.75rem; gap: 3px; }
 	.skills-grid { display: flex; flex-direction: column; gap: 0.5rem; }
 	.skill-wrap { background-color: rgb(53, 37, 17); display: flex; flex-direction: column; padding: 0.5rem; gap: 0.5rem; border-radius: 6px; border: 3px solid #00000056;}
 	.skill-item { font-family: var(--font-family-pixel); font-size: 1rem; display: flex; flex-direction: column; padding: 0.5em; border-radius: 5px; color: var(--orange); gap: 0.25rem; flex-grow: 1; }

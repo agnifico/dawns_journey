@@ -34,6 +34,10 @@
 			<span class="currency-amount">{c.amount.toLocaleString()}</span>
 		</div>
 	{/each}
+	{#if $$slots.end}
+		<!-- Page-specific extras, right-aligned (e.g. exploration on the inventory page) -->
+		<div class="bar-end"><slot name="end" /></div>
+	{/if}
 </div>
 
 <style>
@@ -41,12 +45,19 @@
 		display: flex;
 		gap: 6px;
 		flex-wrap: wrap;
+		align-items: center;
 		padding: 6px 1rem;
 		background: rgba(0,0,0,0.4);
 		border-bottom: 1px solid rgba(200,169,110,0.1);
 		position: sticky;
 		top: 0;
 		z-index: 10;
+	}
+	.bar-end {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 6px;
 	}
 	.currency-chip {
 		display: flex;

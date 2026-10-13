@@ -16,6 +16,9 @@
 	import GearPassive from './GearPassive.svelte';
 	import { getGearPassiveById } from '$lib/data/abilities';
 
+	// false when the page shows exploration levels elsewhere (new inventory layout: top bar)
+	export let showExploration = true;
+
 	$: hasGearPassive =
 		$playerStore.equipment.weapon_slots[0]?.gearPassives?.length > 0 ||
 		$playerStore.equipment.weapon_slots[1]?.gearPassives?.length > 0;
@@ -153,39 +156,42 @@
 				{/if}
 			</div>
 		</div>
-		<div class="equipment-side-panel">
-			{#if hasGearPassive || mergedSetBonuses.length > 0}
-				<button class="hide-btn" on:click={() => (toggleEquipmentPanel = !toggleEquipmentPanel)}
-					>{toggleEquipmentPanel ? 'Hide' : 'Show'}</button
-				>
-			{/if}
+		{#if hasGearPassive || mergedSetBonuses.length > 0}
+			<button class="hide-btn" on:click={() => (toggleEquipmentPanel = !toggleEquipmentPanel)}
+				>{toggleEquipmentPanel ? 'Hide' : 'Show'}</button
+			>
+		{/if}
 
-			{#if toggleEquipmentPanel}
-				<!-- Exploration abilities -->
-				{#if Object.keys($playerExplorationAbilities).length > 0}
-					<div class="info-section explo-section">
-						<span class="section-label">Exploration</span>
-						<div class="explo-list">
-							{#each Object.entries($playerExplorationAbilities) as [name, level]}
-								<ExploBubble_OLD {name} {level} />
-							{/each}
+		<!-- Classic layout always renders this panel; without exploration it's skipped when empty -->
+		{#if showExploration || (toggleEquipmentPanel && $playerStore.activeEffects.length > 0)}
+			<div class="equipment-side-panel">
+				{#if toggleEquipmentPanel}
+					<!-- Exploration abilities -->
+					{#if showExploration && Object.keys($playerExplorationAbilities).length > 0}
+						<div class="info-section explo-section">
+							<span class="section-label">Exploration</span>
+							<div class="explo-list">
+								{#each Object.entries($playerExplorationAbilities) as [name, level]}
+									<ExploBubble_OLD {name} {level} />
+								{/each}
+							</div>
 						</div>
-					</div>
-				{/if}
+					{/if}
 
-				<!-- Active potion/food buffs -->
-				{#if $playerStore.activeEffects.length > 0}
-					<div class="info-section buffs-section">
-						<span class="section-label">Active Buffs</span>
-						<div class="buffs-list">
-							{#each $playerStore.activeEffects as effect (effect.id)}
-								<BuffDisplay {effect} />
-							{/each}
+					<!-- Active potion/food buffs -->
+					{#if $playerStore.activeEffects.length > 0}
+						<div class="info-section buffs-section">
+							<span class="section-label">Active Buffs</span>
+							<div class="buffs-list">
+								{#each $playerStore.activeEffects as effect (effect.id)}
+									<BuffDisplay {effect} />
+								{/each}
+							</div>
 						</div>
-					</div>
+					{/if}
 				{/if}
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</div>
 
 	{#if toggleEquipmentPanel}

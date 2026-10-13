@@ -5,7 +5,10 @@
 	export let statId: string;
 	export let value: number | string;
 	export let baseValue: number | undefined = undefined;
-	export let view: 'short' | 'full' | 'mini' = 'short';
+	// row: full name, compact height, bonus from gear always visible (stat lists)
+	export let view: 'short' | 'full' | 'mini' | 'row' = 'short';
+	// Bonus to show when `value` is preformatted text (e.g. HP as "150 / 150")
+	export let bonusValue: number | undefined = undefined;
 
 	// hpCost reuses the hp icon but has its own label
 	$: iconId = statId === 'hpCost' ? 'hp' : statId;
@@ -30,11 +33,20 @@
 
 	$: isPercent = statId === 'critChance' || statId === 'critDamage';
 
-	$: displayValue = isPercent ? `${(Number(value) * 100).toFixed(0)}%` : Number(value).toFixed(0);
+	// Preformatted strings (like "150 / 150") are shown as-is; Number() on them is NaN.
+	$: displayValue =
+		typeof value === 'string'
+			? value
+			: typeof value !== 'number' || Number.isNaN(value)
+				? '–'
+				: isPercent
+					? `${(value * 100).toFixed(0)}%`
+					: value.toFixed(0);
 
 	$: bonus = (() => {
-		if (baseValue === undefined || typeof value !== 'number') return undefined;
-		const diff = value - baseValue;
+		const current = typeof value === 'number' ? value : bonusValue;
+		if (baseValue === undefined || current === undefined) return undefined;
+		const diff = current - baseValue;
 		if (diff === 0) return undefined;
 		return isPercent ? Math.round(diff * 100) : Math.round(diff);
 	})();
@@ -44,13 +56,14 @@
 	class="stat-line"
 	class:view-full={view === 'full'}
 	class:view-mini={view === 'mini'}
+	class:view-row={view === 'row'}
 	title={statDef.description}
 >
 	{#key statId}
 		<img src={`/game_icons/${iconId}.png`} alt={statDef.name} class="stat-icon" />
 	{/key}
 	<span class="stat-name" style="color: {statDef.color}">
-		{view === 'full' ? statDef.name : statDef.abbr}
+		{view === 'full' || view === 'row' ? statDef.name : statDef.abbr}
 	</span>
 	<span class="stat-value">
 		{#if bonus !== undefined}
@@ -132,6 +145,31 @@
 	.view-full .stat-icon {
 		width: 28px;
 		height: 28px;
+	}
+
+	/* ── Row view — full name, compact, bonus always shown inline ── */
+	.view-row {
+		padding: 3px 8px;
+		min-height: 30px;
+		box-sizing: border-box;
+	}
+	.view-row .stat-icon {
+		width: 22px;
+		height: 22px;
+	}
+	.view-row .stat-name {
+		font-size: 0.9rem;
+	}
+	.view-row .stat-value {
+		flex-direction: row;
+		align-items: baseline;
+		gap: 6px;
+		font-size: 0.95rem;
+	}
+	.view-row .bonus {
+		position: static;
+		visibility: visible;
+		font-size: 0.7rem;
 	}
 
 	/* ── Mini view ── */

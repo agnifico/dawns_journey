@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { playerStore } from '$lib/stores/playerStore';
-	import type { Item, Set } from '$lib/types';
+	import type { Item } from '$lib/types';
 	import ItemBox from './ItemBox.svelte';
 	import {
 		equipItem,
@@ -8,19 +8,16 @@
 		useItem,
 		countInventoryItem
 	} from '$lib/services/InventoryService';
-	import { getSetForRelic, formatBonusLines } from '$lib/services/SetDataService';
 	import { statDefinitions } from '$lib/data/statDefinitions';
-	import Stat from './Stat.svelte';
 	import { derived } from 'svelte/store';
 	import ExploBubble from './ExploBubble.svelte';
-	import BuffDisplay from './ui/BuffDisplay.svelte';
-	import InstantEffectDisplay from './ui/InstantEffectDisplay.svelte';
-	import ElementTag from './ui/ElementTag.svelte';
 	import { activeItem, inventoryTab, homesteadSubTab } from '$lib/stores/uiStore';
 	import InventoryFilterBar from './ui/InventoryFilterBar.svelte';
 	import { inventoryFilterStore } from '$lib/stores/inventoryFilterStore';
-	import GearPassive from './GearPassive.svelte';
-	import { getGearPassiveById } from '$lib/data/abilities';
+	import ItemDetailPanel from './ItemDetailPanel.svelte';
+
+	// false when the page shows ItemDetailPanel itself (new inventory layout)
+	export let showDrawer = true;
 
 	// ── Material/Sigil grouping (General tab only) ────────────────────────────
 	const ELEMENTAL_MATERIAL_IDS = new Set([
@@ -185,15 +182,6 @@
 		}
 		return { regular, materials, sigils };
 	});
-
-	let relicSet: Set | undefined;
-	$: {
-		if ($activeItem && $activeItem.type === 'relic') {
-			relicSet = getSetForRelic($activeItem.id);
-		} else {
-			relicSet = undefined;
-		}
-	}
 
 	let actionSheetItem: Item | null = null;
 	$: drawerItem = $activeItem;
@@ -408,97 +396,10 @@
 			</div>
 		</div>
 
-		<!-- Item detail drawer -->
-		{#if drawerItem}
+		<!-- Item detail drawer (the new layout shows ItemDetailPanel elsewhere) -->
+		{#if drawerItem && showDrawer}
 			<div class="item-drawer">
-				<button class="drawer-close" on:click={closeDrawer}>✕</button>
-
-				<div class="drawer-img">
-					<ItemBox item={drawerItem} viewSize="large" />
-				</div>
-
-				<div class="drawer-header">
-					<h3 class="drawer-name">{drawerItem.name}</h3>
-					{#if drawerItem.type === 'weapon'}
-						<ElementTag element={drawerItem.element} size="mini" />
-					{/if}
-				</div>
-
-				{#if drawerItem.description}
-					<p class="drawer-desc">{drawerItem.description}</p>
-				{/if}
-
-				{#if drawerItem.stats && drawerItem.stats.length > 0}
-					<div class="drawer-section-label">Stats</div>
-					<div class="drawer-stats">
-						{#each drawerItem.stats as stat}
-							<Stat statId={stat.name} value={stat.value} view="mini" />
-						{/each}
-					</div>
-				{/if}
-
-				{#if relicSet}
-					<div class="drawer-section-label">Set: {relicSet.name}</div>
-					<div class="drawer-set">
-						{#each relicSet.bonuses as bonus}
-							{@const lines = formatBonusLines(bonus)}
-							<div class="set-bonus-line">
-								<span class="set-pieces">({bonus.pieces}-pc)</span>
-								{#each lines as line, i}
-									{line}{i < lines.length - 1 ? ' · ' : ''}
-								{/each}
-							</div>
-						{/each}
-					</div>
-				{/if}
-
-				{#if drawerItem.effects && drawerItem.effects.length > 0}
-					<div class="drawer-section-label">Instant Effects</div>
-					<div class="drawer-effects">
-						{#each drawerItem.effects as effect (Object.keys(effect)[0])}
-							<InstantEffectDisplay {effect} />
-						{/each}
-					</div>
-				{/if}
-
-				{#if drawerItem.activeEffects && drawerItem.activeEffects.length > 0}
-					<div class="drawer-section-label">Buffs</div>
-					<div class="drawer-effects">
-						{#each drawerItem.activeEffects as effect (effect.id)}
-							<BuffDisplay {effect} />
-						{/each}
-					</div>
-				{/if}
-
-				{#if drawerItem.gearPassives && drawerItem.gearPassives.length > 0}
-					<div class="drawer-section-label">Passives</div>
-					{#each drawerItem.gearPassives ?? [] as passiveId}
-						{@const passive = getGearPassiveById(passiveId)}
-						{#if passive}
-							<GearPassive
-								weaponName={drawerItem.name}
-								passiveName={passive.name}
-								description={passive.description}
-								icon={drawerItem.image}
-								view="mini"
-							/>
-						{/if}
-					{/each}
-				{/if}
-
-				<!-- Actions -->
-				<div class="drawer-actions">
-					{#if isConsumable(drawerItem)}
-						<button class="drawer-btn drawer-use" on:click={() => handleUse(drawerItem)}>Use</button
-						>
-					{/if}
-					{#if isEquippable(drawerItem)}
-						<button
-							class="drawer-btn drawer-equip"
-							on:click={() => equipItem(drawerItem.instanceId)}>Equip</button
-						>
-					{/if}
-				</div>
+				<ItemDetailPanel item={drawerItem} />
 			</div>
 		{/if}
 	</div>
@@ -711,115 +612,5 @@
 		overflow-y: auto;
 		scrollbar-width: thin;
 		scrollbar-color: #3a2a1a transparent;
-	}
-	.drawer-close {
-		position: absolute;
-		top: 6px;
-		right: 8px;
-		background: none;
-		border: none;
-		color: rgba(200, 169, 110, 0.4);
-		font-size: 0.7rem;
-		cursor: pointer;
-		padding: 2px 4px;
-	}
-	.drawer-close:hover {
-		color: rgba(200, 169, 110, 0.8);
-	}
-	.drawer-img {
-		display: flex;
-		border-radius: 6px;
-	}
-	.drawer-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 6px;
-	}
-	.drawer-name {
-		margin: 0;
-		font-family: var(--font-family-pixel);
-		font-size: 1rem;
-		font-weight: 400;
-		color: #c8a96e;
-		flex-grow: 1;
-	}
-	.drawer-desc {
-		font-family: 'Lexend';
-		font-style: italic;
-		font-size: 0.85rem;
-		color: var(--text-muted);
-		line-height: 1.2;
-		margin: 0;
-	}
-	.drawer-section-label {
-		font-family: var(--font-family-pixel);
-		font-size: 0.55rem;
-		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: rgba(200, 169, 110, 0.4);
-		margin-top: 2px;
-	}
-	.drawer-stats {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-	.drawer-set {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-	}
-	.set-bonus-line {
-		font-family: var(--font-family-pixel);
-		font-size: 0.6rem;
-		color: var(--color-accent);
-		padding: 4px 8px;
-		background: rgba(0, 0, 0, 0.25);
-		border-radius: 4px;
-	}
-	.set-pieces {
-		color: var(--text-muted);
-		margin-right: 4px;
-	}
-	.drawer-effects {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px;
-	}
-	.drawer-actions {
-		display: flex;
-		gap: 6px;
-		margin-top: auto;
-		padding-top: 4px;
-		border-top: 1px solid rgba(200, 169, 110, 0.1);
-	}
-	.drawer-btn {
-		flex: 1;
-		padding: 6px 0;
-		border-radius: 5px;
-		font-family: var(--font-family-pixel);
-		font-size: 0.6rem;
-		cursor: pointer;
-		border: 1px solid;
-		text-align: center;
-		transition: background 0.1s;
-	}
-	.drawer-use {
-		background: rgba(60, 160, 90, 0.15);
-		border-color: rgba(60, 160, 90, 0.4);
-		color: #50c878;
-	}
-	.drawer-equip {
-		background: rgba(200, 169, 110, 0.12);
-		border-color: rgba(200, 169, 110, 0.4);
-		color: #c8a96e;
-	}
-	.drawer-use:hover {
-		background: rgba(60, 160, 90, 0.28);
-	}
-	.drawer-equip:hover {
-		background: rgba(200, 169, 110, 0.25);
 	}
 </style>
