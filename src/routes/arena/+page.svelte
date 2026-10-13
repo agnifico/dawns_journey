@@ -267,7 +267,7 @@
 	.arena-bg {
 		position: absolute;
 		inset: 0;
-		background: url('/images/arenabg.png') center/cover no-repeat;
+		background: url('/images/arenabg.jpg') center/cover no-repeat;
 		z-index: 0;
 	}
 	/* Layered vignette — darker at left/bottom, lighter top-right where bg shows */

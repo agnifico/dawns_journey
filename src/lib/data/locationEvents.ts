@@ -71,7 +71,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     teleport_to_dragon_island: {
         id: 'teleport_to_dragon_island',
         name: 'Teleporter to Dragon Island',
-        image: '/locations/shrine.png',
+        image: '/locations/teleporter.png',
         shortDesc: 'A strange portal humming with energy.',
         stepOnMessage: 'You found a teleporter to Dragon Island.',
         message: 'Do you want to travel to Dragon Island?',
@@ -175,7 +175,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword2: {
         id: 'legendary_sword2',
         name: 'Blade of Still Water',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_still_water.png',
         shortDesc: 'A blade resting at the bottom of a shallow pool, untouched by rust.',
         stepOnMessage: 'The water here is unnaturally still. Beneath the surface, something glints.',
         message: "The inscription reads: 'Power without stillness is just noise. We were taught to listen before we were taught to act.'",
@@ -188,7 +188,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword3: {
         id: 'legendary_sword3',
         name: 'Blade of the Open Mountain',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_open_mountain.png',
         shortDesc: 'A blade driven into the mountainside at the exact height of a dragon\'s eye-level.',
         stepOnMessage: 'The stone here has been shaped — not broken, shaped. A blade stands in it like a marker.',
         message: "The inscription reads: 'The mountain does not belong to those who climb it. The mountain belongs to itself. We only borrowed the view.'",
@@ -201,7 +201,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     legendary_sword4: {
         id: 'legendary_sword4',
         name: 'Blade of the Forest Pact',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_forest_pact.png',
         shortDesc: 'A blade overgrown with living vines that part when you reach for it.',
         stepOnMessage: 'The vines here have grown in a perfect circle around something. As you approach, they shift.',
         message: "The inscription reads: 'The forest remembers every pact ever made beneath its canopy. We made many. We kept them all.'",
@@ -732,7 +732,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     mistweaver_site: {
         id: 'mistweaver_site',
         name: 'The River Fork',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_river_fork.png',
         shortDesc: 'A fork in the eastern river. The water moves strangely here.',
         stepOnMessage: 'The water slows at the fork. Something beneath the surface catches the light.',
         message: [
@@ -777,7 +777,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     groundbreaker_site: {
         id: 'groundbreaker_site',
         name: 'The Stone Circle',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_stone_circle.png',
         shortDesc: 'A circle of standing stones on the mountain plateau. Something stands at the centre.',
         stepOnMessage: 'The stones here were placed. Not by the Dragon Empire — older than that.',
         message: [
@@ -829,7 +829,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     her_majestys_watch_site: {
         id: 'her_majestys_watch_site',
         name: 'The Shrine Sanctum',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_shrine_sanctum.png',
         shortDesc: 'The inner sanctum of the Dragon Shrine. Something is waiting here.',
         stepOnMessage: 'The air in here is heavier. Something in the stone is paying attention.',
         message: [
@@ -902,7 +902,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     frostfall_site: {
         id: 'frostfall_site',
         name: 'The Glacier Shelf',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_glacier_shelf.png',
         shortDesc: 'A wide shelf of ancient ice. A sword is suspended inside it.',
         stepOnMessage: 'The ice here is older than the glacier above it. Something is preserved inside.',
         message: [
@@ -998,7 +998,7 @@ export const locationEventDefinitions: { [id: string]: LocationEvent } = {
     dawnbringer_site: {
         id: 'dawnbringer_site',
         name: 'The Farthest Shore',
-        image: '/locations/legendary_sword.png',
+        image: '/locations/sword_farthest_shore.png',
         shortDesc: "The edge of the known map. Something has been waiting here a very long time.",
         stepOnMessage: "The ocean beyond this shore has no name yet. The ground here feels unlike anywhere else.",
         message: [
